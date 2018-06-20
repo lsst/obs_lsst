@@ -56,13 +56,13 @@ if __name__ == "__main__":
 
     with open(cameraFile, "a") as fd:
         print("""
-    #
-    # Define our specific devices
-    #
-    # All the CCDs present in this file
-    #
-    CCDs :\
-        """, file=fd)
+#
+# Define our specific devices
+#
+# All the CCDs present in this file
+#
+CCDs :\
+""", file=fd)
 
         for raftName, raftData in cameraData.items():
             try:
