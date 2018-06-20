@@ -1,0 +1,438 @@
+defects: ../description/defects
+
+needCalibRegistry: true
+
+levels:
+  tract: patch
+
+defaultLevel: visit
+
+exposures:
+  _raw:
+    level: Ccd
+    persistable: PropertyList
+    python: lsst.daf.base.PropertyList
+    storage: FitsStorage
+    tables: raw
+    template: raw/%(run)s/%(ccd)s/%(ccd)s-%(visit)06d.fits[0]
+  raw:
+    assembler: lsst.obs.lsstCam.lsstCamMapper.assemble_raw
+    composite:
+      raw_amp:
+        datasetType: raw_amp
+        subset: true
+      raw_hdu:
+        datasetType: raw_hdu
+    inputOnly: true
+  raw_amp:
+    level: Amp
+    # NB If type is changed to an exposureI then constructDark breaks. If changing this be sure to test calibs
+    persistable: DecoratedImageI
+    python: lsst.afw.image.DecoratedImageI
+    storage: FitsStorage
+    tables: raw
+    template: raw/%(run)s/%(ccd)s/%(ccd)s-%(visit)06d.fits[%(channel)d]
+  postISRCCD:
+    template: 'postISRCCD/postISRCCD_v%(visit)d_%(ccd)s_f%(filter)s.fits'
+  calexp:
+    template: calexp/calexp_v%(visit)d_%(ccd)s_f%(filter)s.fits
+  icExp:
+    template: icExp/icExp_v%(visit)d_%(ccd)s_f%(filter)s.fits
+  wcs:
+    tables:
+    - raw
+    - raw_visit
+    template: wcs/v%(visit)d_%(ccd)s_f%(filter)s.wcs.fits
+  fcr:
+    level: Ccd
+    persistable: ExposureI
+    python: lsst.afw.image.ExposureI
+    storage: FitsStorage
+    tables:
+    - raw
+    - raw_visit
+    template: fcr/v%(visit)d_%(ccd)s_f%(filter)s.fcr.fits
+
+calibrations:
+  bias:
+    columns:
+    - date
+    level: Ccd
+    obsTimeName: date
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    reference: raw_visit
+    storage: FitsStorage
+    tables: bias
+    template: bias/%(calibDate)s/bias-%(ccd)s-%(calibDate)s.fits
+    validRange: true
+  dark:
+    columns:
+    - date
+    level: Ccd
+    obsTimeName: date
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    reference: raw_visit
+    storage: FitsStorage
+    tables: dark
+    template: dark/%(calibDate)s/dark-%(ccd)s-%(calibDate)s.fits
+    validRange: true
+  flat:
+    columns:
+    - date
+    - filter
+    filter: true
+    level: Ccd
+    obsTimeName: date
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    - filter
+    reference: raw_visit
+    storage: FitsStorage
+    tables: flat
+    template: flat/%(filter)s/%(calibDate)s/flat_%(ccd)s-%(filter)s_%(calibDate)s.fits
+    validRange: true
+  fringe:
+    columns:
+    - date
+    - filter
+    filter: true
+    level: Ccd
+    obsTimeName: date
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    - filter
+    reference: raw_visit
+    storage: FitsStorage
+    tables: flat
+    template: fringe/%(filter)s/%(calibDate)s/fringe_%(ccd)s-%(filter)s_%(calibDate)s.fits
+    validRange: true
+
+  bias_camera:
+    template: focalplane/bias/%(calibDate)s/bias-%(ccd)s-%(calibDate)s.fits
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: None
+  dark_camera:
+    template: focalplane/dark/%(calibDate)s/dark-%(ccd)s-%(calibDate)s.fits
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: None
+  flat_camera:
+    template: focalplane/flat/%(filter)s/%(calibDate)s/flat_%(ccd)s-%(filter)s_%(calibDate)s.fits
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: None
+  fringe_camera:
+    template: focalplane/fringe/%(filter)s/%(calibDate)s/fringe_%(ccd)s-%(filter)s_%(calibDate)s.fits
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: None
+
+datasets:
+  IngestIndexedReferenceTask_config:
+    persistable: Config
+    python: lsst.pipe.tasks.indexReferenceTask.IngestIndexedReferenceConfig
+    storage: ConfigStorage
+    template: config/IngestIndexedReferenceTask.py
+  Mosaic_config:
+    persistable: Config
+    python: lsst.meas.mosaic.mosaicTask.MosaicConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/mosaic.py
+  Mosaic_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables: raw
+    template: metadata/Mosaic.boost
+  ampExposureId:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored:ampExposureId
+    tables: raw
+    template: ignored
+  ampExposureId_bits:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored:ampExposureId_bits
+    tables: raw
+    template: ignored
+  apCorr:
+    persistable: ApertureCorrection
+    python: lsst.meas.algorithms.ApertureCorrection
+    storage: PickleStorage
+    tables: raw
+    template: apCorr/v%(visit)d_f%(filter)s.pickle
+  bias_config:
+    persistable: Config
+    python: lsst.pipe.drivers.constructCalibs.BiasConfig
+    storage: ConfigStorage
+    tables:
+    - raw
+    - raw_visit
+    template: config/bias.py
+  cal_ref_cat:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    table: ignored
+    template: photo_astro_ref/%(pixel_id)s.fits
+  calexpBackground:
+    persistable: PurePythonClass
+    python: lsst.afw.math.BackgroundList
+    storage: FitsCatalogStorage
+    tables: raw
+    template: calexp/v%(visit)d/bkgd.fits
+  ccdExposureId:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored:ccdExposureId
+    tables: raw
+    template: ignored
+  ccdExposureId_bits:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored:ccdExposureId_bits
+    tables: raw
+    template: ignored
+  chiSquaredCoaddId:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  chiSquaredCoaddId_bits:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  dark_config:
+    persistable: Config
+    python: lsst.pipe.drivers.constructCalibs.DarkConfig
+    storage: ConfigStorage
+    tables:
+    - raw
+    - raw_visit
+    template: config/dark.py
+  deepCoaddId:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  deepCoaddId_bits:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  deepCoadd_modelfits:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/modelfits_%(filter)s_%(tract)d_%(patch)s.fits
+  deepCoadd_modelfits_schema:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/deepCoadd_modelfits.fits
+  deepCoadd_multiModelfits:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/multiModelfits_%(filter)s_%(tract)d_%(patch)s.fits
+  deepCoadd_multiModelfits_schema:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/deepCoadd_multiModelfits.fits
+  flat_config:
+    persistable: Config
+    python: lsst.pipe.drivers.constructCalibs.FlatConfig
+    storage: ConfigStorage
+    tables:
+    - raw
+    - raw_visit
+    template: config/flat.py
+  forced_config:
+    persistable: Config
+    python: lsst.meas.base.forcedCcd.ForcedCcdMeasurementConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/forced.py
+  forced_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables: raw
+    template: forced_metadata/v%(visit)d_f%(filter)s.boost
+  forced_schema:
+    persistable: ignored
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/forced.fits
+  forced_src:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: forced/%(tract)d/v%(visit)d_f%(filter)s.fits
+  fringe_config:
+    persistable: Config
+    python: lsst.pipe.drivers.constructCalibs.FringeConfig
+    storage: ConfigStorage
+    tables:
+    - raw
+    - raw_visit
+    template: config/fringe.py
+  goodSeeingCoaddId:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  goodSeeingCoaddId_bits:
+    persistable: ignored
+    python: lsst.daf.base.PropertySet
+    storage: ignored
+    tables: raw
+    template: ignored
+  icExpBackground:
+    persistable: PurePythonClass
+    python: lsst.afw.math.BackgroundList
+    storage: FitsCatalogStorage
+    tables: raw
+    template: icExp/icExpBackground_v%(visit)d_f%(filter)s.fits
+  icSrc:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: icSrc/v%(visit)d_f%(filter)s.fits
+  icSrc_schema:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/icSrc.fits
+  measureCcd_config:
+    persistable: Config
+    python: lsst.meas.multifit.measureCcd.MeasureCcdConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/measureCcd.py
+  measureCcd_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables: raw
+    template: measureCcd_metadata/v%(visit)d_f%(filter)s.boost
+  modelfits:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: modelfits/v%(visit)d_f%(filter)s.fits
+  modelfits_schema:
+    persistable: ModelFitCatalog
+    python: lsst.meas.multifit.ModelFitCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/modelfits.fits
+  processCcd_config:
+    persistable: Config
+    python: lsst.pipe.tasks.processCcd.ProcessCcdConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/processCcd.py
+  processCcd_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables: raw
+    template: processCcd_metadata/v%(visit)d_f%(filter)s.boost
+  raw_hdu:
+    level: Ccd
+    persistable: PropertyList
+    python: lsst.daf.base.propertyList
+    storage: FitsStorage
+    tables: raw
+    template: raw/%(run)s/%(ccd)s/%(ccd)s-%(visit)06d.fits[0]
+  refcat:
+    persistable: SimpleCatalog
+    python: lsst.afw.table.SimpleCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: refcat.fits
+  src:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: src/v%(visit)d_f%(filter)s.fits
+  srcMatch:
+    persistable: BaseCatalog
+    python: lsst.afw.table.BaseCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: srcMatch/v%(visit)d_f%(filter)s.fits
+  src_schema:
+    persistable: SourceCatalog
+    python: lsst.afw.table.SourceCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/src.fits
+  transformSrcMeasurement_config:
+    persistable: Config
+    python: lsst.pipe.tasks.transformMeasurement.RunTransformConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/transformSrcMeasurement.py
+  transformSrcMeasurement_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables: raw
+    template: transformSrcMeasurement_metadata/v%(visit)d_f%(filter)s.boost
+  transformed_src:
+    persistable: ignored
+    python: lsst.afw.table.BaseCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: transformed_src/v%(visit)d_f%(filter)s.fits
+  transformed_src_schema:
+    persistable: ignored
+    python: lsst.afw.table.BaseCatalog
+    storage: FitsCatalogStorage
+    tables: raw
+    template: schema/transformed_src.fits
+  eotest_gain:  # set of amplifier gains, as measured by eotest
+    level: Ccd
+    persistable: ignored
+    python: dict
+    storage: PickleStorage
+    tables: raw
+    template: gain/%(run)s/gain%(ccd)s_%(run)s.pickle
+  apPipe_metadata:
+    template: apPipe_metadata/v%(visit)d_f%(filter)s.boost

@@ -1,0 +1,297 @@
+#
+# LSST Data Management System
+# Copyright 2017 LSST Corporation.
+#
+# This product includes software developed by the
+# LSST Project (http://www.lsst.org/).
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
+# see <http://www.lsstcorp.org/LegalNotices/>.
+#
+#
+--- # lsstCam
+#
+# There are nine ccds with names "S00".."S22" and IDs 0..8 in each of 21 rafts
+# N.b. Ignoring corner rafts for now
+
+name : "lsstCam"
+plateScale : 13.55                      # plate scale, in arcseconds on sky/mm
+radialCoeffs : [0.0, 1.0, 0.0, 1.0]     # radial distortion coefficients (c_0 + c_1 r + c_2 r^2 + ...)
+
+#
+# A single amplifier ("segment" to the camera team)
+#
+AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a CCD has not been checked
+                                        # in detail (e.g. off by one errors)
+    perAmpData : True                   # data is provided independentally for each amplifier
+    # trimmed
+    dataExtent : [512, 2002]
+    readCorner : LL
+    #                         [[x0,  y0], [xsize, ysize]]
+    rawBBox                 : [[0,    0], [576,    2048]]  # total size of one amp's raw data
+
+    rawDataBBox             : [[10,   0], [512,    2002]]  # data region in raw data
+    rawSerialPrescanBBox    : [[0,    0], [10,     2002]]  # serial prescan (often == extended)
+    rawSerialOverscanBBox   : [[522,  0], [54,     2002]]  # serial overscan
+    rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
+    rawParallelOverscanBBox : [[10, 2002], [512,     46]]  # parallel overscan
+
+    #nRowPreParallelTransfer : 0         # number of rows digitised before first parallel transfer
+    #extended : 10                       # number of pixels in the extended register
+    #extended0 : 0                       # first pixel in the extended register
+    #h_overscan : 22                     # number of overscan pixels in x (serial)
+    #h_overscan0 : 0                     # first overscan pixel in x (serial)
+    #v_overscan : 46                     # number of overscan pixel in y (parallel)
+    #v_overscan0 : 0                     # first overscan pixel in y (parallel)
+
+    saturation : 65535                  # saturation level, DN XXX Should this be in electrons?
+
+    # Linearity correction is still under discussion, so this is a placeholder.
+    linearityType : PROPORTIONAL
+    linearityThreshold : 0
+    linearityMax : 65535                # == saturation
+    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+
+AMP_ITL : &AMP_ITL
+    perAmpData : True                   # data is provided independentally for each amplifier
+    # trimmed
+    readCorner : LL
+
+    rawBBox                 : [[0,    0], [544,    2048]]  # total size of one amp's raw data
+
+    rawDataBBox             : [[3,    0], [509,    2000]]  # data region in raw data
+    rawSerialPrescanBBox    : [[0,    0], [3,      2000]]  # serial prescan (often == extended)
+    rawSerialOverscanBBox   : [[512,  0], [32,     2000]]  # serial overscan
+    rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
+    rawParallelOverscanBBox : [[0, 2000], [509,      48]]  # parallel overscan
+
+    saturation : 65535                  # saturation level, DN XXX Should this be in electrons?
+
+    # Linearity correction is still under discussion, so this is a placeholder.
+    linearityType : PROPORTIONAL
+    linearityThreshold : 0
+    linearityMax : 65535                # == saturation
+    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+
+#
+# A single CCD ("sensor" to the camera team)
+#
+CCD_E2V : &CCD_E2V
+    detectorType : 0
+    refpos : [.nan, .nan]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4095, 4003]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      "10": &A10_E2V
+        <<: *AMP_E2V
+        hdu : 1
+        flipXY : [True, False]
+        ixy : [0, 0]
+      "11": &A11_E2V
+        <<: *A10_E2V
+        hdu : 2
+        ixy : [1, 0]
+      "12": &A12_E2V
+        <<: *A10_E2V
+        hdu : 3
+        ixy : [2, 0]
+      "13": &A13_E2V
+        <<: *A10_E2V
+        hdu : 4
+        ixy : [3, 0]
+      "14": &A14_E2V
+        <<: *A10_E2V
+        hdu : 5
+        ixy : [4, 0]
+      "15": &A15_E2V
+        <<: *A10_E2V
+        hdu : 6
+        ixy : [5, 0]
+      "16": &A16_E2V
+        <<: *A10_E2V
+        hdu : 7
+        ixy : [6, 0]
+      "17": &A17_E2V
+        <<: *A10_E2V
+        hdu : 8
+        ixy : [7, 0]
+      "07": &A07_E2V
+        <<: *AMP_E2V
+        hdu : 9
+        flipXY : [False, True]
+        ixy : [7, 1]
+      "06": &A06_E2V
+        <<: *A07_E2V
+        hdu : 10
+        ixy : [6, 1]
+      "05": &A05_E2V
+        <<: *A07_E2V
+        hdu : 11
+        ixy : [5, 1]
+      "04": &A04_E2V
+        <<: *A07_E2V
+        hdu : 12
+        ixy : [4, 1]
+      "03": &A03_E2V
+        <<: *A07_E2V
+        hdu : 13
+        ixy : [3, 1]
+      "02": &A02_E2V
+        <<: *A07_E2V
+        hdu : 14
+        ixy : [2, 1]
+      "01": &A01_E2V
+        <<: *A07_E2V
+        hdu : 15
+        ixy : [1, 1]
+      "00": &A00_E2V
+        <<: *A07_E2V
+        hdu : 16
+        ixy : [0, 1]
+
+CCD_ITL : &CCD_ITL
+    detectorType : 0
+    refpos : [2001.5, 2047.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4095, 4003]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      "10": &A10_ITL
+        <<: *AMP_ITL
+        hdu : 1
+        flipXY : [True, False]
+        ixy : [0, 0]
+      "11": &A11_ITL
+        <<: *A10_ITL
+        hdu : 2
+        ixy : [1, 0]
+      "12": &A12_ITL
+        <<: *A10_ITL
+        hdu : 3
+        ixy : [2, 0]
+      "13": &A13_ITL
+        <<: *A10_ITL
+        hdu : 4
+        ixy : [3, 0]
+      "14": &A14_ITL
+        <<: *A10_ITL
+        hdu : 5
+        ixy : [4, 0]
+      "15": &A15_ITL
+        <<: *A10_ITL
+        hdu : 6
+        ixy : [5, 0]
+      "16": &A16_ITL
+        <<: *A10_ITL
+        hdu : 7
+        ixy : [6, 0]
+      "17": &A17_ITL
+        <<: *A10_ITL
+        hdu : 8
+        ixy : [7, 0]
+      "07": &A07_ITL
+        <<: *AMP_ITL
+        hdu : 9
+        flipXY : [True, True]
+        ixy : [7, 1]
+      "06": &A06_ITL
+        <<: *A07_ITL
+        hdu : 10
+        ixy : [6, 1]
+      "05": &A05_ITL
+        <<: *A07_ITL
+        hdu : 11
+        ixy : [5, 1]
+      "04": &A04_ITL
+        <<: *A07_ITL
+        hdu : 12
+        ixy : [4, 1]
+      "03": &A03_ITL
+        <<: *A07_ITL
+        hdu : 13
+        ixy : [3, 1]
+      "02": &A02_ITL
+        <<: *A07_ITL
+        hdu : 14
+        ixy : [2, 1]
+      "01": &A01_ITL
+        <<: *A07_ITL
+        hdu : 15
+        ixy : [1, 1]
+      "00": &A00_ITL
+        <<: *A07_ITL
+        hdu : 16
+        ixy : [0, 1]
+
+RAFT_ITL:
+  ccds : 
+    S00: &S00_ITL                       # Sensor (0, 0)
+      << : *CCD_ITL
+      id : 0
+      offset : [-41.5, -40.5]
+
+    S01: &S01_ITL                       # Sensor (0, 1)
+      << : *S00_ITL
+      id : 1
+      offset : [0.0, -40.5]
+             
+    S02: &S02_ITL                       # Sensor (0, 2)
+      << : *S00_ITL
+      id : 2
+      offset : [41.5, -40.5]
+      
+    S10: &S10_ITL                       # Sensor (1, 0)
+      << : *S00_ITL
+      id : 3
+      offset : [-41.5, 0.0]
+
+    S11: &S11_ITL                       # Sensor (1, 1)
+      << : *S00_ITL
+      id : 4
+      offset : [0.0, 0.0]
+             
+    S12: &S12_ITL                       # Sensor (1, 2)
+      << : *S00_ITL
+      id : 5
+      offset : [41.5, 0.0]
+
+    S20: &S20_ITL                       # Sensor (2, 0)
+      << : *S00_ITL
+      id : 6
+      offset : [-41.5, 40.5]
+
+    S21: &S21_ITL                       # Sensor (2, 1)
+      << : *S00_ITL
+      id : 7
+      offset : [0.0, 40.5]
+             
+    S22: &S22_ITL                       # Sensor (2, 2)
+      << : *S00_ITL
+      id : 8
+      offset : [41.5, 40.5]
