@@ -19,14 +19,26 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
+import os
 import shutil
 import yaml
 
 if __name__ == "__main__":
-    cameraFile = "camera.yaml"
+    import argparse
+    parser = argparse.ArgumentParser(description="")
+    
+    parser.add_argument('outputFile', type=str, help="Name of generated file")
+    #parser.add_argument('skeletonFile', type=str, help="Name of generated file")
+    #parser.add_argument('dataFile', type=str, help="Name of generated file")
+    parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
+    
+    args = parser.parse_args()
 
-    cameraSklFile = "camera.skl.yaml"
-    cameraDataFile = "cameraData.yaml"
+    cameraFile = args.outputFile
+    cameraFileDir = os.path.dirname(cameraFile)
+
+    cameraSklFile = os.path.join(cameraFileDir, "camera.skl.yaml")
+    cameraDataFile = os.path.join(cameraFileDir, "cameraData.yaml")
 
     with open(cameraSklFile) as fd:
         cameraSkl = yaml.load(fd, Loader=yaml.Loader)
