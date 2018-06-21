@@ -55,7 +55,7 @@ AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a C
     #v_overscan : 46                     # number of overscan pixel in y (parallel)
     #v_overscan0 : 0                     # first overscan pixel in y (parallel)
 
-    saturation : 65535                  # saturation level, DN XXX Should this be in electrons?
+    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
 
     # Linearity correction is still under discussion, so this is a placeholder.
     linearityType : PROPORTIONAL
@@ -63,11 +63,12 @@ AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a C
     linearityMax : 65535                # == saturation
     linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
 
-AMP_ITL : &AMP_ITL
+AMP_ITL_TS8 : &AMP_ITL_TS8
     perAmpData : True                   # data is provided independentally for each amplifier
     # trimmed
     readCorner : LL
 
+    #                         [[x0,  y0], [xsize, ysize]]
     rawBBox                 : [[0,    0], [544,    2048]]  # total size of one amp's raw data
 
     rawDataBBox             : [[3,    0], [509,    2000]]  # data region in raw data
@@ -76,14 +77,26 @@ AMP_ITL : &AMP_ITL
     rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
     rawParallelOverscanBBox : [[0, 2000], [509,      48]]  # parallel overscan
 
-    saturation : 65535                  # saturation level, DN XXX Should this be in electrons?
+    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
 
     # Linearity correction is still under discussion, so this is a placeholder.
     linearityType : PROPORTIONAL
     linearityThreshold : 0
     linearityMax : 65535                # == saturation
     linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
-
+#
+# The imSim geometry is different from the TS8 data
+#
+AMP_ITL_IMSIM : &AMP_ITL
+  << : *AMP_ITL_TS8
+  #                         [[x0,  y0], [xsize, ysize]]
+  rawBBox                 : [[0,    0], [532,    2020]]  # total size of one amp's raw data
+  
+  rawDataBBox             : [[3,    0], [509,    2000]]  # data region in raw data
+  rawSerialPrescanBBox    : [[0,    0], [3,      2000]]  # serial prescan (often == extended)
+  rawSerialOverscanBBox   : [[512,  0], [20,     2000]]  # serial overscan
+  rawParallelOverscanBBox : [[3, 2000], [509,      20]]  # parallel overscan
+  
 #
 # A single CCD ("sensor" to the camera team)
 #
