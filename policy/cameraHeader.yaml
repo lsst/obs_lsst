@@ -114,70 +114,70 @@ CCD_E2V : &CCD_E2V
     roll : 0.0                          # (degrees)
 
     amplifiers:
-      "10": &A10_E2V
+      C10: &C10_E2V
         <<: *AMP_E2V
         hdu : 1
         flipXY : [True, False]
         ixy : [0, 0]
-      "11": &A11_E2V
-        <<: *A10_E2V
+      C11: &C11_E2V
+        <<: *C10_E2V
         hdu : 2
         ixy : [1, 0]
-      "12": &A12_E2V
-        <<: *A10_E2V
+      C12: &C12_E2V
+        <<: *C10_E2V
         hdu : 3
         ixy : [2, 0]
-      "13": &A13_E2V
-        <<: *A10_E2V
+      C13: &C13_E2V
+        <<: *C10_E2V
         hdu : 4
         ixy : [3, 0]
-      "14": &A14_E2V
-        <<: *A10_E2V
+      C14: &C14_E2V
+        <<: *C10_E2V
         hdu : 5
         ixy : [4, 0]
-      "15": &A15_E2V
-        <<: *A10_E2V
+      C15: &C15_E2V
+        <<: *C10_E2V
         hdu : 6
         ixy : [5, 0]
-      "16": &A16_E2V
-        <<: *A10_E2V
+      C16: &C16_E2V
+        <<: *C10_E2V
         hdu : 7
         ixy : [6, 0]
-      "17": &A17_E2V
-        <<: *A10_E2V
+      C17: &C17_E2V
+        <<: *C10_E2V
         hdu : 8
         ixy : [7, 0]
-      "07": &A07_E2V
+      C07: &C07_E2V
         <<: *AMP_E2V
         hdu : 9
         flipXY : [False, True]
         ixy : [7, 1]
-      "06": &A06_E2V
-        <<: *A07_E2V
+      C06: &C06_E2V
+        <<: *C07_E2V
         hdu : 10
         ixy : [6, 1]
-      "05": &A05_E2V
-        <<: *A07_E2V
+      C05: &C05_E2V
+        <<: *C07_E2V
         hdu : 11
         ixy : [5, 1]
-      "04": &A04_E2V
-        <<: *A07_E2V
+      C04: &C04_E2V
+        <<: *C07_E2V
         hdu : 12
         ixy : [4, 1]
-      "03": &A03_E2V
-        <<: *A07_E2V
+      C03: &C03_E2V
+        <<: *C07_E2V
         hdu : 13
         ixy : [3, 1]
-      "02": &A02_E2V
-        <<: *A07_E2V
+      C02: &C02_E2V
+        <<: *C07_E2V
         hdu : 14
         ixy : [2, 1]
-      "01": &A01_E2V
-        <<: *A07_E2V
+      C01: &C01_E2V
+        <<: *C07_E2V
         hdu : 15
         ixy : [1, 1]
-      "00": &A00_E2V
-        <<: *A07_E2V
+      C00: &C00_E2V
+        <<: *C07_E2V
         hdu : 16
         ixy : [0, 1]
 
@@ -195,73 +195,75 @@ CCD_ITL : &CCD_ITL
     roll : 0.0                          # (degrees)
 
     amplifiers:
-      "10": &A10_ITL
+      C10: &C10_ITL
         <<: *AMP_ITL
         hdu : 1
         flipXY : [True, False]
         ixy : [0, 0]
-      "11": &A11_ITL
-        <<: *A10_ITL
+      C11: &C11_ITL
+        <<: *C10_ITL
         hdu : 2
         ixy : [1, 0]
-      "12": &A12_ITL
-        <<: *A10_ITL
+      C12: &C12_ITL
+        <<: *C10_ITL
         hdu : 3
         ixy : [2, 0]
-      "13": &A13_ITL
-        <<: *A10_ITL
+      C13: &C13_ITL
+        <<: *C10_ITL
         hdu : 4
         ixy : [3, 0]
-      "14": &A14_ITL
-        <<: *A10_ITL
+      C14: &C14_ITL
+        <<: *C10_ITL
         hdu : 5
         ixy : [4, 0]
-      "15": &A15_ITL
-        <<: *A10_ITL
+      C15: &C15_ITL
+        <<: *C10_ITL
         hdu : 6
         ixy : [5, 0]
-      "16": &A16_ITL
-        <<: *A10_ITL
+      C16: &C16_ITL
+        <<: *C10_ITL
         hdu : 7
         ixy : [6, 0]
-      "17": &A17_ITL
-        <<: *A10_ITL
+      C17: &C17_ITL
+        <<: *C10_ITL
         hdu : 8
         ixy : [7, 0]
-      "07": &A07_ITL
+      C07: &C07_ITL
         <<: *AMP_ITL
         hdu : 9
         flipXY : [True, True]
         ixy : [7, 1]
-      "06": &A06_ITL
-        <<: *A07_ITL
+      C06: &C06_ITL
+        <<: *C07_ITL
         hdu : 10
         ixy : [6, 1]
-      "05": &A05_ITL
-        <<: *A07_ITL
+      C05: &C05_ITL
+        <<: *C07_ITL
         hdu : 11
         ixy : [5, 1]
-      "04": &A04_ITL
-        <<: *A07_ITL
+      C04: &C04_ITL
+        <<: *C07_ITL
         hdu : 12
         ixy : [4, 1]
-      "03": &A03_ITL
-        <<: *A07_ITL
+      C03: &C03_ITL
+        <<: *C07_ITL
         hdu : 13
         ixy : [3, 1]
-      "02": &A02_ITL
-        <<: *A07_ITL
+      C02: &C02_ITL
+        <<: *C07_ITL
         hdu : 14
         ixy : [2, 1]
-      "01": &A01_ITL
-        <<: *A07_ITL
+      C01: &C01_ITL
+        <<: *C07_ITL
         hdu : 15
         ixy : [1, 1]
-      "00": &A00_ITL
-        <<: *A07_ITL
+      C00: &C00_ITL
+        <<: *C07_ITL
         hdu : 16
         ixy : [0, 1]
-
+#
+# Layout of CCDs within an ITL raft
+#
 RAFT_ITL:
   ccds : 
     S00: &S00_ITL                       # Sensor (0, 0)

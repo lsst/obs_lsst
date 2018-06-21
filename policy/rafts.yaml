@@ -1,0 +1,67 @@
+#
+# A list of all the rafts in the camera
+#
+rafts :
+  R10 :
+    offset : [-125, -244]               # offset of centre of raft, mm
+    id0 : 0                             # id for S00, incrementing uniformly
+  R20 :
+    offset : [   0, -244]
+    id0 : 9
+  R30 :
+    offset : [ 125, -244]
+    id0 : 18
+  R01 :
+    offset : [-250, -122]
+    id0 : 27
+  R11 :
+    offset : [-125, -122]
+    id0 : 36
+  R21 :
+    offset : [   0, -122]
+    id0 : 45
+  R31 :
+    offset : [ 125, -122]
+    id0 : 54
+  R41 :
+    offset : [ 250, -122]
+    id0 : 63
+  R02 :
+    offset : [-250,    0]
+    id0 : 72
+  R12 :
+    offset : [-125,    0]
+    id0 : 81
+  R22 :
+    offset : [   0,    0]
+    id0 : 90
+  R32 :
+    offset : [ 125,    0]
+    id0 : 99  
+  R42 :
+    offset : [ 250,    0]
+    id0 : 108  
+  R03 :
+    offset : [-250,  122]
+    id0 : 117
+  R13 :
+    offset : [-125,  122]
+    id0 : 126
+  R23 :
+    offset : [   0,  122]
+    id0 : 135
+  R33 :
+    offset : [ 125,  122]
+    id0 : 144  
+  R43 :
+    offset : [ 250,  122]
+    id0 : 153  
+  R14 :
+    offset : [-125,  244]
+    id0 : 162  
+  R24 :
+    offset : [   0,  244]
+    id0 : 171  
+  R34 :
+    offset : [ 125,  244]
+    id0 : 180

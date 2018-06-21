@@ -20,6 +20,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 import os
+import sys
 import shutil
 import yaml
 
@@ -28,8 +29,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="")
     
     parser.add_argument('outputFile', type=str, help="Name of generated file")
-    #parser.add_argument('skeletonFile', type=str, help="Name of generated file")
-    #parser.add_argument('dataFile', type=str, help="Name of generated file")
     parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
     
     args = parser.parse_args()
@@ -38,13 +37,13 @@ if __name__ == "__main__":
     cameraFileDir = os.path.dirname(cameraFile)
 
     cameraSklFile = os.path.join(cameraFileDir, "camera.skl.yaml")
-    cameraDataFile = os.path.join(cameraFileDir, "cameraData.yaml")
+    raftsFile = os.path.join(cameraFileDir, "rafts.yaml")
 
     with open(cameraSklFile) as fd:
         cameraSkl = yaml.load(fd, Loader=yaml.Loader)
 
-    with open(cameraDataFile) as fd:
-        cameraData = yaml.load(fd, Loader=yaml.Loader)
+    with open(raftsFile) as fd:
+        raftData = yaml.load(fd, Loader=yaml.Loader)
 
     shutil.copyfile(cameraSklFile, cameraFile)
 
@@ -64,11 +63,18 @@ if __name__ == "__main__":
 CCDs :\
 """, file=fd)
 
-        for raftName, raftData in cameraData.items():
+        for raftName, raftData in raftData["rafts"].items():
             try:
-                detectorType = raftData["detectorType"]
-                ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]
-                amps = cameraSkl['CCD_%s'  % detectorType]["amplifiers"]
+                with open(os.path.join(cameraFileDir, "%s.yaml" % raftName)) as yfd:
+                    raftCcdData = yaml.load(yfd, Loader=yaml.Loader)[raftName]
+            except FileNotFoundError:
+                print("Unable to load CCD descriptions for raft %s" % raftName, file=sys.stderr)
+                continue
+
+            try:
+                detectorType = raftCcdData["detectorType"]
+                ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
+                amps = cameraSkl['CCD_%s'  % detectorType]["amplifiers"]  # describe this *type* of ccd
 
             except KeyError:
                 raise RuntimeError("Unknown detector type %s" % detectorType)
@@ -76,14 +82,13 @@ CCDs :\
             nindent += 1
 
             raftOffset = raftData["offset"]
-            id = raftData['id0'] - 1
+            id0 = raftData['id0']
             for ccdName, ccdData in ccds.items():
-                id += 1
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
-                print(indent(), "id : %s" % (id), file=fd)
-                print(indent(), "serial : %s" % (cameraData[raftName]['ccdSerials'][ccdName]), file=fd)
+                print(indent(), "id : %s" % (id0 + ccdData['id']), file=fd)
+                print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "refpos : %s" % (ccdData['refpos']), file=fd)
                 print(indent(), "offset : [%g, %g]" % (ccdData['offset'][0] + raftOffset[0],
                                                        ccdData['offset'][1] + raftOffset[1]), file=fd)
@@ -91,12 +96,14 @@ CCDs :\
                 print(indent(), "amplifiers :", file=fd)
                 nindent += 1
                 for ampName, ampData in amps.items():
-                    print(indent(), "'%s' :" % ampName, file=fd)
+                    amplifierData = raftCcdData['amplifiers'][ccdName]
+
+                    print(indent(), "%s :" % ampName, file=fd)
 
                     nindent += 1
-                    print(indent(), "<< : *A%s_%s" % (ampName, detectorType), file=fd)
-                    print(indent(), "gain : %g" % (cameraData[raftName]['gain'][ccdName][ampName]), file=fd)
-                    print(indent(), "readNoise : %g" % (cameraData[raftName]['readNoise'][ccdName][ampName]), file=fd)
+                    print(indent(), "<< : *%s_%s" % (ampName, detectorType), file=fd)
+                    print(indent(), "gain : %g" % (amplifierData[ampName]['gain']), file=fd)
+                    print(indent(), "readNoise : %g" % (amplifierData[ampName]['readNoise']), file=fd)
                     nindent -= 1
                 nindent -= 1
 

@@ -21,7 +21,5 @@ commandInst = env.Command("camera.yaml", "",
                           "%s python/lsst/obs/lsstCam/generateCamera.py $TARGET" % (python))
 
 env.Depends(commandInst, lsst.sconsUtils.targets["python"])
-for f in ["camera.skl.yaml", "cameraData.yaml"]:
+for f in ["cameraHeader.yaml", "rafts.yaml", env.Glob("R??.yaml")]:
     env.Depends(commandInst, f)
-
-registry = env.AlwaysBuild(commandInst)
