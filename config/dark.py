@@ -1,3 +1,6 @@
-config.isr.doLinearize = False
-config.isr.doDefect = False
-config.repair.cosmicray.nCrPixelMax = 100000
+import os.path
+from lsst.utils import getPackageDir
+
+config.load(os.path.join(getPackageDir("obs_lsstCam"), "config", "lsstCam.py"))
+
+#config.repair.cosmicray.nCrPixelMax = 100000
