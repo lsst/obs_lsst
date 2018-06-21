@@ -1,7 +1,7 @@
 R10 :
   detectorType : "ITL"
   id : 0
-  offset : [-125, -250]
+  offset : [-125, -244]
 
   id0 : 0                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -328,7 +328,7 @@ R10 :
 R20 :
   detectorType : "ITL"
   id : 0
-  offset : [0, -250]
+  offset : [0, -244]
 
   id0 : 9                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -655,7 +655,7 @@ R20 :
 R30 :
   detectorType : "ITL"
   id : 0
-  offset : [125, -250]
+  offset : [125, -244]
 
   id0 : 18                              # id for S00, incrementing uniformly
   ccdSerials :
@@ -982,7 +982,7 @@ R30 :
 R01 :
   detectorType : "ITL"
   id : 0
-  offset : [-250, -125]
+  offset : [-250, -122]
 
   id0 : 27                              # id for S00, incrementing uniformly
   ccdSerials :
@@ -1309,7 +1309,7 @@ R01 :
 R11 :
   detectorType : "ITL"
   id : 0
-  offset : [-125, -125]
+  offset : [-125, -122]
 
   id0 : 36                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -1636,7 +1636,7 @@ R11 :
 R21 :
   detectorType : "ITL"
   id : 0
-  offset : [0, -125]
+  offset : [0, -122]
 
   id0 : 45                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -1963,7 +1963,7 @@ R21 :
 R31 :
   detectorType : "ITL"
   id : 0
-  offset : [125, -125]
+  offset : [125, -122]
 
   id0 : 54                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -2290,7 +2290,7 @@ R31 :
 R41 :
   detectorType : "ITL"
   id : 0
-  offset : [250, -125]
+  offset : [250, -122]
 
   id0 : 63                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -4252,7 +4252,7 @@ R42 :
 R03 :
   detectorType : "ITL"
   id : 0
-  offset : [-250, 125]
+  offset : [-250, 122]
 
   id0 : 117                             # id for S00, incrementing uniformly
   ccdSerials :
@@ -4579,7 +4579,7 @@ R03 :
 R13 :
   detectorType : "ITL"
   id : 0
-  offset : [-125, 125]
+  offset : [-125, 122]
 
   id0 : 126                             # id for S00, incrementing uniformly
   ccdSerials :
@@ -4906,7 +4906,7 @@ R13 :
 R23 :
   detectorType : "ITL"
   id : 0
-  offset : [0, 125]
+  offset : [0, 122]
 
   id0 : 135                             # id for S00, incrementing uniformly
   ccdSerials :
@@ -5233,7 +5233,7 @@ R23 :
 R33 :
   detectorType : "ITL"
   id : 0
-  offset : [125, 125]
+  offset : [125, 122]
 
   id0 : 144                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -5560,7 +5560,7 @@ R33 :
 R43 :
   detectorType : "ITL"
   id : 0
-  offset : [250, 125]
+  offset : [250, 122]
 
   id0 : 153                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -5887,7 +5887,7 @@ R43 :
 R14 :
   detectorType : "ITL"
   id : 0
-  offset : [-125, 250]
+  offset : [-125, 244]
 
   id0 : 162                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -6214,7 +6214,7 @@ R14 :
 R24 :
   detectorType : "ITL"
   id : 0
-  offset : [0, 250]
+  offset : [0, 244]
 
   id0 : 171                               # id for S00, incrementing uniformly
   ccdSerials :
@@ -6541,7 +6541,7 @@ R24 :
 R34 :
   detectorType : "ITL"
   id : 0
-  offset : [125, 250]
+  offset : [125, 244]
 
   id0 : 180                             # id for S00, incrementing uniformly
   ccdSerials :
