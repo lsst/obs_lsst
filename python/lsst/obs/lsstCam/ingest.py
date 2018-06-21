@@ -1,6 +1,7 @@
 from __future__ import division, print_function
 import os
 import re
+import lsst.pex.exceptions as pexExcept
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 import lsst.log as lsstLog
@@ -17,7 +18,7 @@ class LsstCamParseTask(ParseTask):
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
-    def getInfo(self, filename):
+    def _getInfo(self, filename):
         """ Get the basename and other data which is only available from the filename/path.
 
         This seems fragile, but this is how the teststand data will *always* be written out, 
@@ -89,7 +90,7 @@ class LsstCamParseTask(ParseTask):
                 'Translated significantly non-integer wavelength; %s is more than 0.1nm from an integer value', raw_wl)
         return wl
 
-    def translate_visit(self, md):
+    def _translate_visit(self, md):
         """Generate a unique visit from the timestamp
 
         It might be better to use the 1000*runNo + seqNo, but the latter isn't currently set
@@ -108,8 +109,55 @@ class LsstCamParseTask(ParseTask):
         mmjd = mjd - 55197              # relative to 2010-01-01, just to make the visits a tiny bit smaller
         return int(1e5*mmjd)            # 86400s per day, so we need this resolution
 
-##############################################################################################################
+    def translate_snap(self, md):
+        """Extract snap from metadata
 
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        snap : `int`
+            snap number (default: 0)
+        """
+        try:
+            return int(md.get("SNAP"))
+        except pexExcept.NotFoundError:
+            return 0
+
+    def translate_ccd(self, md):
+        """Extract ccd ID from CHIPID
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        ccdID : `str`
+            name of ccd, e.g. S01
+        """
+        return md.get("CHIPID")[4:]
+
+    def translate_raft(self, md):
+        """Extract raft ID from CHIPID
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        raftID : `str`
+            name of raft, e.g. R21
+        """
+        return md.get("CHIPID")[:3]
+
+##############################################################################################################
 
 class LsstCamCalibsParseTask(CalibsParseTask):
     """Parser for calibs"""
@@ -119,6 +167,9 @@ class LsstCamCalibsParseTask(CalibsParseTask):
         data = md.get("CALIB_ID")
         match = re.search(".*%s=(\S+)" % field, data)
         return match.groups()[0]
+
+    def translate_raft(self, md):
+        return self._translateFromCalibId("raft", md)
 
     def translate_ccd(self, md):
         return self._translateFromCalibId("ccd", md)

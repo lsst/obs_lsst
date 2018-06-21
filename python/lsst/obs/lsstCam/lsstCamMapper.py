@@ -25,6 +25,7 @@ from __future__ import division, print_function
 
 import os
 
+import lsst.log
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
@@ -129,26 +130,69 @@ class LsstCamMapper(CameraMapper):
         """Initialization for the LsstCam Mapper."""
         policyFile = dafPersist.Policy.defaultPolicyFile(self.packageName, "lsstCamMapper.yaml", "policy")
         policy = dafPersist.Policy(policyFile)
+        #
+        # Look for the calibrations root "root/CALIB" if not supplied
+        #
+        if kwargs.get('root', None) and not kwargs.get('calibRoot', None):
+            calibSearch = [os.path.join(kwargs['root'], 'CALIB')]
+            if "repositoryCfg" in kwargs:
+                calibSearch += [os.path.join(cfg.root, 'CALIB') for cfg in kwargs["repositoryCfg"].parents if
+                                hasattr(cfg, "root")]
+                calibSearch += [cfg.root for cfg in kwargs["repositoryCfg"].parents if hasattr(cfg, "root")]
+            for calibRoot in calibSearch:
+                if os.path.exists(os.path.join(calibRoot, "calibRegistry.sqlite3")):
+                    kwargs['calibRoot'] = calibRoot
+                    break
+            if not kwargs.get('calibRoot', None):
+                lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find calib root directory")
 
-        CameraMapper.__init__(self, policy, os.path.dirname(policyFile), **kwargs)
+        super(LsstCamMapper, self).__init__(policy, os.path.dirname(policyFile), **kwargs)
         #
         # The composite objects don't seem to set these
         #
         for d in (self.mappings, self.exposures):
             d['raw'] = d['_raw']
 
-        # self.filterIdMap = {}           # where is this used?  Generating objIds??
+        self.defineFilters()
 
+    @classmethod
+    def defineFilters(cls):
+        # The order of these defineFilter commands matters as their IDs are used to generate at least some
+        # object IDs (e.g. on coadds) and changing the order will invalidate old objIDs
+        afwImageUtils.resetFilters()
         afwImageUtils.defineFilter('NONE', 0.0, alias=['no_filter', "OPEN"])
         afwImageUtils.defineFilter('275CutOn', 0.0, alias=[])
         afwImageUtils.defineFilter('550CutOn', 0.0, alias=[])
-
+        # The LSST Filters from L. Jones 04/07/10
+        afwImageUtils.defineFilter('u', 364.59)
+        afwImageUtils.defineFilter('g', 476.31)
+        afwImageUtils.defineFilter('r', 619.42)
+        afwImageUtils.defineFilter('i', 752.06)
+        afwImageUtils.defineFilter('z', 866.85)
+        afwImageUtils.defineFilter('y', 971.68, alias=['y4'])  # official y filter
+        
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return LsstCam()
 
+    def _getRegistryValue(self, dataId, k):
+        """Return a value from a dataId, or look it up in the registry if it isn't present"""
+        if k in dataId:
+            return dataId[k]
+        else:
+            dataType = "bias" if "taiObs" in dataId else "raw"
+
+            try:
+                return self.queryMetadata(dataType, [k], dataId)[0][0]
+            except IndexError:
+                raise RuntimeError("Unable to lookup %s in \"%s\" registry for dataId %s" %
+                                   (k, dataType, dataId))
+
     def _extractDetectorName(self, dataId):
-        return dataId["ccd"]
+        raft = self._getRegistryValue(dataId, "raft")
+        ccd  = self._getRegistryValue(dataId, "ccd")
+            
+        return "%s_%s" % (raft, ccd)
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -157,6 +201,13 @@ class LsstCamMapper(CameraMapper):
         """
         visit = dataId['visit']
         return int(visit)
+
+    def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
+        return self._computeCcdExposureId(dataId)
+
+    def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
+        """How many bits are required for the maximum exposure ID"""
+        return 32  # just a guess, but this leaves plenty of space for sources
 
     def query_raw_amp(self, format, dataId):
         """!Return a list of tuples of values of the fields specified in format, in order.
@@ -256,82 +307,3 @@ class LsstCamMapper(CameraMapper):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
                                          trimmed=False, setVisitInfo=False)
 
-    def X_validate(self, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        visit = dataId.get("visit")
-        if visit is not None and not isinstance(visit, int):
-            dataId["visit"] = int(visit)
-        return dataId
-
-    def X__setCcdExposureId(self, propertyList, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        propertyList.set("Computed_ccdExposureId", self._computeCcdExposureId(dataId))
-        return propertyList
-
-    def X_bypass_defects(self, datasetType, pythonType, location, dataId):
-        """Method has X_ prepended and thus not currently live.
-
-        Since we have no defects, return an empty list. Fix this when defects exist.
-        """
-        return [afwImage.DefectBase(afwGeom.Box2I(afwGeom.Point2I(x0, y0), afwGeom.Point2I(x1, y1))) for
-                x0, y0, x1, y1 in (
-                    # These may be hot pixels, but we'll treat them as bad until we can get more data
-                    (3801, 666, 3805, 669),
-                    (3934, 582, 3936, 589),
-        )]
-
-    def X__defectLookup(self, dataId):
-        """Method has X_ prepended and thus not currently live.
-
-        Also, method is hacky method and should not exist.
-        This function needs to return a non-None value otherwise the mapper gives up
-        on trying to find the defects.  I wanted to be able to return a list of defects constructed
-        in code rather than reconstituted from persisted files, so I return a dummy value.
-        """
-        return "this_is_a_hack"
-
-    def X_standardizeCalib(self, dataset, item, dataId):
-        """Standardize a calibration image read in by the butler.
-
-        Some calibrations are stored on disk as Images instead of MaskedImages
-        or Exposures.  Here, we convert it to an Exposure.
-
-        @param dataset  Dataset type (e.g., "bias", "dark" or "flat")
-        @param item  The item read by the butler
-        @param dataId  The data identifier (unused, included for future flexibility)
-        @return standardized Exposure
-        """
-        mapping = self.calibrations[dataset]
-        if "MaskedImage" in mapping.python:
-            exp = afwImage.makeExposure(item)
-        elif "Image" in mapping.python:
-            if hasattr(item, "getImage"):  # For DecoratedImageX
-                item = item.getImage()
-                exp = afwImage.makeExposure(afwImage.makeMaskedImage(item))
-        elif "Exposure" in mapping.python:
-            exp = item
-        else:
-            raise RuntimeError("Unrecognised python type: %s" % mapping.python)
-
-        parent = super(CameraMapper, self)
-        if hasattr(parent, "std_" + dataset):
-            return getattr(parent, "std_" + dataset)(exp, dataId)
-        return self._standardizeExposure(mapping, exp, dataId)
-
-    def X_std_bias(self, item, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        return self.standardizeCalib("bias", item, dataId)
-
-    def X_std_dark(self, item, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        exp = self.standardizeCalib("dark", item, dataId)
-        # exp.getCalib().setExptime(1.0)
-        return exp
-
-    def X_std_flat(self, item, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        return self.standardizeCalib("flat", item, dataId)
-
-    def X_std_fringe(self, item, dataId):
-        """Method has X_ prepended and thus not currently live."""
-        return self.standardizeCalib("flat", item, dataId)

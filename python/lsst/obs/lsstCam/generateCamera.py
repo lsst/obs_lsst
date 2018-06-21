@@ -76,12 +76,13 @@ CCDs :\
             nindent += 1
 
             raftOffset = raftData["offset"]
-            id = raftData['id0']
+            id = raftData['id0'] - 1
             for ccdName, ccdData in ccds.items():
+                id += 1
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
-                print(indent(), "id : %s" % (id), file=fd); id += 1
+                print(indent(), "id : %s" % (id), file=fd)
                 print(indent(), "serial : %s" % (cameraData[raftName]['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "refpos : %s" % (ccdData['refpos']), file=fd)
                 print(indent(), "offset : [%g, %g]" % (ccdData['offset'][0] + raftOffset[0],
@@ -90,7 +91,7 @@ CCDs :\
                 print(indent(), "amplifiers :", file=fd)
                 nindent += 1
                 for ampName, ampData in amps.items():
-                    print(indent(), "\"%s\" :" % ampName, file=fd)
+                    print(indent(), "'%s' :" % ampName, file=fd)
 
                     nindent += 1
                     print(indent(), "<< : *A%s_%s" % (ampName, detectorType), file=fd)

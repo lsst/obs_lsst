@@ -35,7 +35,7 @@ exposures:
   postISRCCD:
     template: postISRCCD/%(visit)06d-%(filter)s/%(raft)s/postISRCCD_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   calexp:
-    template: calexp/%(visit)06d-%(filter)s/%(ccd)s/calexp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: calexp/%(visit)06d-%(filter)s/%(raft)s/calexp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   icExp:
     template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   wcs:
@@ -323,13 +323,13 @@ datasets:
     python: lsst.afw.math.BackgroundList
     storage: FitsCatalogStorage
     tables: raw
-    template: icExp/icExpBackground_%(visit)06d-%(filter)s.fits
+    template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   icSrc:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: icSrc/%(visit)06d-%(filter)s.fits
+    template: icSrc/%(visit)06d-%(filter)s/%(raft)s/icSrc_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   icSrc_schema:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
