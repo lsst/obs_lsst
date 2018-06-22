@@ -36,7 +36,7 @@ if __name__ == "__main__":
     cameraFile = args.outputFile
     cameraFileDir = os.path.dirname(cameraFile)
 
-    cameraSklFile = os.path.join(cameraFileDir, "camera.skl.yaml")
+    cameraSklFile = os.path.join(cameraFileDir, "cameraHeader.yaml")
     raftsFile = os.path.join(cameraFileDir, "rafts.yaml")
 
     with open(cameraSklFile) as fd:

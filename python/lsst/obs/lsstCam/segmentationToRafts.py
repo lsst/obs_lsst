@@ -3,8 +3,36 @@
 # used by generateCamera.py
 #
 # This is not really part of obs_lsstCam, but it's useful to keep it here
-# 
+#
+import numpy as np
 import re
+
+def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
+    print("""\
+%s :
+  detectorType : %s
+  raftSerial : %s
+
+  ccdSerials :
+    S00 : ITL-3800C-145-Dev
+    S01 : ITL-3800C-022-Dev
+    S02 : ITL-3800C-041-Dev
+    S10 : ITL-3800C-100-Dev
+    S11 : ITL-3800C-017-Dev
+    S12 : ITL-3800C-018-Dev
+    S20 : ITL-3800C-102-Dev
+    S21 : ITL-3800C-146-Dev
+    S22 : ITL-3800C-103-Dev
+
+  amplifiers :\
+""" % (raftName, detectorType, raftSerial), file=fd)
+    for ccdName in ccdData:
+        print("    %s :" % (ccdName), file=fd)
+
+        for ampName, (gain, readNoise) in ccdData[ccdName].items():
+            print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 raftData = {}
 with open('segmentation.txt') as fd:
@@ -24,7 +52,13 @@ with open('segmentation.txt') as fd:
         fields = fields[:29]
         assert len(fields) == 29
         
-        gain, readNoise = fields[7], fields[11]
+        gain, gainVariation           = fields[7],  fields[8]
+        readNoise, readNoiseVariation = fields[11], fields[12]
+
+        if True:
+            gain *= 1 + 0.01*gainVariation*np.random.normal()
+            readNoise *= 1 + 0.01*readNoiseVariation*np.random.normal()
+
         raftName, ccdName, ampName = name.split('_')
 
         if raftName not in raftData:
@@ -34,36 +68,14 @@ with open('segmentation.txt') as fd:
 
         raftData[raftName][ccdName][ampName] = (gain, readNoise)
 
-import sys
-fd = sys.stdout
-
-
-def writeRaftFile(fd, raftName, detectorType, ccdData):
-    print("""\
-%s :
-  detectorType : %s
-
-  ccdSerials :
-    S00 : ITL-3800C-145-Dev
-    S01 : ITL-3800C-022-Dev
-    S02 : ITL-3800C-041-Dev
-    S10 : ITL-3800C-100-Dev
-    S11 : ITL-3800C-017-Dev
-    S12 : ITL-3800C-018-Dev
-    S20 : ITL-3800C-102-Dev
-    S21 : ITL-3800C-146-Dev
-    S22 : ITL-3800C-103-Dev
-
-  amplifiers :\
-""" % (raftName, detectorType), file=fd)
-    for ccdName in ccdData:
-        print("    %s :" % (ccdName), file=fd)
-
-        for ampName, (gain, readNoise) in ccdData[ccdName].items():
-            print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
-
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            
+raftId = 0
 for raftName, ccdData in raftData.items():
+    raftSerial = "LCA-11021_RTM-%03d" % raftId    # won't be deterministic in reality!
+    raftId += 1
+
     if raftName in ("R00", "R40", "R04", "R44"):
         continue
     with open("%s.yaml" % raftName, "w") as fd:
-        writeRaftFile(fd, raftName, "ITL", raftData[raftName])
+        writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
