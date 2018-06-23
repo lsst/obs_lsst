@@ -75,7 +75,7 @@ AMP_ITL_TS8 : &AMP_ITL_TS8
     rawSerialPrescanBBox    : [[0,    0], [3,      2000]]  # serial prescan (often == extended)
     rawSerialOverscanBBox   : [[512,  0], [32,     2000]]  # serial overscan
     rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
-    rawParallelOverscanBBox : [[0, 2000], [509,      48]]  # parallel overscan
+    rawParallelOverscanBBox : [[3, 2000], [509,      48]]  # parallel overscan
 
     saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
 
