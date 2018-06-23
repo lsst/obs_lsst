@@ -30,7 +30,7 @@ import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
-from lsst.obs.base import CameraMapper, MakeRawVisitInfo
+from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
 
 from lsst.obs.lsstCam import LsstCam
@@ -102,6 +102,68 @@ def assemble_raw(dataId, componentInfo, cls):
         raise RuntimeError("Unable to read raw_amps for %s" % dataId)
 
     ccd = ampExps[0].getDetector()      # the same (full, CCD-level) Detector is attached to all ampExps
+    #
+    # Check that the geometry in the metadata matches cameraGeom
+    #
+    logger = lsst.log.Log.getLogger("LsstCamMapper")
+    warned = False
+    for i, (amp, ampExp) in enumerate(zip(ccd, ampExps)):
+        ampMd = ampExp.getMetadata().toDict()
+
+        if amp.getRawBBox() != ampExp.getBBox(): # Oh dear. cameraGeom is wrong -- probably overscan
+            if not warned:
+                logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)" %
+                            (amp.getRawBBox(), ampExp.getBBox()))
+                warned = True
+                
+            w,  h  = ampExp.getBBox().getDimensions()
+            ow, oh = amp.getRawBBox().getDimensions() # "old" (camGeom) dimensions
+            #
+            # We could trust the BIASSEC keyword, or we can just assume that they've changed
+            # the number of overscan pixels (serial and/or parallel).  As Jim Chiang points out,
+            # the latter is safer
+            #
+            bbox = amp.getRawHorizontalOverscanBBox()
+            hOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
+                                         afwGeom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
+            bbox = amp.getRawVerticalOverscanBBox()
+            vOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
+                                         afwGeom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
+
+            amp.setRawBBox(ampExp.getBBox())
+            amp.setRawHorizontalOverscanBBox(hOverscanBBox)
+            amp.setRawVerticalOverscanBBox(vOverscanBBox)
+            #
+            # This gets all the geometry right for the amplifier, but the size of the untrimmed image
+            # will be wrong and we'll put the amp sections in the wrong places, i.e.
+            #   amp.getRawXYOffset()
+            # will be wrong.  So we need to recalculate the offsets.
+            # 
+            xRawExtent, yRawExtent = amp.getRawBBox().getDimensions()
+            
+            x0, y0 = amp.getRawXYOffset()
+            ix, iy = x0//ow, y0/oh
+            x0, y0 = ix*xRawExtent, iy*yRawExtent
+            amp.setRawXYOffset(afwGeom.ExtentI(ix*xRawExtent, iy*yRawExtent))
+        #
+        # Check the "IRAF" keywords, but don't abort if they're wrong
+        #
+        # Only warn about the first amp, use debug for the others
+        #
+        detsec = bboxFromIraf(ampMd["DETSEC"]) if "DETSEC" in ampMd else None
+        datasec = bboxFromIraf(ampMd["DATASEC"]) if "DATASEC" in ampMd else None
+        biassec = bboxFromIraf(ampMd["BIASSEC"]) if "BIASSEC" in ampMd else None
+
+        logCmd = logger.warn if i == 0 else logger.debug
+        if detsec and amp.getBBox() != detsec:
+            logCmd("DETSEC doesn't match for %s (%s != %s)" %
+                   (dataId, amp.getBBox(), detsec))
+        if datasec and amp.getRawDataBBox() != datasec:
+            logCmd("DATASEC doesn't match for %s (%s != %s)" %
+                        (dataId, amp.getRawDataBBox(), detsec))
+        if biassec and amp.getRawHorizontalOverscanBBox() != biassec:
+            logCmd("BIASSEC doesn't match for %s (%s != %s)" %
+                   (dataId, amp.getRawHorizontalOverscanBBox(), detsec))
 
     ampDict = {}
     for amp, ampExp in zip(ccd, ampExps):
