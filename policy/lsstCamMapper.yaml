@@ -415,6 +415,14 @@ datasets:
     storage: BoostStorage
     tables: raw
     template: transformSrcMeasurement_metadata/%(visit)06d-%(filter)s/%(raft)s/transformSrcMeasurementMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+  singleFrameDriver_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables:
+    - raw
+    - raw_visit
+    template: singleFrameDriver_metadata/%(visit)06d-%(filter)s/%(raft)s/singleFrameDriverMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
   transformed_src:
     persistable: ignored
     python: lsst.afw.table.BaseCatalog
