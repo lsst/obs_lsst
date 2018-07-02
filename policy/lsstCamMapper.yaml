@@ -52,6 +52,8 @@ exposures:
     - raw
     - raw_visit
     template: fcr/%(visit)06d-%(filter)s/%(raft)s/fcr_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+  deepCoadd_directWarp:
+    template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/warp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
 
 calibrations:
   bias:
