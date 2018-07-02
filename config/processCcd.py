@@ -5,8 +5,7 @@ from lsst.meas.algorithms import ColorLimit
 
 configDir = os.path.join(getPackageDir("obs_lsstCam"), "config")
 
-# Place holder for later
-#bgFile = os.path.join(configDir, "background.py")
+bgFile = os.path.join(configDir, "background.py")
 
 config.load(os.path.join(getPackageDir("obs_lsstCam"), "config", "lsstCam.py"))
 
