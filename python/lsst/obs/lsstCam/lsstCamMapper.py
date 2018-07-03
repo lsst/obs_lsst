@@ -117,7 +117,7 @@ def assemble_raw(dataId, componentInfo, cls):
                 warned = True
                 
             w,  h  = ampExp.getBBox().getDimensions()
-            ow, oh = amp.getRawBBox().getDimensions() # "old" (camGeom) dimensions
+            ow, oh = amp.getRawBBox().getDimensions() # "old" (cameraGeom) dimensions
             #
             # We could trust the BIASSEC keyword, or we can just assume that they've changed
             # the number of overscan pixels (serial and/or parallel).  As Jim Chiang points out,
@@ -176,11 +176,68 @@ def assemble_raw(dataId, componentInfo, cls):
     #
     # We need to standardize, but have no legal way to call std_raw.  The butler should do this for us.
     #
+    camera = LsstCam()
     ccm = LsstCamMapper()
+
     exposure = ccm.std_raw(exposure, dataId)
+
+    setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
+    if setWcsFromBoresight:
+        boresight = afwGeom.PointD(md.getScalar("RATEL"), md.getScalar("DECTEL"))
+        rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
+
+        exposure.setWcs(getWcsFromDetector(camera, exposure.getDetector(), boresight,
+                                           90*afwGeom.degrees - rotangle))
 
     return exposure
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#
+# This code will be replaced by functionality in afw;  DM-14932
+#
+import astshim
+import lsst.afw.cameraGeom as cameraGeom
+import numpy as np                      # only for pi!
+
+def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
+    """Given a camera, detector and (boresight, rotation), return that detector's WCS
+
+        Parameters
+        ----------
+        camera: `lsst.afw.cameraGeom.Camera`  The camera containing the detector
+        detector: `lsst.afw.cameraGeom.Detector`  A detector in a camera
+        boresight: `lsst.afw.geom.Point2D`  The boresight of the observation
+        rotation: `lsst.afw.geom.Angle` The rotation angle of the camera
+
+    The rotation is "rotskypos", the angle of sky relative to camera coordinates
+    (from North over East)
+    """
+    trans = camera.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
+                                detector.makeCameraSys(cameraGeom.FIELD_ANGLE))    
+    polyMap = trans.getMapping()
+    radToDeg = astshim.ZoomMap(2, 180/np.pi) # convert from radians to degrees
+    polyMap = polyMap.then(radToDeg)
+
+    pixelFrame = astshim.Frame(2, "Domain=PIXELS")
+    iwcFrame = astshim.Frame(2, "Domain=IWC")
+
+    frameDict = astshim.FrameDict(pixelFrame, polyMap, iwcFrame)
+
+    crpix = afwGeom.PointD(0, 0)
+    crval = afwGeom.SpherePoint(*boresight, afwGeom.degrees)
+    cd = afwGeom.makeCdMatrix(1.0*afwGeom.degrees, rotation, flipX)
+    iwcToSkyWcs = afwGeom.makeSkyWcs(crpix, crval, cd)
+
+    iwcToSkyMap = iwcToSkyWcs.getFrameDict().getMapping("PIXELS", "SKY")
+    skyFrame = iwcToSkyWcs.getFrameDict().getFrame("SKY")
+
+    frameDict.addFrame("IWC", iwcToSkyMap, skyFrame)
+
+    wcs = afwGeom.SkyWcs(frameDict)
+    
+    return wcs
+
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 class LsstCamMapper(CameraMapper):
     """The Mapper for LsstCam."""
