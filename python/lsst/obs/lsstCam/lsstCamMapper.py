@@ -176,17 +176,25 @@ def assemble_raw(dataId, componentInfo, cls):
     #
     # We need to standardize, but have no legal way to call std_raw.  The butler should do this for us.
     #
-    camera = LsstCam()
-    ccm = LsstCamMapper()
+    # Because it's expensive to build Cameras and Mappers, we keep cached copies it global scope;
+    # this is not a good idea in the long run!
+    #
+    global _camera, _lsstCamMapper
 
-    exposure = ccm.std_raw(exposure, dataId)
+    try:
+        _camera
+    except NameError:
+        _camera = LsstCam()
+        _lsstCamMapper = LsstCamMapper()
+
+    exposure = _lsstCamMapper.std_raw(exposure, dataId)
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
         boresight = afwGeom.PointD(md.getScalar("RATEL"), md.getScalar("DECTEL"))
         rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
 
-        exposure.setWcs(getWcsFromDetector(camera, exposure.getDetector(), boresight,
+        exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
                                            90*afwGeom.degrees - rotangle))
 
     return exposure
