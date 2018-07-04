@@ -12,9 +12,13 @@ config.load(os.path.join(getPackageDir("obs_lsstCam"), "config", "lsstCam.py"))
 # Cosmic rays
 config.charImage.repair.cosmicray.nCrPixelMax = 1000000
 config.charImage.repair.cosmicray.cond3_fac2 = 0.4
-#config.charImage.background.load(bgFile)
-#config.charImage.detection.background.load(bgFile)
-#config.calibrate.detection.background.load(bgFile)
+config.charImage.background.load(bgFile)
+config.charImage.detection.background.load(bgFile)
+config.calibrate.detection.background.load(bgFile)
+
+# Enable temporary local background subtraction
+config.charImage.detection.doTempLocalBackground=True
+config.calibrate.detection.doTempLocalBackground=True
 
 # PSF determination
 config.charImage.measurePsf.reserve.fraction = 0.2
