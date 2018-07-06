@@ -14,7 +14,7 @@ exposures:
     python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)s-%(snap)03d.fits[0]
+    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)03d-%(snap)03d.fits[0]
   raw:
     assembler: lsst.obs.lsstCam.lsstCamMapper.assemble_raw
     composite:
@@ -31,18 +31,18 @@ exposures:
     python: lsst.afw.image.DecoratedImageI
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)s-%(snap)03d.fits[%(channel)d]
+    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)03d-%(snap)03d.fits[%(channel)d]
   postISRCCD:
-    template: postISRCCD/%(visit)06d-%(filter)s/%(raft)s/postISRCCD_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: postISRCCD/%(visit)06d-%(filter)s/%(raft)s/postISRCCD_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   calexp:
-    template: calexp/%(visit)06d-%(filter)s/%(raft)s/calexp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: calexp/%(visit)06d-%(filter)s/%(raft)s/calexp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   icExp:
-    template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   wcs:
     tables:
     - raw
     - raw_visit
-    template: wcs/%(visit)06d-%(filter)s/%(raft)s/wcs_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: wcs/%(visit)06d-%(filter)s/%(raft)s/wcs_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   fcr:
     level: Ccd
     persistable: ExposureI
@@ -51,7 +51,7 @@ exposures:
     tables:
     - raw
     - raw_visit
-    template: fcr/%(visit)06d-%(filter)s/%(raft)s/fcr_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: fcr/%(visit)06d-%(filter)s/%(raft)s/fcr_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
 
 calibrations:
   bias:
@@ -66,7 +66,7 @@ calibrations:
     reference: raw_visit
     storage: FitsStorage
     tables: bias
-    template: bias/%(calibDate)s/bias-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: bias/%(calibDate)s/bias-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     validRange: true
   dark:
     columns:
@@ -80,7 +80,7 @@ calibrations:
     reference: raw_visit
     storage: FitsStorage
     tables: dark
-    template: dark/%(calibDate)s/dark-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: dark/%(calibDate)s/dark-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     validRange: true
   flat:
     columns:
@@ -97,7 +97,7 @@ calibrations:
     reference: raw_visit
     storage: FitsStorage
     tables: flat
-    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     validRange: true
   fringe:
     columns:
@@ -114,29 +114,29 @@ calibrations:
     reference: raw_visit
     storage: FitsStorage
     tables: flat
-    template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     validRange: true
 
   bias_camera:
-    template: focalplane/bias/%(calibDate)s/bias_%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: focalplane/bias/%(calibDate)s/bias_%(raft)s-%(ccd)03d_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   dark_camera:
-    template: focalplane/dark/%(calibDate)s/dark_%(raft)-%(ccd)s_%(calibDate)s.fits
+    template: focalplane/dark/%(calibDate)s/dark_%(raft)-%(ccd)03d_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   flat_camera:
-    template: focalplane/flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: focalplane/flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   fringe_camera:
-    template: focalplane/fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raft)s-%(ccd)s_%(calibDate)s.fits
+    template: focalplane/fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raft)s-%(ccd)03d_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
@@ -177,7 +177,7 @@ datasets:
     python: lsst.meas.algorithms.ApertureCorrection
     storage: PickleStorage
     tables: raw
-    template: apCorr/%(visit)06d-%(filter)s/%(raft)s/apCorr_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.pickle
+    template: apCorr/%(visit)06d-%(filter)s/%(raft)s/apCorr_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.pickle
   bias_config:
     persistable: Config
     python: lsst.pipe.drivers.constructCalibs.BiasConfig
@@ -285,7 +285,7 @@ datasets:
     python: lsst.daf.base.PropertySet
     storage: BoostStorage
     tables: raw
-    template: forced_metadata/%(visit)06d-%(filter)s/%(raft)s/forcedMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: forced_metadata/%(visit)06d-%(filter)s/%(raft)s/forcedMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.boost
   forced_schema:
     persistable: ignored
     python: lsst.afw.table.SourceCatalog
@@ -297,7 +297,7 @@ datasets:
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: forced/%(visit)06d-%(filter)s/%(raft)s/forced_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: forced/%(visit)06d-%(filter)s/%(raft)s/forced_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   fringe_config:
     persistable: Config
     python: lsst.pipe.drivers.constructCalibs.FringeConfig
@@ -323,13 +323,13 @@ datasets:
     python: lsst.afw.math.BackgroundList
     storage: FitsCatalogStorage
     tables: raw
-    template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: icExp/%(visit)06d-%(filter)s/%(raft)s/icExp_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   icSrc:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: icSrc/%(visit)06d-%(filter)s/%(raft)s/icSrc_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: icSrc/%(visit)06d-%(filter)s/%(raft)s/icSrc_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   icSrc_schema:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
@@ -347,13 +347,13 @@ datasets:
     python: lsst.daf.base.PropertySet
     storage: BoostStorage
     tables: raw
-    template: measureCcd_metadata/%(visit)06d-%(filter)s/%(raft)s/measureCcdMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: measureCcd_metadata/%(visit)06d-%(filter)s/%(raft)s/measureCcdMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.boost
   modelfits:
     persistable: ModelFitCatalog
     python: lsst.meas.multifit.ModelFitCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: modelfits/%(visit)06d-%(filter)s/%(raft)s/modelfits_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: modelfits/%(visit)06d-%(filter)s/%(raft)s/modelfits_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   modelfits_schema:
     persistable: ModelFitCatalog
     python: lsst.meas.multifit.ModelFitCatalog
@@ -371,14 +371,14 @@ datasets:
     python: lsst.daf.base.PropertySet
     storage: BoostStorage
     tables: raw
-    template: processCcd_metadata/%(visit)06d-%(filter)s/%(raft)s/processCcdMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: processCcd_metadata/%(visit)06d-%(filter)s/%(raft)s/processCcdMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.boost
   raw_hdu:
     level: Ccd
     persistable: PropertyList
     python: lsst.daf.base.propertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)s-%(snap)03d.fits[0]
+    template: raw/%(run)s/%(raft)s/%(visit)06d-%(raft)s-%(ccd)03d-%(snap)03d.fits[0]
   refcat:
     persistable: SimpleCatalog
     python: lsst.afw.table.SimpleCatalog
@@ -390,13 +390,13 @@ datasets:
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: src/%(visit)06d-%(filter)s/%(raft)s/src_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: src/%(visit)06d-%(filter)s/%(raft)s/src_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   srcMatch:
     persistable: BaseCatalog
     python: lsst.afw.table.BaseCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: srcMatch/%(visit)06d-%(filter)s/%(raft)s/srcMatch_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: srcMatch/%(visit)06d-%(filter)s/%(raft)s/srcMatch_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   src_schema:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
@@ -414,13 +414,13 @@ datasets:
     python: lsst.daf.base.PropertySet
     storage: BoostStorage
     tables: raw
-    template: transformSrcMeasurement_metadata/%(visit)06d-%(filter)s/%(raft)s/transformSrcMeasurementMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: transformSrcMeasurement_metadata/%(visit)06d-%(filter)s/%(raft)s/transformSrcMeasurementMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.boost
   transformed_src:
     persistable: ignored
     python: lsst.afw.table.BaseCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: transformedSrc/%(visit)06d-%(filter)s/%(raft)s/transformedSrc_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
+    template: transformedSrc/%(visit)06d-%(filter)s/%(raft)s/transformedSrc_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.fits
   transformed_src_schema:
     persistable: ignored
     python: lsst.afw.table.BaseCatalog
@@ -433,6 +433,6 @@ datasets:
     python: dict
     storage: PickleStorage
     tables: raw
-    template: gain/%(run)s/gain_%(run)s-%(raft)s-%(ccd)s.pickle
+    template: gain/%(run)s/gain_%(run)s-%(raft)s-%(ccd)03d.pickle
   apPipe_metadata:
-    template: apPipe_metadata/%(visit)06d-%(filter)s/%(raft)s/apPipeMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: apPipe_metadata/%(visit)06d-%(filter)s/%(raft)s/apPipeMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)03d.boost

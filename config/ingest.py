@@ -17,6 +17,7 @@ config.parse.translation = {
 config.parse.translators = {
     'wavelength': 'translate_wavelength',
     'raft' : 'translate_raft',
+    'ccdName' : 'translate_ccdName',
     'ccd'  : 'translate_ccd',
     'snap' : 'translate_snap',
 }
@@ -33,7 +34,8 @@ config.register.columns = {
     'dateObs': 'text',
     'expTime': 'double',
     'raft': 'text',
-    'ccd': 'text',
+    'ccdName': 'text',
+    'ccd': 'int',
     'snap': 'int',
     'object': 'text',
     'imageType': 'text',
