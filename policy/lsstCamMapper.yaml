@@ -197,7 +197,7 @@ datasets:
     python: lsst.afw.math.BackgroundList
     storage: FitsCatalogStorage
     tables: raw
-    template: calexp/%(visit)06d/bkgd.fits
+    template: calexp/%(visit)06d-%(filter)s/%(raft)s/bkgd_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.fits
   ccdExposureId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
