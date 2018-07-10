@@ -436,3 +436,5 @@ datasets:
     template: gain/%(run)s/gain_%(run)s-%(raft)s-%(ccd)s.pickle
   apPipe_metadata:
     template: apPipe_metadata/%(visit)06d-%(filter)s/%(raft)s/apPipeMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+  bfKernelNew:
+    template: calibrations/bfKernel-%(ccd)03d.pkl
