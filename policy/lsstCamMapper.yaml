@@ -51,13 +51,9 @@ exposures:
     tables:
     - raw
     - raw_visit
-<<<<<<< HEAD
     template: fcr/%(visit)08d-%(filter)s/%(raft)s/fcr_%(visit)08d-%(filter)s-%(raft)s-%(ccd)03d.fits
   deepCoadd_directWarp:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/warp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
-=======
-    template: fcr/%(visit)08d-%(filter)s/%(raftName)s/fcr_%(visit)08d-%(filter)s-%(raftName)s-%(detector)03d.fits
->>>>>>> Change raft --> raftName
 
 calibrations:
   bias:
@@ -122,7 +118,6 @@ calibrations:
     tables: flat
     template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detector)03d_%(calibDate)s.fits
     validRange: true
-
   bias_camera:
     template: focalplane/bias/%(calibDate)s/bias_%(raftName)s-%(detector)03d_%(calibDate)s.fits
     persistable: ExposureF
