@@ -90,7 +90,7 @@ class LsstCamParseTask(ParseTask):
                 '%s is more than 0.1nm from an integer value', raw_wl)
         return wl
 
-    def _translate_visit(self, md):
+    def XXX_translate_visit(self, md):
         """Generate a unique visit from the timestamp.
 
         It might be better to use the 1000*runNo + seqNo, but the latter isn't currently set
