@@ -423,7 +423,7 @@ datasets:
     tables:
     - raw
     - raw_visit
-    template: singleFrameDriver_metadata/%(visit)06d-%(filter)s/%(raft)s/singleFrameDriverMetadata_%(visit)06d-%(filter)s-%(raft)s-%(ccd)s.boost
+    template: singleFrameDriver_metadata/%(visit)06d-%(filter)s/%(raftName)s/singleFrameDriverMetadata_%(visit)06d-%(filter)s-%(raftName)s-%(detector)03d.boost
   transformed_src:
     persistable: ignored
     python: lsst.afw.table.BaseCatalog
@@ -446,4 +446,4 @@ datasets:
   apPipe_metadata:
     template: apPipe_metadata/%(visit)08d-%(filter)s/%(raftName)s/apPipeMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detector)03d.boost
   bfKernelNew:
-    template: calibrations/bfKernel-%(ccd)03d.pkl
+    template: calibrations/bfKernel-%(detector)03d.pkl
