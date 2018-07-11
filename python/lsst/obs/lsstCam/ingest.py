@@ -127,7 +127,7 @@ class LsstCamParseTask(ParseTask):
         except pexExcept.NotFoundError:
             return 0
 
-    def translate_ccd(self, md):
+    def translate_detectorName(self, md):
         """Extract ccd ID from CHIPID
 
         Parameters
@@ -142,7 +142,7 @@ class LsstCamParseTask(ParseTask):
         """
         return md.get("CHIPID")[4:]
 
-    def translate_raft(self, md):
+    def translate_raftName(self, md):
         """Extract raft ID from CHIPID
 
         Parameters
@@ -156,6 +156,21 @@ class LsstCamParseTask(ParseTask):
             name of raft, e.g. R21
         """
         return md.get("CHIPID")[:3]
+
+    def translate_detector(self, md):
+        """Extract raft ID from CHIPID
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        raftID : `str`
+            name of raft, e.g. R21
+        """
+        return 94
 
 ##############################################################################################################
 
