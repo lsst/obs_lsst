@@ -4,9 +4,11 @@ import lsst.pex.exceptions as pexExcept
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 import lsst.log as lsstLog
+from lsst.obs.lsstCam import lsstCam
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
+camera = lsstCam.LsstCam()  # Global camera to avoid instaniating once per file
 
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
@@ -170,7 +172,14 @@ class LsstCamParseTask(ParseTask):
         raftID : `str`
             name of raft, e.g. R21
         """
-        return 94
+        global camera  # avoids (very slow) instantiation for each file
+
+        raftName = self.translate_raftName(md)
+        detectorName = self.translate_detectorName(md)
+        fullName = '_'.join([raftName, detectorName])
+        detId = camera._nameDetectorDict[fullName].getId()
+
+        return detId
 
 #############################################################################################################
 
