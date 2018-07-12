@@ -193,11 +193,16 @@ class LsstCamCalibsParseTask(CalibsParseTask):
         match = re.search(".*%s=(\S+)" % field, data)
         return match.groups()[0]
 
-    def translate_raft(self, md):
-        return self._translateFromCalibId("raft", md)
+    def translate_raftName(self, md):
+        return self._translateFromCalibId("raftName", md)
 
-    def translate_ccd(self, md):
-        return self._translateFromCalibId("ccd", md)
+    def translate_detectorName(self, md):
+        return self._translateFromCalibId("detectorName", md)
+
+    def translate_detector(self, md):
+        # this is not a _great_ fix, but this obs_package is enforcing that detectors be integers
+        # and there's not an elegant way of ensuring this is the right type really
+        return int(self._translateFromCalibId("detector", md))
 
     def translate_filter(self, md):
         return self._translateFromCalibId("filter", md)
