@@ -459,3 +459,7 @@ datasets:
     template: apPipe_metadata/%(visit)08d-%(filter)s/%(raftName)s/apPipeMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
   bfKernelNew:
     template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.pkl
+  bfGain:
+    template: calibrations/bfGain-%(detector)03d.pkl
+  plotBfPtc:
+    template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
