@@ -2,8 +2,8 @@ config.isr.doFlat = False  # mandatory for this task
 config.ccdKey = 'detector'
 
 # to be re-examined once more calibration products are available
-config.isr.doBias = True
-config.isr.doDark = True
+config.isr.doBias = False
+config.isr.doDark = False
 config.isr.doFringe = False
 config.isr.doLinearize = False
 config.isr.doDefect = False
