@@ -316,10 +316,10 @@ class LsstCamMapper(CameraMapper):
                                    (k, dataType, dataId))
 
     def _extractDetectorName(self, dataId):
-        raft = self._getRegistryValue(dataId, "raft")
-        ccd  = self._getRegistryValue(dataId, "ccd")
-            
-        return "%s_%s" % (raft, ccd)
+        raftName = self._getRegistryValue(dataId, "raftName")
+        detectorName = self._getRegistryValue(dataId, "detectorName")
+
+        return "%s_%s" % (raftName, detectorName)
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.

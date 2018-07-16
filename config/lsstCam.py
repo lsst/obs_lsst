@@ -1,7 +1,7 @@
 # Configuration for lsstCam
 
 if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['raft', 'ccd', 'snap']
+    config.ccdKeys = ['detector', 'snap', 'raftName', 'detectorName']
 
 config.isr.doLinearize = False
 config.isr.doDefect = False

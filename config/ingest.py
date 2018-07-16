@@ -16,9 +16,10 @@ config.parse.translation = {
 }
 config.parse.translators = {
     'wavelength': 'translate_wavelength',
-    'raft' : 'translate_raft',
-    'ccd'  : 'translate_ccd',
-    'snap' : 'translate_snap',
+    'raftName': 'translate_raftName',
+    'detectorName': 'translate_detectorName',
+    'detector': 'translate_detector',
+    'snap': 'translate_snap',
 }
 config.parse.defaults = {
     'object': "UNKNOWN",
@@ -32,8 +33,9 @@ config.register.columns = {
     'date': 'text',
     'dateObs': 'text',
     'expTime': 'double',
-    'raft': 'text',
-    'ccd': 'text',
+    'raftName': 'text',
+    'detectorName': 'text',
+    'detector': 'int',
     'snap': 'int',
     'object': 'text',
     'imageType': 'text',
@@ -41,5 +43,5 @@ config.register.columns = {
     'lsstSerial': 'text',
     'wavelength': 'int',
 }
-config.register.unique = ["visit", "raft", "ccd"]
+config.register.unique = ["visit", "detector"]
 config.register.visit = list(config.register.columns.keys())
