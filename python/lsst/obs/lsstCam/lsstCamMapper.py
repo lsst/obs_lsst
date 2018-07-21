@@ -33,9 +33,9 @@ from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
 
-from lsst.obs.lsstCam import LsstCam
+from lsst.obs.lsstCam import LsstCam, PhosimCam
 
-__all__ = ["LsstCamMapper"]
+__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper",]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
@@ -176,16 +176,7 @@ def assemble_raw(dataId, componentInfo, cls):
     #
     # We need to standardize, but have no legal way to call std_raw.  The butler should do this for us.
     #
-    # Because it's expensive to build Cameras and Mappers, we keep cached copies it global scope;
-    # this is not a good idea in the long run!
-    #
-    global _camera, _lsstCamMapper
-
-    try:
-        _camera
-    except NameError:
-        _camera = LsstCam()
-        _lsstCamMapper = LsstCamMapper()
+    global _camera, _lsstCamMapper      # Dangerous file-level cache set by Mapper.__initialiseCache()
 
     exposure = _lsstCamMapper.std_raw(exposure, dataId)
 
@@ -253,6 +244,20 @@ class LsstCamMapper(CameraMapper):
     packageName = 'obs_lsstCam'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
 
+    def __initialiseCache(self):
+        """Initialise file-level cache.
+        
+        We do this because it's expensive to build Cameras and Mappers, but it is not a good idea in the
+        medium or long run!
+        """
+        global _camera, _lsstCamMapper
+
+        try:
+            _camera
+        except NameError:
+            _camera = self._makeCamera(None, None)
+            _lsstCamMapper = self
+
     def __init__(self, inputPolicy=None, **kwargs):
         """Initialization for the LsstCam Mapper."""
         policyFile = dafPersist.Policy.defaultPolicyFile(self.packageName, "lsstCamMapper.yaml", "policy")
@@ -281,6 +286,8 @@ class LsstCamMapper(CameraMapper):
             d['raw'] = d['_raw']
 
         self.defineFilters()
+
+        self.__initialiseCache()
 
     @classmethod
     def defineFilters(cls):
@@ -434,3 +441,23 @@ class LsstCamMapper(CameraMapper):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
                                          trimmed=False, setVisitInfo=False)
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+#
+# We need a mapper class for each new distinct collection of LSST CCDs; you'll also
+# need to make the obvious changes to lsstCamp.py
+#
+# Don't forget to add your mapper to __all__ at the top of this file
+#
+class ImsimMapper(LsstCamMapper):
+    """The Mapper for the imsim simulations of the LsstCam."""
+
+    def _makeCamera(self, policy, repositoryDir):
+        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        return ImsimCam()
+    
+class PhosimMapper(LsstCamMapper):
+    """The Mapper for the phosim simulations of the LsstCam."""
+
+    def _makeCamera(self, policy, repositoryDir):
+        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        return PhosimCam()

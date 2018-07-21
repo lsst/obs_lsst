@@ -24,11 +24,26 @@ import sys
 import shutil
 import yaml
 
+def findYamlOnPath(fileName, searchPath):
+    """Find and return a file somewhere in the directories listed in searchPath"""
+    for d in searchPath:
+        f = os.path.join(d, fileName)
+        if os.path.exists(f):
+            return f
+
+    raise FileNotFoundError("Unable to find %s on path %s" % (fileName, ":".join(searchPath)))
+
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="")
+    parser = argparse.ArgumentParser(description="""
+    Generate a camera.yaml file for a camera by assembling descriptions of rafts, sensors, etc.
+
+    Because we have many similar cameras, the assembly uses a :-separated search path of directories
+    to find desired information.  The _first_ occurrence of a filename is used.
+    """)
     
     parser.add_argument('outputFile', type=str, help="Name of generated file")
+    parser.add_argument('--path', type=str, help="List of directories to search for components", default=False)
     parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
     
     args = parser.parse_args()
@@ -36,14 +51,19 @@ if __name__ == "__main__":
     cameraFile = args.outputFile
     cameraFileDir = os.path.dirname(cameraFile)
 
-    cameraSklFile = os.path.join(cameraFileDir, "cameraHeader.yaml")
-    raftsFile = os.path.join(cameraFileDir, "rafts.yaml")
+    searchPath = []
+    for d in args.path.split(":"):
+        searchPath.append(os.path.join(cameraFileDir, d))
 
+    cameraSklFile = findYamlOnPath("cameraHeader.yaml", searchPath)
     with open(cameraSklFile) as fd:
         cameraSkl = yaml.load(fd, Loader=yaml.Loader)
 
-    with open(raftsFile) as fd:
+    with open(findYamlOnPath("rafts.yaml", searchPath)) as fd:
         raftData = yaml.load(fd, Loader=yaml.Loader)
+
+    with open(findYamlOnPath("ccdData.yaml", searchPath)) as fd:
+        ccdData = yaml.load(fd, Loader=yaml.Loader)
 
     shutil.copyfile(cameraSklFile, cameraFile)
 
@@ -65,7 +85,7 @@ CCDs :\
 
         for raftName, raftData in raftData["rafts"].items():
             try:
-                with open(os.path.join(cameraFileDir, "%s.yaml" % raftName)) as yfd:
+                with open(findYamlOnPath("%s.yaml" % raftName, searchPath)) as yfd:
                     raftCcdData = yaml.load(yfd, Loader=yaml.Loader)[raftName]
             except FileNotFoundError:
                 print("Unable to load CCD descriptions for raft %s" % raftName, file=sys.stderr)
@@ -75,9 +95,13 @@ CCDs :\
                 detectorType = raftCcdData["detectorType"]
                 ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
                 amps = cameraSkl['CCD_%s'  % detectorType]["amplifiers"]  # describe this *type* of ccd
-
             except KeyError:
                 raise RuntimeError("Unknown detector type %s" % detectorType)
+
+            try:
+                crosstalkCoeffs = ccdData["crosstalk"][detectorType]
+            except KeyError:
+                crosstalkCoeffs = None
 
             nindent += 1
 
@@ -92,6 +116,16 @@ CCDs :\
                 print(indent(), "refpos : %s" % (ccdData['refpos']), file=fd)
                 print(indent(), "offset : [%g, %g]" % (ccdData['offset'][0] + raftOffset[0],
                                                        ccdData['offset'][1] + raftOffset[1]), file=fd)
+
+                if crosstalkCoeffs is not None:
+                    namp = len(amps)
+                    print(indent(), "crosstalk : [", file=fd)
+                    nindent += 1
+                    print(indent(), file=fd, end="")
+                    for i, c in enumerate(crosstalkCoeffs):
+                        print("%10.3e," % c, file=fd, end="\n" + indent() if i%namp == namp - 1 else " ")
+                    nindent -= 1
+                    print("]", file=fd)
 
                 print(indent(), "amplifiers :", file=fd)
                 nindent += 1

@@ -1,0 +1,37 @@
+This directory contains the files needed to describe cameras made up of LSST chips.  The eventual goal is to
+describe the real camera, but for now we also have variants to handle phosim and imsim simulations (they
+differ in e.g. the gain and crosstalk values).
+
+Once Butler Gen3 is ready this configuration data will be moved out of the obs package and into the
+calibration registry, which will allow us to track evolution of the system (including replacing failed
+rafts -- not that that's going to happen).
+
+
+The basic strategy is that the SConscript file in the directory assembles a suitable camera.yaml file
+(e.g. phosim.yaml) and we put the appropriate entry in the _mapper file in the data repository.
+
+To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call it R99 for now):
+ - Add a directory policy/comCam (n.b. the file you are reading is policy/README)
+ - Put a file rafts.yaml in that directory describing R99 (you can start with policy/rafts.yaml).
+ - Put a file R99.yaml in policy.comCam (you can start with lsstCam/R11.yaml).  Note that you can
+   choose an ITL or E2V device.
+ - If you're plagued by crosstalk, put a file ccdData.yaml in policy/comcam.  Look at the one in
+   policy/phosim for the format -- basically a dict crosstalk indexed by the CCD type.  There
+   are 256 coefficients (16 amplifiers and 256 == 16^2), and we assume for now that all CCDs from
+   a given vendor are the same (but the fix to generateCamera.py to handle per-CCD coefficients
+   would be easy)
+ - Edit policy/SConscript to add your new camera "comcam" to the `for camera in ...` loop.
+   note the magic `--path` options -- it tells the code to use your data in comcam to override
+   lsstCam values.  This is why there's no imsim directory and phosim only contains the crosstalk
+   coefficients; they take almost everything from policy and policy/lsstCam
+ - run scons in the obs_lsstCam directory (or scons -u in policy)
+ - add comcam.yaml to policy/.gitignore
+ - Edit python/lsst/obs/lsstCam/lsstCam.py to add a class ComCam.  Note that you need to change
+   the path for cameraYamlFile, presumably to "comcam.yaml" -- you don't need to create this file;
+   it's the one you named in the previous step
+ - Edit python/lsst/obs/lsstCam/lsstCamMapper.py to add a class ComCamMapper.
+   Remember to update _makeCamera to match your change to lsstCam.py, and to update __all__
+ - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.ComCamMapper
+
+If my instructions are complete and correct you are good to go. Once you're happy commit all
+your changes to git and push.

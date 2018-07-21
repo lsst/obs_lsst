@@ -37,3 +37,29 @@ class LsstCam(YamlCamera):
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "camera.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
+
+class ImsimCam(YamlCamera):
+    """The imsim realisation of the real LSST 3.2Gpix Camera
+    """
+    packageName = 'obs_lsstCam'
+
+    def __init__(self, cameraYamlFile=None):
+        """Construct lsstCam for imsim
+        """
+        if not cameraYamlFile:
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
+
+        YamlCamera.__init__(self, cameraYamlFile)
+
+class PhosimCam(YamlCamera):
+    """The phosim realisation of the real LSST 3.2Gpix Camera
+    """
+    packageName = 'obs_lsstCam'
+
+    def __init__(self, cameraYamlFile=None):
+        """Construct lsstCam for phosim
+        """
+        if not cameraYamlFile:
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "phosim.yaml")
+
+        YamlCamera.__init__(self, cameraYamlFile)
