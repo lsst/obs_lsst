@@ -55,7 +55,7 @@ with open('segmentation.txt') as fd:
         gain, gainVariation           = fields[7],  fields[8]
         readNoise, readNoiseVariation = fields[11], fields[12]
 
-        if True:
+        if False:
             gain *= 1 + 0.01*gainVariation*np.random.normal()
             readNoise *= 1 + 0.01*readNoiseVariation*np.random.normal()
 
