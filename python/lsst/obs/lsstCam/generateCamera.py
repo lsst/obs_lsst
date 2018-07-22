@@ -107,15 +107,15 @@ CCDs :\
 
             raftOffset = raftData["offset"]
             id0 = raftData['id0']
-            for ccdName, ccdData in ccds.items():
+            for ccdName, ccd_layout in ccds.items():
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
-                print(indent(), "id : %s" % (id0 + ccdData['id']), file=fd)
+                print(indent(), "id : %s" % (id0 + ccd_layout['id']), file=fd)
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
-                print(indent(), "refpos : %s" % (ccdData['refpos']), file=fd)
-                print(indent(), "offset : [%g, %g]" % (ccdData['offset'][0] + raftOffset[0],
-                                                       ccdData['offset'][1] + raftOffset[1]), file=fd)
+                print(indent(), "refpos : %s" % (ccd_layout['refpos']), file=fd)
+                print(indent(), "offset : [%g, %g]" % (ccd_layout['offset'][0] + raftOffset[0],
+                                                       ccd_layout['offset'][1] + raftOffset[1]), file=fd)
 
                 if crosstalkCoeffs is not None:
                     namp = len(amps)
