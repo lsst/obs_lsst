@@ -8,8 +8,8 @@ config.makePsfMatched = True
 config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
 config.modelPsf.defaultFwhm = 7.7
 
-# To be uncommented when we will run jointcal
-#config.doApplyUberCal = True
+# FUTURE: Set to True when we decide to run jointcal
+config.doApplyUberCal = False
 
-# To be uncommented when we will have sky background estimates
-#config.doApplySkyCorr = True
+# FUTURE: Set to True when we have sky background estimate
+config.doApplySkyCorr = False

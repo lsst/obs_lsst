@@ -14,5 +14,5 @@ config.badMaskPlanes += ["SUSPECT"]
 from lsst.pipe.tasks.selectImages import PsfWcsSelectImagesTask
 config.select.retarget(PsfWcsSelectImagesTask)
 
-# Place holder for later
-#config.doAttachTransmissionCurve = True
+# FUTURE: Set to True when we get transmission curves
+config.doAttachTransmissionCurve = False
