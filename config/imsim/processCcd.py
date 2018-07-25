@@ -1,0 +1,1 @@
+config.isr.doCrosstalk=False
