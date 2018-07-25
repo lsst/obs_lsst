@@ -26,6 +26,7 @@ from __future__ import division, print_function
 import os
 
 import lsst.log
+import lsst.pex.exceptions as pexExcept
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
@@ -35,7 +36,7 @@ import lsst.daf.persistence as dafPersist
 
 from lsst.obs.lsstCam import LsstCam, PhosimCam, ImsimCam
 
-__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper",]
+__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper", "AuxTelMapper"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
@@ -182,11 +183,14 @@ def assemble_raw(dataId, componentInfo, cls):
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
-        boresight = afwGeom.PointD(md.getScalar("RATEL"), md.getScalar("DECTEL"))
-        rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
-
-        exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
-                                           90*afwGeom.degrees - rotangle))
+        try:
+            boresight = afwGeom.PointD(md.getScalar("RATEL"), md.getScalar("DECTEL"))
+            rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
+        except pexExcept.NotFoundError as e:
+            logger.warn("Unable to set WCS for %s from header: %s" % (dataId, e))
+        else:
+            exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
+                                               90*afwGeom.degrees - rotangle))
 
     return exposure
 
@@ -243,6 +247,7 @@ class LsstCamMapper(CameraMapper):
 
     packageName = 'obs_lsstCam'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
+    yamlFileList = ("lsstCamMapper.yaml",) # list of yaml files to load, keeping the first occurrence
 
     def __initialiseCache(self):
         """Initialise file-level cache.
@@ -260,8 +265,18 @@ class LsstCamMapper(CameraMapper):
 
     def __init__(self, inputPolicy=None, **kwargs):
         """Initialization for the LsstCam Mapper."""
-        policyFile = dafPersist.Policy.defaultPolicyFile(self.packageName, "lsstCamMapper.yaml", "policy")
-        policy = dafPersist.Policy(policyFile)
+        #
+        # Merge the list of .yaml files
+        #
+        policy = None
+        for yamlFile in self.yamlFileList:
+            policyFile = dafPersist.Policy.defaultPolicyFile(self.packageName, yamlFile, "policy")
+            npolicy = dafPersist.Policy(policyFile)
+
+            if policy is None:
+                policy = npolicy
+            else:
+                policy.merge(npolicy)
         #
         # Look for the calibrations root "root/CALIB" if not supplied
         #
@@ -307,7 +322,7 @@ class LsstCamMapper(CameraMapper):
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return LsstCam()
+        return lsstCam.LsstCam()
 
     def _getRegistryValue(self, dataId, k):
         """Return a value from a dataId, or look it up in the registry if it isn't present"""
@@ -469,3 +484,19 @@ class PhosimMapper(LsstCamMapper):
     @classmethod
     def getCameraName(cls) :
         return 'phosim'
+    
+class AuxTelMapper(LsstCamMapper):
+    """The Mapper for the auxTel camera."""
+
+    yamlFileList =  ["auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
+
+    @classmethod
+    def getCameraName(cls):
+        return "auxTel"
+
+    def _makeCamera(self, policy, repositoryDir):
+        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        return lsstCam.AuxTelCam()
+
+    def _extractDetectorName(self, dataId):
+        return 0 # "S1"

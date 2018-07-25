@@ -10,11 +10,12 @@ rafts -- not that that's going to happen).
 The basic strategy is that the SConscript file in the directory assembles a suitable camera.yaml file
 (e.g. phosim.yaml) and we put the appropriate entry in the _mapper file in the data repository.
 
-To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call it R99 for now):
+To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call it RXX for now):
  - Add a directory policy/comCam (n.b. the file you are reading is policy/README)
- - Put a file rafts.yaml in that directory describing R99 (you can start with policy/rafts.yaml).
- - Put a file R99.yaml in policy.comCam (you can start with lsstCam/R11.yaml).  Note that you can
-   choose an ITL or E2V device.
+ - Put a file rafts.yaml in that directory describing RXX (you can start with policy/rafts.yaml).
+ - Put a file RXX.yaml in policy.comCam (you can start with lsstCam/R11.yaml).  Note that you can
+   choose an ITL or E2V device.  Note that you must provide a serial number for each CCD in the raft
+   as that's how I know how many CCDs there are in the "raft" (e.g. auxTel has only one)
  - If you're plagued by crosstalk, put a file ccdData.yaml in policy/comcam.  Look at the one in
    policy/phosim for the format -- basically a dict crosstalk indexed by the CCD type.  There
    are 256 coefficients (16 amplifiers and 256 == 16^2), and we assume for now that all CCDs from
@@ -31,6 +32,8 @@ To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call i
    it's the one you named in the previous step
  - Edit python/lsst/obs/lsstCam/lsstCamMapper.py to add a class ComCamMapper.
    Remember to update _makeCamera to match your change to lsstCam.py, and to update __all__
+   You may also want to add a classmethod `getCameraName` (e.g. AuxTelMapper); this name
+   is used to e.g. provide per-camera configuration files (for example config/auxTel/ingest.py)
  - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.ComCamMapper
 
 If my instructions are complete and correct you are good to go. Once you're happy commit all

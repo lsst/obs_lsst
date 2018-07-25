@@ -1,0 +1,20 @@
+calibrations:
+  bias:
+    columns:
+    - date
+    - detectorName
+    template: bias/%(calibDate)s/bias-det%(detector)03d_%(calibDate)s.fits
+
+datasets:
+  raw_hdu:
+    template: raw/%(dayObs)s/%(visit)08d-det%(detector)03d.fits[0]
+
+exposures:
+  _raw:
+    template: raw/%(dayObs)s/%(visit)08d-det%(detector)03d.fits[0]
+  raw_amp:
+    template: raw/%(dayObs)s/%(visit)08d-det%(detector)03d.fits[%(channel)d]
+  postISRCCD:
+    template: postISRCCD/%(dayObs)s/postISRCCD_%(visit)08d-%(filter)s-det%(detector)03d.fits
+  calexp:
+    template: calexp/%(dayObs)s/calexp_%(visit)08d-%(filter)s-det%(detector)03d.fits

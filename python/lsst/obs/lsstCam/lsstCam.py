@@ -63,3 +63,17 @@ class PhosimCam(YamlCamera):
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "phosim.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
+
+class AuxTelCam(YamlCamera):
+    """The auxTel's single CCD Camera
+    """
+    packageName = 'obs_lsstCam'
+
+    def __init__(self, cameraYamlFile=None):
+        """Construct lsstCam for auxTel
+        """
+        if not cameraYamlFile:
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "auxTel.yaml")
+
+        YamlCamera.__init__(self, cameraYamlFile)
+
