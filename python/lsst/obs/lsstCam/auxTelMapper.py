@@ -1,6 +1,6 @@
 #
 # LSST Data Management System
-# Copyright 2017 LSST Corporation.
+# Copyright 2016 LSST Corporation.
 #
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
@@ -19,26 +19,14 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import lsst.utils as utils
-from lsst.obs.base.yamlCamera import YamlCamera
+"""The AuxTelCam Mapper."""  # necessary to suppress D100 flake8 warning.
+
+import os
+
+from . import auxTel
 from . import LsstCamMapper
 
-__all__ = ["AuxTelMapper", "AuxTelCam"]
-
-class AuxTelCam(YamlCamera):
-    """The auxTel's single CCD Camera
-    """
-    packageName = 'obs_lsstCam'
-
-    def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for auxTel
-        """
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "auxTel.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
-
+__all__ = ["AuxTelMapper"]
     
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
@@ -51,7 +39,7 @@ class AuxTelMapper(LsstCamMapper):
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return AuxTelCam()
+        return auxTel.AuxTelCam()
 
     def _extractDetectorName(self, dataId):
         return 0 # "S1"

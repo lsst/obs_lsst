@@ -37,7 +37,7 @@ import lsst.daf.persistence as dafPersist
 from lsst.obs.lsstCam import LsstCam, PhosimCam, ImsimCam
 from . import auxTel
 
-__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper", "AuxTelMapper"]
+__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
@@ -467,6 +467,10 @@ class LsstCamMapper(CameraMapper):
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
 
+    @classmethod
+    def getCameraName(cls):
+        return "imsim"
+
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return ImsimCam()
@@ -485,7 +489,7 @@ class PhosimMapper(LsstCamMapper):
     @classmethod
     def getCameraName(cls) :
         return 'phosim'
-    
+
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
 
@@ -493,11 +497,8 @@ class AuxTelMapper(LsstCamMapper):
 
     @classmethod
     def getCameraName(cls):
-        return "auxTel"
+        return "phosim"
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return auxTel.AuxTelCam()
-
-    def _extractDetectorName(self, dataId):
-        return 0 # "S1"
+        return lsstCam.PhosimCam()
