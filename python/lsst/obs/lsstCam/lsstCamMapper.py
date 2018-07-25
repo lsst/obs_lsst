@@ -35,6 +35,7 @@ from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
 
 from lsst.obs.lsstCam import LsstCam, PhosimCam, ImsimCam
+from . import auxTel
 
 __all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper", "AuxTelMapper"]
 
@@ -496,7 +497,7 @@ class AuxTelMapper(LsstCamMapper):
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return lsstCam.AuxTelCam()
+        return auxTel.AuxTelCam()
 
     def _extractDetectorName(self, dataId):
         return 0 # "S1"

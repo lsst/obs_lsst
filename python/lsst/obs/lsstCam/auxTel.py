@@ -24,42 +24,15 @@ import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 
-
-class LsstCam(YamlCamera):
-    """The real LSST 3.2Gpix Camera
+class AuxTelCam(YamlCamera):
+    """The auxTel's single CCD Camera
     """
     packageName = 'obs_lsstCam'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam
+        """Construct lsstCam for auxTel
         """
         if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "lsstCam.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
-
-class ImsimCam(YamlCamera):
-    """The imsim realisation of the real LSST 3.2Gpix Camera
-    """
-    packageName = 'obs_lsstCam'
-
-    def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for imsim
-        """
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
-
-class PhosimCam(YamlCamera):
-    """The phosim realisation of the real LSST 3.2Gpix Camera
-    """
-    packageName = 'obs_lsstCam'
-
-    def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for phosim
-        """
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "phosim.yaml")
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "auxTel.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
