@@ -34,7 +34,7 @@ class LsstCam(YamlCamera):
         """Construct lsstCam
         """
         if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "camera.yaml")
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "lsstCam.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
 
