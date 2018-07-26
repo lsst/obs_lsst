@@ -27,14 +27,18 @@ To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call i
    coefficients; they take almost everything from policy and policy/lsstCam
  - run scons in the obs_lsstCam directory (or scons -u in policy)
  - add comcam.yaml to policy/.gitignore
- - Edit python/lsst/obs/lsstCam/lsstCam.py to add a class ComCam.  Note that you need to change
-   the path for cameraYamlFile, presumably to "comcam.yaml" -- you don't need to create this file;
-   it's the one you named in the previous step
- - Edit python/lsst/obs/lsstCam/lsstCamMapper.py to add a class ComCamMapper.
-   Remember to update _makeCamera to match your change to lsstCam.py, and to update __all__
-   You may also want to add a classmethod `getCameraName` (e.g. AuxTelMapper); this name
+ - Create a new file python/lsst/obs/lsstCam/comCam.py (see auxTel.py for an example)
+   and add a class ComCam.  Note that you need to change the path for cameraYamlFile, presumably to
+   "comcam.yaml" -- you don't need to create this file; it's the one you named in the previous step.
+   Now add a class ComCamMapper to the same file.  Look at the example in
+   python/lsst/obs/lsstCam/auxTel/auxTel.py -- you'll see that this overrides some entries in
+   lsstCamMapper.yaml (in the class data member yamlFileList) with auxTelMapper.yaml.
+   If want to provide your own templates you'll need to do the same thing, adding a file
+   `policy/comCamMapper.yaml".
+   
+   Remember to update _makeCamera to call ComCam(), and getCameraName to return "comCam"; this name
    is used to e.g. provide per-camera configuration files (for example config/auxTel/ingest.py)
- - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.ComCamMapper
+ - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.comCam.ComCamMapper
 
 If my instructions are complete and correct you are good to go. Once you're happy commit all
 your changes to git and push.
