@@ -33,7 +33,7 @@ from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
 
-from lsst.obs.lsstCam import LsstCam, PhosimCam
+from lsst.obs.lsstCam import LsstCam, PhosimCam, ImsimCam
 
 __all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper",]
 
