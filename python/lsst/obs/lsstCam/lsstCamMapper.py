@@ -185,11 +185,16 @@ def assemble_raw(dataId, componentInfo, cls):
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
         try:
-            boresight = afwGeom.PointD(md.getScalar("RATEL"), md.getScalar("DECTEL"))
+            ratel, dectel = md.getScalar("RATEL"), md.getScalar("DECTEL")
             rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
         except pexExcept.NotFoundError as e:
-            logger.warn("Unable to set WCS for %s from header: %s" % (dataId, e))
+            ratel, dectel, rotangle = '', '', ''
+            
+        if ratel == '' or dectel == '' or rotangle == '': # FITS for None
+            logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
+                        (dataId,))
         else:
+            boresight = afwGeom.PointD(ratel, dectel)
             exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
                                                90*afwGeom.degrees - rotangle))
 
