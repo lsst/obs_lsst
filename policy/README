@@ -39,6 +39,8 @@ To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call i
    Remember to update _makeCamera to call ComCam(), and getCameraName to return "comCam"; this name
    is used to e.g. provide per-camera configuration files (for example config/auxTel/ingest.py)
  - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.comCam.ComCamMapper
+ - You may well need your own ParseTask.  Add it to python/lsst/obs/lsstCam/comCam.py (once more
+   you'll find an example in auxTel.py) and retarget config.parse in config/comCam/ingest.py
 
 If my instructions are complete and correct you are good to go. Once you're happy commit all
 your changes to git and push.

@@ -1,4 +1,4 @@
-from lsst.obs.lsstCam.ingest import AuxTelParseTask
+from lsst.obs.lsstCam.auxTel import AuxTelParseTask
 
 config.parse.retarget(AuxTelParseTask)
 
