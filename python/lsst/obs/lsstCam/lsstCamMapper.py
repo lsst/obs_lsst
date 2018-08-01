@@ -115,7 +115,7 @@ def assemble_raw(dataId, componentInfo, cls):
                 logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)" %
                             (amp.getRawBBox(), ampExp.getBBox()))
                 warned = True
-                
+
             w,  h  = ampExp.getBBox().getDimensions()
             ow, oh = amp.getRawBBox().getDimensions() # "old" (cameraGeom) dimensions
             #
@@ -138,9 +138,9 @@ def assemble_raw(dataId, componentInfo, cls):
             # will be wrong and we'll put the amp sections in the wrong places, i.e.
             #   amp.getRawXYOffset()
             # will be wrong.  So we need to recalculate the offsets.
-            # 
+            #
             xRawExtent, yRawExtent = amp.getRawBBox().getDimensions()
-            
+
             x0, y0 = amp.getRawXYOffset()
             ix, iy = x0//ow, y0/oh
             x0, y0 = ix*xRawExtent, iy*yRawExtent
@@ -212,7 +212,7 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
     (from North over East)
     """
     trans = camera.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
-                                detector.makeCameraSys(cameraGeom.FIELD_ANGLE))    
+                                detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
     polyMap = trans.getMapping()
     radToDeg = astshim.ZoomMap(2, 180/np.pi) # convert from radians to degrees
     polyMap = polyMap.then(radToDeg)
@@ -233,7 +233,7 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
     frameDict.addFrame("IWC", iwcToSkyMap, skyFrame)
 
     wcs = afwGeom.SkyWcs(frameDict)
-    
+
     return wcs
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -246,7 +246,7 @@ class LsstCamMapper(CameraMapper):
 
     def __initialiseCache(self):
         """Initialise file-level cache.
-        
+
         We do this because it's expensive to build Cameras and Mappers, but it is not a good idea in the
         medium or long run!
         """
@@ -304,7 +304,7 @@ class LsstCamMapper(CameraMapper):
         afwImageUtils.defineFilter('i', 752.06)
         afwImageUtils.defineFilter('z', 866.85)
         afwImageUtils.defineFilter('y', 971.68, alias=['y4'])  # official y filter
-        
+
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return LsstCam()
@@ -454,10 +454,18 @@ class ImsimMapper(LsstCamMapper):
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return ImsimCam()
-    
+
+    @classmethod
+    def getCameraName(cls) :
+        return 'imsim'
+
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return PhosimCam()
+
+    @classmethod
+    def getCameraName(cls) :
+        return 'phosim'
