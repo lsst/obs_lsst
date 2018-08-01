@@ -154,6 +154,32 @@ calibrations:
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
+  sky:
+    template: SKY/%(calibDate)s/%(filter)s/SKY-%(calibDate)s-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    python: lsst.afw.image.ExposureF
+    persistable: ExposureF
+    storage: FitsStorage
+    level: Ccd
+    tables: sky
+    columns:
+    - ccd
+    - filter
+    - taiObs
+    reference: raw_visit
+    refCols:
+    - visit
+    - filter
+    filter: true
+    validRange: true
+    validStartName: validStart
+    validEndName: validEnd
+  sky_camera:
+    template: focalplane/SKY/%(calibDate)s/%(filter)s/SKY-%(filter)s_%(calibDate)s.fits
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: None
+
 
 datasets:
   IngestIndexedReferenceTask_config:
