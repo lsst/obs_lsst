@@ -48,13 +48,13 @@ class AuxTelMapper(LsstCamMapper):
 
     yamlFileList =  ["auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
-    @classmethod
-    def getCameraName(cls):
-        return "auxTel"
-
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return AuxTelCam()
+
+    @classmethod
+    def getCameraName(cls):
+        return "auxTel"
 
     def _extractDetectorName(self, dataId):
         return 0 # "S1"
