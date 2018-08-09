@@ -55,6 +55,8 @@ config.calibrate.photoCal.applyColorTerms = False
 config.calibrate.photoCal.match.referenceSelection.doMagLimit = True
 config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
 config.calibrate.photoCal.match.referenceSelection.magLimit.maximum = 22.0
+# select only stars for photometry calibration
+config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=0.5
 
 # Demand astrometry and photoCal succeed
 config.calibrate.requireAstrometry = True
