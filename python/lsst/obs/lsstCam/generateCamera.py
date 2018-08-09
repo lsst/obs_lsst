@@ -83,7 +83,7 @@ if __name__ == "__main__":
 CCDs :\
 """, file=fd)
 
-        for raftName, raftData in raftData["rafts"].items():
+        for raftName, perRaftData in raftData["rafts"].items():
             try:
                 with open(findYamlOnPath("%s.yaml" % raftName, searchPath)) as yfd:
                     raftCcdData = yaml.load(yfd, Loader=yaml.Loader)[raftName]
@@ -112,8 +112,8 @@ CCDs :\
 
             nindent += 1
 
-            raftOffset = raftData["offset"]
-            id0 = raftData['id0']
+            raftOffset = perRaftData["offset"]
+            id0 = perRaftData['id0']
             for ccdName, ccdLayout in ccds.items():
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
@@ -129,8 +129,10 @@ CCDs :\
                     print(indent(), "crosstalk : [", file=fd)
                     nindent += 1
                     print(indent(), file=fd, end="")
-                    for i, c in enumerate(crosstalkCoeffs):
-                        print("%10.3e," % c, file=fd, end="\n" + indent() if i%namp == namp - 1 else " ")
+                    for iAmp in amps:
+                        for jAmp in amps:
+                            print("%11.3e," % crosstalkCoeffs[iAmp][jAmp], file=fd, end='')
+                        print(file=fd, end="\n" + indent())
                     nindent -= 1
                     print("]", file=fd)
 
