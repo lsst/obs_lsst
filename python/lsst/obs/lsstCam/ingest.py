@@ -8,7 +8,9 @@ from lsst.obs.lsstCam import lsstCam
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-camera = lsstCam.LsstCam()  # Global camera to avoid instaniating once per file
+camera = lsstCam.LsstCam()  # Global camera to avoid instantiating once per file
+
+__all__ = ["LsstCamParseTask"]
 
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
@@ -19,7 +21,7 @@ class LsstCamParseTask(ParseTask):
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
-    def _getInfo(self, filename):
+    def XXX_getInfo(self, filename):
         """Get the basename and other data which is only available from the filename/path.
 
         This seems fragile, but this is how the teststand data will *always* be written out,
@@ -91,6 +93,21 @@ class LsstCamParseTask(ParseTask):
                 'Translated significantly non-integer wavelength; '
                 '%s is more than 0.1nm from an integer value', raw_wl)
         return wl
+
+    def translate_dayObs(self, md):
+        """Generate the day that the observation was taken
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        dayObs : `str`
+            The day that the data was taken, e.g. 1958-02-05
+        """
+        return md.get("DATE-OBS")[:10]
 
     def XXX_translate_visit(self, md):
         """Generate a unique visit from the timestamp.

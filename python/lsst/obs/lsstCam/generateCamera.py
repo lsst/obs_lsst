@@ -93,7 +93,14 @@ CCDs :\
 
             try:
                 detectorType = raftCcdData["detectorType"]
-                ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
+                _ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
+
+                # only include CCDs in the raft for which we have a serial (the value isn't checked)
+                ccds = {}
+                for ccdName in raftCcdData["ccdSerials"]:
+                    ccds[ccdName] = _ccds[ccdName]
+                del _ccds
+
                 amps = cameraSkl['CCD_%s'  % detectorType]["amplifiers"]  # describe this *type* of ccd
             except KeyError:
                 raise RuntimeError("Unknown detector type %s" % detectorType)
