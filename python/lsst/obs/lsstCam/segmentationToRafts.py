@@ -7,6 +7,8 @@
 import numpy as np
 import re
 
+__all__ = ["writeRaftFile"]
+
 def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
     print("""\
 %s :
@@ -34,48 +36,49 @@ def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-raftData = {}
-with open('segmentation.txt') as fd:
-    for line in fd.readlines():
-        if re.search(r"^\s*($|#)", line):
+if __name__ == "__main__":
+    raftData = {}
+    with open('segmentation.txt') as fd:
+        for line in fd.readlines():
+            if re.search(r"^\s*($|#)", line):
+                continue
+
+            fields = line.split()
+            name = fields[0]
+            fields[1:] = [float(_) for _ in fields[1:]]
+
+            nField = len(fields)
+            if nField == 4:
+                name, nAmp, ncol, nrow = fields
+                continue
+
+            fields = fields[:29]
+            assert len(fields) == 29
+
+            gain, gainVariation           = fields[7],  fields[8]
+            readNoise, readNoiseVariation = fields[11], fields[12]
+
+            if False:
+                gain *= 1 + 0.01*gainVariation*np.random.normal()
+                readNoise *= 1 + 0.01*readNoiseVariation*np.random.normal()
+
+            raftName, ccdName, ampName = name.split('_')
+
+            if raftName not in raftData:
+                raftData[raftName] = {}
+            if ccdName not in raftData[raftName]:
+                raftData[raftName][ccdName] = {}
+
+            raftData[raftName][ccdName][ampName] = (gain, readNoise)
+
+    #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+    raftId = 0
+    for raftName, ccdData in raftData.items():
+        raftSerial = "LCA-11021_RTM-%03d" % raftId    # won't be deterministic in reality!
+        raftId += 1
+
+        if raftName in ("R00", "R40", "R04", "R44"):
             continue
-            
-        fields = line.split()
-        name = fields[0]
-        fields[1:] = [float(_) for _ in fields[1:]]
-
-        nField = len(fields)
-        if nField == 4:
-            name, nAmp, ncol, nrow = fields
-            continue
-            
-        fields = fields[:29]
-        assert len(fields) == 29
-        
-        gain, gainVariation           = fields[7],  fields[8]
-        readNoise, readNoiseVariation = fields[11], fields[12]
-
-        if False:
-            gain *= 1 + 0.01*gainVariation*np.random.normal()
-            readNoise *= 1 + 0.01*readNoiseVariation*np.random.normal()
-
-        raftName, ccdName, ampName = name.split('_')
-
-        if raftName not in raftData:
-            raftData[raftName] = {}
-        if ccdName not in raftData[raftName]:
-            raftData[raftName][ccdName] = {}
-
-        raftData[raftName][ccdName][ampName] = (gain, readNoise)
-
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-            
-raftId = 0
-for raftName, ccdData in raftData.items():
-    raftSerial = "LCA-11021_RTM-%03d" % raftId    # won't be deterministic in reality!
-    raftId += 1
-
-    if raftName in ("R00", "R40", "R04", "R44"):
-        continue
-    with open("%s.yaml" % raftName, "w") as fd:
-        writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
+        with open("%s.yaml" % raftName, "w") as fd:
+            writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
