@@ -1,0 +1,169 @@
+R13 :
+  detectorType : ITL
+  raftSerial : LCA-11021_RTM-006
+
+  ccdSerials :
+    S00 : ITL-3800C-145-Dev
+    S01 : ITL-3800C-022-Dev
+    S02 : ITL-3800C-041-Dev
+    S10 : ITL-3800C-100-Dev
+    S11 : ITL-3800C-017-Dev
+    S12 : ITL-3800C-018-Dev
+    S20 : ITL-3800C-102-Dev
+    S21 : ITL-3800C-146-Dev
+    S22 : ITL-3800C-103-Dev
+
+  amplifiers :
+    S00 :
+      C10 : { gain : 1.798, readNoise : 4.04 }
+      C11 : { gain : 1.766, readNoise : 3.87 }
+      C12 : { gain : 1.714, readNoise : 4.00 }
+      C13 : { gain : 1.724, readNoise : 4.06 }
+      C14 : { gain : 1.725, readNoise : 3.84 }
+      C15 : { gain : 1.673, readNoise : 4.00 }
+      C16 : { gain : 1.696, readNoise : 4.18 }
+      C17 : { gain : 1.657, readNoise : 4.37 }
+      C07 : { gain : 1.621, readNoise : 4.41 }
+      C06 : { gain : 1.764, readNoise : 4.00 }
+      C05 : { gain : 1.651, readNoise : 4.22 }
+      C04 : { gain : 1.737, readNoise : 4.07 }
+      C03 : { gain : 1.715, readNoise : 3.99 }
+      C02 : { gain : 1.701, readNoise : 4.12 }
+      C01 : { gain : 1.733, readNoise : 4.02 }
+      C00 : { gain : 1.733, readNoise : 4.21 }
+    S01 :
+      C10 : { gain : 1.797, readNoise : 3.78 }
+      C11 : { gain : 1.722, readNoise : 4.01 }
+      C12 : { gain : 1.680, readNoise : 4.02 }
+      C13 : { gain : 1.729, readNoise : 4.12 }
+      C14 : { gain : 1.709, readNoise : 4.16 }
+      C15 : { gain : 1.728, readNoise : 4.21 }
+      C16 : { gain : 1.742, readNoise : 4.05 }
+      C17 : { gain : 1.748, readNoise : 4.12 }
+      C07 : { gain : 1.719, readNoise : 4.14 }
+      C06 : { gain : 1.732, readNoise : 4.00 }
+      C05 : { gain : 1.671, readNoise : 4.35 }
+      C04 : { gain : 1.715, readNoise : 3.96 }
+      C03 : { gain : 1.681, readNoise : 4.12 }
+      C02 : { gain : 1.786, readNoise : 3.68 }
+      C01 : { gain : 1.750, readNoise : 3.87 }
+      C00 : { gain : 1.688, readNoise : 4.05 }
+    S02 :
+      C10 : { gain : 1.742, readNoise : 3.95 }
+      C11 : { gain : 1.664, readNoise : 4.27 }
+      C12 : { gain : 1.735, readNoise : 3.95 }
+      C13 : { gain : 1.757, readNoise : 3.95 }
+      C14 : { gain : 1.680, readNoise : 4.32 }
+      C15 : { gain : 1.720, readNoise : 4.01 }
+      C16 : { gain : 1.655, readNoise : 4.35 }
+      C17 : { gain : 1.635, readNoise : 4.17 }
+      C07 : { gain : 1.623, readNoise : 4.18 }
+      C06 : { gain : 1.786, readNoise : 3.89 }
+      C05 : { gain : 1.719, readNoise : 4.22 }
+      C04 : { gain : 1.733, readNoise : 4.15 }
+      C03 : { gain : 1.729, readNoise : 4.12 }
+      C02 : { gain : 1.704, readNoise : 4.18 }
+      C01 : { gain : 1.666, readNoise : 4.19 }
+      C00 : { gain : 1.663, readNoise : 4.42 }
+    S10 :
+      C10 : { gain : 1.804, readNoise : 3.83 }
+      C11 : { gain : 1.744, readNoise : 3.82 }
+      C12 : { gain : 1.625, readNoise : 4.34 }
+      C13 : { gain : 1.703, readNoise : 4.22 }
+      C14 : { gain : 1.811, readNoise : 4.00 }
+      C15 : { gain : 1.804, readNoise : 4.03 }
+      C16 : { gain : 1.687, readNoise : 3.95 }
+      C17 : { gain : 1.728, readNoise : 4.27 }
+      C07 : { gain : 1.577, readNoise : 4.60 }
+      C06 : { gain : 1.657, readNoise : 4.02 }
+      C05 : { gain : 1.695, readNoise : 4.07 }
+      C04 : { gain : 1.741, readNoise : 3.79 }
+      C03 : { gain : 1.637, readNoise : 4.28 }
+      C02 : { gain : 1.638, readNoise : 4.37 }
+      C01 : { gain : 1.676, readNoise : 4.13 }
+      C00 : { gain : 1.749, readNoise : 3.98 }
+    S11 :
+      C10 : { gain : 1.739, readNoise : 3.97 }
+      C11 : { gain : 1.724, readNoise : 3.97 }
+      C12 : { gain : 1.799, readNoise : 3.81 }
+      C13 : { gain : 1.659, readNoise : 4.22 }
+      C14 : { gain : 1.813, readNoise : 4.11 }
+      C15 : { gain : 1.746, readNoise : 3.96 }
+      C16 : { gain : 1.744, readNoise : 4.16 }
+      C17 : { gain : 1.635, readNoise : 4.32 }
+      C07 : { gain : 1.725, readNoise : 4.08 }
+      C06 : { gain : 1.772, readNoise : 3.97 }
+      C05 : { gain : 1.666, readNoise : 4.09 }
+      C04 : { gain : 1.627, readNoise : 4.18 }
+      C03 : { gain : 1.676, readNoise : 4.18 }
+      C02 : { gain : 1.670, readNoise : 4.34 }
+      C01 : { gain : 1.772, readNoise : 4.03 }
+      C00 : { gain : 1.757, readNoise : 3.97 }
+    S12 :
+      C10 : { gain : 1.649, readNoise : 4.33 }
+      C11 : { gain : 1.624, readNoise : 4.37 }
+      C12 : { gain : 1.622, readNoise : 4.44 }
+      C13 : { gain : 1.709, readNoise : 4.02 }
+      C14 : { gain : 1.687, readNoise : 4.09 }
+      C15 : { gain : 1.706, readNoise : 4.10 }
+      C16 : { gain : 1.670, readNoise : 4.24 }
+      C17 : { gain : 1.734, readNoise : 3.93 }
+      C07 : { gain : 1.690, readNoise : 4.14 }
+      C06 : { gain : 1.665, readNoise : 4.02 }
+      C05 : { gain : 1.669, readNoise : 4.03 }
+      C04 : { gain : 1.764, readNoise : 4.10 }
+      C03 : { gain : 1.723, readNoise : 4.19 }
+      C02 : { gain : 1.771, readNoise : 4.12 }
+      C01 : { gain : 1.756, readNoise : 3.89 }
+      C00 : { gain : 1.798, readNoise : 3.87 }
+    S20 :
+      C10 : { gain : 1.647, readNoise : 4.31 }
+      C11 : { gain : 1.809, readNoise : 3.83 }
+      C12 : { gain : 1.631, readNoise : 4.30 }
+      C13 : { gain : 1.628, readNoise : 4.47 }
+      C14 : { gain : 1.767, readNoise : 3.96 }
+      C15 : { gain : 1.607, readNoise : 4.36 }
+      C16 : { gain : 1.665, readNoise : 4.16 }
+      C17 : { gain : 1.626, readNoise : 4.24 }
+      C07 : { gain : 1.697, readNoise : 4.16 }
+      C06 : { gain : 1.710, readNoise : 4.18 }
+      C05 : { gain : 1.601, readNoise : 4.14 }
+      C04 : { gain : 1.714, readNoise : 4.09 }
+      C03 : { gain : 1.674, readNoise : 4.20 }
+      C02 : { gain : 1.717, readNoise : 4.27 }
+      C01 : { gain : 1.717, readNoise : 4.06 }
+      C00 : { gain : 1.718, readNoise : 4.16 }
+    S21 :
+      C10 : { gain : 1.744, readNoise : 4.03 }
+      C11 : { gain : 1.656, readNoise : 4.14 }
+      C12 : { gain : 1.715, readNoise : 4.06 }
+      C13 : { gain : 1.740, readNoise : 3.96 }
+      C14 : { gain : 1.697, readNoise : 4.12 }
+      C15 : { gain : 1.727, readNoise : 4.29 }
+      C16 : { gain : 1.661, readNoise : 4.13 }
+      C17 : { gain : 1.708, readNoise : 3.92 }
+      C07 : { gain : 1.676, readNoise : 4.22 }
+      C06 : { gain : 1.685, readNoise : 4.20 }
+      C05 : { gain : 1.738, readNoise : 3.90 }
+      C04 : { gain : 1.731, readNoise : 3.96 }
+      C03 : { gain : 1.732, readNoise : 3.91 }
+      C02 : { gain : 1.746, readNoise : 4.11 }
+      C01 : { gain : 1.748, readNoise : 3.87 }
+      C00 : { gain : 1.760, readNoise : 4.05 }
+    S22 :
+      C10 : { gain : 1.690, readNoise : 3.94 }
+      C11 : { gain : 1.656, readNoise : 4.20 }
+      C12 : { gain : 1.721, readNoise : 4.18 }
+      C13 : { gain : 1.695, readNoise : 4.06 }
+      C14 : { gain : 1.765, readNoise : 4.02 }
+      C15 : { gain : 1.771, readNoise : 3.79 }
+      C16 : { gain : 1.713, readNoise : 4.05 }
+      C17 : { gain : 1.782, readNoise : 3.92 }
+      C07 : { gain : 1.678, readNoise : 4.34 }
+      C06 : { gain : 1.722, readNoise : 4.08 }
+      C05 : { gain : 1.773, readNoise : 3.97 }
+      C04 : { gain : 1.658, readNoise : 4.18 }
+      C03 : { gain : 1.715, readNoise : 3.91 }
+      C02 : { gain : 1.721, readNoise : 3.97 }
+      C01 : { gain : 1.694, readNoise : 4.26 }
+      C00 : { gain : 1.680, readNoise : 4.20 }
