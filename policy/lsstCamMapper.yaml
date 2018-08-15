@@ -522,3 +522,32 @@ datasets:
     python: builtins.str
     storage: TextStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
+
+  # Focalplane summary plots
+  focalplane_summary_fits:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: focalplane_summary/v%(visit)d-f%(filter)s-focalplane-summary.fits
+  binned_sensor_fits:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: binned_sensor/v%(visit)d-f%(filter)s/R%(raftName)s/S%(detectorName)s.fits
+  binned_sensor_fits_halves:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: binned_sensor_halves/v%(visit)d-f%(filter)s/R%(raftName)s/S%(detectorName)s_%(half)s.fits
+  focalplane_summary_png:
+    level: Visit
+    persistable: None
+    python: builtins.str
+    storage: TextStorage
+    template: focalplane_summary/v%(visit)d-f%(filter)s-focalplane-summary.png
