@@ -25,6 +25,21 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 
 
+class comCam(YamlCamera):
+    """comCam
+    """
+    
+    packageName = 'obs_comCam'
+    
+    def __init__(self, cameraYamlFile=None):
+        """Construct comCam
+        """
+        if not cameraYamlFile:
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "comCam.yaml")
+        
+        YamlCamera.__init__(self, cameraYamlFile)
+            
+
 class LsstCam(YamlCamera):
     """The real LSST 3.2Gpix Camera
     """

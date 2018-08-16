@@ -17,7 +17,7 @@ libpathstr = lsst.sconsUtils.utils.libraryLoaderEnvironment()
 # We always run these commands with an explicit python rather than relying on the shebang
 python = "{} python".format(libpathstr)
 
-for camera in ["lsstCam", "imsim", "phosim"]:
+for camera in ["lsstCam", "imsim", "phosim","comcam"]:
     commandInst = env.Command("%s.yaml" % camera, "",
                               "%s python/lsst/obs/lsstCam/generateCamera.py --path %s:lsstCam:. $TARGET" %
                               (python, camera))

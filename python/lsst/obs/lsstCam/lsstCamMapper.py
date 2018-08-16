@@ -35,7 +35,7 @@ import lsst.daf.persistence as dafPersist
 
 from lsst.obs.lsstCam import LsstCam, PhosimCam, ImsimCam
 
-__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper",]
+__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper","comCamMapper"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
@@ -448,6 +448,18 @@ class LsstCamMapper(CameraMapper):
 #
 # Don't forget to add your mapper to __all__ at the top of this file
 #
+
+class comCamMapper(LsstCamMapper):
+    """The Mapper for the imsim simulations of the LsstCam."""
+
+    def _makeCamera(self, policy, repositoryDir):
+        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        return ImsimCam()
+
+    @classmethod
+    def getCameraName(cls) :
+        return 'comCam'
+
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
 
