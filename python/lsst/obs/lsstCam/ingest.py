@@ -21,48 +21,6 @@ class LsstCamParseTask(ParseTask):
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
-    def XXX_getInfo(self, filename):
-        """Get the basename and other data which is only available from the filename/path.
-
-        This seems fragile, but this is how the teststand data will *always* be written out,
-        as the software has been "frozen" as they are now in production mode.
-
-        Parameters
-        ----------
-        filename : `str`
-            The filename
-
-        Returns
-        -------
-        phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config from the primary HDU
-        infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
-        """
-        phuInfo, infoList = ParseTask.getInfo(self, filename)
-
-        pathname, basename = os.path.split(filename)
-        basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
-        phuInfo['basename'] = basename
-
-        # Now pull the acq type & jobID from the path (no, they're not in the header)
-        # the acq type is the type of test, eg flat/fe55/darks etc
-        # jobID is the test number, and corresponds to database entries in the eTraveller/cameraTestDB
-        pathComponents = pathname.split("/")
-        if len(pathComponents) < 0:
-            raise RuntimeError("Path %s is too short to deduce raftID" % pathname)
-        raftId, runId, acquisitionType, testVersion, jobId, sensorLocationInRaft = pathComponents[-6:]
-        if runId != phuInfo['run']:
-            raise RuntimeError("Expected runId %s, found %s from path %s" % phuInfo['run'], runId, pathname)
-
-        phuInfo['raftId'] = raftId  # also in the header - RAFTNAME
-        phuInfo['field'] = acquisitionType  # NOT in the header
-        phuInfo['jobId'] = int(jobId)  # NOT in the header
-        phuInfo['raft'] = 'R00'
-        phuInfo['ccd'] = sensorLocationInRaft  # NOT in the header
-
-        return phuInfo, infoList
-
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
 
@@ -108,25 +66,6 @@ class LsstCamParseTask(ParseTask):
             The day that the data was taken, e.g. 1958-02-05
         """
         return md.get("DATE-OBS")[:10]
-
-    def XXX_translate_visit(self, md):
-        """Generate a unique visit from the timestamp.
-
-        It might be better to use the 1000*runNo + seqNo, but the latter isn't currently set
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit_num : `int`
-            Visit number, as translated
-        """
-        mjd = md.get("MJD-OBS")
-        mmjd = mjd - 55197              # relative to 2010-01-01, just to make the visits a tiny bit smaller
-        return int(1e5*mmjd)            # 86400s per day, so we need this resolution
 
     def translate_snap(self, md):
         """Extract snap from metadata.
