@@ -24,6 +24,7 @@ import sys
 import shutil
 import yaml
 
+
 def findYamlOnPath(fileName, searchPath):
     """Find and return a file somewhere in the directories listed in searchPath"""
     for d in searchPath:
@@ -33,6 +34,7 @@ def findYamlOnPath(fileName, searchPath):
 
     raise FileNotFoundError("Unable to find %s on path %s" % (fileName, ":".join(searchPath)))
 
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="""
@@ -41,11 +43,12 @@ if __name__ == "__main__":
     Because we have many similar cameras, the assembly uses a :-separated search path of directories
     to find desired information.  The _first_ occurrence of a filename is used.
     """)
-    
+
     parser.add_argument('outputFile', type=str, help="Name of generated file")
-    parser.add_argument('--path', type=str, help="List of directories to search for components", default=False)
+    parser.add_argument('--path', type=str, help="List of directories to search for components",
+                        default=False)
     parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
-    
+
     args = parser.parse_args()
 
     cameraFile = args.outputFile
@@ -68,6 +71,7 @@ if __name__ == "__main__":
     shutil.copyfile(cameraSklFile, cameraFile)
 
     nindent = 0        # current number of indents
+
     def indent():
         """Return the current indent string"""
         dindent = 2    # number of spaces per indent
@@ -101,7 +105,7 @@ CCDs :\
                     ccds[ccdName] = _ccds[ccdName]
                 del _ccds
 
-                amps = cameraSkl['CCD_%s'  % detectorType]["amplifiers"]  # describe this *type* of ccd
+                amps = cameraSkl['CCD_%s' % detectorType]["amplifiers"]  # describe this *type* of ccd
             except KeyError:
                 raise RuntimeError("Unknown detector type %s" % detectorType)
 

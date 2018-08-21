@@ -9,6 +9,7 @@ import re
 
 __all__ = ["writeRaftFile"]
 
+
 def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
     print("""\
 %s :
@@ -34,7 +35,8 @@ def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
         for ampName, (gain, readNoise) in ccdData[ccdName].items():
             print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 
 if __name__ == "__main__":
     raftData = {}
@@ -55,7 +57,7 @@ if __name__ == "__main__":
             fields = fields[:29]
             assert len(fields) == 29
 
-            gain, gainVariation           = fields[7],  fields[8]
+            gain, gainVariation           = fields[7],  fields[8] # noqa E221
             readNoise, readNoiseVariation = fields[11], fields[12]
 
             if False:
@@ -70,8 +72,6 @@ if __name__ == "__main__":
                 raftData[raftName][ccdName] = {}
 
             raftData[raftName][ccdName][ampName] = (gain, readNoise)
-
-    #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
     raftId = 0
     for raftName, ccdData in raftData.items():

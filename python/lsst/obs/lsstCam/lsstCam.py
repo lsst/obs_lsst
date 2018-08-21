@@ -38,6 +38,7 @@ class LsstCam(YamlCamera):
 
         YamlCamera.__init__(self, cameraYamlFile)
 
+
 class ImsimCam(YamlCamera):
     """The imsim realisation of the real LSST 3.2Gpix Camera
     """
@@ -50,6 +51,7 @@ class ImsimCam(YamlCamera):
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
+
 
 class PhosimCam(YamlCamera):
     """The phosim realisation of the real LSST 3.2Gpix Camera

@@ -7,10 +7,8 @@
 import argparse
 import re
 import sys
-import numpy as np
 
 import lsst.daf.persistence as dafPersist
-import lsst.afw.image as afwImage
 
 from segmentationToRafts import writeRaftFile
 
@@ -54,13 +52,14 @@ if __name__ == "__main__":
     # Due to butler stupidity it can't/won't lookup things when you also specify a channel.  Sigh
     #
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
-        
+
     if verbose:
         print("DataId = %s" % dataId)
 
     raftData = {}
     for raftName, detectorName, detector in \
-        butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId):
+        butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId): # noqa E125
+
         dataId["detector"] = detector   # more of the butler stupidity
 
         print(raftName, detectorName)
@@ -78,8 +77,6 @@ if __name__ == "__main__":
             assert(ampName[-2:] == md.get("EXTNAME")[-2:])
 
             raftData[raftName][detectorName][ampName] = (gain, readNoise)
-
-    #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
     raftId = 0
     for raftName, ccdData in raftData.items():
