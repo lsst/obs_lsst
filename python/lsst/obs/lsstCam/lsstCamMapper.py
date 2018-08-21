@@ -351,10 +351,18 @@ class LsstCamMapper(CameraMapper):
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
-        @param dataId (dict) Data identifier with visit
+        @param dataId (dict) Data identifier including visit and detector
         """
         visit = dataId['visit']
-        return int(visit)
+
+        if "detector" in dataId:
+            detector = dataId["detector"]
+        else:
+            camera = self.camera
+            fullName = "%s_%s" % (dataId["raftName"], dataId["detectorName"])
+            detector = camera._nameDetectorDict[fullName].getId()
+
+        return 200*visit + detector
 
     def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
         return self._computeCcdExposureId(dataId)
