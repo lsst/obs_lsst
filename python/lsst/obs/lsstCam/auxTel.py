@@ -19,6 +19,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
+import datetime
 import os.path
 import re
 import lsst.utils as utils
@@ -28,6 +29,7 @@ from . import LsstCamMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
 
 __all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
+
 
 class AuxTelCam(YamlCamera):
     """The auxTel's single CCD Camera
@@ -42,11 +44,22 @@ class AuxTelCam(YamlCamera):
 
         YamlCamera.__init__(self, cameraYamlFile)
 
-    
+
+def computeVisit(dayObs, seqNum):
+    """Compute a visit number given a dayObs and seqNum"""
+
+    try:
+        date = datetime.data.fromisoformat(dayObs)
+    except AttributeError:          # requires py 3.7
+        date = datetime.date(*[int(f) for f in dayObs.split('-')])
+
+    return (date.toordinal() - 736900)*100000 + seqNum
+
+
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
 
-    yamlFileList =  ["auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
+    yamlFileList = ["auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
@@ -57,10 +70,18 @@ class AuxTelMapper(LsstCamMapper):
         return "auxTel"
 
     def _extractDetectorName(self, dataId):
-        return 0 # "S1"
+        return 0                        # "S1"
 
+    def _computeCcdExposureId(self, dataId):
+        """Compute the 64-bit (long) identifier for a CCD exposure.
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        @param dataId (dict) Data identifier including dayObs and seqnum
+        """
+        visit = computeVisit(dataId['dayObs'], dataId["seqnum"])
+        detector = self._extractDetectorName(dataId)
+
+        return 200*visit + detector
+
 
 class AuxTelParseTask(LsstCamParseTask):
     """Parser suitable for auxTel data.
@@ -93,27 +114,13 @@ class AuxTelParseTask(LsstCamParseTask):
         basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
         phuInfo['basename'] = basename
 
-        # Now pull the imageType and the correct exposure time the path (no, they're not in the header)
-
-        basenameComponents = basename.split("_")
-        try:
-            imageType = basenameComponents[1]
-            expTime = float(basenameComponents[2])
-        except IndexError:
-            raise RuntimeError("File basename %s is too short to deduce expTime" % basename)
-
-        phuInfo['imageType'] = imageType if expTime > 0 else "bias"
-        phuInfo['expTime'] = expTime    # the header value is wrong
-
         return phuInfo, infoList
-    
+
     def translate_detector(self, md):
         return 0                        # we can't use config.parse.defaults as it only handles strings
 
     def translate_visit(self, md):
-        """Generate a unique visit from the timestamp.
-
-        It might be better to use the 1000*runNo + seqNo, but the latter isn't currently set
+        """Generate a unique visit number
 
         Parameters
         ----------
@@ -125,9 +132,10 @@ class AuxTelParseTask(LsstCamParseTask):
         visit_num : `int`
             Visit number, as translated
         """
-        mjd = md.get("MJD-OBS")
-        mmjd = mjd - 58300              # relative to 2018-07-01, just to make the visits a tiny bit smaller
-        return int(1e5*mmjd)            # 86400s per day, so we need this resolution
+        dayObs = self.translate_dayObs(md)
+        seqNum = self.translate_seqnum(md)
+
+        return computeVisit(dayObs, seqNum)
 
     def translate_wavelength(self, md):
         """Translate wavelength provided by auxtel readout.
@@ -161,7 +169,7 @@ class AuxTelParseTask(LsstCamParseTask):
         for k in ["FILTER1", "FILTER2"]:
             if md.exists(k):
                 filters.append(md.get(k))
-                            
+
         filterName = "|".join(filters)
 
         if filterName == "":
@@ -169,8 +177,8 @@ class AuxTelParseTask(LsstCamParseTask):
 
         return filterName
 
-    def translate_kid(self, md):
-        """Return the end of the timestamp; the start is the day
+    def translate_seqnum(self, md):
+        """Return the SEQNUM
 
         Parameters
         ----------
@@ -179,15 +187,17 @@ class AuxTelParseTask(LsstCamParseTask):
 
         Returns
         -------
-        the "Kirk ID" (kid) : `int`
+        the sequence number : `int`
             An identifier valid within a day
         """
 
-        f = md.get("FILENAME")
-        basename = os.path.splitext(os.path.split(f)[1])[0] # e.g. ats_exp_5_20180721023513
+        if md.exists("SEQNUM"):
+            return md.get("SEQNUM")
+        #
+        # Oh dear.  Extract it from the filename
+        #
+        imgname = md.get("IMGNAME")           # e.g. AT-O-20180816-00008
+        seqnum = imgname[-5:]                 # 00008
+        seqnum = re.sub(r'^0+', '', seqnum)   # 8
 
-        tstamp = basename.split('_')[-1] # 20180721023513
-        kid = tstamp[-6:]                # 023513
-        kid = re.sub(r'^0+', '', kid)    # 23515
-
-        return kid
+        return int(seqnum)

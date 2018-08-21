@@ -3,19 +3,19 @@ from lsst.obs.lsstCam.auxTel import AuxTelParseTask
 config.parse.retarget(AuxTelParseTask)
 
 config.parse.translation = {
-    'expTime': 'EXPTIME',   # values are incorrect in 2018-07-20 (e.g. ats_dark_600*fits)
+    'expTime': 'EXPTIME',
     'object': 'OBJECT',
     'imageType': 'IMGTYPE',
     'detectorName': '',
     'dateObs': 'DATE-OBS',
     'date': 'DATE-OBS',
-    'seqnum': 'SEQNUM',
+    #'seqnum': 'SEQNUM',
 }
 config.parse.translators = {
     'dayObs': 'translate_dayObs',
     'detector': 'translate_detector',   # set this way as I can't use a default of 0
     'filter': 'translate_filter',       # we have two filter wheels
-    'kid': 'translate_kid',             # Kirk's time-based ID (valid within a day)
+    'seqnum': 'translate_seqnum',       # an ID valid within a day
     'visit': 'translate_visit',
     'wavelength': 'translate_wavelength',
 }
@@ -31,7 +31,6 @@ config.register.columns = {
     #'run': 'text',
     'dayObs': 'text',
     'seqnum': 'int',
-    'kid': 'int',
     'visit': 'int',
     'detector': 'int',
     'detectorName': 'text',
