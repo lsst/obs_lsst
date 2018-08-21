@@ -193,7 +193,7 @@ def assemble_raw(dataId, componentInfo, cls):
             logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
                         (dataId,))
         else:
-            boresight = afwGeom.PointD(ratel, dectel)
+            boresight = afwGeom.SpherePoint(ratel, dectel, afwGeom.degrees)
             exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
                                                90*afwGeom.degrees - rotangle))
 
@@ -201,11 +201,9 @@ def assemble_raw(dataId, componentInfo, cls):
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #
-# This code will be replaced by functionality in afw;  DM-14932
+# This code will be replaced by functionality in afw;  DM-14932 (done), DM-14980
 #
-import astshim
 import lsst.afw.cameraGeom as cameraGeom
-import numpy as np                      # only for pi!
 
 def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
     """Given a camera, detector and (boresight, rotation), return that detector's WCS
@@ -214,7 +212,7 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
         ----------
         camera: `lsst.afw.cameraGeom.Camera`  The camera containing the detector
         detector: `lsst.afw.cameraGeom.Detector`  A detector in a camera
-        boresight: `lsst.afw.geom.Point2D`  The boresight of the observation
+        boresight: `lsst.afw.geom.SpherePoint`  The boresight of the observation
         rotation: `lsst.afw.geom.Angle` The rotation angle of the camera
 
     The rotation is "rotskypos", the angle of sky relative to camera coordinates
@@ -222,26 +220,8 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
     """
     trans = camera.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
                                 detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
-    polyMap = trans.getMapping()
-    radToDeg = astshim.ZoomMap(2, 180/np.pi) # convert from radians to degrees
-    polyMap = polyMap.then(radToDeg)
 
-    pixelFrame = astshim.Frame(2, "Domain=PIXELS")
-    iwcFrame = astshim.Frame(2, "Domain=IWC")
-
-    frameDict = astshim.FrameDict(pixelFrame, polyMap, iwcFrame)
-
-    crpix = afwGeom.PointD(0, 0)
-    crval = afwGeom.SpherePoint(*boresight, afwGeom.degrees)
-    cd = afwGeom.makeCdMatrix(1.0*afwGeom.degrees, rotation, flipX)
-    iwcToSkyWcs = afwGeom.makeSkyWcs(crpix, crval, cd)
-
-    iwcToSkyMap = iwcToSkyWcs.getFrameDict().getMapping("PIXELS", "SKY")
-    skyFrame = iwcToSkyWcs.getFrameDict().getFrame("SKY")
-
-    frameDict.addFrame("IWC", iwcToSkyMap, skyFrame)
-
-    wcs = afwGeom.SkyWcs(frameDict)
+    wcs = afwGeom.makeSkyWcs(trans, rotation, flipX, boresight)
 
     return wcs
 
