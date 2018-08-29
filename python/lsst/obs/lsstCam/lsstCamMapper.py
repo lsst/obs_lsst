@@ -289,6 +289,17 @@ class LsstCamMapper(CameraMapper):
 
         self.__initialiseCache()
 
+        LsstCamMapper._nbit_tract = 16
+        LsstCamMapper._nbit_patch = 5
+        LsstCamMapper._nbit_filter = 6
+
+        LsstCamMapper._nbit_id = 64 - (LsstCamMapper._nbit_tract + 2*LsstCamMapper._nbit_patch + LsstCamMapper._nbit_filter)
+
+        if len(afwImage.Filter.getNames()) >= 2**LsstCamMapper._nbit_filter:
+            raise RuntimeError("You have more filters defined than fit into the %d bits allocated" %
+LsstCamMapper._nbit_filter)
+
+
     @classmethod
     def defineFilters(cls):
         # The order of these defineFilter commands matters as their IDs are used to generate at least some
@@ -350,6 +361,40 @@ class LsstCamMapper(CameraMapper):
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
         return 32  # just a guess, but this leaves plenty of space for sources
+
+    def _computeCoaddExposureId(self, dataId, singleFilter):
+        """Compute the 64-bit (long) identifier for a coadd.
+        @param dataId (dict)       Data identifier with tract and patch.
+        @param singleFilter (bool) True means the desired ID is for a single-
+                                   filter coadd, in which case dataId
+                                   must contain filter.
+        """
+
+        tract = int(dataId['tract'])
+        if tract < 0 or tract >= 2**LsstCamMapper._nbit_tract:
+            raise RuntimeError('tract not in range [0,%d)' % (2**LsstCamMapper._nbit_tract))
+        patchX, patchY = [int(patch) for patch in dataId['patch'].split(',')]
+        for p in (patchX, patchY):
+            if p < 0 or p >= 2**LsstCamMapper._nbit_patch:
+                raise RuntimeError('patch component not in range [0, %d)' % 2**LsstCamMapper._nbit_patch)
+        oid = (((tract << LsstCamMapper._nbit_patch) + patchX) << LsstCamMapper._nbit_patch) + patchY
+        if singleFilter:
+            return (oid << LsstCamMapper._nbit_filter) + afwImage.Filter(dataId['filter']).getId()
+        return oid
+
+    def bypass_deepCoaddId_bits(self, *args, **kwargs):
+        """The number of bits used up for patch ID bits"""
+        return 64 - LsstCamMapper._nbit_id
+
+    def bypass_deepCoaddId(self, datasetType, pythonType, location, dataId):
+        return self._computeCoaddExposureId(dataId, True)
+
+    def bypass_deepMergedCoaddId_bits(self, *args, **kwargs):
+        """The number of bits used up for patch ID bits"""
+        return 64 - LsstCamMapper._nbit_id
+
+    def bypass_deepMergedCoaddId(self, datasetType, pythonType, location, dataId):
+        return self._computeCoaddExposureId(dataId, False)
 
     def query_raw_amp(self, format, dataId):
         """!Return a list of tuples of values of the fields specified in format, in order.
