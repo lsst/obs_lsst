@@ -309,12 +309,13 @@ LsstCamMapper._nbit_filter)
         afwImageUtils.defineFilter('275CutOn', 0.0, alias=[])
         afwImageUtils.defineFilter('550CutOn', 0.0, alias=[])
         # The LSST Filters from L. Jones 04/07/10
-        afwImageUtils.defineFilter('u', 364.59)
-        afwImageUtils.defineFilter('g', 476.31)
-        afwImageUtils.defineFilter('r', 619.42)
-        afwImageUtils.defineFilter('i', 752.06)
-        afwImageUtils.defineFilter('z', 866.85)
-        afwImageUtils.defineFilter('y', 971.68, alias=['y4'])  # official y filter
+        afwImageUtils.defineFilter('u', lambdaEff=364.59, lambdaMin=324.0, lambdaMax=395.0)
+        afwImageUtils.defineFilter('g', lambdaEff=476.31, lambdaMin=405.0, lambdaMax=552.0)
+        afwImageUtils.defineFilter('r', lambdaEff=619.42, lambdaMin=552.0, lambdaMax=691.0)
+        afwImageUtils.defineFilter('i', lambdaEff=752.06, lambdaMin=818.0, lambdaMax=921.0)
+        afwImageUtils.defineFilter('z', lambdaEff=866.85, lambdaMin=922.0, lambdaMax=997.0)
+        # official y filter
+        afwImageUtils.defineFilter('y', lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4'])
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
@@ -389,12 +390,25 @@ LsstCamMapper._nbit_filter)
     def bypass_deepCoaddId(self, datasetType, pythonType, location, dataId):
         return self._computeCoaddExposureId(dataId, True)
 
+    def bypass_dcrCoaddId_bits(self, datasetType, pythonType, location, dataId):
+        return self.bypass_deepCoaddId_bits(datasetType, pythonType, location, dataId)
+
+    def bypass_dcrCoaddId(self, datasetType, pythonType, location, dataId):
+        return self.bypass_deepCoaddId(datasetType, pythonType, location, dataId)
+
     def bypass_deepMergedCoaddId_bits(self, *args, **kwargs):
         """The number of bits used up for patch ID bits"""
         return 64 - LsstCamMapper._nbit_id
 
     def bypass_deepMergedCoaddId(self, datasetType, pythonType, location, dataId):
         return self._computeCoaddExposureId(dataId, False)
+
+    def bypass_dcrMergedCoaddId_bits(self, *args, **kwargs):
+        """The number of bits used up for patch ID bits"""
+        return self.bypass_deepMergedCoaddId_bits(*args, **kwargs)
+
+    def bypass_dcrMergedCoaddId(self, datasetType, pythonType, location, dataId):
+        return self.bypass_deepMergedCoaddId(datasetType, pythonType, location, dataId)
 
     def query_raw_amp(self, format, dataId):
         """!Return a list of tuples of values of the fields specified in format, in order.
