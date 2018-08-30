@@ -59,7 +59,7 @@ def computeVisit(dayObs, seqNum):
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
 
-    yamlFileList = ["auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
+    yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
@@ -77,6 +77,9 @@ class AuxTelMapper(LsstCamMapper):
 
         @param dataId (dict) Data identifier including dayObs and seqnum
         """
+        if len(dataId) == 0:
+            return 0                    # give up.  Useful if reading files without a butler
+
         visit = computeVisit(dataId['dayObs'], dataId["seqnum"])
         detector = self._extractDetectorName(dataId)
 
