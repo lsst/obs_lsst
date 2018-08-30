@@ -24,7 +24,7 @@
 from __future__ import division, print_function
 
 import os
-
+import re
 import lsst.log
 import lsst.pex.exceptions as pexExcept
 import lsst.afw.image.utils as afwImageUtils
@@ -111,7 +111,7 @@ def assemble_raw(dataId, componentInfo, cls):
     for i, (amp, ampExp) in enumerate(zip(ccd, ampExps)):
         ampMd = ampExp.getMetadata().toDict()
 
-        if amp.getRawBBox() != ampExp.getBBox(): # Oh dear. cameraGeom is wrong -- probably overscan
+        if amp.getRawBBox() != ampExp.getBBox():  # Oh dear. cameraGeom is wrong -- probably overscan
             if not warned:
                 logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)" %
                             (amp.getRawBBox(), ampExp.getBBox()))
@@ -179,7 +179,10 @@ def assemble_raw(dataId, componentInfo, cls):
     #
     global _camera, _lsstCamMapper      # Dangerous file-level cache set by Mapper.__initialiseCache()
 
-    exposure = _lsstCamMapper.std_raw(exposure, dataId)
+    try:
+        exposure = _lsstCamMapper.std_raw(exposure, dataId)
+    except:
+        exposure = _lsstCamMapper.std_raw(exposure, dataId, filter=False)
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
@@ -188,7 +191,7 @@ def assemble_raw(dataId, componentInfo, cls):
             rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
         except pexExcept.NotFoundError as e:
             ratel, dectel, rotangle = '', '', ''
-            
+
         if ratel == '' or dectel == '' or rotangle == '': # FITS for None
             logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
                         (dataId,))
@@ -203,7 +206,7 @@ def assemble_raw(dataId, componentInfo, cls):
 #
 # This code will be replaced by functionality in afw;  DM-14932 (done), DM-14980
 #
-import lsst.afw.cameraGeom as cameraGeom
+import lsst.afw.cameraGeom as cameraGeom # noqa F811
 
 def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
     """Given a camera, detector and (boresight, rotation), return that detector's WCS
@@ -432,9 +435,6 @@ class LsstCamMapper(CameraMapper):
             #
             return self.bypass__raw_visitInfo(datasetType, pythonType, location, dataId)
         else:
-            import re
-            import lsst.afw.image as afwImage
-
             fileName = location.getLocationsWithRoot()[0]
             mat = re.search(r"\[(\d+)\]$", fileName)
             if mat:
@@ -448,6 +448,12 @@ class LsstCamMapper(CameraMapper):
     def std_raw_amp(self, item, dataId):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
                                          trimmed=False, setVisitInfo=False)
+
+    def std_raw(self, item, dataId, filter=True):
+        """Standardize a raw dataset by converting it to an Exposure instead of an Image"""
+        return self._standardizeExposure(self.exposures['raw'], item, dataId,
+                                         trimmed=False, setVisitInfo=True, filter=filter)
+
 
 #-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #
@@ -467,9 +473,6 @@ class ImsimMapper(LsstCamMapper):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
         return lsstCam.ImsimCam()
 
-    @classmethod
-    def getCameraName(cls) :
-        return 'imsim'
 
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
@@ -479,5 +482,5 @@ class PhosimMapper(LsstCamMapper):
         return lsstCam.PhosimCam()
 
     @classmethod
-    def getCameraName(cls) :
+    def getCameraName(cls):
         return 'phosim'
