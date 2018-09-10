@@ -7,11 +7,12 @@ config.parse.translation = {
     'object': 'OBJECT',
     'imageType': 'IMGTYPE',
     'detectorName': '',
-    'dateObs': 'DATE-OBS',
+    #'dateObs': 'DATE-OBS',
     'date': 'DATE-OBS',
     #'seqnum': 'SEQNUM',
 }
 config.parse.translators = {
+    'dateObs': 'translate_dateObs',     # need to strip "(UTC)"
     'dayObs': 'translate_dayObs',
     'detector': 'translate_detector',   # set this way as I can't use a default of 0
     'filter': 'translate_filter',       # we have two filter wheels
@@ -42,5 +43,5 @@ config.register.columns = {
     'imageType': 'text',
     'wavelength': 'int',
 }
-config.register.unique = ["visit", "detector"]
+config.register.unique = ["visit", "dayObs", "seqnum", "detector"]
 config.register.visit = list(config.register.columns.keys())
