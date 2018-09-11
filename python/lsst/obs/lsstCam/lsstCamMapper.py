@@ -112,13 +112,16 @@ def assemble_raw(dataId, componentInfo, cls):
         ampMd = ampExp.getMetadata().toDict()
 
         if amp.getRawBBox() != ampExp.getBBox():  # Oh dear. cameraGeom is wrong -- probably overscan
+            if amp.getRawDataBBox().getDimensions() != amp.getBBox().getDimensions():
+                raise RuntimeError("Active area is the wrong size: %s v. %s" %
+                                   (amp.getRawDataBBox().getDimensions(), amp.getBBox().getDimensions()))
             if not warned:
-                logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)" %
-                            (amp.getRawBBox(), ampExp.getBBox()))
+                logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)",
+                            amp.getRawBBox(), ampExp.getBBox())
                 warned = True
 
-            w,  h  = ampExp.getBBox().getDimensions()
-            ow, oh = amp.getRawBBox().getDimensions() # "old" (cameraGeom) dimensions
+            w,  h  = ampExp.getBBox().getDimensions()  # noqa E221, E241
+            ow, oh = amp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
             #
             # We could trust the BIASSEC keyword, or we can just assume that they've changed
             # the number of overscan pixels (serial and/or parallel).  As Jim Chiang points out,
@@ -157,14 +160,12 @@ def assemble_raw(dataId, componentInfo, cls):
 
         logCmd = logger.warn if i == 0 else logger.debug
         if detsec and amp.getBBox() != detsec:
-            logCmd("DETSEC doesn't match for %s (%s != %s)" %
-                   (dataId, amp.getBBox(), detsec))
+            logCmd("DETSEC doesn't match for %s (%s != %s)", dataId, amp.getBBox(), detsec)
         if datasec and amp.getRawDataBBox() != datasec:
-            logCmd("DATASEC doesn't match for %s (%s != %s)" %
-                        (dataId, amp.getRawDataBBox(), detsec))
+            logCmd("DATASEC doesn't match for %s (%s != %s)", dataId, amp.getRawDataBBox(), detsec)
         if biassec and amp.getRawHorizontalOverscanBBox() != biassec:
-            logCmd("BIASSEC doesn't match for %s (%s != %s)" %
-                   (dataId, amp.getRawHorizontalOverscanBBox(), detsec))
+            logCmd("BIASSEC doesn't match for %s (%s != %s)",
+                   dataId, amp.getRawHorizontalOverscanBBox(), detsec)
 
     ampDict = {}
     for amp, ampExp in zip(ccd, ampExps):
@@ -181,7 +182,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     try:
         exposure = _lsstCamMapper.std_raw(exposure, dataId)
-    except:
+    except Exception:
         exposure = _lsstCamMapper.std_raw(exposure, dataId, filter=False)
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
@@ -192,7 +193,7 @@ def assemble_raw(dataId, componentInfo, cls):
         except pexExcept.NotFoundError as e:
             ratel, dectel, rotangle = '', '', ''
 
-        if ratel == '' or dectel == '' or rotangle == '': # FITS for None
+        if ratel == '' or dectel == '' or rotangle == '':  # FITS for None
             logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
                         (dataId,))
         else:
@@ -202,11 +203,12 @@ def assemble_raw(dataId, componentInfo, cls):
 
     return exposure
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #
 # This code will be replaced by functionality in afw;  DM-14932 (done), DM-14980
 #
 import lsst.afw.cameraGeom as cameraGeom # noqa F811
+
 
 def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
     """Given a camera, detector and (boresight, rotation), return that detector's WCS
@@ -228,14 +230,15 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
 
     return wcs
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 
 class LsstCamMapper(CameraMapper):
     """The Mapper for LsstCam."""
 
     packageName = 'obs_lsstCam'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
-    yamlFileList = ("lsstCamMapper.yaml",) # list of yaml files to load, keeping the first occurrence
+    yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
 
     def __initialiseCache(self):
         """Initialise file-level cache.
@@ -455,7 +458,7 @@ class LsstCamMapper(CameraMapper):
                                          trimmed=False, setVisitInfo=True, filter=filter)
 
 
-#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #
 # We need a mapper class for each new distinct collection of LSST CCDs; you'll also
 # need to make the obvious changes to lsstCamp.py

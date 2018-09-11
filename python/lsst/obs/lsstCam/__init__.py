@@ -23,4 +23,3 @@ from __future__ import absolute_import
 from .version import *
 from .lsstCam import *
 from .lsstCamMapper import *
-from .SimButlerImage import *
