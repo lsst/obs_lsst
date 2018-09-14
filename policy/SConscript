@@ -23,5 +23,13 @@ for camera in ["auxTel", "lsstCam", "imsim", "phosim"]:
                               (python, camera))
 
     env.Depends(commandInst, lsst.sconsUtils.targets["python"])
+    dirList = ["lsstCam"]
+    if os.path.isdir(camera):
+        dirList.append(camera)
+
+    for d in dirList:
+        for f in glob.glob(os.path.join(d, "*.yaml")):
+            env.Depends(commandInst, f)
+        
     for f in ["cameraHeader.yaml", "rafts.yaml", env.Glob("R??.yaml")]:
         env.Depends(commandInst, f)
