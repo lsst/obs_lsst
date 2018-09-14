@@ -43,6 +43,13 @@ exposures:
     - raw
     - raw_visit
     template: wcs/%(visit)08d-%(filter)s/%(raftName)s/wcs_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  eimage:
+    level: Ccd
+    persistable: DecoratedImageU
+    python: lsst.afw.image.DecoratedImageU
+    storage: FitsStorage
+    tables: raw
+    template: eimage/%(visit)d/E%(snap)03d/%(raftName)s/eimage_%(visit)08d_%(raftName)s_%(detectorName)s_E%(snap)03d.fits.gz
   fcr:
     level: Ccd
     persistable: ExposureI
@@ -564,3 +571,32 @@ datasets:
     python: builtins.str
     storage: TextStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
+
+  # Focal plane summary plots
+  focal_plane_fits:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: focal_plane/%(dstype)s-v%(visit)08d.fits
+  focal_plane_png:
+    level: Visit
+    persistable: None
+    python: builtins.str
+    storage: TextStorage
+    template: focal_plane/%(dstype)s-v%(visit)08d.png
+  binned_sensor_fits:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s.fits
+  binned_sensor_fits_halves:
+    level: Visit
+    persistable: MaskedImageF
+    python: lsst.afw.image.MaskedImageF
+    storage: FitsStorage
+    tables: raw
+    template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s_%(half)s.fits

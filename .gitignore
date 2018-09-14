@@ -6,3 +6,4 @@ config.log
 bin
 ups/*.cfgc
 python/lsst/obs/lsstCam/version.py
+bin
