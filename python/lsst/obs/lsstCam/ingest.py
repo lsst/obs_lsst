@@ -1,4 +1,4 @@
-import datetime
+import os
 import re
 import lsst.pex.exceptions as pexExcept
 from lsst.pipe.tasks.ingest import ParseTask
@@ -11,7 +11,6 @@ EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 camera = lsstCam.LsstCam()  # Global camera to avoid instantiating once per file
 
 __all__ = ["LsstCamParseTask"]
-
 
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
@@ -53,29 +52,6 @@ class LsstCamParseTask(ParseTask):
                 '%s is more than 0.1nm from an integer value', raw_wl)
         return wl
 
-    def translate_dateObs(self, md):
-        """Convert DATE-OBS to a legal format; TSEIA-83
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        dateObs : `str`
-            The day that the data was taken, e.g. 2018-08-20T21:56:24.608
-        """
-        return self.__fixDateObs(md.get("DATE-OBS"))
-
-    @staticmethod
-    def __fixDateObs(dateObs):
-        """Fix bad formatting in dateObs"""
-        dateObs = re.sub(r"\(UTC\)$", "", dateObs) # TSEIA-83
-
-        return dateObs
-        
-
     def translate_dayObs(self, md):
         """Generate the day that the observation was taken
 
@@ -89,13 +65,7 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. 1958-02-05
         """
-        dateObs = self.__fixDateObs(md.get("DATE-OBS"))
-
-        d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= datetime.timedelta(hours=8) # roll over at 8am UTC
-        dayObs = d.strftime("%Y-%m-%d")
-
-        return dayObs
+        return md.get("DATE-OBS")[:10]
 
     def translate_snap(self, md):
         """Extract snap from metadata.

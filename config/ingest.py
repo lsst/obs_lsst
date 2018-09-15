@@ -44,4 +44,4 @@ config.register.columns = {
     'wavelength': 'int',
 }
 config.register.unique = ["visit", "detector"]
-config.register.visit = ['visit', 'filter', 'dateObs', 'expTime']
+config.register.visit = list(config.register.columns.keys())
