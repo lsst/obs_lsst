@@ -71,9 +71,10 @@ class LsstCamParseTask(ParseTask):
     @staticmethod
     def __fixDateObs(dateObs):
         """Fix bad formatting in dateObs"""
-        dateObs = re.sub(r"\(UTC\)$", "", dateObs)  # TSEIA-83
+        dateObs = re.sub(r"\(UTC\)$", "", dateObs) # TSEIA-83
 
         return dateObs
+        
 
     def translate_dayObs(self, md):
         """Generate the day that the observation was taken
@@ -91,7 +92,7 @@ class LsstCamParseTask(ParseTask):
         dateObs = self.__fixDateObs(md.get("DATE-OBS"))
 
         d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= datetime.timedelta(hours=8)  # roll over at 8am UTC
+        d -= datetime.timedelta(hours=8) # roll over at 8am UTC
         dayObs = d.strftime("%Y-%m-%d")
 
         return dayObs
