@@ -61,11 +61,11 @@ exposures:
 calibrations:
   bias:
     columns:
-    - date
+    - dateObs
     - raftName
     - detectorName
     level: Ccd
-    obsTimeName: date
+    obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     refCols:
@@ -78,11 +78,11 @@ calibrations:
     validRange: true
   dark:
     columns:
-    - date
+    - dateObs
     - raftName
     - detectorName
     level: Ccd
-    obsTimeName: date
+    obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     refCols:
@@ -95,13 +95,13 @@ calibrations:
     validRange: true
   flat:
     columns:
-    - date
+    - dateObs
     - filter
     - raftName
     - detectorName
     filter: true
     level: Ccd
-    obsTimeName: date
+    obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     refCols:
@@ -115,13 +115,13 @@ calibrations:
     validRange: true
   fringe:
     columns:
-    - date
+    - dateObs
     - filter
     - raftName
     - detectorName
     filter: true
     level: Ccd
-    obsTimeName: date
+    obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     refCols:
