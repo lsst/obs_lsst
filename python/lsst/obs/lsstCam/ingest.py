@@ -112,7 +112,7 @@ class LsstCamParseTask(ParseTask):
         """
         try:
             return int(md.get("SNAP"))
-        except pexExcept.NotFoundError:
+        except KeyError:
             return 0
 
     def translate_detectorName(self, md):
