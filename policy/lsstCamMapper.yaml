@@ -417,7 +417,7 @@ datasets:
   raw_hdu:
     level: Ccd
     persistable: PropertyList
-    python: lsst.daf.base.propertyList
+    python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
     template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
