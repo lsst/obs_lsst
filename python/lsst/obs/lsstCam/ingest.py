@@ -111,7 +111,7 @@ class LsstCamParseTask(ParseTask):
         """
         try:
             return int(md.get("SNAP"))
-        except KeyError:
+        except pexExcept.wrappers.NotFoundError:
             return 0
 
     def translate_detectorName(self, md):
@@ -158,7 +158,6 @@ class LsstCamParseTask(ParseTask):
             name of raft, e.g. R21
         """
         global camera  # avoids (very slow) instantiation for each file
-
         raftName = self.translate_raftName(md)
         detectorName = self.translate_detectorName(md)
         fullName = '_'.join([raftName, detectorName])
