@@ -94,6 +94,8 @@ class AuxTelParseTask(LsstCamParseTask):
     and provide some translation methods
     """
 
+    _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
+
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the filename/path.
 

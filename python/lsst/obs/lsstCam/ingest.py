@@ -1,6 +1,5 @@
 import datetime
 import re
-import lsst.pex.exceptions as pexExcept
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 import lsst.log as lsstLog
@@ -24,8 +23,8 @@ class LsstCamParseTask(ParseTask):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
         if self.camera is None:
-            self.camera = self._cameraClass() 
-        
+            self.camera = self._cameraClass()
+
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
 

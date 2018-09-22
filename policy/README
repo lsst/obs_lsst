@@ -34,11 +34,12 @@ To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call i
    python/lsst/obs/lsstCam/auxTel/auxTel.py -- you'll see that this overrides some entries in
    lsstCamMapper.yaml (in the class data member yamlFileList) with auxTelMapper.yaml.
    If want to provide your own templates you'll need to do the same thing, adding a file
-   `policy/comCam/comCamMapper.yaml".
+   policy/comCam/comCamMapper.yaml
    
    Remember to update _makeCamera to call ComCam(), and getCameraName to return "comCam"; this name
    is used to e.g. provide per-camera configuration files (for example config/auxTel/ingest.py)
- - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.comCam.ComCamMapper
+ - Add a ComCamParseTask to python/lsst/obs/lsstCam/comCam.py, remembering to set _cameraClass correctly
+ - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.comCam.ComCamMapper 
  - You may well need your own ParseTask.  Add it to python/lsst/obs/lsstCam/comCam.py (once more
    you'll find an example in auxTel.py) and retarget config.parse in config/comCam/ingest.py
 
