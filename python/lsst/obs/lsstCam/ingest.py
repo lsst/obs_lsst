@@ -8,8 +8,6 @@ from lsst.obs.lsstCam import lsstCam
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-camera = lsstCam.LsstCam()  # Global camera to avoid instantiating once per file
-
 __all__ = ["LsstCamParseTask"]
 
 
@@ -19,9 +17,15 @@ class LsstCamParseTask(ParseTask):
     See https://docushare.lsstcorp.org/docushare/dsweb/Get/Version-43119/FITS_Raft.pdf
     """
 
+    camera = None                       # class-scope camera to avoid instantiating once per file
+    _cameraClass = lsstCam.LsstCam     # the class to instantiate for the class-scope camera
+
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
+        if self.camera is None:
+            self.camera = self._cameraClass() 
+        
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
 
@@ -111,7 +115,7 @@ class LsstCamParseTask(ParseTask):
         """
         try:
             return int(md.get("SNAP"))
-        except pexExcept.wrappers.NotFoundError:
+        except KeyError:
             return 0
 
     def translate_detectorName(self, md):
@@ -127,7 +131,7 @@ class LsstCamParseTask(ParseTask):
         ccdID : `str`
             name of ccd, e.g. S01
         """
-        return md.get("CHIPID")[4:]
+        return md.get("CHIPID")[4:7]
 
     def translate_raftName(self, md):
         """Extract raft ID from CHIPID.
@@ -157,11 +161,10 @@ class LsstCamParseTask(ParseTask):
         raftID : `str`
             name of raft, e.g. R21
         """
-        global camera  # avoids (very slow) instantiation for each file
         raftName = self.translate_raftName(md)
         detectorName = self.translate_detectorName(md)
         fullName = '_'.join([raftName, detectorName])
-        detId = camera._nameDetectorDict[fullName].getId()
+        detId = self.camera._nameDetectorDict[fullName].getId()
 
         return detId
 
