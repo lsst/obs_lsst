@@ -59,7 +59,7 @@ class FocalplaneSummaryConfig(pexConfig.Config):
     """)
     allowFitsCompression = pexConfig.Field(dtype=bool, default=False,
                                            doc="allow FITS files to be written with compression?")
-    
+
     def validate(self):
         if self.putFullSensors and not self.doSensorImages:
             raise ValueError("You may not set putFullSensors == True if doSensorImages == False")
@@ -102,7 +102,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                 for dataId in (er.dataId for er in expRefListForVisit):
                     ccd = butler.get('calexp_detector', **dataId)
                     md = butler.get('calexp_md', **dataId)
-                    afwGeom.makeSkyWcs(md, strip=True) # strips the WCS cards; they're invalidated by binning
+                    afwGeom.makeSkyWcs(md, strip=True)  # strips the WCS cards; they're invalidated by binning
                     try:
                         binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize)[0]
                         binned_im = rotateImageBy90(binned_im, ccd.getOrientation().getNQuarter())
@@ -123,7 +123,8 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                         box = boxes[half]
                         binned_dim = afwImage.DecoratedImageF(binned_im[box])
                         binned_dim.setMetadata(md)
-                        butler.put(binned_dim, 'binned_sensor_fits_halves', half=half, **dataId, dstype=dstype)
+                        butler.put(binned_dim, 'binned_sensor_fits_halves', half=half,
+                                   **dataId, dstype=dstype)
 
             detectorNameList = ["%s_%s" % (er.dataId["raftName"], er.dataId["detectorName"])
                                 for er in expRefListForVisit]
@@ -132,7 +133,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                                 detectorNameList=detectorNameList)
 
             dstypeName = "%s-%s" % (dstype, self.config.fpId) if self.config.fpId else dstype
-                
+
             butler.put(im, 'focal_plane_fits', visit=visit, dstype=dstypeName)
             zmap = ZScaleMapping(im, contrast=self.config.contrast)
             rgb = zmap.makeRgbImage(im, im, im)
