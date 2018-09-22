@@ -101,14 +101,19 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
             if self.config.doSensorImages:
                 for dataId in (er.dataId for er in expRefListForVisit):
                     ccd = butler.get('calexp_detector', **dataId)
-                    md = butler.get('calexp_md', **dataId)
-                    afwGeom.makeSkyWcs(md, strip=True)  # strips the WCS cards; they're invalidated by binning
+                    try:
+                        md = butler.get('calexp_md', **dataId)
+                    except RuntimeError:
+                        md = None
+                    if md:
+                        afwGeom.makeSkyWcs(md, strip=True)  # strip WCS cards; they're invalidated by binning
                     try:
                         binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize)[0]
                         binned_im = rotateImageBy90(binned_im, ccd.getOrientation().getNQuarter())
                         if self.config.putFullSensors:
                             binned_dim = afwImage.DecoratedImageF(binned_im)
-                            binned_dim.setMetadata(md)
+                            if md:
+                                binned_dim.setMetadata(md)
 
                             butler.put(binned_dim, 'binned_sensor_fits', **dataId, dstype=dstype)
                     except (TypeError, RuntimeError) as e:
@@ -122,7 +127,8 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                     for half in ('A', 'B'):
                         box = boxes[half]
                         binned_dim = afwImage.DecoratedImageF(binned_im[box])
-                        binned_dim.setMetadata(md)
+                        if md:
+                            binned_dim.setMetadata(md)
                         butler.put(binned_dim, 'binned_sensor_fits_halves', half=half,
                                    **dataId, dstype=dstype)
 
