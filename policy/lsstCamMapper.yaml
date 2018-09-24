@@ -63,6 +63,16 @@ exposures:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/warp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
   deepCoadd_psfMatchedWarp:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
+  dcrCoadd_directWarp:
+    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(visit)d.fits
+  deepDiff_differenceExp:
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  deepDiff_matchedExp:
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  dcrDiff_differenceExp:
+    template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  dcrDiff_matchedExp:
+    template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 
 calibrations:
@@ -279,18 +289,24 @@ datasets:
     - raw
     - raw_visit
     template: config/dark.py
-  deepCoaddId:
-    persistable: ignored
-    python: lsst.daf.base.PropertySet
-    storage: ignored
-    tables: raw
-    template: ignored
-  deepCoaddId_bits:
-    persistable: ignored
-    python: lsst.daf.base.PropertySet
-    storage: ignored
-    tables: raw
-    template: ignored
+  dcrCoadd_measMatch:
+    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
+  dcrCoadd_measMatchFull:
+    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
+  dcrCoadd_forced_src:
+    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
+  dcrCoadd_forced_config:
+    template: config/dcrCoadd_forced.py
+  dcrCoadd_forced_metadata:
+    template: dcrCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
+  dcrDiff_diaSrc:
+    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  dcrDiff_kernelSrc:
+    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  dcrDiff_config:
+    python: lsst.pex.config.Config
+  dcrDiff_metadata:
+    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
   deepCoadd_modelfits:
     persistable: ModelFitCatalog
     python: lsst.meas.multifit.ModelFitCatalog
@@ -315,6 +331,32 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: schema/deepCoadd_multiModelfits.fits
+  deep_measureMulti_config:
+    persistable: Config
+    python: lsst.meas.multifit.measureMulti.MeasureMultiConfig
+    storage: ConfigStorage
+    tables: raw
+    template: config/deep_measureMulti.py
+  deep_safeClipAssembleCoadd_metadata:
+    template: deep_safeClipAssembleCoadd_metadata/%(filter)s/%(tract)d/%(patch)s.boost
+  deepCoadd_measMatch:
+    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
+  deepCoadd_measMatchFull:
+    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
+  deepCoadd_forced_src:
+    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
+  deepCoadd_forced_config:
+    template: config/deepCoadd_forced.py
+  deepCoadd_forced_metadata:
+    template: deepCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
+  deepDiff_diaSrc:
+    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  deepDiff_kernelSrc:
+    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  deepDiff_config:
+    python: lsst.pex.config.Config
+  deepDiff_metadata:
+    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
   flat_config:
     persistable: Config
     python: lsst.pipe.drivers.constructCalibs.FlatConfig
