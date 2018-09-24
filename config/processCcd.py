@@ -1,13 +1,17 @@
+"""
+LSST Cam-specific overrides for ProcessCcdTask
+"""
 import os.path
+
 from lsst.utils import getPackageDir
 from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
 from lsst.meas.algorithms import ColorLimit
 
-configDir = os.path.join(getPackageDir("obs_lsstCam"), "config")
+obsConfigDir = os.path.join(getPackageDir("obs_lsstCam"), "config")
 
-bgFile = os.path.join(configDir, "background.py")
+config.isr.load(os.path.join(obsConfigDir, "isr.py"))
 
-config.load(os.path.join(getPackageDir("obs_lsstCam"), "config", "lsstCam.py"))
+bgFile = os.path.join(obsConfigDir, "background.py")
 
 # Cosmic rays
 config.charImage.repair.cosmicray.nCrPixelMax = 1000000
@@ -69,18 +73,18 @@ config.charImage.detection.isotropicGrow = True
 config.calibrate.detection.isotropicGrow = True
 
 # Activate calibration of measurements: required for aperture corrections
-config.charImage.load(os.path.join(configDir, "cmodel.py"))
-config.charImage.measurement.load(os.path.join(configDir, "apertures.py"))
-config.charImage.measurement.load(os.path.join(configDir, "kron.py"))
-config.charImage.measurement.load(os.path.join(configDir, "convolvedFluxes.py"))
-config.charImage.measurement.load(os.path.join(configDir, "hsm.py"))
+config.charImage.load(os.path.join(obsConfigDir, "cmodel.py"))
+config.charImage.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
+config.charImage.measurement.load(os.path.join(obsConfigDir, "kron.py"))
+config.charImage.measurement.load(os.path.join(obsConfigDir, "convolvedFluxes.py"))
+config.charImage.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 if "ext_shapeHSM_HsmShapeRegauss" in config.charImage.measurement.plugins:
     # no deblending has been done
     config.charImage.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
 
-config.calibrate.measurement.load(os.path.join(configDir, "apertures.py"))
-config.calibrate.measurement.load(os.path.join(configDir, "kron.py"))
-config.calibrate.measurement.load(os.path.join(configDir, "hsm.py"))
+config.calibrate.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
+config.calibrate.measurement.load(os.path.join(obsConfigDir, "kron.py"))
+config.calibrate.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 
 # Deblender
 config.charImage.deblend.maskLimits["NO_DATA"] = 0.25 # Ignore sources that are in the vignetted region
