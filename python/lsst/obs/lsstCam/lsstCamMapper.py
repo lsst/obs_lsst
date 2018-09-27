@@ -26,7 +26,6 @@ from __future__ import division, print_function
 import os
 import re
 import lsst.log
-import lsst.pex.exceptions as pexExcept
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
@@ -36,7 +35,7 @@ import lsst.daf.persistence as dafPersist
 
 from . import lsstCam
 
-__all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper"]
+__all__ = ["LsstCamMapper"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
@@ -515,34 +514,3 @@ LsstCamMapper._nbit_filter)
         """Standardize a raw dataset by converting it to an Exposure instead of an Image"""
         return self._standardizeExposure(self.exposures['raw'], item, dataId,
                                          trimmed=False, setVisitInfo=True, filter=filter)
-
-
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-#
-# We need a mapper class for each new distinct collection of LSST CCDs; you'll also
-# need to make the obvious changes to lsstCamp.py
-#
-# Don't forget to add your mapper to __all__ at the top of this file
-#
-class ImsimMapper(LsstCamMapper):
-    """The Mapper for the imsim simulations of the LsstCam."""
-
-    @classmethod
-    def getCameraName(cls):
-        return "imsim"
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return lsstCam.ImsimCam()
-
-
-class PhosimMapper(LsstCamMapper):
-    """The Mapper for the phosim simulations of the LsstCam."""
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return lsstCam.PhosimCam()
-
-    @classmethod
-    def getCameraName(cls):
-        return 'phosim'
