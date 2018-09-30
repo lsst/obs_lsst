@@ -5,4 +5,4 @@ _build.*
 config.log
 bin
 ups/*.cfgc
-python/lsst/obs/lsstCam/version.py
+python/lsst/obs/lsst/version.py
