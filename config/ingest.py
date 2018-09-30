@@ -1,4 +1,4 @@
-from lsst.obs.lsstCam.ingest import LsstCamParseTask
+from lsst.obs.lsst.ingest import LsstCamParseTask
 
 config.parse.retarget(LsstCamParseTask)
 

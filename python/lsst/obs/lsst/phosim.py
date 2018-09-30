@@ -31,7 +31,7 @@ __all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
 class PhosimCam(YamlCamera):
     """The phosim realisation of the real LSST 3.2Gpix Camera
     """
-    packageName = 'obs_lsstCam'
+    packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
         """Construct lsstCam for phosim

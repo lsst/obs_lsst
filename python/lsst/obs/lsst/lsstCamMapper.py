@@ -235,7 +235,7 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
 class LsstCamMapper(CameraMapper):
     """The Mapper for LsstCam."""
 
-    packageName = 'obs_lsstCam'
+    packageName = 'obs_lsst'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
 
@@ -281,7 +281,7 @@ class LsstCamMapper(CameraMapper):
                     kwargs['calibRoot'] = calibRoot
                     break
             if not kwargs.get('calibRoot', None):
-                lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find calib root directory")
+                lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find valid calib root directory")
 
         super(LsstCamMapper, self).__init__(policy, os.path.dirname(policyFile), **kwargs)
         #
@@ -298,12 +298,12 @@ class LsstCamMapper(CameraMapper):
         LsstCamMapper._nbit_patch = 5
         LsstCamMapper._nbit_filter = 6
 
-        LsstCamMapper._nbit_id = 64 - (LsstCamMapper._nbit_tract + 2*LsstCamMapper._nbit_patch + LsstCamMapper._nbit_filter)
+        LsstCamMapper._nbit_id = 64 - (LsstCamMapper._nbit_tract + 2*LsstCamMapper._nbit_patch +
+                                       LsstCamMapper._nbit_filter)
 
         if len(afwImage.Filter.getNames()) >= 2**LsstCamMapper._nbit_filter:
             raise RuntimeError("You have more filters defined than fit into the %d bits allocated" %
-LsstCamMapper._nbit_filter)
-
+                               LsstCamMapper._nbit_filter)
 
     @classmethod
     def defineFilters(cls):

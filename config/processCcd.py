@@ -7,7 +7,7 @@ from lsst.utils import getPackageDir
 from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
 from lsst.meas.algorithms import ColorLimit
 
-obsConfigDir = os.path.join(getPackageDir("obs_lsstCam"), "config")
+obsConfigDir = os.path.join(getPackageDir("obs_lsst"), "config")
 
 config.isr.load(os.path.join(obsConfigDir, "isr.py"))
 
@@ -39,7 +39,7 @@ for refObjLoader in (config.charImage.refObjLoader,
                      config.calibrate.astromRefObjLoader,
                      config.calibrate.photoRefObjLoader):
     refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
-    refObjLoader.load(os.path.join(getPackageDir('obs_lsstCam'), 'config', 'filterMap.py'))
+    refObjLoader.load(os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py'))
     refObjLoader.ref_dataset_name='cal_ref_cat'
 
 # Better astrometry matching

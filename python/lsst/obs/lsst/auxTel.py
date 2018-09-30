@@ -34,7 +34,7 @@ __all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
 class AuxTelCam(YamlCamera):
     """The auxTel's single CCD Camera
     """
-    packageName = 'obs_lsstCam'
+    packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
         """Construct lsstCam for auxTel
@@ -75,12 +75,12 @@ class AuxTelMapper(LsstCamMapper):
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
-        @param dataId (dict) Data identifier including dayObs and seqnum
+        @param dataId (dict) Data identifier including dayObs and seqNum
         """
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dayObs'], dataId["seqnum"])
+        visit = computeVisit(dataId['dayObs'], dataId["seqNum"])
         detector = self._extractDetectorName(dataId)
 
         return 200*visit + detector
@@ -138,7 +138,7 @@ class AuxTelParseTask(LsstCamParseTask):
             Visit number, as translated
         """
         dayObs = self.translate_dayObs(md)
-        seqNum = self.translate_seqnum(md)
+        seqNum = self.translate_seqNum(md)
 
         return computeVisit(dayObs, seqNum)
 
@@ -182,7 +182,7 @@ class AuxTelParseTask(LsstCamParseTask):
 
         return filterName
 
-    def translate_seqnum(self, md):
+    def translate_seqNum(self, md):
         """Return the SEQNUM
 
         Parameters
@@ -202,7 +202,7 @@ class AuxTelParseTask(LsstCamParseTask):
         # Oh dear.  Extract it from the filename
         #
         imgname = md.get("IMGNAME")           # e.g. AT-O-20180816-00008
-        seqnum = imgname[-5:]                 # 00008
-        seqnum = re.sub(r'^0+', '', seqnum)   # 8
+        seqNum = imgname[-5:]                 # 00008
+        seqNum = re.sub(r'^0+', '', seqNum)   # 8
 
-        return int(seqnum)
+        return int(seqNum)

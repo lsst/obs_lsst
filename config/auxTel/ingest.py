@@ -1,4 +1,4 @@
-from lsst.obs.lsstCam.auxTel import AuxTelParseTask
+from lsst.obs.lsst.auxTel import AuxTelParseTask
 
 config.parse.retarget(AuxTelParseTask)
 
@@ -9,13 +9,13 @@ config.parse.translation = {
     'detectorName': '',
     'dateObs': 'DATE-OBS',
     'date': 'DATE-OBS',
-    #'seqnum': 'SEQNUM',
+    #'seqNum': 'SEQNUM',
 }
 config.parse.translators = {
     'dayObs': 'translate_dayObs',
     'detector': 'translate_detector',   # set this way as I can't use a default of 0
     'filter': 'translate_filter',       # we have two filter wheels
-    'seqnum': 'translate_seqnum',       # an ID valid within a day
+    'seqNum': 'translate_seqNum',       # an ID valid within a day
     'visit': 'translate_visit',
     'wavelength': 'translate_wavelength',
 }
@@ -30,7 +30,7 @@ config.parse.hdu = 0
 config.register.columns = {
     #'run': 'text',
     'dayObs': 'text',
-    'seqnum': 'int',
+    'seqNum': 'int',
     'visit': 'int',
     'detector': 'int',
     'detectorName': 'text',

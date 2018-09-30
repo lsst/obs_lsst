@@ -2,7 +2,7 @@
 # A python script to split out a phoSim "segmentation" file into the per-raft datafiles
 # used by generateCamera.py
 #
-# This is not really part of obs_lsstCam, but it's useful to keep it here
+# This is not really part of obs_lsst, but it's useful to keep it here
 #
 import numpy as np
 import re

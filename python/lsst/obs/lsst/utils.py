@@ -25,14 +25,14 @@ Miscellaneous utilities related to lsst cameras
 """
 
 import lsst.afw.image as afwImage
-from lsst.obs.lsstCam.lsstCamMapper import assemble_raw
+from lsst.obs.lsst.lsstCamMapper import assemble_raw
 try:
-    from lsst.obs.lsstCam.lsstCamMapper import _camera
+    from lsst.obs.lsst.lsstCamMapper import _camera
 except ImportError:
-    from lsst.obs.lsstCam.auxTel import AuxTelMapper
+    from lsst.obs.lsst.auxTel import AuxTelMapper
     mapper = AuxTelMapper()    # Sets the sleazy _camera global
 
-    from lsst.obs.lsstCam.lsstCamMapper import _camera
+    from lsst.obs.lsst.lsstCamMapper import _camera
 
 
 def readRawFile(fileName, dataId={}):

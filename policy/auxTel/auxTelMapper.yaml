@@ -1,7 +1,8 @@
 calibrations:
   bias:
+    obsTimeName: dayObs
     columns:
-    - date
+    - dayObs
     - detectorName
     template: bias/%(calibDate)s/bias-det%(detector)03d_%(calibDate)s.fits
 

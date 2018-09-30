@@ -1,4 +1,4 @@
-from lsst.obs.lsstCam.ingest import LsstCamCalibsParseTask
+from lsst.obs.lsst.ingest import LsstCamCalibsParseTask
 config.parse.retarget(LsstCamCalibsParseTask)
 
 config.register.columns = {'filter': 'text',

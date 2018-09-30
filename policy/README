@@ -25,7 +25,7 @@ To add a new camera (e.g. comCam, made up of 9 CCDs in a single "raft" -- call i
    note the magic `--path` options -- it tells the code to use your data in comcam to override
    lsstCam values.  This is why there's no imsim directory and phosim only contains the crosstalk
    coefficients; they take almost everything from policy and policy/lsstCam
- - run scons in the obs_lsstCam directory (or scons -u in policy)
+ - run scons in the obs_lsst directory (or scons -u in policy)
  - add comcam.yaml to policy/.gitignore
  - Create a new file python/lsst/obs/lsstCam/comCam.py (see auxTel.py for an example)
    and add a class ComCam.  Note that you need to change the path for cameraYamlFile, presumably to

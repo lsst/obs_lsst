@@ -16,7 +16,7 @@ exposures:
     tables: raw
     template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
   raw:
-    assembler: lsst.obs.lsstCam.lsstCamMapper.assemble_raw
+    assembler: lsst.obs.lsst.lsstCamMapper.assemble_raw
     composite:
       raw_amp:
         datasetType: raw_amp

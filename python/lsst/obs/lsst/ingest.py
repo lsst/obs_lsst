@@ -3,7 +3,7 @@ import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 import lsst.log as lsstLog
-from lsst.obs.lsstCam import lsstCam
+from . import LsstCam
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
@@ -17,7 +17,7 @@ class LsstCamParseTask(ParseTask):
     """
 
     camera = None                       # class-scope camera to avoid instantiating once per file
-    _cameraClass = lsstCam.LsstCam     # the class to instantiate for the class-scope camera
+    _cameraClass = LsstCam              # the class to instantiate for the class-scope camera
 
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
@@ -50,7 +50,7 @@ class LsstCamParseTask(ParseTask):
         raw_wl = md.get("MONOWL")
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
-            logger = lsstLog.Log.getLogger('obs.lsstCam.ingest')
+            logger = lsstLog.Log.getLogger('obs.lsst.ingest')
             logger.warn(
                 'Translated significantly non-integer wavelength; '
                 '%s is more than 0.1nm from an integer value', raw_wl)
