@@ -1,3 +1,3 @@
-from lsst.obs.lsstCam.phosim import ImsimParseTask
+from lsst.obs.lsst.imsim import ImsimParseTask
 
 config.parse.retarget(ImsimParseTask)
