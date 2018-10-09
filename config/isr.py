@@ -6,5 +6,10 @@ if hasattr(config, 'ccdKeys'):
 
 config.doLinearize = False
 config.doDefect = False
-config.doCrosstalk=True
+# skip xtalk for Run1.2x
+config.doCrosstalk = False
 config.doAddDistortionModel = False
+
+# Work-around for median-bug in overscan correction (DM-15203).
+config.overscanFitType = 'POLY'
+config.overscanOrder = 0
