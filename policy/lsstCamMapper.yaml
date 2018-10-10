@@ -195,6 +195,10 @@ calibrations:
 
 
 datasets:
+  jointcal_wcs:  # astrometric calibration produced by jointcal
+    template: 'jointcal-results/%(filter)s/%(tract)04d/jointcal_wcs-v%(visit)d_%(raftName)s_%(detectorName)s.fits'
+  jointcal_photoCalib:  # photometric calibration produced by jointcal
+    template: 'jointcal-results/%(filter)s/%(tract)04d/jointcal_photoCalib-v%(visit)d_%(raftName)s_%(detectorName)s.fits'
   IngestIndexedReferenceTask_config:
     persistable: Config
     python: lsst.pipe.tasks.indexReferenceTask.IngestIndexedReferenceConfig

@@ -32,15 +32,46 @@ import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
+from lsst.afw.coord import Observatory, Weather
+from lsst.afw.coord.refraction import defaultWeather
 import lsst.daf.persistence as dafPersist
+import astropy.time
+import astropy.coordinates
 
 from . import lsstCam
 
 __all__ = ["LsstCamMapper", "ImsimMapper", "PhosimMapper"]
 
-
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
     """functor to make a VisitInfo from the FITS header of a raw image."""
+
+    observatory = Observatory(-30.239932*afwGeom.degrees, -70.742964*afwGeom.degrees, 2663)  # long, lat, elev
+
+    def getHourAngle(self, mjd, ra):
+            """
+            Extracted from: https://github.com/lsst/sims_GalSimInterface/blob/master/python/lsst/sims/GalSimInterface/galSimInterpreter.py
+            Compute the local hour angle of an object for the specified
+            MJD and RA.
+            Parameters
+            ----------
+            mjd: float
+                Modified Julian Date of the observation.
+            ra: float
+                Right Ascension (in degrees) of the object.
+            Returns
+            -------
+            float: hour angle in degrees
+            """
+
+            obs_location = astropy.coordinates.EarthLocation.from_geodetic(
+                self.observatory.getLongitude().asDegrees(),
+                self.observatory.getLatitude().asDegrees(),
+                self.observatory.getElevation())
+            time = astropy.time.Time(mjd, format='mjd', location=obs_location)
+            # Get the local apparent sidereal time.
+            last = time.sidereal_time('apparent').degree
+            ha = last - ra
+            return ha
 
     def setArgDict(self, md, argDict):
         """Fill an argument dict with arguments for makeVisitInfo and pop associated metadata.
@@ -55,8 +86,27 @@ class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
         super(LsstCamMakeRawVisitInfo, self).setArgDict(md, argDict)
         argDict["darkTime"] = self.popFloat(md, "DARKTIME")
 
-        # Done setting argDict; check values now that all the header keywords have been consumed
-        argDict["darkTime"] = self.getDarkTime(argDict)
+        #argDict["date"] = self.popFloat(md, "")
+
+        ratel, dectel = md.getScalar("RATEL"), md.getScalar("DECTEL")
+        rotangle = md.getScalar("ROTANGLE")
+
+        argDict["boresightRaDec"] = afwGeom.SpherePoint(ratel, dectel, afwGeom.degrees)
+        argDict["boresightRotAngle"] = rotangle*afwGeom.degrees
+        argDict["boresightAirmass"] = self.popFloat(md, "AIRMASS")
+        argDict["boresightAzAlt"] = afwGeom.SpherePoint(
+            self.popAngle(md, "AZIMUTH"),
+            self.altitudeFromZenithDistance(self.popAngle(md, "ZENITH")),
+        )
+
+        argDict["observatory"] = self.observatory
+        weather = defaultWeather(self.observatory.getElevation())
+        temperature = self.defaultMetadata(self.popFloat(md, "TEMPERA"), weather.getAirTemperature(),
+                                           minimum=-10, maximum=40.)
+        pressure = self.defaultMetadata(self.pascalFromMmHg(self.popFloat(md, "PRESS")),
+                                        weather.getAirPressure(), minimum=50000., maximum=90000.)
+        humidity = 40.  # Not currently supplied by phosim, so set to a typical value.
+        argDict["weather"] = Weather(temperature, pressure, humidity)
 
     def getDateAvg(self, md, exposureTime):
         """Return date at the middle of the exposure.
@@ -188,7 +238,7 @@ def assemble_raw(dataId, componentInfo, cls):
             rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
         except pexExcept.NotFoundError as e:
             ratel, dectel, rotangle = '', '', ''
-            
+
         if ratel == '' or dectel == '' or rotangle == '': # FITS for None
             logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
                         (dataId,))
