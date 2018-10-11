@@ -531,11 +531,11 @@ datasets:
     template: gain/%(run)s/gain_%(run)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
   apPipe_metadata:
     template: apPipe_metadata/%(visit)08d-%(filter)s/%(raftName)s/apPipeMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
-  bfKernelNew:
+  brighterFatterKernel:
     template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.pkl
-  bfGain:
+  brighterFatterGain:
     template: calibrations/bfGain-%(detector)03d.pkl
-  plotBfPtc:
+  plotBrighterFatterPtc:
     template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
   plotCoadd:
     persistable: None
