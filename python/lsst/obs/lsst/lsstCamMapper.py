@@ -379,7 +379,7 @@ class LsstCamMapper(CameraMapper):
         tract = int(dataId['tract'])
         if tract < 0 or tract >= 2**LsstCamMapper._nbit_tract:
             raise RuntimeError('tract not in range [0,%d)' % (2**LsstCamMapper._nbit_tract))
-        patchX, patchY = [int(patch) for patch in dataId['patch'].split(',')]
+        patchX, patchY = [int(patch) for patch in dataId['patch'].split('_')]
         for p in (patchX, patchY):
             if p < 0 or p >= 2**LsstCamMapper._nbit_patch:
                 raise RuntimeError('patch component not in range [0, %d)' % 2**LsstCamMapper._nbit_patch)
