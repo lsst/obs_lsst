@@ -6,4 +6,4 @@ config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "apert
 config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "kron.py"))
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
 
-config.measurement.slots.instFlux = None
+config.measurement.slots.gaussianFlux = None
