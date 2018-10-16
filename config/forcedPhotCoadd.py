@@ -8,7 +8,7 @@ config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "kron.
 config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "convolvedFluxes.py"))
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
 
-config.measurement.slots.instFlux = None
+config.measurement.slots.gaussianFlux = None
 
 config.measurement.plugins['base_PixelFlags'].masksFpCenter.append('BRIGHT_OBJECT')
 config.measurement.plugins['base_PixelFlags'].masksFpAnywhere.append('BRIGHT_OBJECT')
