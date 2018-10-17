@@ -73,11 +73,7 @@ class PhosimParseTask(LsstCamParseTask):
         filter : `str`
             filter name
         """
-        raftName = self.translate_raftName(md)
-        if raftName in ["R00", "R04", "R40", "R44"]:
-            return "NONE"
-        else:
-            return md.get("FILTER")
+        return md.get("FILTER")
 
     def translate_visit(self, md):
         """Extract visit from metadata (as an int)
