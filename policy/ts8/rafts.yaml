@@ -1,0 +1,7 @@
+#
+# A list of all the rafts in the camera
+#
+rafts :
+  R00 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 0                             # id for S00, incrementing uniformly

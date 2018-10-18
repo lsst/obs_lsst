@@ -1,0 +1,6 @@
+calibrations:
+  bias:
+    refCols:
+    - detector
+    - dayObs
+    - seqNum
