@@ -90,7 +90,7 @@ AMP_ITL : &AMP_ITL
 #
 CCD_E2V : &CCD_E2V
     detectorType : 0
-    refpos : [.nan, .nan]
+    refpos : [2047.5, 2001.5]
     offset : [.nan, .nan]
     # This is the orientation we need to put the serial direction along the x-axis
     bbox : [[0, 0], [4095, 4003]]
@@ -297,3 +297,54 @@ RAFT_ITL:
       << : *S00_ITL
       id : 8
       offset : [ 42.36,  42.20]
+#
+# Layout of CCDs within an E2V raft
+#
+# N.b. these offsets are copied from ITL and have not been checked on the sky or from drawings
+#
+RAFT_E2V:
+  ccds : 
+    S00: &S00_E2V                       # Sensor (0, 0)
+      << : *CCD_E2V
+      id : 0
+      offset : [-42.37, -42.19]
+
+    S01: &S01_E2V                       # Sensor (0, 1)
+      << : *S00_E2V
+      id : 1
+      offset : [ -0.09, -42.32]
+             
+    S02: &S02_E2V                       # Sensor (0, 2)
+      << : *S00_E2V
+      id : 2
+      offset : [ 42.18, -42.37]
+      
+    S10: &S10_E2V                       # Sensor (1, 0)
+      << : *S00_E2V
+      id : 3
+      offset : [-42.32,   0.08]
+
+    S11: &S11_E2V                       # Sensor (1, 1)
+      << : *S00_E2V
+      id : 4
+      offset : [   0.0,    0.0]
+             
+    S12: &S12_E2V                       # Sensor (1, 2)
+      << : *S00_E2V
+      id : 5
+      offset : [ 42.28,   -0.10]
+
+    S20: &S20_E2V                       # Sensor (2, 0)
+      << : *S00_E2V
+      id : 6
+      offset : [-42.19,  42.36]
+
+    S21: &S21_E2V                       # Sensor (2, 1)
+      << : *S00_E2V
+      id : 7
+      offset : [  0.10,  42.28]             
+    S22: &S22_E2V                       # Sensor (2, 2)
+      << : *S00_E2V
+      id : 8
+      offset : [ 42.36,  42.20]
+      
