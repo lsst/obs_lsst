@@ -35,8 +35,6 @@ def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
         for ampName, (gain, readNoise) in ccdData[ccdName].items():
             print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 if __name__ == "__main__":
     raftData = {}

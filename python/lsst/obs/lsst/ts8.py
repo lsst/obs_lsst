@@ -61,7 +61,7 @@ class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
 
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
-                   list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
+        list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
@@ -139,15 +139,15 @@ class Ts8ParseTask(LsstCamParseTask):
         serial = md.get("LSST_NUM")
 
         return {
-            'E2V-CCD250-266-Dev' : 0,  # S00
-            'E2V-CCD250-268-Dev' : 1,  # S01
-            'E2V-CCD250-200-Dev' : 2,  # S02
-            'E2V-CCD250-273-Dev' : 3,  # S10
-            'E2V-CCD250-179' :     4,  # S11
-            'E2V-CCD250-263-Dev' : 5,  # S12
-            'E2V-CCD250-226-Dev' : 6,  # S20
-            'E2V-CCD250-264-Dev' : 7,  # S21
-            'E2V-CCD250-137-Dev' : 8,  # S22
+            'E2V-CCD250-266-Dev': 0,  # S00
+            'E2V-CCD250-268-Dev': 1,  # S01
+            'E2V-CCD250-200-Dev': 2,  # S02
+            'E2V-CCD250-273-Dev': 3,  # S10
+            'E2V-CCD250-179': 4,  # S11
+            'E2V-CCD250-263-Dev': 5,  # S12
+            'E2V-CCD250-226-Dev': 6,  # S20
+            'E2V-CCD250-264-Dev': 7,  # S21
+            'E2V-CCD250-137-Dev': 8,  # S22
         }[serial]
 
     def translate_filter(self, md):
@@ -173,7 +173,7 @@ class Ts8ParseTask(LsstCamParseTask):
         except IndexError:
             print("Unknown filterPos (assuming NONE): %d" % (filterPos))
             return "NONE"
-        
+
     def translate_visit(self, md):
         """Generate a unique visit number
 
