@@ -203,18 +203,6 @@ datasets:
     python: lsst.pipe.tasks.indexReferenceTask.IngestIndexedReferenceConfig
     storage: ConfigStorage
     template: config/IngestIndexedReferenceTask.py
-  Mosaic_config:
-    persistable: Config
-    python: lsst.meas.mosaic.mosaicTask.MosaicConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/mosaic.py
-  Mosaic_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: YamlStorage
-    tables: raw
-    template: metadata/Mosaic.yaml
   ampExposureId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
