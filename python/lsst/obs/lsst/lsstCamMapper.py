@@ -189,7 +189,7 @@ def assemble_raw(dataId, componentInfo, cls):
         try:
             ratel, dectel = md.getScalar("RATEL"), md.getScalar("DECTEL")
             rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
-        except KeyError as e:
+        except KeyError:
             ratel, dectel, rotangle = '', '', ''
 
         if ratel == '' or dectel == '' or rotangle == '':  # FITS for None
