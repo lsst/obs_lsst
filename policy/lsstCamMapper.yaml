@@ -266,16 +266,6 @@ datasets:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_metadata:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
-  deep_safeClipAssembleCoadd_metadata:
-    template: deep_safeClipAssembleCoadd_metadata/%(filter)s/%(tract)d/%(patch)s.boost
-  deepCoadd_measMatch:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_measMatchFull:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_forced_src:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_forced_metadata:
-    template: deepCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
   deepDiff_diaSrc:
     template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_kernelSrc:
