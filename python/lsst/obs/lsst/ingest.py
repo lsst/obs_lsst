@@ -7,8 +7,11 @@ from . import LsstCam
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-__all__ = ["LsstCamParseTask"]
+# This is needed elsewhere and should only be defined in one place
+# roll over at 8am UTC
+ROLLOVERTIME = datetime.timedelta(hours=8)
 
+__all__ = ["LsstCamParseTask", "ROLLOVERTIME"]
 
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
@@ -94,7 +97,7 @@ class LsstCamParseTask(ParseTask):
         dateObs = self.__fixDateObs(md.get("DATE-OBS"))
 
         d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= datetime.timedelta(hours=8)  # roll over at 8am UTC
+        d -= ROLLOVERTIME
         dayObs = d.strftime("%Y-%m-%d")
 
         return dayObs
