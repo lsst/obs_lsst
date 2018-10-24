@@ -252,14 +252,6 @@ datasets:
     storage: ignored
     tables: raw
     template: ignored
-  dcrCoadd_measMatch:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_measMatchFull:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_forced_src:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_forced_metadata:
-    template: dcrCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
   dcrDiff_diaSrc:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_kernelSrc:
