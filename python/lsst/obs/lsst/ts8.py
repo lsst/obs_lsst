@@ -27,7 +27,7 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS
+from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
@@ -187,7 +187,14 @@ class Ts8ParseTask(LsstCamParseTask):
         visit_num : `int`
             Visit number, as translated
         """
+        dateObs = self.translate_dateObs(md)
         dayObs = self.translate_dayObs(md)
-        seqNum = md.get("SEQNUM")
 
-        return computeVisit(dayObs, seqNum)
+        fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+        justTime = datetime.datetime.strptime(dateObs.split('T')[0], "%Y-%m-%d")
+        justTime = justTime.replace(tzinfo=fullDateTime.tzinfo)  # turn into a timedelta obj
+
+        fullDateTime -= ROLLOVERTIME
+        secondsIntoDay = (fullDateTime - justTime).total_seconds()
+
+        return computeVisit(dayObs, secondsIntoDay)
