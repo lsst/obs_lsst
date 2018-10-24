@@ -3,7 +3,6 @@ from lsst.obs.lsst.ts8 import Ts8ParseTask
 config.parse.retarget(Ts8ParseTask)
 
 # what used to be config.parse.translation = {
-del config.parse.translation['testType']
 del config.parse.translation['filter']
 del config.parse.translation['visit']
 config.parse.translation['seqNum'] = 'SEQNUM'
@@ -24,7 +23,6 @@ config.parse.hdu = 0
 # what used to be config.register.columns = {
 del config.register.columns['raftName']
 del config.register.columns['snap']
-del config.register.columns['testType']
 config.register.columns['dayObs'] = 'text'
 config.register.columns['seqNum'] = 'int'
 
