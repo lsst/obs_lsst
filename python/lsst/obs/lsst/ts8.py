@@ -171,6 +171,9 @@ class Ts8ParseTask(LsstCamParseTask):
         filterPos = md.get("FILTPOS")
         try:
             return {
+                2: 'g',
+                3: 'r',
+                4: 'i',
                 5: 'z',
                 6: 'y',
             }[filterPos]
