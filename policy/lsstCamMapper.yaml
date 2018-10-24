@@ -303,36 +303,6 @@ datasets:
     python: lsst.pex.config.Config
   dcrDiff_metadata:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
-  deepCoadd_modelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/modelfits_%(filter)s-%(tract)05d-%(patch)s.fits
-  deepCoadd_modelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/deepCoadd_modelfits.fits
-  deepCoadd_multiModelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/multiModelfits_%(filter)s-%(tract)05d-%(patch)s.fits
-  deepCoadd_multiModelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/deepCoadd_multiModelfits.fits
-  deep_measureMulti_config:
-    persistable: Config
-    python: lsst.meas.multifit.measureMulti.MeasureMultiConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/deep_measureMulti.py
   deep_safeClipAssembleCoadd_metadata:
     template: deep_safeClipAssembleCoadd_metadata/%(filter)s/%(tract)d/%(patch)s.boost
   deepCoadd_measMatch:
@@ -423,30 +393,6 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: schema/icSrc.fits
-  measureCcd_config:
-    persistable: Config
-    python: lsst.meas.multifit.measureCcd.MeasureCcdConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/measureCcd.py
-  measureCcd_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: YamlStorage
-    tables: raw
-    template: measureCcd_metadata/%(visit)08d-%(filter)s/%(raftName)s/measureCcdMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
-  modelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: modelfits/%(visit)08d-%(filter)s/%(raftName)s/modelfits_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  modelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/modelfits.fits
   processCcd_config:
     persistable: Config
     python: lsst.pipe.tasks.processCcd.ProcessCcdConfig
