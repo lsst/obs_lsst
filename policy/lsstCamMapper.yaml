@@ -257,13 +257,13 @@ datasets:
   dcrDiff_kernelSrc:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_metadata:
-    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
+    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   deepDiff_diaSrc:
     template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_kernelSrc:
     template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_metadata:
-    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
+    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   forced_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
