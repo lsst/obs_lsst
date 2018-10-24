@@ -50,8 +50,12 @@ def computeVisit(dayObs, seqNum):
     """Compute a visit number given a dayObs and seqNum"""
 
     try:
+        # once we start using py 3.7 this will not raise, and this try block
+        # can be removed. Until then, this will raise an AttributeError
+        # and therefore fall through to the except block which does it the
+        # ugly and hard-to-understand py <= 3.6 way
         date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:          # requires py 3.7
+    except AttributeError:
         date = datetime.date(*[int(f) for f in dayObs.split('-')])
 
     return (date.toordinal() - 730000)*100000 + seqNum
@@ -170,7 +174,7 @@ class Ts8ParseTask(LsstCamParseTask):
                 5: 'z',
                 6: 'y',
             }[filterPos]
-        except IndexError:
+        except KeyError:
             print("Unknown filterPos (assuming NONE): %d" % (filterPos))
             return "NONE"
 
