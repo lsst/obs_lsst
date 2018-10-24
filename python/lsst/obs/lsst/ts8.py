@@ -142,16 +142,16 @@ class Ts8ParseTask(LsstCamParseTask):
         """
         serial = md.get("LSST_NUM")
 
-        return {
-            'E2V-CCD250-266-Dev': 0,  # S00
-            'E2V-CCD250-268-Dev': 1,  # S01
-            'E2V-CCD250-200-Dev': 2,  # S02
-            'E2V-CCD250-273-Dev': 3,  # S10
-            'E2V-CCD250-179': 4,  # S11
-            'E2V-CCD250-263-Dev': 5,  # S12
-            'E2V-CCD250-226-Dev': 6,  # S20
-            'E2V-CCD250-264-Dev': 7,  # S21
-            'E2V-CCD250-137-Dev': 8,  # S22
+        return {  # config for RTM-007 aka RTM #4
+            'E2V-CCD250-260' : 0,  # S00
+            'E2V-CCD250-182' : 1,  # S01
+            'E2V-CCD250-175' : 2,  # S02
+            'E2V-CCD250-167' : 3,  # S10
+            'E2V-CCD250-195' : 4,  # S11
+            'E2V-CCD250-201' : 5,  # S12
+            'E2V-CCD250-222' : 6,  # S20
+            'E2V-CCD250-213' : 7,  # S21
+            'E2V-CCD250-177' : 8,  # S22
         }[serial]
 
     def translate_filter(self, md):
