@@ -6,3 +6,6 @@ config.log
 bin
 ups/*.cfgc
 python/lsst/obs/lsst/version.py
+.coverage
+.pytest_cache
+tests/.tests
