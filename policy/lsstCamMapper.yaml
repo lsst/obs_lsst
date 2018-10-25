@@ -198,23 +198,6 @@ calibrations:
 
 
 datasets:
-  IngestIndexedReferenceTask_config:
-    persistable: Config
-    python: lsst.pipe.tasks.indexReferenceTask.IngestIndexedReferenceConfig
-    storage: ConfigStorage
-    template: config/IngestIndexedReferenceTask.py
-  Mosaic_config:
-    persistable: Config
-    python: lsst.meas.mosaic.mosaicTask.MosaicConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/mosaic.py
-  Mosaic_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: YamlStorage
-    tables: raw
-    template: metadata/Mosaic.yaml
   ampExposureId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
@@ -233,14 +216,6 @@ datasets:
     storage: PickleStorage
     tables: raw
     template: apCorr/%(visit)08d-%(filter)s/%(raftName)s/apCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
-  bias_config:
-    persistable: Config
-    python: lsst.pipe.drivers.constructCalibs.BiasConfig
-    storage: ConfigStorage
-    tables:
-    - raw
-    - raw_visit
-    template: config/bias.py
   cal_ref_cat:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
@@ -277,122 +252,30 @@ datasets:
     storage: ignored
     tables: raw
     template: ignored
-  dark_config:
-    persistable: Config
-    python: lsst.pipe.drivers.constructCalibs.DarkConfig
-    storage: ConfigStorage
-    tables:
-    - raw
-    - raw_visit
-    template: config/dark.py
-  dcrCoadd_measMatch:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_measMatchFull:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_forced_src:
-    template: dcrCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
-  dcrCoadd_forced_config:
-    template: config/dcrCoadd_forced.py
-  dcrCoadd_forced_metadata:
-    template: dcrCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
   dcrDiff_diaSrc:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_kernelSrc:
     template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  dcrDiff_config:
-    python: lsst.pex.config.Config
   dcrDiff_metadata:
-    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
-  deepCoadd_modelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/modelfits_%(filter)s-%(tract)05d-%(patch)s.fits
-  deepCoadd_modelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/deepCoadd_modelfits.fits
-  deepCoadd_multiModelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/multiModelfits_%(filter)s-%(tract)05d-%(patch)s.fits
-  deepCoadd_multiModelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/deepCoadd_multiModelfits.fits
-  deep_measureMulti_config:
-    persistable: Config
-    python: lsst.meas.multifit.measureMulti.MeasureMultiConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/deep_measureMulti.py
-  deep_safeClipAssembleCoadd_metadata:
-    template: deep_safeClipAssembleCoadd_metadata/%(filter)s/%(tract)d/%(patch)s.boost
-  deepCoadd_measMatch:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatch-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_measMatchFull:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/srcMatchFull-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_forced_src:
-    template: deepCoadd_results/%(filter)s_t%(tract)d_p%(patch)s/forced-%(filter)s-%(tract)d-%(patch)s.fits
-  deepCoadd_forced_config:
-    template: config/deepCoadd_forced.py
-  deepCoadd_forced_metadata:
-    template: deepCoadd_forced_metadata/%(filter)s_t%(tract)d_p%(patch)s.boost
+    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   deepDiff_diaSrc:
     template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_kernelSrc:
     template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  deepDiff_config:
-    python: lsst.pex.config.Config
   deepDiff_metadata:
-    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.boost
-  flat_config:
-    persistable: Config
-    python: lsst.pipe.drivers.constructCalibs.FlatConfig
-    storage: ConfigStorage
-    tables:
-    - raw
-    - raw_visit
-    template: config/flat.py
-  forced_config:
-    persistable: Config
-    python: lsst.meas.base.forcedCcd.ForcedCcdMeasurementConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/forced.py
+    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   forced_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
     storage: YamlStorage
     tables: raw
     template: forced_metadata/%(visit)08d-%(filter)s/%(raftName)s/forcedMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
-  forced_schema:
-    persistable: ignored
-    python: lsst.afw.table.SourceCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/forced.fits
   forced_src:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
     template: forced/%(visit)08d-%(filter)s/%(raftName)s/forced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  fringe_config:
-    persistable: Config
-    python: lsst.pipe.drivers.constructCalibs.FringeConfig
-    storage: ConfigStorage
-    tables:
-    - raw
-    - raw_visit
-    template: config/fringe.py
   goodSeeingCoaddId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
@@ -417,42 +300,6 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: icSrc/%(visit)08d-%(filter)s/%(raftName)s/icSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  icSrc_schema:
-    persistable: SourceCatalog
-    python: lsst.afw.table.SourceCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/icSrc.fits
-  measureCcd_config:
-    persistable: Config
-    python: lsst.meas.multifit.measureCcd.MeasureCcdConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/measureCcd.py
-  measureCcd_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: YamlStorage
-    tables: raw
-    template: measureCcd_metadata/%(visit)08d-%(filter)s/%(raftName)s/measureCcdMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
-  modelfits:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: modelfits/%(visit)08d-%(filter)s/%(raftName)s/modelfits_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  modelfits_schema:
-    persistable: ModelFitCatalog
-    python: lsst.meas.multifit.ModelFitCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/modelfits.fits
-  processCcd_config:
-    persistable: Config
-    python: lsst.pipe.tasks.processCcd.ProcessCcdConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/processCcd.py
   processCcd_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
@@ -484,18 +331,6 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  src_schema:
-    persistable: SourceCatalog
-    python: lsst.afw.table.SourceCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/src.fits
-  transformSrcMeasurement_config:
-    persistable: Config
-    python: lsst.pipe.tasks.transformMeasurement.RunTransformConfig
-    storage: ConfigStorage
-    tables: raw
-    template: config/transformSrcMeasurement.py
   transformSrcMeasurement_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
@@ -516,12 +351,6 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: transformedSrc/%(visit)08d-%(filter)s/%(raftName)s/transformedSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  transformed_src_schema:
-    persistable: ignored
-    python: lsst.afw.table.BaseCatalog
-    storage: FitsCatalogStorage
-    tables: raw
-    template: schema/transformed_src.fits
   eotest_gain:  # set of amplifier gains, as measured by eotest
     level: Ccd
     persistable: ignored
