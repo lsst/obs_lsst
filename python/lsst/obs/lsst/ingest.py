@@ -13,6 +13,7 @@ ROLLOVERTIME = datetime.timedelta(hours=8)
 
 __all__ = ["LsstCamParseTask", "ROLLOVERTIME"]
 
+
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
 
