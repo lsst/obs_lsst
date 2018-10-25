@@ -4,3 +4,7 @@ calibrations:
     - detector
     - dayObs
     - seqNum
+
+datasets:
+  eotest_gain:  # set of amplifier gains, as measured by eotest
+    template: gain/%(run)s/gain_%(run)s-det%(detector)03d.pickle

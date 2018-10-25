@@ -27,7 +27,7 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS
+from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
@@ -50,8 +50,12 @@ def computeVisit(dayObs, seqNum):
     """Compute a visit number given a dayObs and seqNum"""
 
     try:
+        # once we start using py 3.7 this will not raise, and this try block
+        # can be removed. Until then, this will raise an AttributeError
+        # and therefore fall through to the except block which does it the
+        # ugly and hard-to-understand py <= 3.6 way
         date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:          # requires py 3.7
+    except AttributeError:
         date = datetime.date(*[int(f) for f in dayObs.split('-')])
 
     return (date.toordinal() - 730000)*100000 + seqNum
@@ -138,16 +142,16 @@ class Ts8ParseTask(LsstCamParseTask):
         """
         serial = md.get("LSST_NUM")
 
-        return {
-            'E2V-CCD250-266-Dev': 0,  # S00
-            'E2V-CCD250-268-Dev': 1,  # S01
-            'E2V-CCD250-200-Dev': 2,  # S02
-            'E2V-CCD250-273-Dev': 3,  # S10
-            'E2V-CCD250-179': 4,  # S11
-            'E2V-CCD250-263-Dev': 5,  # S12
-            'E2V-CCD250-226-Dev': 6,  # S20
-            'E2V-CCD250-264-Dev': 7,  # S21
-            'E2V-CCD250-137-Dev': 8,  # S22
+        return {  # config for RTM-007 aka RTM #4
+            'E2V-CCD250-260': 0,  # S00
+            'E2V-CCD250-182': 1,  # S01
+            'E2V-CCD250-175': 2,  # S02
+            'E2V-CCD250-167': 3,  # S10
+            'E2V-CCD250-195': 4,  # S11
+            'E2V-CCD250-201': 5,  # S12
+            'E2V-CCD250-222': 6,  # S20
+            'E2V-CCD250-213': 7,  # S21
+            'E2V-CCD250-177': 8,  # S22
         }[serial]
 
     def translate_filter(self, md):
@@ -167,15 +171,23 @@ class Ts8ParseTask(LsstCamParseTask):
         filterPos = md.get("FILTPOS")
         try:
             return {
+                2: 'g',
+                3: 'r',
+                4: 'i',
                 5: 'z',
                 6: 'y',
             }[filterPos]
-        except IndexError:
+        except KeyError:
             print("Unknown filterPos (assuming NONE): %d" % (filterPos))
             return "NONE"
 
     def translate_visit(self, md):
         """Generate a unique visit number
+
+        Note that SEQNUM is not unique for a given day in TS8 data
+        so instead we use the number of seconds into the day
+        and the dayObs. We take the ROLLOVER time from the main
+        LSST configuration.
 
         Parameters
         ----------
@@ -187,7 +199,14 @@ class Ts8ParseTask(LsstCamParseTask):
         visit_num : `int`
             Visit number, as translated
         """
+        dateObs = self.translate_dateObs(md)
         dayObs = self.translate_dayObs(md)
-        seqNum = md.get("SEQNUM")
 
-        return computeVisit(dayObs, seqNum)
+        fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+        justTime = datetime.datetime.strptime(dateObs.split('T')[0], "%Y-%m-%d")
+        justTime = justTime.replace(tzinfo=fullDateTime.tzinfo)  # turn into a timedelta obj
+
+        fullDateTime -= ROLLOVERTIME
+        secondsIntoDay = (fullDateTime - justTime).total_seconds()
+
+        return computeVisit(dayObs, secondsIntoDay)
