@@ -184,6 +184,11 @@ class Ts8ParseTask(LsstCamParseTask):
     def translate_visit(self, md):
         """Generate a unique visit number
 
+        Note that SEQNUM is not unique for a given day in TS8 data
+        so instead we use the number of seconds into the day
+        and the dayObs. We take the ROLLOVER time from the main
+        LSST configuration.
+
         Parameters
         ----------
         md : `lsst.daf.base.PropertyList or PropertySet`
