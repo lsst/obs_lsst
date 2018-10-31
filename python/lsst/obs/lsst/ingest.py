@@ -167,7 +167,7 @@ class LsstCamParseTask(ParseTask):
         raftName = self.translate_raftName(md)
         detectorName = self.translate_detectorName(md)
         fullName = '_'.join([raftName, detectorName])
-        detId = self.camera._nameDetectorDict[fullName].getId()
+        detId = self.camera[fullName].getId()
 
         return detId
 
