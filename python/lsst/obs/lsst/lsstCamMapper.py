@@ -357,7 +357,7 @@ class LsstCamMapper(CameraMapper):
         else:
             camera = self.camera
             fullName = "%s_%s" % (dataId["raftName"], dataId["detectorName"])
-            detector = camera._nameDetectorDict[fullName].getId()
+            detector = camera[fullName].getId()
 
         return 200*visit + detector
 
