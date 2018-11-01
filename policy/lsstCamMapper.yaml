@@ -398,6 +398,11 @@ datasets:
     python: builtins.str
     storage: TextStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
+  # ISR stage thumbnails
+  ossThumb:
+    template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/ossThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
+  flattenedThumb:
+    template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/flattenedThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
 
   # Focal plane summary plots
   focal_plane_fits:
