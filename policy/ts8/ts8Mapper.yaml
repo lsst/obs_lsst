@@ -1,10 +1,50 @@
 calibrations:
   bias:
     refCols:
+    - dateObs
     - detector
-    - dayObs
-    - seqNum
+
+# exposures:
+#   _raw:
+#     refCols:
+#     - dateObs
+#     - detector
+#     template: raw/%(run)s/%(raftName)s/%(visit)011d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
+#   raw_amp:
+#     refCols:
+#     - dateObs
+#     - detector
+#     template: raw/%(run)s/%(raftName)s/%(visit)011d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[%(channel)d]
+
 
 datasets:
   eotest_gain:  # set of amplifier gains, as measured by eotest
     template: gain/%(run)s/gain_%(run)s-det%(detector)03d.pickle
+
+
+
+exposures:
+  _raw:
+    # refCols:
+    # - dateObs
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
+    # template: raw/%(visit)011d-det%(detector)03d.fits[0]
+    # template: raw/%(dateObs)s-%(visit)011d-det%(detector)03d.fits[0]
+  raw_amp:
+    # refCols:
+    # - dateObs
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
+    # template: raw/%(visit)011d-det%(detector)03d.fits[%(channel)d]
+    # template: raw/%(dateObs)s-%(visit)011d-det%(detector)03d.fits[%(channel)d]
+  raw_hdu:
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
+    
+  postISRCCD:
+    # xxx do this one
+    template: postISRCCD/postISRCCD_%(visit)011d-%(filter)s-det%(detector)03d.fits
+    # template: postISRCCD/%(dayObs)s/postISRCCD_%(visit)011d-%(filter)s-det%(detector)03d.fits
+  calexp:
+    # xxx do this one
+    template: calexp/calexp_%(visit)011d-%(filter)s-det%(detector)03d.fits
+    # template: calexp/%(dayObs)s-calexp_%(visit)011d-%(filter)s-det%(detector)03d.fits
+

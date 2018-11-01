@@ -27,7 +27,7 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME
+from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME, TZERO
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
@@ -46,19 +46,23 @@ class Ts8(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dayObs, seqNum):
-    """Compute a visit number given a dayObs and seqNum"""
+def computeVisit(dateObs):
+    """Compute a visit number from the full dateObs"""
 
-    try:
-        # once we start using py 3.7 this will not raise, and this try block
-        # can be removed. Until then, this will raise an AttributeError
-        # and therefore fall through to the except block which does it the
-        # ugly and hard-to-understand py <= 3.6 way
-        date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:
-        date = datetime.date(*[int(f) for f in dayObs.split('-')])
+    fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+    visit = int((fullDateTime - ROLLOVERTIME - TZERO).total_seconds())
 
-    return (date.toordinal() - 730000)*100000 + seqNum
+    # try:
+    #     # once we start using py 3.7 this will not raise, and this try block
+    #     # can be removed. Until then, this will raise an AttributeError
+    #     # and therefore fall through to the except block which does it the
+    #     # ugly and hard-to-understand py <= 3.6 way
+    #     date = datetime.data.fromisoformat(dayObs)
+    # except AttributeError:
+    #     date = datetime.date(*[int(f) for f in dayObs.split('-')])
+
+    # return (date.toordinal() - 730000)*100000 + seqNum
+    return visit  # xxx fix return!
 
 
 class Ts8Mapper(LsstCamMapper):
@@ -86,7 +90,7 @@ class Ts8Mapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dayObs'], dataId["seqNum"])
+        visit = computeVisit(dataId['dateObs'])
         detector = self._extractDetectorName(dataId)
 
         return 10*visit + detector
@@ -200,13 +204,13 @@ class Ts8ParseTask(LsstCamParseTask):
             Visit number, as translated
         """
         dateObs = self.translate_dateObs(md)
-        dayObs = self.translate_dayObs(md)
+        # dayObs = self.translate_dayObs(md)
 
-        fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        justTime = datetime.datetime.strptime(dateObs.split('T')[0], "%Y-%m-%d")
-        justTime = justTime.replace(tzinfo=fullDateTime.tzinfo)  # turn into a timedelta obj
+        # fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+        # justTime = datetime.datetime.strptime(dateObs.split('T')[0], "%Y-%m-%d")
+        # justTime = justTime.replace(tzinfo=fullDateTime.tzinfo)  # turn into a timedelta obj
 
-        fullDateTime -= ROLLOVERTIME
-        secondsIntoDay = (fullDateTime - justTime).total_seconds()
+        # fullDateTime -= ROLLOVERTIME
+        # secondsIntoDay = (fullDateTime - justTime).total_seconds()
 
-        return computeVisit(dayObs, secondsIntoDay)
+        return computeVisit(dateObs)
