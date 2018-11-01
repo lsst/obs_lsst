@@ -90,7 +90,10 @@ class Ts8Mapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dateObs'])
+        if 'visit' in dataId:
+            visit = dataId['visit']
+        else:
+            visit = computeVisit(dataId['dateObs'])
         detector = self._extractDetectorName(dataId)
 
         return 10*visit + detector

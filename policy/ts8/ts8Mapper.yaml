@@ -20,7 +20,8 @@ calibrations:
 datasets:
   eotest_gain:  # set of amplifier gains, as measured by eotest
     template: gain/%(run)s/gain_%(run)s-det%(detector)03d.pickle
-
+  raw_hdu:
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
 
 
 exposures:
@@ -36,9 +37,8 @@ exposures:
     template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
     # template: raw/%(visit)011d-det%(detector)03d.fits[%(channel)d]
     # template: raw/%(dateObs)s-%(visit)011d-det%(detector)03d.fits[%(channel)d]
-  raw_hdu:
-    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
-    
+
+
   postISRCCD:
     # xxx do this one
     template: postISRCCD/postISRCCD_%(visit)011d-%(filter)s-det%(detector)03d.fits
