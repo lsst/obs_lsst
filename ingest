@@ -1,0 +1,85 @@
+#!/bin/sh
+export LD_LIBRARY_PATH=$LSST_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$LSST_LIBRARY_PATH
+
+PRODUCT_DIR=/project/rhl/Data/ci_lsst
+rawUningestedDir=""
+
+allCameras="auxTel imsim phosim ts8"
+
+while [ X$1 != X ]; do
+    case $1 in
+	--dir*|-d)
+	    shift
+	    PRODUCT_DIR=$1;;
+	-h)
+	    echo <<EOF
+Process the test data for the cameras from end-to-end:
+   ingestion,
+   calibration products generation,
+   ISR
+
+Usage:
+	runPipeline [options] --raw rawUningestedDirectory cameras
+If no cameras, process $allCameras
+Options:
+   -h         Print this message
+   --dir DIR  Base directory for data
+   -x, -v     Set bash option
+EOF
+	    ;;
+	--raw)
+	    shift
+	    rawUningestedDir="$1"
+	    rawUningestedDir=$(python -c "import os.path; print(os.path.abspath('$rawUningestedDir'))");;
+	-x|-v|-xv|-vx)
+	    set $1;;
+	*)
+	    break;;
+    esac
+    shift
+done
+
+if [ "X$rawUningestedDir" = X"" ]; then
+    echo "Please specify a directory of raw data with --raw" >&2
+    exit 1
+fi
+
+cameras="$@"
+if [ X"$cameras" = X"" ]; then
+    cameras="$allCameras"
+fi
+
+for camera in $cameras; do
+    DATA_DIR=$PRODUCT_DIR/$camera
+
+    case $camera in
+	auxTel)
+	    rawUningested="$rawUningestedDir/$camera/Tucson/ACCS_images/2018-09-20/ats_*_AT_C*fits*";;
+	imsim|phosim)
+	    rawUningested="$rawUningestedDir/$camera/*/*fits*";;
+	ts8)
+	    rawUningested="$rawUningestedDir/$camera/LCA-11021_RTM-01?-Dev/*/*/*/*/S??/*fits";;
+	*)
+	    echo "Unknown camera \"$camera\"; skipping" >&2
+	    continue
+	    ;;
+    esac
+
+    echo "Ingesting data for $camera"
+
+    mapper="$(echo $camera | perl -ne 'print "\u$_"')Mapper"
+
+    if true; then
+	rm -f $DATA_DIR/registry.sqlite3*
+	rm -rf $DATA_DIR/raw
+	rm -rf $DATA_DIR/CALIB
+	rm -rf $DATA_DIR/config
+	rm -rf $DATA_DIR/rerun/rhl/*
+    fi
+    echo "lsst.obs.lsst.$camera.$mapper" > $DATA_DIR/_mapper
+    #echo "lsst.obs.lsstCam.$camera.$mapper" > $DATA_DIR/_mapper
+
+    #ingestDriver.py $DATA_DIR "$rawUningested" --mode link --cores 10
+    ingestImages.py $DATA_DIR "$rawUningested" --mode link
+done

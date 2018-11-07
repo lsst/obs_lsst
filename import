@@ -1,0 +1,12 @@
+#!/bin/sh
+
+for camera in "imsim", "phosim"; do
+   DATA_DIR=/project/rhl/Data/ci_lsst/$camera
+   mapper=$(echo $camera | sed 's/./\U&/')
+
+   echo "lsst.obs.lsstCam.$mapper" > $DATA_DIR/_mapper
+   rm $DATA_DIR/registry.sqlite3*
+   rm -rf $DATA_DIR/rerun/rhl/*
+
+   ingestDriver.py $DATA_DIR "$DATA_DIR/rawUningested/*/*fits* --mode link --cores 10
+fi

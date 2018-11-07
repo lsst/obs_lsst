@@ -1,0 +1,110 @@
+#!/bin/sh
+export LD_LIBRARY_PATH=$LSST_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$LSST_LIBRARY_PATH
+
+PRODUCT_DIR=/project/rhl/Data/ci_lsst
+
+allCameras="auxTel imsim phosim ts8"
+rerun="$(whoami)/calibs"		# rerun for calibration products
+nproc=4
+
+while [ X$1 != X ]; do
+    case $1 in
+	--dir*|-d)
+	    shift
+	    PRODUCT_DIR=$1;;
+	-h)
+	    echo <<EOF
+Create the calibration products
+Usage:
+	createCalibs [options] cameras
+If no cameras, process $allCameras
+Options:
+   -h       Print this message
+   --dir DIR  Base directory for data
+   -x, -v   Set bash option
+EOF
+	    ;;
+	-j)
+	    shift
+	    nproc=$1;;
+	--rerun)
+	    shift
+	    rerun=$1
+	    ;;
+	-x|-v|-xv|-vx)
+	    set $1;;
+	*)
+	    break;;
+    esac
+    shift
+done
+
+cameras="$@"
+if [ X"$cameras" = X"" ]; then
+    cameras="$allCameras"
+fi
+
+failed=""
+for camera in $cameras; do
+    DATA_DIR=$PRODUCT_DIR/$camera
+    echo "Generating calibs for $camera"
+
+    rm -rf $DATA_DIR/rerun/$rerun
+    rm -rf $DATA_DIR/CALIB
+
+    configs=""
+    biasIds=""
+    darkIds=""
+    flatIds=""
+
+    case $camera in
+	auxTel)
+	    biasIds="seqNum=28..36"
+	    configs="isr.overscanNumLeadingColumnsToSkip=20 isr.doDark=False"
+	    ;;
+	imsim)
+	    biasIds="visit=3010000..3010009:3" #  detectorName=S11"
+	    darkIds="visit=4010000..4010009:3" # detectorName=S11"
+	    flatIds="visit=5000000..5000009:3" #  detectorName=S11"
+	    ;;
+	phosim)
+	    echo "\"$camera\" does not have calibration data available; skipping" >&2
+	    continue
+	    ;;
+	ts8)
+	    biasIds="--id imageType=BIAS"
+	    configs="isr.overscanNumLeadingColumnsToSkip=20 isr.doDark=False"
+	    ;;
+	*)
+	    echo "Unknown camera \"$camera\"; skipping" >&2
+	    continue
+	    ;;
+    esac
+
+    if [ X"$configs" != X ]; then
+	configs="-c $configs"
+    fi    
+
+    constructBias.py $DATA_DIR --rerun $rerun --id $biasIds $configs --batch-type none -j $nproc &&
+    ingestCalibs.py $DATA_DIR --output $DATA_DIR/CALIB --validity 1800 \
+		    $DATA_DIR/rerun/$rerun/bias/*/*.fits --mode move &&
+    if [ X"$darkIds" != X"" ]; then
+	constructDark.py $DATA_DIR --rerun $rerun --id $darkIds $configs --batch-type none -j $nproc &&
+	    ingestCalibs.py $DATA_DIR --output $DATA_DIR/CALIB --validity 1800 \
+			    $DATA_DIR/rerun/$rerun/dark/*/*.fits --mode move
+    fi &&
+    if [ X"$flatIds" != X"" ]; then
+	constructFlat.py $DATA_DIR --rerun $rerun --id $flatIds $configs --batch-type none -j $nproc &&
+	    ingestCalibs.py $DATA_DIR --output $DATA_DIR/CALIB --validity 1800 \
+			    $DATA_DIR/rerun/$rerun/flat/*/*/*.fits --mode move
+    fi ||
+    failed="$failed$camera "
+done
+
+if [ X"$failed" = X ]; then
+    true
+else
+    echo "Failed to process $failed"
+    false
+fi
