@@ -85,7 +85,7 @@ for camera in $cameras; do
 	    if [ X"$_ids" != X ]; then
 		ids=$_ids
 	    else
-		ids="seqNum=20..24^700"
+		ids="visit=270095325"
 	    fi
 	    configs="isr.overscanNumLeadingColumnsToSkip=20 isr.doDark=False isr.doFlat=False"
 	    ;;
