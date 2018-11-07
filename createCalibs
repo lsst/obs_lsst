@@ -73,7 +73,7 @@ for camera in $cameras; do
 	    continue
 	    ;;
 	ts8)
-	    biasIds="--id imageType=BIAS"
+	    biasIds="imageType=BIAS"
 	    configs="isr.overscanNumLeadingColumnsToSkip=20 isr.doDark=False"
 	    ;;
 	*)
