@@ -5,7 +5,7 @@ config.parse.retarget(Ts8ParseTask)
 # what used to be config.parse.translation = {
 del config.parse.translation['filter']
 del config.parse.translation['visit']
-config.parse.translation['seqNum'] = 'SEQNUM'
+config.parse.translation['testSeqNum'] = 'SEQNUM'
 config.parse.translation['wavelength'] = 'MONOWL'
 
 # what used to be config.parse.translators = {
@@ -24,7 +24,7 @@ config.parse.hdu = 0
 del config.register.columns['raftName']
 del config.register.columns['snap']
 config.register.columns['dayObs'] = 'text'
-config.register.columns['seqNum'] = 'int'
+config.register.columns['testSeqNum'] = 'int'
 
 config.register.unique = ["visit", "detector"]
 config.register.visit = list(config.register.columns.keys())

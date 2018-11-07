@@ -3,8 +3,23 @@ calibrations:
     obsTimeName: dayObs
     columns:
     - dayObs
-    - detectorName
+    - detector
     template: bias/%(calibDate)s/bias-det%(detector)03d_%(calibDate)s.fits
+
+  dark:
+    obsTimeName: dayObs
+    columns:
+    - dayObs
+    - detector
+    template: dark/%(calibDate)s/dark-det%(detector)03d_%(calibDate)s.fits
+
+  flat:
+    obsTimeName: dayObs
+    columns:
+    - dayObs
+    - detector
+    - filter
+    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-det%(detector)03d_%(calibDate)s.fits
 
 datasets:
   raw_hdu:

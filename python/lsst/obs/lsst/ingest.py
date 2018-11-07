@@ -10,8 +10,9 @@ EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 # This is needed elsewhere and should only be defined in one place
 # roll over at 8am UTC
 ROLLOVERTIME = datetime.timedelta(hours=8)
+TZERO = datetime.datetime(2010, 1, 1, tzinfo=datetime.timezone.utc)
 
-__all__ = ["LsstCamParseTask", "ROLLOVERTIME"]
+__all__ = ["LsstCamParseTask", "ROLLOVERTIME", "TZERO"]
 
 
 class LsstCamParseTask(ParseTask):

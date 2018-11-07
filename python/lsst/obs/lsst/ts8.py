@@ -27,7 +27,7 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME
+from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME, TZERO
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
@@ -46,19 +46,13 @@ class Ts8(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dayObs, seqNum):
-    """Compute a visit number given a dayObs and seqNum"""
+def computeVisit(dateObs):
+    """Compute a visit number from the full dateObs"""
 
-    try:
-        # once we start using py 3.7 this will not raise, and this try block
-        # can be removed. Until then, this will raise an AttributeError
-        # and therefore fall through to the except block which does it the
-        # ugly and hard-to-understand py <= 3.6 way
-        date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:
-        date = datetime.date(*[int(f) for f in dayObs.split('-')])
+    fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
+    visit = int((fullDateTime - ROLLOVERTIME - TZERO).total_seconds())
 
-    return (date.toordinal() - 730000)*100000 + seqNum
+    return visit
 
 
 class Ts8Mapper(LsstCamMapper):
@@ -86,7 +80,10 @@ class Ts8Mapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dayObs'], dataId["seqNum"])
+        if 'visit' in dataId:
+            visit = dataId['visit']
+        else:
+            visit = computeVisit(dataId['dateObs'])
         detector = self._extractDetectorName(dataId)
 
         return 10*visit + detector
@@ -135,24 +132,60 @@ class Ts8ParseTask(LsstCamParseTask):
                 "S10", "S11", "S12",
                 "S20", "S21", "S22"][detector]
 
+    def _translate_raftName(self, raftString):
+        """Get the raft name from the string in the header"""
+        # should look something like 'LCA-11021_RTM-011-Dev'
+        return raftString[10:17]
+
     def translate_detector(self, md):
-        """Find the detector number
+        """Find the detector number from the serial
 
         This should come from CHIPID, not LSST_NUM
         """
+        raftName = self._translate_raftName(md.get("RAFTNAME"))
         serial = md.get("LSST_NUM")
 
-        return {  # config for RTM-007 aka RTM #4
-            'E2V-CCD250-260': 0,  # S00
-            'E2V-CCD250-182': 1,  # S01
-            'E2V-CCD250-175': 2,  # S02
-            'E2V-CCD250-167': 3,  # S10
-            'E2V-CCD250-195': 4,  # S11
-            'E2V-CCD250-201': 5,  # S12
-            'E2V-CCD250-222': 6,  # S20
-            'E2V-CCD250-213': 7,  # S21
-            'E2V-CCD250-177': 8,  # S22
-        }[serial]
+        # this seems to be appended more or less at random, and breaks the mapping dict
+        if serial.endswith('-Dev'):
+            serial = serial[:-4]
+
+        # a dict of dicts holding the raft serials
+        raftSerialData = {
+            'RTM-007': {  # config for RTM-007 aka RTM #4
+                'E2V-CCD250-260': 0,  # S00
+                'E2V-CCD250-182': 1,  # S01
+                'E2V-CCD250-175': 2,  # S02
+                'E2V-CCD250-167': 3,  # S10
+                'E2V-CCD250-195': 4,  # S11
+                'E2V-CCD250-201': 5,  # S12
+                'E2V-CCD250-222': 6,  # S20
+                'E2V-CCD250-213': 7,  # S21
+                'E2V-CCD250-177': 8   # S22
+            },
+            'RTM-010': {  # config for RTM-010 aka RTM #7
+                'E2V-CCD250-266': 0,  # S00
+                'E2V-CCD250-268': 1,  # S01
+                'E2V-CCD250-200': 2,  # S02
+                'E2V-CCD250-273': 3,  # S10
+                'E2V-CCD250-179': 4,  # S11
+                'E2V-CCD250-263': 5,  # S12
+                'E2V-CCD250-226': 6,  # S20
+                'E2V-CCD250-264': 7,  # S21
+                'E2V-CCD250-137': 8,  # S22
+            },
+            'RTM-011': {  # config for RTM-011 aka RTM #8 NB Confluence lies here, values are from the data!
+                'ITL-3800C-083': 0,  # S00
+                'ITL-3800C-172': 1,  # S01
+                'ITL-3800C-142': 2,  # S02
+                'ITL-3800C-173': 3,  # S10
+                'ITL-3800C-136': 4,  # S11
+                'ITL-3800C-227': 5,  # S12
+                'ITL-3800C-226': 6,  # S20
+                'ITL-3800C-230': 7,  # S21
+                'ITL-3800C-235': 8,  # S22
+            }
+        }
+        return raftSerialData[raftName][serial]
 
     def translate_filter(self, md):
         """Generate a filtername from a FILTPOS
@@ -185,9 +218,8 @@ class Ts8ParseTask(LsstCamParseTask):
         """Generate a unique visit number
 
         Note that SEQNUM is not unique for a given day in TS8 data
-        so instead we use the number of seconds into the day
-        and the dayObs. We take the ROLLOVER time from the main
-        LSST configuration.
+        so instead we use the number of seconds since TZERO as defined in
+        the main LSST part of the package.
 
         Parameters
         ----------
@@ -200,13 +232,5 @@ class Ts8ParseTask(LsstCamParseTask):
             Visit number, as translated
         """
         dateObs = self.translate_dateObs(md)
-        dayObs = self.translate_dayObs(md)
 
-        fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        justTime = datetime.datetime.strptime(dateObs.split('T')[0], "%Y-%m-%d")
-        justTime = justTime.replace(tzinfo=fullDateTime.tzinfo)  # turn into a timedelta obj
-
-        fullDateTime -= ROLLOVERTIME
-        secondsIntoDay = (fullDateTime - justTime).total_seconds()
-
-        return computeVisit(dayObs, secondsIntoDay)
+        return computeVisit(dateObs)
