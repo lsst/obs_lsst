@@ -8,3 +8,6 @@ for sub in ("mergeCoaddDetections", "measureCoaddSources", "mergeCoaddMeasuremen
     path = os.path.join(getPackageDir("obs_lsst"), "config", sub + ".py")
     if os.path.exists(path):
         getattr(config, sub).load(path)
+
+config.measureCoaddSources.propagateFlags.ccdName="detector"
+
