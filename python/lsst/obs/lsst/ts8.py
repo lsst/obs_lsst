@@ -151,6 +151,17 @@ class Ts8ParseTask(LsstCamParseTask):
 
         # a dict of dicts holding the raft serials
         raftSerialData = {
+            'RTM-005': {  # config for RTM-007 aka RTM #2
+                'E2V-CCD250-220': 0,  # S00
+                'E2V-CCD250-239': 1,  # S01
+                'E2V-CCD250-154': 2,  # S02
+                'E2V-CCD250-165': 3,  # S10
+                'E2V-CCD250-130': 4,  # S11
+                'E2V-CCD250-153': 5,  # S12
+                'E2V-CCD250-163': 6,  # S20
+                'E2V-CCD250-216': 7,  # S21
+                'E2V-CCD250-252': 8   # S22
+            },
             'RTM-007': {  # config for RTM-007 aka RTM #4
                 'E2V-CCD250-260': 0,  # S00
                 'E2V-CCD250-182': 1,  # S01
@@ -161,6 +172,17 @@ class Ts8ParseTask(LsstCamParseTask):
                 'E2V-CCD250-222': 6,  # S20
                 'E2V-CCD250-213': 7,  # S21
                 'E2V-CCD250-177': 8   # S22
+            },
+            'RTM-008': {  # config for RTM-008 aka RTM #5
+                'E2V-CCD250-160': 0,  # S00
+                'E2V-CCD250-208': 1,  # S01
+                'E2V-CCD250-256': 2,  # S02
+                'E2V-CCD250-253': 3,  # S10
+                'E2V-CCD250-194': 4,  # S11
+                'E2V-CCD250-231': 5,  # S12
+                'E2V-CCD250-224': 6,  # S20
+                'E2V-CCD250-189': 7,  # S21
+                'E2V-CCD250-134': 8   # S22
             },
             'RTM-010': {  # config for RTM-010 aka RTM #7
                 'E2V-CCD250-266': 0,  # S00
@@ -234,3 +256,28 @@ class Ts8ParseTask(LsstCamParseTask):
         dateObs = self.translate_dateObs(md)
 
         return computeVisit(dateObs)
+
+    def translate_testSeqNum(self, md):
+        """Translate the sequence number
+
+        Sometimes this is present, sometimes it is not. When it is, return it
+        as an int. When it's not, provide a default value of 0 as an int.
+        This function exists because currently the Gen2 butler's default
+        value providing pathway has trouble with types.
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        seqNum : `int`
+            The seqNum, with a default value of 0 if required
+        """
+        # import ipdb as pdb; pdb.set_trace()
+        try:
+            seqNum = md.get("SEQNUM")
+        except KeyError:
+            seqNum = 0
+        return seqNum
