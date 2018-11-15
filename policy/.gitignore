@@ -2,4 +2,4 @@ auxTel.yaml
 imsim.yaml
 lsstCam.yaml
 phosim.yaml
-ts8.yaml
+ts8*.yaml
