@@ -2,7 +2,7 @@
 export LD_LIBRARY_PATH=$LSST_LIBRARY_PATH
 export DYLD_LIBRARY_PATH=$LSST_LIBRARY_PATH
 
-PRODUCT_DIR=/project/rhl/Data/ci_lsst
+PRODUCT_DIR=$CI_LSST_DIR  
 
 allCameras="auxTel imsim phosim ts8"
 rerun="$(whoami)/tmp"				# rerun for processing
@@ -42,6 +42,11 @@ EOF
     esac
     shift
 done
+
+if [ X"$PRODUCT_DIR" = X"" ]; then
+    echo "Please specify a directory for processed data by setting \$CI_LSST_DIR or with --dir" >&2
+    exit 1
+fi
 
 cameras="$@"
 if [ X"$cameras" = X"" ]; then
