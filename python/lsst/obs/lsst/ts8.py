@@ -70,7 +70,11 @@ class Ts8Mapper(LsstCamMapper):
         return "ts8"
 
     def _extractDetectorName(self, dataId):
-        return dataId['detector']
+        if 'detector' in dataId:
+            return dataId['detector']
+        else:
+            detectors = ["S00", "S01", "S02", "S10", "S11", "S12", "S22", "S20", "S21", "S22"]
+            return detectors.index(dataId["detectorName"])
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -275,7 +279,6 @@ class Ts8ParseTask(LsstCamParseTask):
         seqNum : `int`
             The seqNum, with a default value of 0 if required
         """
-        # import ipdb as pdb; pdb.set_trace()
         try:
             seqNum = md.get("SEQNUM")
         except KeyError:
