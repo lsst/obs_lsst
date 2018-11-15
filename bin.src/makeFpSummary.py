@@ -132,11 +132,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                         butler.put(binned_dim, 'binned_sensor_fits_halves', half=half,
                                    **dataId, dstype=dstype)
 
-            detectorNameList = ["%s_%s" % (er.dataId["raftName"], er.dataId["detectorName"])
-                                for er in expRefListForVisit]
-
-            im = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize,
-                                detectorNameList=detectorNameList)
+            im = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize)
 
             dstypeName = "%s-%s" % (dstype, self.config.fpId) if self.config.fpId else dstype
 
