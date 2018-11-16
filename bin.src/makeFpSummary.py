@@ -108,14 +108,13 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                     if md:
                         afwGeom.makeSkyWcs(md, strip=True)  # strip WCS cards; they're invalidated by binning
                     try:
-                        binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize)[0]
+                        binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize,
+                                                   as_masked_image=True)[0]
                         binned_im = rotateImageBy90(binned_im, ccd.getOrientation().getNQuarter())
                         if self.config.putFullSensors:
-                            binned_dim = afwImage.DecoratedImageF(binned_im)
-                            if md:
-                                binned_dim.setMetadata(md)
-
-                            butler.put(binned_dim, 'binned_sensor_fits', **dataId, dstype=dstype)
+                            # binned_mim = afwImage.MaskedImageF(binned_im, metadata=md)
+                            binned_mim = afwImage.MaskedImageF(binned_im)
+                            butler.put(binned_mim, 'binned_sensor_fits', **dataId, dstype=dstype)
                     except (TypeError, RuntimeError) as e:
                         # butler couldn't put the image or there was no image to put
                         self.log.warn("Unable to make binned image: %s", e)
@@ -126,10 +125,9 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                              'B': afwGeom.Box2I(afwGeom.PointI(0, 0), afwGeom.ExtentI(x, y/2))}
                     for half in ('A', 'B'):
                         box = boxes[half]
-                        binned_dim = afwImage.DecoratedImageF(binned_im[box])
-                        if md:
-                            binned_dim.setMetadata(md)
-                        butler.put(binned_dim, 'binned_sensor_fits_halves', half=half,
+                        # binned_mim = afwImage.MaskedImageF(binned_im[box], metadata=md)
+                        binned_mim = afwImage.MaskedImageF(binned_im[box])
+                        butler.put(binned_mim, 'binned_sensor_fits_halves', half=half,
                                    **dataId, dstype=dstype)
 
             im = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize)
