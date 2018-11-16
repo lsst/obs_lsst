@@ -6,6 +6,7 @@ from lsst.afw.display.rgb import ZScaleMapping, writeRGB
 from lsst.afw.math import rotateImageBy90, flipImage
 import lsst.afw.image as afwImage
 import lsst.afw.geom as afwGeom
+import lsst.afw.math as afwMath
 import lsst.afw.fits
 
 
@@ -138,6 +139,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
 
             butler.put(im, 'focal_plane_fits', visit=visit, dstype=dstypeName)
             zmap = ZScaleMapping(im, contrast=self.config.contrast)
+            im = afwMath.flipImage(im, False, True)  # PNGs have the origin in the upper left
             rgb = zmap.makeRgbImage(im, im, im)
             file_name = butler.get('focal_plane_png_filename', visit=visit, dstype=dstypeName)
             writeRGB(file_name[0], rgb)
