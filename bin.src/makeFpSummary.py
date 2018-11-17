@@ -136,6 +136,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
 
             butler.put(im, 'focal_plane_fits', visit=visit, dstype=dstypeName)
             zmap = ZScaleMapping(im, contrast=self.config.contrast)
+            im = flipImage(im, False, True)
             rgb = zmap.makeRgbImage(im, im, im)
             file_name = butler.get('focal_plane_png_filename', visit=visit, dstype=dstypeName)
             writeRGB(file_name[0], rgb)
