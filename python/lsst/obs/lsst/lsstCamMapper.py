@@ -21,8 +21,6 @@
 #
 """The LsstCam Mapper."""  # necessary to suppress D100 flake8 warning.
 
-from __future__ import division, print_function
-
 import os
 import re
 import lsst.log
