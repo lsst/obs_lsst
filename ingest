@@ -58,6 +58,7 @@ fi
 
 for camera in $cameras; do
     DATA_DIR=$PRODUCT_DIR/$camera
+    mkdir -p $DATA_DIR
 
     case $camera in
 	auxTel)
