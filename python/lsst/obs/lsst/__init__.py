@@ -22,3 +22,4 @@
 from .version import *
 from .lsstCam import *
 from .lsstCamMapper import *
+from .translators import *
