@@ -1,0 +1,160 @@
+R10:
+  amplifiers:
+    S00:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S01:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S02:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S10:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S11:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S12:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S20:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S21:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+    S22:
+      C00: {gain: 0.7, readNoise: 7.0}
+      C01: {gain: 0.7, readNoise: 7.0}
+      C02: {gain: 0.7, readNoise: 7.0}
+      C03: {gain: 0.7, readNoise: 7.0}
+      C04: {gain: 0.7, readNoise: 7.0}
+      C05: {gain: 0.7, readNoise: 7.0}
+      C06: {gain: 0.7, readNoise: 7.0}
+      C07: {gain: 0.7, readNoise: 7.0}
+      C10: {gain: 0.7, readNoise: 7.0}
+      C11: {gain: 0.7, readNoise: 7.0}
+      C12: {gain: 0.7, readNoise: 7.0}
+      C13: {gain: 0.7, readNoise: 7.0}
+      C14: {gain: 0.7, readNoise: 7.0}
+      C15: {gain: 0.7, readNoise: 7.0}
+      C16: {gain: 0.7, readNoise: 7.0}
+      C17: {gain: 0.7, readNoise: 7.0}
+  ccdSerials: {S00: ITL-3800C-145-Dev, S01: ITL-3800C-022-Dev, S02: ITL-3800C-041-Dev,
+    S10: ITL-3800C-100-Dev, S11: ITL-3800C-017-Dev, S12: ITL-3800C-018-Dev, S20: ITL-3800C-102-Dev,
+    S21: ITL-3800C-146-Dev, S22: ITL-3800C-103-Dev}
+  detectorType: ITL
+  raftSerial: LCA-11021_RTM-003
