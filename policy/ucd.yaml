@@ -1,0 +1,997 @@
+#
+# LSST Data Management System
+# Copyright 2017 LSST Corporation.
+#
+# This product includes software developed by the
+# LSST Project (http://www.lsst.org/).
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
+# see <http://www.lsstcorp.org/LegalNotices/>.
+#
+#
+--- # lsstCam
+#
+# There are nine ccds with names "S00".."S22" and IDs 0..8 in each of 21 rafts
+# N.b. Ignoring corner rafts for now
+
+name : "lsstCam"
+plateScale : 20.00                      # plate scale, in arcseconds on sky/mm
+radialCoeffs : [0.0, 1.0, 0.0, 1.0]     # radial distortion coefficients (c_0 + c_1 r + c_2 r^2 + ...)
+
+#
+# A single amplifier ("segment" to the camera team)
+#
+AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a CCD has not been checked
+                                        # in detail (e.g. off by one errors)
+    perAmpData : True                   # data is provided independentally for each amplifier
+    # trimmed
+    dataExtent : [512, 2002]
+    readCorner : LL
+    #                         [[x0,  y0], [xsize, ysize]]
+    rawBBox                 : [[0,    0], [572,    2048]]  # total size of one amp's raw data
+
+    rawDataBBox             : [[10,   0], [512,    2002]]  # data region in raw data
+    rawSerialPrescanBBox    : [[0,    0], [10,     2002]]  # serial prescan (often == extended)
+    rawSerialOverscanBBox   : [[522,  0], [50,     2002]]  # serial overscan
+    rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
+    rawParallelOverscanBBox : [[10, 2002], [512,     46]]  # parallel overscan
+
+    #nRowPreParallelTransfer : 0         # number of rows digitised before first parallel transfer
+    #extended : 10                       # number of pixels in the extended register
+    #extended0 : 0                       # first pixel in the extended register
+    #h_overscan : 22                     # number of overscan pixels in x (serial)
+    #h_overscan0 : 0                     # first overscan pixel in x (serial)
+    #v_overscan : 46                     # number of overscan pixel in y (parallel)
+    #v_overscan0 : 0                     # first overscan pixel in y (parallel)
+
+    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
+
+    # Linearity correction is still under discussion, so this is a placeholder.
+    linearityType : PROPORTIONAL
+    linearityThreshold : 0
+    linearityMax : 65535                # == saturation
+    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+
+AMP_ITL : &AMP_ITL
+    perAmpData : True                   # data is provided independentally for each amplifier
+    # trimmed
+    dataExtent : [509, 2000]
+    readCorner : LL
+
+    #                         [[x0,  y0], [xsize, ysize]]
+    rawBBox                 : [[0,    0], [542,    2022]]  # total size of one amp's raw data
+
+    rawDataBBox             : [[3,    0], [509,    2000]]  # data region in raw data
+    rawSerialPrescanBBox    : [[0,    0], [3,      2000]]  # serial prescan (often == extended)
+    rawSerialOverscanBBox   : [[512,  0], [30,     2000]]  # serial overscan
+    rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
+    rawParallelOverscanBBox : [[3, 2000], [509,      22]]  # parallel overscan
+
+    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
+
+    # Linearity correction is still under discussion, so this is a placeholder.
+    linearityType : PROPORTIONAL
+    linearityThreshold : 0
+    linearityMax : 65535                # == saturation
+    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+  
+#
+# A single CCD ("sensor" to the camera team)
+#
+CCD_E2V : &CCD_E2V
+    detectorType : 0
+    refpos : [2047.5, 2001.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4095, 4003]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C17: &C17_E2V
+        <<: *AMP_E2V
+        hdu : 1
+        flipXY : [True, False]
+        ixy : [7, 0]
+      C16: &C16_E2V
+        <<: *C17_E2V
+        hdu : 2
+        ixy : [6, 0]
+      C15: &C15_E2V
+        <<: *C17_E2V
+        hdu : 3
+        ixy : [5, 0]
+      C14: &C14_E2V
+        <<: *C17_E2V
+        hdu : 4
+        ixy : [4, 0]
+      C13: &C13_E2V
+        <<: *C17_E2V
+        hdu : 5
+        ixy : [3, 0]
+      C12: &C12_E2V
+        <<: *C17_E2V
+        hdu : 6
+        ixy : [2, 0]
+      C11: &C11_E2V
+        <<: *C17_E2V
+        hdu : 7
+        ixy : [1, 0]
+      C10: &C10_E2V
+        <<: *C17_E2V
+        hdu : 8
+        ixy : [0, 0]
+      C00: &C00_E2V
+        <<: *AMP_E2V
+        hdu : 9
+        flipXY : [False, True]
+        ixy : [0, 1]
+      C01: &C01_E2V
+        <<: *C00_E2V
+        hdu : 10
+        ixy : [1, 1]
+      C02: &C02_E2V
+        <<: *C00_E2V
+        hdu : 11
+        ixy : [2, 1]
+      C03: &C03_E2V
+        <<: *C00_E2V
+        hdu : 12
+        ixy : [3, 1]
+      C04: &C04_E2V
+        <<: *C00_E2V
+        hdu : 13
+        ixy : [4, 1]
+      C05: &C05_E2V
+        <<: *C00_E2V
+        hdu : 14
+        ixy : [5, 1]
+      C06: &C06_E2V
+        <<: *C00_E2V
+        hdu : 15
+        ixy : [6, 1]
+      C07: &C07_E2V
+        <<: *C00_E2V
+        hdu : 16
+        ixy : [7, 1]
+
+CCD_ITL : &CCD_ITL
+    detectorType : 0
+    refpos : [2036.5, 2000.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4071, 3999]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C13: &C13_ITL
+        <<: *AMP_ITL
+        hdu : 1
+        flipXY : [False, False]
+        ixy : [4, 0]
+      C12: &C12_ITL
+        <<: *C13_ITL
+        hdu : 2
+        ixy : [5, 0]
+      C11: &C11_ITL
+        <<: *C13_ITL
+        hdu : 3
+        ixy : [6, 0]
+      C10: &C10_ITL
+        <<: *C13_ITL
+        hdu : 4
+        ixy : [7, 0]
+      C17: &C17_ITL
+        <<: *C13_ITL
+        hdu : 5
+        ixy : [0, 0]
+      C16: &C16_ITL
+        <<: *C13_ITL
+        hdu : 6
+        ixy : [1, 0]
+      C15: &C15_ITL
+        <<: *C13_ITL
+        hdu : 7
+        ixy : [2, 0]
+      C14: &C14_ITL
+        <<: *C13_ITL
+        hdu : 8
+        ixy : [3, 0]
+      C07: &C07_ITL
+        <<: *AMP_ITL
+        hdu : 9
+        flipXY : [False, True]
+        ixy : [0, 1]
+      C06: &C06_ITL
+        <<: *C07_ITL
+        hdu : 10
+        ixy : [1, 1]
+      C05: &C05_ITL
+        <<: *C07_ITL
+        hdu : 11
+        ixy : [2, 1]
+      C04: &C04_ITL
+        <<: *C07_ITL
+        hdu : 12
+        ixy : [3, 1]
+      C03: &C03_ITL
+        <<: *C07_ITL
+        hdu : 13
+        ixy : [4, 1]
+      C02: &C02_ITL
+        <<: *C07_ITL
+        hdu : 14
+        ixy : [5, 1]
+      C01: &C01_ITL
+        <<: *C07_ITL
+        hdu : 15
+        ixy : [6, 1]
+      C00: &C00_ITL
+        <<: *C07_ITL
+        hdu : 16
+        ixy : [7, 1]
+#
+# Layout of CCDs within an ITL raft
+#
+RAFT_ITL:
+  ccds : 
+    S00: &S00_ITL                       # Sensor (0, 0)
+      << : *CCD_ITL
+      id : 0
+      offset : [-42.37, -42.19]
+
+    S01: &S01_ITL                       # Sensor (0, 1)
+      << : *S00_ITL
+      id : 1
+      offset : [ -0.09, -42.32]
+             
+    S02: &S02_ITL                       # Sensor (0, 2)
+      << : *S00_ITL
+      id : 2
+      offset : [ 42.18, -42.37]
+      
+    S10: &S10_ITL                       # Sensor (1, 0)
+      << : *S00_ITL
+      id : 3
+      offset : [-42.32,   0.08]
+
+    S11: &S11_ITL                       # Sensor (1, 1)
+      << : *S00_ITL
+      id : 4
+      offset : [   0.0,    0.0]
+             
+    S12: &S12_ITL                       # Sensor (1, 2)
+      << : *S00_ITL
+      id : 5
+      offset : [ 42.28,   -0.10]
+
+    S20: &S20_ITL                       # Sensor (2, 0)
+      << : *S00_ITL
+      id : 6
+      offset : [-42.19,  42.36]
+
+    S21: &S21_ITL                       # Sensor (2, 1)
+      << : *S00_ITL
+      id : 7
+      offset : [  0.10,  42.28]             
+    S22: &S22_ITL                       # Sensor (2, 2)
+      << : *S00_ITL
+      id : 8
+      offset : [ 42.36,  42.20]
+#
+# Layout of CCDs within an E2V raft
+#
+# N.b. these offsets are copied from ITL and have not been checked on the sky or from drawings
+#
+RAFT_E2V:
+  ccds : 
+    S00: &S00_E2V                       # Sensor (0, 0)
+      << : *CCD_E2V
+      id : 0
+      offset : [-42.37, -42.19]
+
+    S01: &S01_E2V                       # Sensor (0, 1)
+      << : *S00_E2V
+      id : 1
+      offset : [ -0.09, -42.32]
+             
+    S02: &S02_E2V                       # Sensor (0, 2)
+      << : *S00_E2V
+      id : 2
+      offset : [ 42.18, -42.37]
+      
+    S10: &S10_E2V                       # Sensor (1, 0)
+      << : *S00_E2V
+      id : 3
+      offset : [-42.32,   0.08]
+
+    S11: &S11_E2V                       # Sensor (1, 1)
+      << : *S00_E2V
+      id : 4
+      offset : [   0.0,    0.0]
+             
+    S12: &S12_E2V                       # Sensor (1, 2)
+      << : *S00_E2V
+      id : 5
+      offset : [ 42.28,   -0.10]
+
+    S20: &S20_E2V                       # Sensor (2, 0)
+      << : *S00_E2V
+      id : 6
+      offset : [-42.19,  42.36]
+
+    S21: &S21_E2V                       # Sensor (2, 1)
+      << : *S00_E2V
+      id : 7
+      offset : [  0.10,  42.28]             
+    S22: &S22_E2V                       # Sensor (2, 2)
+      << : *S00_E2V
+      id : 8
+      offset : [ 42.36,  42.20]
+      
+
+#
+# Define our specific devices
+#
+# All the CCDs present in this file
+#
+CCDs :
+  R00_S00 : 
+    << : *S00_E2V
+    id : 0
+    serial : E2V-CCD250-112-04
+    refpos : [2047.5, 2001.5]
+    offset : [-42.37, -42.19]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S01 : 
+    << : *S01_E2V
+    id : 1
+    serial : E2V-CCD250-268-Dev
+    refpos : [2047.5, 2001.5]
+    offset : [-0.09, -42.32]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S02 : 
+    << : *S02_ITL
+    id : 2
+    serial : ITL-3800C-002
+    refpos : [2047.5, 2001.5]
+    offset : [42.18, -42.37]
+    amplifiers :
+      C10 :
+        << : *C10_ITL
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_ITL
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_ITL
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_ITL
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_ITL
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_ITL
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_ITL
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_ITL
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_ITL
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_ITL
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_ITL
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_ITL
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_ITL
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_ITL
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_ITL
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_ITL
+        gain : 1.7
+        readNoise : 7
+  R00_S10 : 
+    << : *S10_E2V
+    id : 3
+    serial : E2V-CCD250-273-Dev
+    refpos : [2047.5, 2001.5]
+    offset : [-42.32, 0.08]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S11 : 
+    << : *S11_E2V
+    id : 4
+    serial : E2V-CCD250-179
+    refpos : [2047.5, 2001.5]
+    offset : [0, 0]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S12 : 
+    << : *S12_E2V
+    id : 5
+    serial : ITL-3800C-029
+    refpos : [2047.5, 2001.5]
+    offset : [42.28, -0.1]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S20 : 
+    << : *S20_E2V
+    id : 6
+    serial : ITL-3800C-002
+    refpos : [2047.5, 2001.5]
+    offset : [-42.19, 42.36]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S21 : 
+    << : *S21_E2V
+    id : 7
+    serial : ITL-3800C-146
+    refpos : [2047.5, 2001.5]
+    offset : [0.1, 42.28]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7
+  R00_S22 : 
+    << : *S22_E2V
+    id : 8
+    serial : ITL-3800C-103
+    refpos : [2047.5, 2001.5]
+    offset : [42.36, 42.2]
+    amplifiers :
+      C10 :
+        << : *C10_E2V
+        gain : 1.7
+        readNoise : 7
+      C11 :
+        << : *C11_E2V
+        gain : 1.7
+        readNoise : 7
+      C12 :
+        << : *C12_E2V
+        gain : 1.7
+        readNoise : 7
+      C13 :
+        << : *C13_E2V
+        gain : 1.7
+        readNoise : 7
+      C14 :
+        << : *C14_E2V
+        gain : 1.7
+        readNoise : 7
+      C15 :
+        << : *C15_E2V
+        gain : 1.7
+        readNoise : 7
+      C16 :
+        << : *C16_E2V
+        gain : 1.7
+        readNoise : 7
+      C17 :
+        << : *C17_E2V
+        gain : 1.7
+        readNoise : 7
+      C07 :
+        << : *C07_E2V
+        gain : 1.7
+        readNoise : 7
+      C06 :
+        << : *C06_E2V
+        gain : 1.7
+        readNoise : 7
+      C05 :
+        << : *C05_E2V
+        gain : 1.7
+        readNoise : 7
+      C04 :
+        << : *C04_E2V
+        gain : 1.7
+        readNoise : 7
+      C03 :
+        << : *C03_E2V
+        gain : 1.7
+        readNoise : 7
+      C02 :
+        << : *C02_E2V
+        gain : 1.7
+        readNoise : 7
+      C01 :
+        << : *C01_E2V
+        gain : 1.7
+        readNoise : 7
+      C00 :
+        << : *C00_E2V
+        gain : 1.7
+        readNoise : 7

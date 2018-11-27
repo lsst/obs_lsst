@@ -25,6 +25,7 @@ import unittest
 import lsst.obs.lsst
 import lsst.obs.lsst.auxTel
 import lsst.obs.lsst.ts8
+import lsst.obs.lsst.ucd
 import lsst.obs.lsst.phosim
 import lsst.obs.lsst.imsim
 

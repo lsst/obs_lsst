@@ -1,0 +1,25 @@
+calibrations:
+  bias:
+    template: bias/%(calibDate)s/bias-det%(detector)03d-%(detectorName)s_%(calibDate)s.fits
+
+  dark:
+    template: dark/%(calibDate)s/dark-det%(detector)03d-%(detectorName)s_%(calibDate)s.fits
+
+  flat:
+    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+
+exposures:
+  _raw:
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
+  raw_amp:
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
+  postISRCCD:
+    template: postISRCCD/postISRCCD_%(visit)011d-%(filter)s-det%(detector)03d.fits
+  calexp:
+    template: calexp/calexp_%(visit)011d-%(filter)s-det%(detector)03d.fits
+
+datasets:
+  eotest_gain:  # set of amplifier gains, as measured by eotest
+    template: gain/%(run)s/gain_%(run)s-det%(detector)03d.pickle
+  raw_hdu:
+    template: raw/%(run)s/%(visit)011d-%(detectorName)s-det%(detector)03d.fits[0]
