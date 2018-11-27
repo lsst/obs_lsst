@@ -9,3 +9,4 @@ python/lsst/obs/lsst/version.py
 .coverage
 .pytest_cache
 tests/.tests
+pytest_session.txt
