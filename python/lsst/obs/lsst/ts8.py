@@ -282,7 +282,12 @@ class Ts8ParseTask(LsstCamParseTask):
             Filter name
         """
 
-        filterPos = md.get("FILTPOS")
+        try:
+            filterPos = md.get("FILTPOS")
+        except KeyError:
+            print("FILTPOS key not found in header (assuming NONE)")
+            return "NONE"
+
         try:
             return {
                 2: 'g',
