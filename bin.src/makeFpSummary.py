@@ -50,7 +50,7 @@ class ButlerListRunner(pipeBase.TaskRunner):
 
 class FocalplaneSummaryConfig(pexConfig.Config):
     binSize = pexConfig.Field(dtype=int, default=64, doc="pixels to bin for the focalplane summary")
-    contrast = pexConfig.Field(dtype=float, default=1, doc="contrast factor")
+    contrast = pexConfig.Field(dtype=float, default=0.25, doc="contrast factor")
     sensorBinSize = pexConfig.Field(dtype=int, default=4, doc="pixels to bin per sensor")
     putFullSensors = pexConfig.Field(dtype=bool, default=False, doc="persist the full size binned sensor?")
     doSensorImages = pexConfig.Field(dtype=bool, default=True, doc="make images of the individual sensors")
@@ -135,7 +135,14 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
             dstypeName = "%s-%s" % (dstype, self.config.fpId) if self.config.fpId else dstype
 
             butler.put(im, 'focal_plane_fits', visit=visit, dstype=dstypeName)
-            zmap = ZScaleMapping(im, contrast=self.config.contrast)
+
+            # Compute the zscale stretch for just the CCDs that have data.
+            detectorNameList = ["%s_%s" % (er.dataId["raftName"], er.dataId["detectorName"])
+                                for er in expRefListForVisit]
+            im_scaling = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize,
+                                        detectorNameList=detectorNameList)
+            zmap = ZScaleMapping(im_scaling, contrast=self.config.contrast)
+
             im = flipImage(im, False, True)
             rgb = zmap.makeRgbImage(im, im, im)
             file_name = butler.get('focal_plane_png_filename', visit=visit, dstype=dstypeName)
