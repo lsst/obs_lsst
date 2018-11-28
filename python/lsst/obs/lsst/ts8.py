@@ -155,7 +155,40 @@ class Ts8ParseTask(LsstCamParseTask):
 
         # a dict of dicts holding the raft serials
         raftSerialData = {
-            'RTM-005': {  # config for RTM-007 aka RTM #2
+            'RTM-002': {  # config for RTM-004 aka ETU #1
+                'ITL-3800C-023': 0,  # S00
+                'ITL-3800C-032': 1,  # S01
+                'ITL-3800C-042': 2,  # S02
+                'ITL-3800C-090': 3,  # S10
+                'ITL-3800C-107': 4,  # S11
+                'ITL-3800C-007': 5,  # S12
+                'ITL-3800C-004': 6,  # S20
+                'ITL-3800C-139': 7,  # S21
+                'ITL-3800C-013': 8   # S22
+            },
+            'RTM-003': {  # config for RTM-004 aka ETU #2
+                'ITL-3800C-145': 0,  # S00
+                'ITL-3800C-022': 1,  # S01
+                'ITL-3800C-041': 2,  # S02
+                'ITL-3800C-100': 3,  # S10
+                'ITL-3800C-017': 4,  # S11
+                'ITL-3800C-018': 5,  # S12
+                'ITL-3800C-102': 6,  # S20
+                'ITL-3800C-146': 7,  # S21
+                'ITL-3800C-103': 8   # S22
+            },
+            'RTM-004': {  # config for RTM-004 aka RTM #1
+                'ITL-3800C-381': 0,  # S00
+                'ITL-3800C-333': 1,  # S01
+                'ITL-3800C-380': 2,  # S02
+                'ITL-3800C-346': 3,  # S10
+                'ITL-3800C-062': 4,  # S11
+                'ITL-3800C-371': 5,  # S12
+                'ITL-3800C-385': 6,  # S20
+                'ITL-3800C-424': 7,  # S21
+                'ITL-3800C-247': 8   # S22
+            },
+            'RTM-005': {  # config for RTM-005 aka RTM #2
                 'E2V-CCD250-220': 0,  # S00
                 'E2V-CCD250-239': 1,  # S01
                 'E2V-CCD250-154': 2,  # S02
@@ -209,6 +242,28 @@ class Ts8ParseTask(LsstCamParseTask):
                 'ITL-3800C-226': 6,  # S20
                 'ITL-3800C-230': 7,  # S21
                 'ITL-3800C-235': 8,  # S22
+            },
+            'RTM-012': {  # config for RTM-012 aka RTM #9
+                'E2V-CCD250-281': 0,  # S00
+                'E2V-CCD250-237': 1,  # S01
+                'E2V-CCD250-234': 2,  # S02
+                'E2V-CCD250-277': 3,  # S10
+                'E2V-CCD250-251': 4,  # S11
+                'E2V-CCD250-149': 5,  # S12
+                'E2V-CCD250-166': 6,  # S20
+                'E2V-CCD250-214': 7,  # S21
+                'E2V-CCD250-228': 8,  # S22
+            },
+            'RTM-014': {  # config for RTM-014 aka RTM #11
+                'ITL-3800C-307': 0,  # S00
+                'ITL-3800C-325': 1,  # S01
+                'ITL-3800C-427': 2,  # S02
+                'ITL-3800C-361': 3,  # S10
+                'ITL-3800C-440': 4,  # S11
+                'ITL-3800C-411': 5,  # S12
+                'ITL-3800C-400': 6,  # S20
+                'ITL-3800C-455': 7,  # S21
+                'ITL-3800C-407': 8,  # S22
             }
         }
         return raftSerialData[raftName][serial]
@@ -227,7 +282,12 @@ class Ts8ParseTask(LsstCamParseTask):
             Filter name
         """
 
-        filterPos = md.get("FILTPOS")
+        try:
+            filterPos = md.get("FILTPOS")
+        except KeyError:
+            print("FILTPOS key not found in header (assuming NONE)")
+            return "NONE"
+
         try:
             return {
                 2: 'g',
