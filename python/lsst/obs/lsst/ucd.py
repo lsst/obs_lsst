@@ -171,7 +171,7 @@ class UcdParseTask(LsstCamParseTask):
         return raftSerialData[raftName][serial]
 
     def translate_filter(self, md):
-        """Generate a filtername from a FILTPOS
+        """Generate a filtername from FILTER
 
         Parameters
         ----------
@@ -248,7 +248,7 @@ class UcdParseTask(LsstCamParseTask):
         return seqNum
 
     def translate_dateObs(self, md):
-        """Get a legal dateObs by parsing the file name
+        """Get a legal dateObs by parsing DATE-OBS
 
         Parameters
         ----------
@@ -260,15 +260,9 @@ class UcdParseTask(LsstCamParseTask):
         dateObs : `str`
             The day that the data was taken, e.g. 2018-08-20T21:56:24.608
         """
-        filename = md.get("FILENAME")
-        dateTime = filename.split('/')[-1].split('_')[4]
-        year = dateTime[0:4]
-        month = dateTime[4:6]
-        day = dateTime[6:8]
-        hour = dateTime[8:10]
-        minute = dateTime[10:12]
-        sec = dateTime[12:14]
-        dateObs = year+'-'+month+'-'+day+'T'+hour+':'+minute+':'+sec+'.000'
+
+        d = datetime.datetime.strptime(md.get("DATE-OBS"), "%a %b %d %H:%M:%S %Z %Y")
+        dateObs = d.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
         return dateObs
 
     def translate_dayObs(self, md):
@@ -293,7 +287,7 @@ class UcdParseTask(LsstCamParseTask):
         return dayObs
 
     def translate_runNum(self, md):
-        """Generate a dummy number for RUNNUM
+        """Generate a run number from the date
 
         Parameters
         ----------
@@ -303,7 +297,6 @@ class UcdParseTask(LsstCamParseTask):
         Returns
         -------
         run : `int`
-            dummy number
         """
-        run = 999
+        run = self.translate_dayObs(md)
         return run
