@@ -63,6 +63,38 @@ class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
                 with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
                     self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
 
+    def test_ts8_translator(self):
+        test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
+                      dict(telescope="LSST",
+                           instrument="TS8",
+                           detector_exposure_id=2700961194,
+                           detector_name="S11",
+                           detector_num=4,
+                           exposure_id=270096119,
+                           exposure_time=0.0*u.s,
+                           observation_id="E2V-CCD250-179_lambda_bias_024_6006D_20180724104156",
+                           observation_type="bias",
+                           physical_filter="y",
+                           science_program="6006D",
+                           visit_id=270096119)),
+                     ("ts8-E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845.yaml",
+                      dict(telescope="LSST",
+                           instrument="TS8",
+                           detector_exposure_id=2700953282,
+                           detector_name="S02",
+                           detector_num=2,
+                           exposure_id=270095328,
+                           exposure_time=21.913*u.s,
+                           observation_id="E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845",
+                           observation_type="flat",
+                           physical_filter="z",
+                           science_program="6006D",
+                           visit_id=270095328)),
+                     )
+        for file, expected in test_data:
+            with self.subTest(f"Testing {file}"):
+                self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+
 
 if __name__ == "__main__":
     unittest.main()
