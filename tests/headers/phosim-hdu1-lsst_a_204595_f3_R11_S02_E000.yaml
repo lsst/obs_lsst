@@ -1,50 +1,7 @@
 !<lsst.daf.base.PropertyList>
-- [SIMPLE, Bool, true, conforms to FITS standard]
-- - BITPIX
-  - Int
-  - [8, 32]
-  - array data type
-- - NAXIS
-  - Int
-  - [0, 2]
-  - number of array dimensions
-- [EXTEND, Bool, true, '']
-- - EXPTIME
-  - Double
-  - [30.0, 30.0]
-  - Exposure time
-- - DARKTIME
-  - Double
-  - [30.0, 30.0]
-  - Actual Exposed time
-- [RUNNUM, Int, 204595, '']
-- - MJD-OBS
-  - Double
-  - [59857.286937, 59857.286937]
-  - Modified Julian date (also TAI)
-- [DATE-OBS, String, '2022-10-05T06:53:11.357', '']
-- - FILTER
-  - String
-  - [i, i]
-  - Filter
-- [LSST_NUM, String, R11_S02, '']
-- - CHIPID
-  - String
-  - [R11_S02, R11_S02]
-  - Chip/Amplifier ID
-- - OBSID
-  - Int
-  - [204595, 204595]
-  - Observation ID
-- [TESTTYPE, String, PHOSIM, '']
-- [IMGTYPE, String, SKYEXP, '']
-- [MONOWL, Int, -1, '']
-- [RAFTNAME, String, R11, '']
-- [SENSNAME, String, S02, '']
-- [RATEL, Double, 55.6775988587027, '']
-- [DECTEL, Double, -30.4423935708909, '']
-- [ROTANGLE, Double, 195.624333002684, '']
 - [XTENSION, String, IMAGE, Image extension]
+- [BITPIX, Int, 32, array data type]
+- [NAXIS, Int, 2, number of array dimensions]
 - [NAXIS1, Int, 522, '']
 - [NAXIS2, Int, 2010, '']
 - [PCOUNT, Int, 0, number of parameters]
@@ -78,7 +35,9 @@
 - [PHOV7, String, sourceperthread 100, Physics Override Command 7]
 - [PHOV8, String, checkpointcount 0, Physics Override Command 8]
 - [PHOV9, String, checkpointtotal 0, Physics Override Command 9]
+- [OBSID, Int, 204595, Observation ID]
 - [TAI, Double, 59857.286937, International Atomic Time scale]
+- [MJD-OBS, Double, 59857.286937, Modified Julian date (also TAI)]
 - [OUTPDIR, String, ., Output directory]
 - [OUTFILE, String, lsst_e_204595_f3_R11_S02_E000, Output filename]
 - [SEDDIR, String, /global/cscratch1/sd/descpho/Pipeline-tasks/DC2-R1-2p-WFD-i/000057/S,
@@ -101,9 +60,12 @@
 - [PLTSCAL, Double, 20.0, Approx. Plate scale (arcsec/mm)]
 - [MINR, Double, 2558.0, Minimum aperture radius]
 - [MAXR, Double, 4180.0, Maximum aperture radius]
+- [EXPTIME, Double, 30.0, Exposure time]
+- [DARKTIME, Double, 30.0, Actual Exposed time]
 - [SHUTERR, Double, 0.0, Shutter error]
 - [TIMEOFF, Double, 0.0, Time offset]
 - [FILTNM, Int, 3, 'Filter (0=u, 1=g, 2=r, 3=i, 4=z, 5=y)']
+- [FILTER, String, i, Filter]
 - [SEED, Int, 204595, Random seed]
 - [PRA, Double, 0.971757419689, Pointing RA (radians)]
 - [PDEC, Double, -0.53132, Pointing Dec (radians)]
@@ -653,6 +615,7 @@
 - [DOMESEE, Double, 0.1, Dome Seeing (arcseconds FWHM)]
 - [TOYPSF, Double, 0.0, Toy PSF (arcseconds FWHM)]
 - [PIXSIZE, Double, 10.0, Pixel Size (microns)]
+- [CHIPID, String, R11_S02, Chip/Amplifier ID]
 - [PAIRID, Int, 0, Pair ID]
 - [FPFILE, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9/data/l,
   '']

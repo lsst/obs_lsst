@@ -1,13 +1,77 @@
 !<lsst.daf.base.PropertyList>
+- [SIMPLE, Bool, true, 'Java FITS: Tue Jul 03 17:30:46 PDT 2018']
+- - BITPIX
+  - Int
+  - [8, 32]
+  - bits per data value
+- - NAXIS
+  - Int
+  - [0, 2]
+  - number of axis
+- [EXTEND, Bool, true, Extensions are permitted]
+- [DATE, String, '2018-07-24T10:42:01.370', Creation Date and Time of File]
+- [DATE-OBS, String, '2018-07-24T10:41:56.807', Date of the observation (image acquisition]
+- [MJD, Double, 58323.44584919, Modified Julian Date that the file was written]
+- [MJD-OBS, Double, 58323.44579637749, Modified Julian Date (5 decimal places) of
+    image a]
+- [RUNNUM, String, 6006D, The Run Number]
+- [IMAGETAG, String, '1532428916807', Image tag (CCS/VST)]
+- [TSTAND, String, TS8, Which Test stand at the site was used]
+- [CONTNUM, String, 000018ee28e4, CCD Controller Serial Number]
+- [SEQFILE, String, seq-e2v-2s-invert.seq, Name of Sequencer File]
+- [CCD_MANU, String, E2V, CCD Manufacturer]
+- [CCD_TYPE, String, CCD250, CCD Model Number]
+- [CCD_SERN, String, 15483-07-01, 'Manufacturers? CCD Serial Number']
+- [LSST_NUM, String, E2V-CCD250-179, LSST Assigned CCD Number]
+- [RAFTNAME, String, LCA-11021_RTM-010-Dev, Name of the RTM]
+- [REBNAME, String, R00.Reb1, Name of the REB]
+- [TESTTYPE, String, LAMBDA, 'DARK:FLAT:OBS:PPUMP:QE:SFLAT']
+- [IMGTYPE, String, BIAS, 'BIAS, DARK, ?']
+- [SEQNUM, Int, 24, Sequence number extracted from the original filename]
+- - DETSIZE
+  - String
+  - ['[1:4096,1:4004]', '[1:4096,1:4004]']
+  - ''
+- [TEMP_SET, Double, -100.0, Temperature set point (deg C)]
+- [CCDTEMP, Double, -100.52526152, Measured temperature (deg C)]
+- [MONOWL, Double, 850.022, Monochromator wavelength (nm)]
+- [EXPTIME, Double, 0.0, Exposure Time in Seconds]
+- [SHUT_DEL, Double, 0.0, Delay between shutter close command and readout (msec)]
+- [FILENAME, String, E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.fits, Original]
+- [BINX, Int, 1, '[pixels] binning along X axis']
+- [BINY, Int, 1, '[pixels] binning along Y axis']
+- - HEADVER
+  - Int
+  - [1, 1]
+  - Version number of header
+- [CCDGAIN, Double, 1.0, Rough guess at overall system gain (e-/DNB)]
+- [CCDNOISE, Double, 0.0, Rough guess at system noise (e- rms)]
+- [MONDIODE, Double, 0.0, Current in the monitoring diode (nA)]
+- [CCDBSS, Double, 60.85, CCD bias voltage]
+- [FILTPOS, Int, 6, Filter position]
+- [MONOCH-WAVELENG, Double, 850.022, monochromator wavelength]
+- [MONOCH-SLIT_A, Double, 240.0, Width of the A slit in um]
+- [MONOCH-SLIT_B, Double, 240.0, Width of the B slit in um]
+- [MONOCH-SLIT_C, Double, 0.0, Width of the C slit in um]
+- [MONOCH-BANDPASS, Double, 0.0, Automatic slit width in nm]
+- [MONOCH-FILT_1, Double, 6.0, filter position]
+- [MONOCH-MSTEPS, Double, 600.0, Current grating position in terms of motor step]
+- [MONOCH-GRATING, Double, 2.0, Grating position]
+- [AMP0-AZERO, String, F, 'SYSTEM:AZERO value']
+- [AMP2-ZERO_CHECK, String, 'off', Zero check on/off]
+- - CHECKSUM
+  - String
+  - [ZA1Zf50XZA0Xd30X, BiL9BfK8BfK8BfK8]
+  - checksum for the current HDU
+- - DATASUM
+  - String
+  - ['0', '2050583163']
+  - checksum of the data records
 - [XTENSION, String, IMAGE, marks beginning of new HDU]
-- [BITPIX, Int, 32, bits per data value]
-- [NAXIS, Int, 2, number of axis]
 - [NAXIS1, Int, 576, size of the n'th axis]
 - [NAXIS2, Int, 2048, size of the n'th axis]
 - [PCOUNT, Int, 0, Required value]
 - [GCOUNT, Int, 1, Required value]
-- [CHECKSUM, String, BiL9BfK8BfK8BfK8, checksum for the current HDU]
-- [HEADVER, Int, 1, Version number of header]
 - [CHANNEL, Int, 1, '']
 - [EXTNAME, String, Segment10, '']
 - [CCDSUM, String, 1 1, '']
@@ -17,7 +81,6 @@
 - [STDEV, Double, 6.360052189867744, '']
 - [DATASEC, String, '[11:522,1:2002]', '']
 - [DETSEC, String, '[512:1,1:2002]', '']
-- [DETSIZE, String, '[1:4096,1:4004]', '']
 - [DTV1, Int, 523, detector transformation vector]
 - [DTV2, Int, 0, detector transformation vector]
 - [DTM1_1, Double, -1.0, detector transformation matrix]
@@ -104,5 +167,4 @@
 - [CRVAL2Q, Double, 8353.0, '']
 - [BSCALE, Double, 1.0, '']
 - [BZERO, Double, 0.0, '']
-- [DATASUM, String, '2050583163', checksum of the data records]
 
