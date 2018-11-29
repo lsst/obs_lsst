@@ -90,8 +90,9 @@ class PhosimTranslator(StubTranslator):
             `True` if the header is recognized by this class. `False`
             otherwise.
         """
-        if "CREATOR" in header:
-            return header["CREATOR"] == "PHOSIM"
+        for card in ("CREATOR", "TESTTYPE"):
+            if card in header:
+                return header[card] == "PHOSIM"
         return False
 
     @cache_translation
