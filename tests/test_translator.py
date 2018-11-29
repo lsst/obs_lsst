@@ -51,7 +51,7 @@ class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
                            physical_filter="i",
                            pressure=520.0*cds.mmHg,
                            relative_humidity=40.0,
-                           science_program="phosim",
+                           science_program="204595",
                            temperature=20.0*u.deg_C,
                            visit_id=204595,
                            wcs_params=dict(max_sep=3000.))),  # 2022

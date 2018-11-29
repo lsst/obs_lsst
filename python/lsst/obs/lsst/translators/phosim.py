@@ -30,7 +30,6 @@ from astropy.coordinates import EarthLocation
 import astropy.units as u
 import astropy.units.cds as cds
 from astropy.time import Time
-# from astropy.coordinates import Angle
 
 from astro_metadata_translator import cache_translation, StubTranslator
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
@@ -51,12 +50,12 @@ class PhosimTranslator(StubTranslator):
         "boresight_rotation_coord": "sky",
         "observation_type": "science",
         "object": "unknown",
-        "science_program": "phosim",
         "relative_humidity": 40.0,
     }
 
     _trivial_map = {
         "observation_id": "OBSID",
+        "science_program": "RUNNUM",
         "exposure_id": "OBSID",
         "visit_id": "OBSID",
         "physical_filter": "FILTER",

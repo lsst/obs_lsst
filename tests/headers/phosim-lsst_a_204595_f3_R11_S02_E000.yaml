@@ -11,30 +11,30 @@
 - [EXTEND, Bool, true, '']
 - - EXPTIME
   - Double
-  - [30.0, 30.0]
+  - 30.0
   - Exposure time
 - - DARKTIME
   - Double
-  - [30.0, 30.0]
+  - 30.0
   - Actual Exposed time
 - [RUNNUM, Int, 204595, '']
 - - MJD-OBS
   - Double
-  - [59857.286937, 59857.286937]
+  - 59857.286937
   - Modified Julian date (also TAI)
 - [DATE-OBS, String, '2022-10-05T06:53:11.357', '']
 - - FILTER
   - String
-  - [i, i]
+  - i
   - Filter
 - [LSST_NUM, String, R11_S02, '']
 - - CHIPID
   - String
-  - [R11_S02, R11_S02]
+  - R11_S02
   - Chip/Amplifier ID
 - - OBSID
   - Int
-  - [204595, 204595]
+  - 204595
   - Observation ID
 - [TESTTYPE, String, PHOSIM, '']
 - [IMGTYPE, String, SKYEXP, '']
@@ -720,4 +720,3 @@
 - [DATASEC, String, '[4:512,1:2000]', Data section of amplifier]
 - [EXTNAME, String, Segment10, '']
 - [DETSEC, String, '[509:1,1:2000]', '']
-
