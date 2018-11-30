@@ -103,3 +103,8 @@ if "ext_convolved_ConvolvedFlux" in config.charImage.measurement.plugins:
 
 config.charImage.measurement.plugins["base_Jacobian"].pixelScale = 0.2
 config.calibrate.measurement.plugins["base_Jacobian"].pixelScale = 0.2
+
+# Prevent spurious detections in vignetting areas
+config.calibrate.detection.thresholdType='pixel_stdev'
+config.charImage.detection.thresholdType='pixel_stdev'
+
