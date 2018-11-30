@@ -109,7 +109,7 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                         afwGeom.makeSkyWcs(md, strip=True)  # strip WCS cards; they're invalidated by binning
                     try:
                         binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize,
-                                                   as_masked_image=True)[0]
+                                                   asMaskedImage=True)[0]
                         binned_im = rotateImageBy90(binned_im, ccd.getOrientation().getNQuarter())
                         if self.config.putFullSensors:
                             binned_exp = afwImage.ExposureF(binned_im)
