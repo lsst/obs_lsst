@@ -50,7 +50,7 @@ class ButlerListRunner(pipeBase.TaskRunner):
 
 class FocalplaneSummaryConfig(pexConfig.Config):
     binSize = pexConfig.Field(dtype=int, default=64, doc="pixels to bin for the focalplane summary")
-    contrast = pexConfig.Field(dtype=float, default=1, doc="contrast factor")
+    contrast = pexConfig.Field(dtype=float, default=0.25, doc="contrast factor")
     sensorBinSize = pexConfig.Field(dtype=int, default=4, doc="pixels to bin per sensor")
     putFullSensors = pexConfig.Field(dtype=bool, default=False, doc="persist the full size binned sensor?")
     doSensorImages = pexConfig.Field(dtype=bool, default=True, doc="make images of the individual sensors")
@@ -108,14 +108,13 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                     if md:
                         afwGeom.makeSkyWcs(md, strip=True)  # strip WCS cards; they're invalidated by binning
                     try:
-                        binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize)[0]
+                        binned_im = bi.getCcdImage(ccd, binSize=self.config.sensorBinSize,
+                                                   asMaskedImage=True)[0]
                         binned_im = rotateImageBy90(binned_im, ccd.getOrientation().getNQuarter())
                         if self.config.putFullSensors:
-                            binned_dim = afwImage.DecoratedImageF(binned_im)
-                            if md:
-                                binned_dim.setMetadata(md)
-
-                            butler.put(binned_dim, 'binned_sensor_fits', **dataId, dstype=dstype)
+                            binned_exp = afwImage.ExposureF(binned_im)
+                            binned_exp.setMetadata(md)
+                            butler.put(binned_exp, 'binned_sensor_fits', **dataId, dstype=dstype)
                     except (TypeError, RuntimeError) as e:
                         # butler couldn't put the image or there was no image to put
                         self.log.warn("Unable to make binned image: %s", e)
@@ -126,10 +125,9 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
                              'B': afwGeom.Box2I(afwGeom.PointI(0, 0), afwGeom.ExtentI(x, y/2))}
                     for half in ('A', 'B'):
                         box = boxes[half]
-                        binned_dim = afwImage.DecoratedImageF(binned_im[box])
-                        if md:
-                            binned_dim.setMetadata(md)
-                        butler.put(binned_dim, 'binned_sensor_fits_halves', half=half,
+                        binned_exp = afwImage.ExposureF(binned_im[box])
+                        binned_exp.setMetadata(md)
+                        butler.put(binned_exp, 'binned_sensor_fits_halves', half=half,
                                    **dataId, dstype=dstype)
 
             im = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize)
@@ -137,7 +135,15 @@ class FocalplaneSummaryTask(pipeBase.CmdLineTask):
             dstypeName = "%s-%s" % (dstype, self.config.fpId) if self.config.fpId else dstype
 
             butler.put(im, 'focal_plane_fits', visit=visit, dstype=dstypeName)
-            zmap = ZScaleMapping(im, contrast=self.config.contrast)
+
+            # Compute the zscale stretch for just the CCDs that have data.
+            detectorNameList = ["%s_%s" % (er.dataId["raftName"], er.dataId["detectorName"])
+                                for er in expRefListForVisit]
+            im_scaling = cgu.showCamera(butler.get('camera'), imageSource=bi, binSize=self.config.binSize,
+                                        detectorNameList=detectorNameList)
+            zmap = ZScaleMapping(im_scaling, contrast=self.config.contrast)
+
+            im = flipImage(im, False, True)
             rgb = zmap.makeRgbImage(im, im, im)
             file_name = butler.get('focal_plane_png_filename', visit=visit, dstype=dstypeName)
             writeRGB(file_name[0], rgb)
