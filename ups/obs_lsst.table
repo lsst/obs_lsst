@@ -9,5 +9,14 @@ setupRequired(utils)
 setupRequired(ip_isr)
 setupRequired(pipe_tasks)
 
+# The following are necessary to run the CI script: bin/runPipeline
+# Note you will also need to setup testdata_obs_lsst
+setupOptional(meas_extensions_psfex)
+setupOptional(meas_modelfit)
+setupOptional(meas_extensions_photometryKron)
+setupOptional(meas_extensions_convolved)
+setupOptional(meas_extensions_shapeHSM)
+setupOptional(pipe_drivers)
+
 envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)
