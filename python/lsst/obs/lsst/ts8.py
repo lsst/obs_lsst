@@ -155,7 +155,7 @@ class Ts8ParseTask(LsstCamParseTask):
 
         # a dict of dicts holding the raft serials
         raftSerialData = {
-            'RTM-002': {  # config for RTM-004 aka ETU #1
+            'RTM-002': {  # config for RTM-002 aka ETU #1
                 'ITL-3800C-023': 0,  # S00
                 'ITL-3800C-032': 1,  # S01
                 'ITL-3800C-042': 2,  # S02
@@ -166,7 +166,7 @@ class Ts8ParseTask(LsstCamParseTask):
                 'ITL-3800C-139': 7,  # S21
                 'ITL-3800C-013': 8   # S22
             },
-            'RTM-003': {  # config for RTM-004 aka ETU #2
+            'RTM-003': {  # config for RTM-003 aka ETU #2
                 'ITL-3800C-145': 0,  # S00
                 'ITL-3800C-022': 1,  # S01
                 'ITL-3800C-041': 2,  # S02
