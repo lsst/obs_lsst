@@ -1,20 +1,10 @@
-This package should be tested via a `ci_lsst` package.
+This package should be tested via the `bin/runPipeline` script.
 
-This is being prepared, but is not yet in git or runnable automatically.  On lsst-dev, see
-     /project/rhl/Data/ci_lsst
+Test data is available in https://github.com/lsst-dm/testdata_obs_lsst
 where data is available to test
      auxTel
      imsim
      phosim
-and (soon)
      ts8
 
-After
-     setup -m /project/rhl/Data/ci_lsst/ups/ci_lsst.table
-Run
-     /project/rhl/Data/ci_lsst/bin/runPipeline [cameras]
-e.g.
-     /project/rhl/Data/ci_lsst/bin/runPipeline imsim
-
-to ingest, generate calibs, run the isr, and run processCcd.  If you omit the list of cameras, all will be
-run.
+See `bin/README.md` for instructions on running the test script.

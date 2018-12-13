@@ -3,7 +3,7 @@
 .scon*
 _build.*
 config.log
-bin
+bin/makeFpSummary.py
 ups/*.cfgc
 python/lsst/obs/lsst/version.py
 .coverage
