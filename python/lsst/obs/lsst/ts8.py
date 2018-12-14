@@ -199,6 +199,17 @@ class Ts8ParseTask(LsstCamParseTask):
                 'E2V-CCD250-216': 7,  # S21
                 'E2V-CCD250-252': 8   # S22
             },
+            'RTM-006': {  # config for RTM-006 aka RTM #3
+                'E2V-CCD250-229': 0,  # S00
+                'E2V-CCD250-225': 1,  # S01
+                'E2V-CCD250-141': 2,  # S02
+                'E2V-CCD250-221': 3,  # S10
+                'E2V-CCD250-131': 4,  # S11
+                'E2V-CCD250-190': 5,  # S12
+                'E2V-CCD250-211': 6,  # S20
+                'E2V-CCD250-192': 7,  # S21
+                'E2V-CCD250-217': 8   # S22
+            },
             'RTM-007': {  # config for RTM-007 aka RTM #4
                 'E2V-CCD250-260': 0,  # S00
                 'E2V-CCD250-182': 1,  # S01
