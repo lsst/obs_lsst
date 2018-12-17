@@ -116,6 +116,7 @@ class TestObsTest(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
 
         super(TestObsTest, self).setUp()
 
+
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
 
