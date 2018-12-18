@@ -31,7 +31,7 @@ import lsst.obs.base.tests
 import lsst.obs.lsst
 
 
-class TestObsTest(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
+class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
     def setUp(self):
         product_dir = getPackageDir('obs_lsst')
         data_dir = os.path.join(product_dir, 'data', 'input', 'phosim')
@@ -106,6 +106,7 @@ class TestObsTest(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                           raw_filename=raw_filename,
                           default_level=default_level,
                           raw_levels=raw_levels,
+                          test_config_metadata=True
                           )
 
         self.setUp_camera(camera_name='lsstCam',
@@ -114,11 +115,14 @@ class TestObsTest(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                           plate_scale=20.0 * arcseconds,
                           )
 
-        super(TestObsTest, self).setUp()
+        super(TestPhosim, self).setUp()
 
 
+""" Disabling memory test since the assembler has a copy of the mapper that can't be garbage collected by
+tearDown.
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
+"""
 
 
 def setup_module(module):
