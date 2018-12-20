@@ -1,0 +1,14 @@
+!RepositoryCfg_v1
+_mapper: &id001 !!python/name:lsst.obs.lsst.auxTel.AuxTelMapper ''
+_mapperArgs: {}
+_parents:
+- !RepositoryCfg_v1
+  _mapper: *id001
+  _mapperArgs: {}
+  _parents: []
+  _policy: null
+  _root: /project/krughoff/hack/WORK/auxTel
+  dirty: true
+_policy: null
+_root: null
+dirty: true

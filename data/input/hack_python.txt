@@ -1,0 +1,16 @@
+from astropy.io import fits
+from lsst.daf.persistence import Butler
+import numpy
+aim = fits.open('./ts8/raw/6006D/E2V-CCD250-179_lambda_flat_0700_6006D_20180724102845.fits')
+aim.info() # inspect for correct dtype
+r_arr = numpy.array([], dtype=numpy.int32)
+for i in range(16):
+    aim[i+1].data = r_arr
+aim.writeto('./ts8/raw/6006D/E2V-CCD250-179_lambda_flat_0700_6006D_20180724102845.fits.comp')
+# Deal with calibs
+butler = Butler('ts8/CALIB')
+bias = butler.get('bias', detectorName='S11')
+mim = bias.getMaskedImage().getImage().set(0)
+mim = bias.getMaskedImage().getMask().set(0)
+mim = bias.getMaskedImage().getVariance().set(0)
+butler.put(bias, 'bias', detectorName='S11', )
