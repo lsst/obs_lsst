@@ -252,6 +252,20 @@ class LsstCamMapper(CameraMapper):
         except NameError:
             _camera = self._makeCamera(None, None)
             _lsstCamMapper = self
+    @classmethod
+    def __clearCache(cls):
+        """Clear file-level cache.
+        """
+
+        try:
+            del globals()['_camera']
+        except KeyError:
+            pass
+
+        try:
+            del globals()['_lsstCamMapper']
+        except KeyError:
+            pass
 
     def __init__(self, inputPolicy=None, **kwargs):
         """Initialization for the LsstCam Mapper."""

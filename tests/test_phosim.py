@@ -28,16 +28,22 @@ from lsst.utils import getPackageDir
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
 import lsst.obs.base.tests
-import lsst.obs.lsst
 
 
 class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
+    def tearDown(self):
+        self.mapper._LsstCamMapper__clearCache()
+        super(TestPhosim, self).tearDown()
+
     def setUp(self):
         product_dir = getPackageDir('obs_lsst')
         data_dir = os.path.join(product_dir, 'data', 'input', 'phosim')
 
         butler = lsst.daf.persistence.Butler(root=data_dir)
-        mapper = lsst.obs.lsst.phosim.PhosimMapper(root=data_dir)
+        mapper_class = butler.getMapperClass(root=data_dir)
+        mapper_class._LsstCamMapper__clearCache()
+        mapper = mapper_class(root=data_dir)
+
         dataIds = {'raw': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
@@ -118,11 +124,8 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
         super(TestPhosim, self).setUp()
 
 
-""" Disabling memory test since the assembler has a copy of the mapper that can't be garbage collected by
-tearDown.
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
-"""
 
 
 def setup_module(module):

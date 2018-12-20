@@ -32,12 +32,19 @@ import lsst.obs.lsst
 
 
 class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
+    def tearDown(self):
+        self.mapper._LsstCamMapper__clearCache()
+        super(TestTs8, self).tearDown()
+
     def setUp(self):
         product_dir = getPackageDir('obs_lsst')
         data_dir = os.path.join(product_dir, 'data', 'input', 'ts8')
 
         butler = lsst.daf.persistence.Butler(root=data_dir)
-        mapper = lsst.obs.lsst.ts8.Ts8Mapper(root=data_dir)
+        mapper_class = butler.getMapperClass(root=data_dir)
+        mapper_class._LsstCamMapper__clearCache()
+        mapper = mapper_class(root=data_dir)
+
         dataIds = {'raw': {'visit': 270095325, 'detectorName': 'S11'},
                    'bias': {'detectorName': 'S11', 'dateObs': '2018-07-24T10:28:45.342'},
                    'flat': unittest.SkipTest,
@@ -120,11 +127,8 @@ class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
         super(TestTs8, self).setUp()
 
 
-""" Disabling memory test since the assembler has a copy of the mapper that can't be garbage collected by
-tearDown.
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
-"""
 
 
 def setup_module(module):

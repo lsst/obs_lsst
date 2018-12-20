@@ -28,16 +28,22 @@ from lsst.utils import getPackageDir
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
 import lsst.obs.base.tests
-import lsst.obs.lsst
 
 
 class TestAuxTel(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
+    def tearDown(self):
+        self.mapper._LsstCamMapper__clearCache()
+        super(TestAuxTel, self).tearDown()
+
     def setUp(self):
         product_dir = getPackageDir('obs_lsst')
         data_dir = os.path.join(product_dir, 'data', 'input', 'auxTel')
 
         butler = lsst.daf.persistence.Butler(root=data_dir)
-        mapper = lsst.obs.lsst.auxTel.AuxTelMapper(root=data_dir)
+        mapper_class = butler.getMapperClass(root=data_dir)
+        mapper_class._LsstCamMapper__clearCache()
+        mapper = mapper_class(root=data_dir)
+
         dataIds = {'raw': {'visit': 5700065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'bias': {'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'flat': unittest.SkipTest,
@@ -120,11 +126,8 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
         super(TestAuxTel, self).setUp()
 
 
-""" Disabling memory test since the assembler has a copy of the mapper that can't be garbage collected by
-tearDown.
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
-"""
 
 
 def setup_module(module):
