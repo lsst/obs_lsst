@@ -8,3 +8,5 @@ config.doLinearize = False
 config.doDefect = False
 config.doCrosstalk=True
 config.doAddDistortionModel = False
+config.qa.doThumbnailOss = False
+config.qa.doThumbnailFlattened = False
