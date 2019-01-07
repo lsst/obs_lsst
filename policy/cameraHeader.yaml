@@ -55,13 +55,13 @@ AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a C
     #v_overscan : 46                     # number of overscan pixel in y (parallel)
     #v_overscan0 : 0                     # first overscan pixel in y (parallel)
 
-    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
+    saturation : 142857                  # saturation level, DN XXX Should this be in electrons?
 
     # Linearity correction is still under discussion, so this is a placeholder.
     linearityType : PROPORTIONAL
     linearityThreshold : 0
-    linearityMax : 65535                # == saturation
-    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+    linearityMax : 142857                # == saturation
+    linearityCoeffs : [0, 142857]        # == [linearityThreshold, linearityMax]
 
 AMP_ITL : &AMP_ITL
     perAmpData : True                   # data is provided independentally for each amplifier
@@ -77,13 +77,13 @@ AMP_ITL : &AMP_ITL
     rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
     rawParallelOverscanBBox : [[3, 2000], [509,      48]]  # parallel overscan
 
-    saturation : 56000                  # saturation level, DN XXX Should this be in electrons?
+    saturation : 142857                  # saturation level, DN XXX Should this be in electrons?
 
     # Linearity correction is still under discussion, so this is a placeholder.
     linearityType : PROPORTIONAL
     linearityThreshold : 0
-    linearityMax : 65535                # == saturation
-    linearityCoeffs : [0, 65535]        # == [linearityThreshold, linearityMax]
+    linearityMax : 142857                # == saturation
+    linearityCoeffs : [0, 142857]        # == [linearityThreshold, linearityMax]
   
 #
 # A single CCD ("sensor" to the camera team)

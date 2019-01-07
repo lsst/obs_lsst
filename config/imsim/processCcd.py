@@ -1,1 +1,1 @@
-config.isr.doCrosstalk=False
+config.isr.doCrosstalk=True

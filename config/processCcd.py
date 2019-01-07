@@ -46,6 +46,9 @@ for refObjLoader in (config.charImage.refObjLoader,
 # commented out for now
 #config.calibrate.astrometry.matcher.numBrightStars = 150
 
+# set SIP order fitting to 2 to avoid bad astrometric solutions
+config.calibrate.astrometry.wcsFitter.order=2
+
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.charImage.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
 config.calibrate.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
