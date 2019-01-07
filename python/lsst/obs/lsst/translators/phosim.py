@@ -107,9 +107,9 @@ class PhosimTranslator(StubTranslator):
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
         location = None
-        if self._header["OUTFILE"].startswith("lsst"):
+        tel = self.to_telescope()
+        if tel is not None and tel == "LSST":
             location = EarthLocation.from_geodetic(-30.244639, -70.749417, 2663.0)
-        self._used_these_cards("OUTFILE")
         return location
 
     @cache_translation
