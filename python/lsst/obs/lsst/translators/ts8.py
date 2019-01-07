@@ -87,9 +87,7 @@ class LsstTS8Translator(StubTranslator):
             `True` if the header is recognized by this class. `False`
             otherwise.
         """
-        if "TSTAND" in header:
-            return header["TSTAND"] == "TS8"
-        return False
+        return cls.can_translate_with_options(header, {"TSTAND": "TS8"}, filename=filename)
 
     @cache_translation
     def to_datetime_begin(self):

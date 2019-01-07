@@ -19,79 +19,56 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Metadata translation code for LSST PhoSim FITS headers"""
+"""Metadata translation code for LSST simulations"""
 
-__all__ = ("PhosimTranslator", )
+__all__ = ("LsstSimTranslator", )
 
 import logging
 import re
 
 
-import astropy.units as u
-import astropy.units.cds as cds
+from astropy.time import Time
 
-from astro_metadata_translator import cache_translation
+from astro_metadata_translator import cache_translation, StubTranslator
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
     altaz_from_degree_headers
 
-from .lsstsim import LsstSimTranslator
+from .lsst import LSST_LOCATION
 
 log = logging.getLogger(__name__)
 
 
-class PhosimTranslator(LsstSimTranslator):
-    """Metadata translator for LSST PhoSim data.
+class LsstSimTranslator(StubTranslator):
+    """Shared routines for LSST Simulated Data.
     """
 
-    name = "PhoSim"
-    """Name of this translation class"""
+    @cache_translation
+    def to_telescope(self):
+        # Docstring will be inherited. Property defined in properties.py
+        telescope = None
+        if self._header["OUTFILE"].startswith("lsst"):
+            telescope = "LSST"
+        self._used_these_cards("OUTFILE")
+        return telescope
 
-    _const_map = {
-        "instrument": "PhoSim",
-        "boresight_rotation_coord": "sky",
-        "observation_type": "science",
-        "object": "unknown",
-        "relative_humidity": 40.0,
-    }
+    @cache_translation
+    def to_location(self):
+        # Docstring will be inherited. Property defined in properties.py
+        location = None
+        tel = self.to_telescope()
+        if tel is not None and tel == "LSST":
+            location = LSST_LOCATION
+        return location
 
-    _trivial_map = {
-        "observation_id": "OBSID",
-        "science_program": "RUNNUM",
-        "exposure_id": "OBSID",
-        "visit_id": "OBSID",
-        "physical_filter": "FILTER",
-        "dark_time": ("DARKTIME", dict(unit=u.s)),
-        "exposure_time": ("EXPTIME", dict(unit=u.s)),
-        "temperature": ("TEMPERA", dict(unit=u.deg_C)),
-        "pressure": ("PRESS", dict(unit=cds.mmHg)),
-        "boresight_rotation_angle": ("ROTANGZ", dict(unit=u.deg)),
-        "boresight_airmass": "AIRMASS",
-        "detector_name": "CCDID",
-    }
+    @cache_translation
+    def to_datetime_begin(self):
+        # Docstring will be inherited. Property defined in properties.py
+        return Time(self._header["MJD-OBS"], scale="tai", format="mjd")
 
-    @classmethod
-    def can_translate(cls, header, filename=None):
-        """Indicate whether this translation class can translate the
-        supplied header.
-
-        There is no ``INSTRUME`` header in PhoSim data. Instead we use
-        the ``CREATOR`` header.
-
-        Parameters
-        ----------
-        header : `dict`-like
-            Header to convert to standardized form.
-        filename : `str`, optional
-            Name of file being translated.
-
-        Returns
-        -------
-        can : `bool`
-            `True` if the header is recognized by this class. `False`
-            otherwise.
-        """
-        return cls.can_translate_with_options(header, {"CREATOR": "PHOSIM", "TESTTYPE": "PHOSIM"},
-                                              filename=filename)
+    @cache_translation
+    def to_datetime_end(self):
+        # Docstring will be inherited. Property defined in properties.py
+        return self.to_datetime_begin() + self.to_exposure_time()
 
     @cache_translation
     def to_tracking_radec(self):

@@ -21,10 +21,14 @@
 
 """Metadata translation support code for LSST headers"""
 
-__alll__ = ("ROLLOVERTIME", "TZERO")
+__alll__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION")
 
 from astropy.time import Time, TimeDelta
+from astropy.coordinates import EarthLocation
 
 # LSST day clock starts at UTC+8
 ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
 TZERO = Time("2010-01-01T00:00", format="isot", scale="utc")
+
+# LSST Default location in the absence of headers
+LSST_LOCATION = EarthLocation.from_geodetic(-30.244639, -70.749417, 2663.0)

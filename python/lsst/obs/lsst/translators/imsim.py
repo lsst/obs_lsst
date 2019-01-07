@@ -25,16 +25,17 @@ __all__ = ("ImSimTranslator", )
 
 import astropy.units as u
 from astropy.coordinates import AltAz
-from astropy.time import Time
 import logging
-from astro_metadata_translator import cache_translation, StubTranslator
+from astro_metadata_translator import cache_translation
 
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers
+
+from .lsstsim import LsstSimTranslator
 
 log = logging.getLogger(__name__)
 
 
-class ImSimTranslator(StubTranslator):
+class ImSimTranslator(LsstSimTranslator):
     """Metadata translation class for ImSim headers"""
 
     name = "ImSim"
@@ -78,38 +79,8 @@ class ImSimTranslator(StubTranslator):
             `True` if the header is recognized by this class. `False`
             otherwise.
         """
-        for card in ("TESTTYPE",):
-            if card in header:
-                return header[card] == "IMSIM"
-        return False
-
-    @cache_translation
-    def to_telescope(self):
-        # Docstring will be inherited. Property defined in properties.py
-        telescope = None
-        if self._header["OUTFILE"].startswith("lsst"):
-            telescope = "LSST"
-        self._used_these_cards("OUTFILE")
-        return telescope
-
-    @cache_translation
-    def to_location(self):
-        # Docstring will be inherited. Property defined in properties.py
-        location = None
-        tel = self.to_telescope()
-        if tel is not None and tel.startswith("lsst"):
-            location = EarthLocation.from_geodetic(-30.244639, -70.749417, 2663.0)
-        return location
-
-    @cache_translation
-    def to_datetime_begin(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return Time(self._header["MJD-OBS"], scale="tai", format="mjd")
-
-    @cache_translation
-    def to_datetime_end(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return self.to_datetime_begin() + self.to_exposure_time()
+        return cls.can_translate_with_options(header, {"TESTTYPE": "IMSIM"},
+                                              filename=filename)
 
     @cache_translation
     def to_tracking_radec(self):
