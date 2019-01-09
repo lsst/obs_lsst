@@ -45,9 +45,14 @@ class ImSimTranslator(LsstSimTranslator):
         "instrument": "ImSim",
         "boresight_rotation_coord": "sky",
         "object": "unknown",
+        "pressure": None,
+        "temperature": None,
+        "relative_humidity": 40.0,
     }
 
     _trivial_map = {
+        "detector_group": "RAFTNAME",
+        "detector_name": "SENSNAME",
         "observation_id": "OBSID",
         "science_program": "RUNNUM",
         "exposure_id": "OBSID",
@@ -55,7 +60,8 @@ class ImSimTranslator(LsstSimTranslator):
         "physical_filter": "FILTER",
         "dark_time": ("DARKTIME", dict(unit=u.s)),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
-        "detector_name": "LSST_NUM",
+        "detector_serial": "LSST_NUM",
+        "boresight_rotation_angle": ("ROTANGLE", dict(unit=u.deg)),
     }
 
     @classmethod
@@ -93,7 +99,7 @@ class ImSimTranslator(LsstSimTranslator):
     def to_altaz_begin(self):
         # Docstring will be inherited. Property defined in properties.py
         if self.to_observation_type() == "science":
-            # Derive from RADec
+            # Derive from RADec in absence of any other information
             radec = self.to_tracking_radec()
             if radec is not None:
                 altaz = radec.transform_to(AltAz)

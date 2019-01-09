@@ -24,14 +24,10 @@
 __all__ = ("LsstSimTranslator", )
 
 import logging
-import re
-
 
 from astropy.time import Time
 
 from astro_metadata_translator import cache_translation, StubTranslator
-from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
-    altaz_from_degree_headers
 
 from .lsst import LSST_LOCATION
 
@@ -71,27 +67,22 @@ class LsstSimTranslator(StubTranslator):
         return self.to_datetime_begin() + self.to_exposure_time()
 
     @cache_translation
-    def to_tracking_radec(self):
-        # Docstring will be inherited. Property defined in properties.py
-        radecsys = ("RADESYS",)
-        radecpairs = (("RA_DEG", "DEC_DEG"), ("BORE-RA", "BORE-DEC"))
-        return tracking_from_degree_headers(self, radecsys, radecpairs)
-
-    @cache_translation
-    def to_altaz_begin(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
-                                         self.to_datetime_begin(), is_zd=set(["ZENITH"]))
-
-    @cache_translation
     def to_detector_num(self):
         # Docstring will be inherited. Property defined in properties.py
-        name = self.to_detector_name()
-        match = re.match(r"R(\d\d)_S(\d)(\d)$", name)
-        if not match:
-            raise ValueError(f"Detector number has unexpected form 'f{name}'")
-        r, ccdx, ccdy = match.groups()
-        num = int(r)*9 + int(ccdy)*3 + int(ccdx)
+        raft = self.to_detector_group()
+        detector = self.to_detector_name()
+
+        try:
+            rnum = int(raft[1:])
+        except Exception as e:
+            raise ValueError(f"Raft name in unexpected format ({raft})") from e
+
+        try:
+            ccdx = int(detector[1])
+            ccdy = int(detector[2])
+        except Exception as e:
+            raise ValueError(f"Unexpected form for detector name ({detector})") from e
+        num = rnum*9 + ccdy*3 + ccdx
         return num
 
     @cache_translation
@@ -99,3 +90,13 @@ class LsstSimTranslator(StubTranslator):
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
         return 200*exposure_id + num
+
+    @cache_translation
+    def to_observation_type(self):
+        # Docstring will be inherited. Property defined in properties.py
+        obstype = self._header["IMGTYPE"]
+        self._used_these_cards("IMGTYPE")
+        obstype = obstype.lower()
+        if obstype == "skyexp":
+            obstype = "science"
+        return obstype

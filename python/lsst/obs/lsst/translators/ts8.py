@@ -109,7 +109,7 @@ class LsstTS8Translator(StubTranslator):
                 "S20", "S21", "S22"][detector]
 
     def _to_raft_name(self):
-        """Returns the name of the raft.
+        """Returns the full name of the raft.
 
         Extracted from RAFTNAME header.
 
@@ -128,6 +128,43 @@ class LsstTS8Translator(StubTranslator):
         raise ValueError(f"RAFTNAME has unexpected form of '{raft_name}'")
 
     @cache_translation
+    def to_detector_group(self):
+        """Return the raft name in form "Rnn".
+
+        Extracts the name from the ``RAFTNAME`` header using the RTM-nnn
+        content.
+
+        Returns
+        -------
+        name : `str`
+            Name of raft.
+        """
+        rtm = self._to_raft_name()
+        # This will be in form RTM-0nn but we want Rnn
+        return f"R{rtm[5:]}"
+
+    @cache_translation
+    def to_detector_serial(self):
+        """Returns the serial number of the detector.
+
+        Returns
+        -------
+        serial : `str`
+            LSST assigned serial number.
+
+        Notes
+        -----
+        This is the LSST assigned serial number (``LSST_NUM``), and not
+        the manufacturer's serial number (``CCD_SERN``).
+        """
+        serial = self._header["LSST_NUM"]
+        self._used_these_cards("LSST_NUM")
+
+        # this seems to be appended more or less at random and should be removed.
+        serial = re.sub("-Dev$", "", serial)
+        return serial
+
+    @cache_translation
     def to_detector_num(self):
         """Return value of detector_num from headers.
 
@@ -140,11 +177,7 @@ class LsstTS8Translator(StubTranslator):
             The translated property.
         """
         raft_name = self._to_raft_name()
-        serial = self._header["LSST_NUM"]
-        self._used_these_cards("LSST_NUM")
-
-        # this seems to be appended more or less at random, and breaks the mapping dict
-        serial = re.sub("-Dev$", "", serial)
+        serial = self.to_detector_serial()
 
         # a dict of dicts holding the raft serials
         raft_serial_data = {

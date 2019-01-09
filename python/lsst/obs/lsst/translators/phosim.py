@@ -24,8 +24,6 @@
 __all__ = ("PhosimTranslator", )
 
 import logging
-import re
-
 
 import astropy.units as u
 import astropy.units.cds as cds
@@ -55,6 +53,7 @@ class PhosimTranslator(LsstSimTranslator):
     }
 
     _trivial_map = {
+        "detector_group": "RAFTNAME",
         "observation_id": "OBSID",
         "science_program": "RUNNUM",
         "exposure_id": "OBSID",
@@ -66,7 +65,8 @@ class PhosimTranslator(LsstSimTranslator):
         "pressure": ("PRESS", dict(unit=cds.mmHg)),
         "boresight_rotation_angle": ("ROTANGZ", dict(unit=u.deg)),
         "boresight_airmass": "AIRMASS",
-        "detector_name": "CCDID",
+        "detector_name": "SENSNAME",
+        "detector_serial": "LSST_NUM",
     }
 
     @classmethod
@@ -105,20 +105,3 @@ class PhosimTranslator(LsstSimTranslator):
         # Docstring will be inherited. Property defined in properties.py
         return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
                                          self.to_datetime_begin(), is_zd=set(["ZENITH"]))
-
-    @cache_translation
-    def to_detector_num(self):
-        # Docstring will be inherited. Property defined in properties.py
-        name = self.to_detector_name()
-        match = re.match(r"R(\d\d)_S(\d)(\d)$", name)
-        if not match:
-            raise ValueError(f"Detector number has unexpected form 'f{name}'")
-        r, ccdx, ccdy = match.groups()
-        num = int(r)*9 + int(ccdy)*3 + int(ccdx)
-        return num
-
-    @cache_translation
-    def to_detector_exposure_id(self):
-        exposure_id = self.to_exposure_id()
-        num = self.to_detector_num()
-        return 200*exposure_id + num

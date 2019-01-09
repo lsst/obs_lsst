@@ -31,7 +31,7 @@ from astro_metadata_translator.tests import MetadataAssertHelper
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
-class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
+class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
     datadir = os.path.join(TESTDIR, "headers")
 
     def test_phosim_translator(self):
@@ -41,8 +41,10 @@ class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
                            boresight_rotation_coord="sky",
                            dark_time=30.0*u.s,
                            detector_exposure_id=40919105,
-                           detector_name="R11_S02",
+                           detector_group="R11",
+                           detector_name="S02",
                            detector_num=105,
+                           detector_serial="R11_S02",
                            exposure_id=204595,
                            exposure_time=30.0*u.s,
                            object="unknown",
@@ -63,13 +65,119 @@ class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
                 with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
                     self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
 
+    def test_imsim_translator(self):
+        test_data = (("imsim-bias-lsst_a_3010002_R11_S00.yaml",
+                      dict(telescope="LSST",
+                           instrument="ImSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=0.0*u.s,
+                           detector_exposure_id=602000499,
+                           detector_group="R11",
+                           detector_name="S00",
+                           detector_num=99,
+                           detector_serial="LCA-11021_RTM-000",
+                           exposure_id=3010002,
+                           exposure_time=0.0*u.s,
+                           object="unknown",
+                           observation_id="3010002",
+                           observation_type="science",  # The header is wrong
+                           physical_filter="i",
+                           pressure=None,
+                           relative_humidity=40.0,
+                           science_program="42",
+                           temperature=None,
+                           visit_id=3010002,
+                           wcs_params=dict(max_sep=3000.),  # 2022
+                           )),
+                     ("imsim-lsst_a_204595_R11_S02_i.yaml",
+                      dict(telescope="LSST",
+                           instrument="ImSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=30.0*u.s,
+                           detector_exposure_id=40919105,
+                           detector_group="R11",
+                           detector_name="S02",
+                           detector_num=105,
+                           detector_serial="LCA-11021_RTM-000",
+                           exposure_id=204595,
+                           exposure_time=30.0*u.s,
+                           object="unknown",
+                           observation_id="204595",
+                           observation_type="science",  # The header is wrong
+                           physical_filter="i",
+                           pressure=None,
+                           relative_humidity=40.0,
+                           science_program="204595",
+                           temperature=None,
+                           visit_id=204595,
+                           wcs_params=dict(max_sep=3000.),  # 2022
+                           )),
+                     ("imsim-flats-lsst_a_5000007_R11_S20_i.yaml",
+                      dict(telescope="LSST",
+                           instrument="ImSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=30.0*u.s,
+                           detector_exposure_id=1000001501,
+                           detector_group="R11",
+                           detector_name="S20",
+                           detector_num=101,
+                           detector_serial="LCA-11021_RTM-000",
+                           exposure_id=5000007,
+                           exposure_time=30.0*u.s,
+                           object="unknown",
+                           observation_id="5000007",
+                           observation_type="flat",
+                           physical_filter="i",
+                           pressure=None,
+                           relative_humidity=40.0,
+                           science_program="5000007",
+                           temperature=None,
+                           visit_id=5000007,
+                           wcs_params=dict(max_sep=3000.),  # 2022
+                           )),
+                     ("imsim-dark-lsst_a_4010003_R11_S11.yaml",
+                      dict(telescope="LSST",
+                           instrument="ImSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=500.0*u.s,
+                           detector_exposure_id=802000703,
+                           detector_group="R11",
+                           detector_name="S11",
+                           detector_num=103,
+                           detector_serial="LCA-11021_RTM-000",
+                           exposure_id=4010003,
+                           exposure_time=500.0*u.s,
+                           object="unknown",
+                           observation_id="4010003",
+                           observation_type="science",  # The header is wrong
+                           physical_filter="i",
+                           pressure=None,
+                           relative_humidity=40.0,
+                           science_program="42",
+                           temperature=None,
+                           visit_id=4010003,
+                           wcs_params=dict(max_sep=3000.),  # 2022
+                           )),
+                     )
+        for file, expected in test_data:
+            with self.subTest(f"Testing {file}"):
+                # ImSim data are in the future and Astropy complains
+                # about astrometry errors.
+                if expected["observation_type"] == "science":
+                    with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
+                        self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+                else:
+                    self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
                       dict(telescope="LSST",
                            instrument="TS8",
                            detector_exposure_id=2700961194,
+                           detector_group="R10",
                            detector_name="S11",
                            detector_num=4,
+                           detector_serial="E2V-CCD250-179",
                            exposure_id=270096119,
                            exposure_time=0.0*u.s,
                            observation_id="E2V-CCD250-179_lambda_bias_024_6006D_20180724104156",
@@ -81,8 +189,10 @@ class PhoSimTestCase(unittest.TestCase, MetadataAssertHelper):
                       dict(telescope="LSST",
                            instrument="TS8",
                            detector_exposure_id=2700953282,
+                           detector_group="R10",
                            detector_name="S02",
                            detector_num=2,
+                           detector_serial="E2V-CCD250-200",
                            exposure_id=270095328,
                            exposure_time=21.913*u.s,
                            observation_id="E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845",
