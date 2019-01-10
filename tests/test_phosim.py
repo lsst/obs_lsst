@@ -24,32 +24,23 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.utils import getPackageDir
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
 import lsst.obs.base.tests
 
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests
 
-class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
-    def tearDown(self):
-        self.mapper._LsstCamMapper__clearCache()
-        super(TestPhosim, self).tearDown()
+
+class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+    instrumentDir = "phosim"
 
     def setUp(self):
-        product_dir = getPackageDir('obs_lsst')
-        data_dir = os.path.join(product_dir, 'data', 'input', 'phosim')
-
-        butler = lsst.daf.persistence.Butler(root=data_dir)
-        mapper_class = butler.getMapperClass(root=data_dir)
-        mapper_class._LsstCamMapper__clearCache()
-        mapper = mapper_class(root=data_dir)
-
         dataIds = {'raw': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(butler, mapper, dataIds)
+        self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 32
         exposureIds = {'raw': 40919042}
@@ -79,7 +70,7 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042-000.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042-000.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
@@ -99,7 +90,7 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                       ('filter', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
                       ('visit', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName']))
                       )
-        self.setUp_mapper(output=data_dir,
+        self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
                           keys=keys,
                           query_format=query_format,
@@ -121,7 +112,7 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                           plate_scale=20.0 * arcseconds,
                           )
 
-        super(TestPhosim, self).setUp()
+        super().setUp()
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

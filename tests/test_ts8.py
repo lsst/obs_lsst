@@ -24,33 +24,24 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.utils import getPackageDir
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
 import lsst.obs.base.tests
 import lsst.obs.lsst
 
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests
 
-class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
-    def tearDown(self):
-        self.mapper._LsstCamMapper__clearCache()
-        super(TestTs8, self).tearDown()
+
+class TestTs8(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+    instrumentDir = "ts8"
 
     def setUp(self):
-        product_dir = getPackageDir('obs_lsst')
-        data_dir = os.path.join(product_dir, 'data', 'input', 'ts8')
-
-        butler = lsst.daf.persistence.Butler(root=data_dir)
-        mapper_class = butler.getMapperClass(root=data_dir)
-        mapper_class._LsstCamMapper__clearCache()
-        mapper = mapper_class(root=data_dir)
-
         dataIds = {'raw': {'visit': 270095325, 'detectorName': 'S11'},
                    'bias': {'detectorName': 'S11', 'dateObs': '2018-07-24T10:28:45.342'},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(butler, mapper, dataIds)
+        self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 32
         exposureIds = {'raw': 2700953254, 'bias': 2700953254}
@@ -81,7 +72,7 @@ class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(data_dir, "raw", "6006D", "00270095325-S11-det004.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "00270095325-S11-det004.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
@@ -102,7 +93,7 @@ class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                       ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
                       ('visit', set(['visit', 'detector', 'run', 'detectorName']))
                       )
-        self.setUp_mapper(output=data_dir,
+        self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
                           keys=keys,
                           query_format=query_format,
@@ -124,7 +115,7 @@ class TestTs8(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
                           plate_scale=20.0 * arcseconds,
                           )
 
-        super(TestTs8, self).setUp()
+        super().setUp()
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
