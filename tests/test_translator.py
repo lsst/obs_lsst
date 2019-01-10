@@ -65,6 +65,34 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
                     self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
 
+    def test_auxtel_translator(self):
+        test_data = (("auxTel-2018-09-20-05700065-det000.yaml",
+                      dict(telescope="LSSTAuxTel",
+                           instrument="LATISS",
+                           boresight_rotation_coord="unknown",
+                           dark_time=27.0*u.s,
+                           detector_exposure_id=20180920000065,
+                           detector_group="RXX",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-098",
+                           exposure_id=20180920000065,
+                           exposure_time=27.0*u.s,
+                           object=None,
+                           observation_id="AT_C_20180920_000065",
+                           observation_type="dark",
+                           physical_filter=None,
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=20180920000065,
+                           )),
+                     )
+        for file, expected in test_data:
+            with self.subTest(f"Testing {file}"):
+                self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+
     def test_imsim_translator(self):
         test_data = (("imsim-bias-lsst_a_3010002_R11_S00.yaml",
                       dict(telescope="LSST",
