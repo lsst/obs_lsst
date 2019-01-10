@@ -24,28 +24,15 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.utils import getPackageDir
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
 import lsst.obs.base.tests
 
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests
 
-class TestAuxTel(lsst.obs.base.tests.ObsTests, lsst.utils.tests.TestCase):
-    @classmethod
-    def tearDownClass(cls):
-        cls._mapper._LsstCamMapper__clearCache()
-        del cls._mapper
-        del cls._butler
 
-    @classmethod
-    def setUpClass(cls):
-        product_dir = getPackageDir('obs_lsst')
-        cls.data_dir = os.path.join(product_dir, 'data', 'input', 'auxTel')
-
-        cls._butler = lsst.daf.persistence.Butler(root=cls.data_dir)
-        mapper_class = cls._butler.getMapperClass(root=cls.data_dir)
-        mapper_class._LsstCamMapper__clearCache()
-        cls._mapper = mapper_class(root=cls.data_dir)
+class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+    instrumentDir = "auxTel"
 
     def setUp(self):
         dataIds = {'raw': {'visit': 5700065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
