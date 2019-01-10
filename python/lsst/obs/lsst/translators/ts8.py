@@ -40,7 +40,7 @@ class LsstTS8Translator(StubTranslator):
     """Metadata translator for LSST Test Stand 8 data.
     """
 
-    name = "TS8"
+    name = "LSST-TS8"
     """Name of this translation class"""
 
     _const_map = {
