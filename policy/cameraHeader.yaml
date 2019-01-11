@@ -104,7 +104,7 @@ CCD_E2V : &CCD_E2V
       C10: &C10_E2V
         <<: *AMP_E2V
         hdu : 1
-        flipXY : [True, False]
+        flipXY : [False, False]
         ixy : [0, 0]
       C11: &C11_E2V
         <<: *C10_E2V
@@ -137,7 +137,7 @@ CCD_E2V : &CCD_E2V
       C07: &C07_E2V
         <<: *AMP_E2V
         hdu : 9
-        flipXY : [False, True]
+        flipXY : [True, True]
         ixy : [7, 1]
       C06: &C06_E2V
         <<: *C07_E2V
