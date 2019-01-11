@@ -99,6 +99,11 @@ CCDs :\
                 detectorType = raftCcdData["detectorType"]
                 _ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
 
+                try:
+                    sensorTypes = raftCcdData["sensorTypes"]
+                except KeyError:
+                    sensorTypes = None
+
                 # only include CCDs in the raft for which we have a serial (the value isn't checked)
                 ccds = {}
                 for ccdName in raftCcdData["ccdSerials"]:
@@ -122,6 +127,8 @@ CCDs :\
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
+                if sensorTypes is not None:
+                    print(indent(), "detectorType : %i" % (sensorTypes[ccdName]), file=fd)
                 print(indent(), "id : %s" % (id0 + ccdLayout['id']), file=fd)
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)

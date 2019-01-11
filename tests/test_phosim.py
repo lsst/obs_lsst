@@ -107,7 +107,7 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           )
 
         self.setUp_camera(camera_name='lsstCam',
-                          n_detectors=225,
+                          n_detectors=201,
                           first_detector_name='R01_S00',
                           plate_scale=20.0 * arcseconds,
                           )
