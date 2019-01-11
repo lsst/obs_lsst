@@ -90,14 +90,14 @@ class LsstAuxTelTranslator(StubTranslator):
     }
 
     _trivial_map = {
-        "observation_id": "OBSID",
+        "observation_id": ("OBSID", dict(default=None, checker=is_non_science)),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
-        "dark_time": ("EXPTIME", dict(unit=u.s)),
-        "detector_serial": "LSST_NUM",
+        "dark_time": (["DARKTIME", "EXPTIME"], dict(unit=u.s)),
+        "detector_serial": ["LSST_NUM", "DETSER"],
         "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
         "object": ("OBJECT", dict(checker=is_non_science_or_lab)),
         "boresight_rotation_angle": ("ROTANGLE", dict(checker=is_non_science_or_lab,
-                                                      default=float("NaN"), unit=u.deg)),
+                                                      default=float("nan"), unit=u.deg)),
     }
 
     @classmethod
@@ -124,6 +124,9 @@ class LsstAuxTelTranslator(StubTranslator):
             for v in ("LSST_ATISS", "LATISS"):
                 if instrume == v:
                     return True
+        # Calibration files strip important headers at the moment so guess
+        if "DETNAME" in header and header["DETNAME"] == "RXX_S00":
+            return True
         return False
 
     def _is_on_mountain(self):
@@ -142,7 +145,19 @@ class LsstAuxTelTranslator(StubTranslator):
     @cache_translation
     def to_datetime_begin(self):
         # Docstring will be inherited. Property defined in properties.py
-        return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
+        if "MJD-OBS" in self._header:
+            self._used_these_cards("MJD-OBS")
+            return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
+        if "CALIB_ID" in self._header:
+            # Calibration files hide the date information
+            calib_id = self._header["CALIB_ID"]
+            self._used_these_cards("CALIB_ID")
+            parts = calib_id.split()
+            for p in parts:
+                if p.startswith("calibDate"):
+                    ymd = p[10:]
+                    return Time(ymd, scale="utc", format="isot")
+        return None
 
     @cache_translation
     def to_datetime_end(self):
@@ -164,6 +179,10 @@ class LsstAuxTelTranslator(StubTranslator):
         exposure_id : `int`
             Unique exposure number.
         """
+        if "CALIB_ID" in self._header:
+            self._used_these_cards("CALIB_ID")
+            return 0
+
         dayobs = self._header["DAYOBS"]
         seqnum = self._header["SEQNUM"]
         self._used_these_cards("DAYOBS", "SEQNUM")
