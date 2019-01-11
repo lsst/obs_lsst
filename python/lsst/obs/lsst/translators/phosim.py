@@ -63,7 +63,7 @@ class PhosimTranslator(LsstSimTranslator):
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "temperature": ("TEMPERA", dict(unit=u.deg_C)),
         "pressure": ("PRESS", dict(unit=cds.mmHg)),
-        "boresight_rotation_angle": ("ROTANGZ", dict(unit=u.deg)),
+        "boresight_rotation_angle": (["ROTANGZ", "ROTANGLE"], dict(unit=u.deg)),
         "boresight_airmass": "AIRMASS",
         "detector_name": "SENSNAME",
         "detector_serial": "LSST_NUM",
