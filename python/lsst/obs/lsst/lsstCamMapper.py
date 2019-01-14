@@ -155,19 +155,17 @@ def assemble_raw(dataId, componentInfo, cls):
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
-        try:
-            ratel, dectel = md.getScalar("RATEL"), md.getScalar("DECTEL")
-            rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
-        except KeyError:
-            ratel, dectel, rotangle = '', '', ''
+        visitInfo = exposure.getInfo().getVisitInfo()
+        boresight = visitInfo.getBoresightRaDec()
+        rotangle = visitInfo.getBoresightRotAngle()
 
-        if ratel == '' or dectel == '' or rotangle == '':  # FITS for None
-            logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
-                        (dataId,))
-        else:
-            boresight = afwGeom.SpherePoint(ratel, dectel, afwGeom.degrees)
+        if boresight.isFinite():
             exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
                                                90*afwGeom.degrees - rotangle))
+        else:
+            # Should only warn for science observations but VisitInfo does not know
+            logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
+                        (dataId,))
 
     return exposure
 
