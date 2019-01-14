@@ -97,11 +97,15 @@ class PhosimTranslator(LsstSimTranslator):
     def to_tracking_radec(self):
         # Docstring will be inherited. Property defined in properties.py
         radecsys = ("RADESYS",)
-        radecpairs = (("RA_DEG", "DEC_DEG"), ("BORE-RA", "BORE-DEC"))
+        radecpairs = (("RATEL", "DECTEL"), ("RA_DEG", "DEC_DEG"), ("BORE-RA", "BORE-DEC"))
         return tracking_from_degree_headers(self, radecsys, radecpairs)
 
     @cache_translation
     def to_altaz_begin(self):
         # Docstring will be inherited. Property defined in properties.py
-        return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
-                                         self.to_datetime_begin(), is_zd=set(["ZENITH"]))
+        # Fallback to the "derive from ra/dec" if keys are missing
+        if "ZENITH" in self._header and "AZIMUTH" in self._header:
+            return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
+                                             self.to_datetime_begin(), is_zd=set(["ZENITH"]))
+        else:
+            return super().to_altaz_begin()

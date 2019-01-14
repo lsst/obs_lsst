@@ -23,9 +23,12 @@
 
 __all__ = ("LsstSimTranslator", )
 
+import warnings
 import logging
 
+import astropy.utils.exceptions
 from astropy.time import Time
+from astropy.coordinates import AltAz
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
@@ -42,9 +45,12 @@ class LsstSimTranslator(StubTranslator):
     def to_telescope(self):
         # Docstring will be inherited. Property defined in properties.py
         telescope = None
-        if self._header["OUTFILE"].startswith("lsst"):
+        if "OUTFILE" in self._header and self._header["OUTFILE"].startswith("lsst"):
             telescope = "LSST"
-        self._used_these_cards("OUTFILE")
+            self._used_these_cards("OUTFILE")
+        elif "LSST_NUM" in self._header:
+            telescope = "LSST"
+            self._used_these_cards("LSST_NUM")
         return telescope
 
     @cache_translation
@@ -100,3 +106,17 @@ class LsstSimTranslator(StubTranslator):
         if obstype == "skyexp":
             obstype = "science"
         return obstype
+
+    @cache_translation
+    def to_altaz_begin(self):
+        # Docstring will be inherited. Property defined in properties.py
+        if self.to_observation_type() == "science":
+            # Derive from RADec in absence of any other information
+            radec = self.to_tracking_radec()
+            if radec is not None:
+                # This triggers warnings because of the future dates
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", category=astropy.utils.exceptions.AstropyWarning)
+                    altaz = radec.transform_to(AltAz)
+                return altaz
+        return None

@@ -23,11 +23,10 @@
 
 __all__ = ("ImSimTranslator", )
 
-import astropy.units as u
-from astropy.coordinates import AltAz
 import logging
-from astro_metadata_translator import cache_translation
+import astropy.units as u
 
+from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers
 
 from .lsstsim import LsstSimTranslator
@@ -94,17 +93,6 @@ class ImSimTranslator(LsstSimTranslator):
         radecsys = ("RADESYS",)
         radecpairs = (("RATEL", "DECTEL"),)
         return tracking_from_degree_headers(self, radecsys, radecpairs)
-
-    @cache_translation
-    def to_altaz_begin(self):
-        # Docstring will be inherited. Property defined in properties.py
-        if self.to_observation_type() == "science":
-            # Derive from RADec in absence of any other information
-            radec = self.to_tracking_radec()
-            if radec is not None:
-                altaz = radec.transform_to(AltAz)
-                return altaz
-        return None
 
     @cache_translation
     def to_boresight_airmass(self):
