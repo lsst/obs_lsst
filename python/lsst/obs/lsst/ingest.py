@@ -52,7 +52,7 @@ class LsstCamParseTask(ParseTask):
         wavelength : `int`
             The recorded wavelength as an int
         """
-        raw_wl = md.get("MONOWL")
+        raw_wl = md.getScalar("MONOWL")
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
             logger = lsstLog.Log.getLogger('obs.lsst.ingest')
@@ -74,7 +74,7 @@ class LsstCamParseTask(ParseTask):
         dateObs : `str`
             The day that the data was taken, e.g. 2018-08-20T21:56:24.608
         """
-        return self.__fixDateObs(md.get("DATE-OBS"))
+        return self.__fixDateObs(md.getScalar("DATE-OBS"))
 
     @staticmethod
     def __fixDateObs(dateObs):
@@ -96,7 +96,7 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. 1958-02-05
         """
-        dateObs = self.__fixDateObs(md.get("DATE-OBS"))
+        dateObs = self.__fixDateObs(md.getScalar("DATE-OBS"))
 
         d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
         d -= ROLLOVERTIME
@@ -118,7 +118,7 @@ class LsstCamParseTask(ParseTask):
             snap number (default: 0)
         """
         try:
-            return int(md.get("SNAP"))
+            return int(md.getScalar("SNAP"))
         except KeyError:
             return 0
 
@@ -135,7 +135,7 @@ class LsstCamParseTask(ParseTask):
         ccdID : `str`
             name of ccd, e.g. S01
         """
-        return md.get("CHIPID")[4:7]
+        return md.getScalar("CHIPID")[4:7]
 
     def translate_raftName(self, md):
         """Extract raft ID from CHIPID.
@@ -150,7 +150,7 @@ class LsstCamParseTask(ParseTask):
         raftID : `str`
             name of raft, e.g. R21
         """
-        return md.get("CHIPID")[:3]
+        return md.getScalar("CHIPID")[:3]
 
     def translate_detector(self, md):
         """Extract raft ID from CHIPID.
@@ -180,7 +180,7 @@ class LsstCamCalibsParseTask(CalibsParseTask):
 
     def _translateFromCalibId(self, field, md):
         """Get a value from the CALIB_ID written by constructCalibs."""
-        data = md.get("CALIB_ID")
+        data = md.getScalar("CALIB_ID")
         match = re.search(r".*%s=(\S+)" % field, data)
         return match.groups()[0]
 

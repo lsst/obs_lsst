@@ -73,7 +73,7 @@ class PhosimParseTask(LsstCamParseTask):
         filter : `str`
             filter name
         """
-        return md.get("FILTER")
+        return md.getScalar("FILTER")
 
     def translate_visit(self, md):
         """Extract visit from metadata (as an int)
@@ -88,4 +88,4 @@ class PhosimParseTask(LsstCamParseTask):
         visit : `int`
             visit number
         """
-        return int(md.get("OBSID"))
+        return int(md.getScalar("OBSID"))

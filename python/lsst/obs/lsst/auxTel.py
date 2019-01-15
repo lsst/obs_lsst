@@ -173,7 +173,7 @@ class AuxTelParseTask(LsstCamParseTask):
         filters = []
         for k in ["FILTER1", "FILTER2"]:
             if md.exists(k):
-                filters.append(md.get(k))
+                filters.append(md.getScalar(k))
 
         filterName = "|".join(filters)
 
@@ -197,11 +197,11 @@ class AuxTelParseTask(LsstCamParseTask):
         """
 
         if md.exists("SEQNUM"):
-            return md.get("SEQNUM")
+            return md.getScalar("SEQNUM")
         #
         # Oh dear.  Extract it from the filename
         #
-        imgname = md.get("IMGNAME")           # e.g. AT-O-20180816-00008
+        imgname = md.getScalar("IMGNAME")           # e.g. AT-O-20180816-00008
         seqNum = imgname[-5:]                 # 00008
         seqNum = re.sub(r'^0+', '', seqNum)   # 8
 

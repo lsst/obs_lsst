@@ -146,8 +146,8 @@ class Ts8ParseTask(LsstCamParseTask):
 
         This should come from CHIPID, not LSST_NUM
         """
-        raftName = self._translate_raftName(md.get("RAFTNAME"))
-        serial = md.get("LSST_NUM")
+        raftName = self._translate_raftName(md.getScalar("RAFTNAME"))
+        serial = md.getScalar("LSST_NUM")
 
         # this seems to be appended more or less at random, and breaks the mapping dict
         if serial.endswith('-Dev'):
@@ -300,7 +300,7 @@ class Ts8ParseTask(LsstCamParseTask):
         """
 
         try:
-            filterPos = md.get("FILTPOS")
+            filterPos = md.getScalar("FILTPOS")
         except KeyError:
             print("FILTPOS key not found in header (assuming NONE)")
             return "NONE"
@@ -357,7 +357,7 @@ class Ts8ParseTask(LsstCamParseTask):
             The seqNum, with a default value of 0 if required
         """
         try:
-            seqNum = md.get("SEQNUM")
+            seqNum = md.getScalar("SEQNUM")
         except KeyError:
             seqNum = 0
         return seqNum
