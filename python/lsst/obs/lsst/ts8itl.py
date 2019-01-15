@@ -24,10 +24,10 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from .ts8 import Ts8, Ts8Mapper
 
-__all__ = ["Ts8ITLMapper", "Ts8ITL"]
+__all__ = ["Ts8itlMapper", "Ts8itl"]
 
 
-class Ts8ITL(Ts8):
+class Ts8itl(Ts8):
     """The ts8's single raft Camera with ITL chips
 
     N.b. This will be superseded when Butler Gen3 versions camera data
@@ -37,18 +37,18 @@ class Ts8ITL(Ts8):
         """Construct lsstCam for ts8
         """
         if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ts8ITL.yaml")
+            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ts8itl.yaml")
 
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-class Ts8ITLMapper(Ts8Mapper):
+class Ts8itlMapper(Ts8Mapper):
     """The Mapper for the ts8 ITL camera."""
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
-        return Ts8ITL()
+        return Ts8itl()
 
     @classmethod
     def getCameraName(cls):
-        return "ts8ITL"
+        return "ts8itl"
