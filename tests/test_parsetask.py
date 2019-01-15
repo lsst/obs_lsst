@@ -119,7 +119,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=17,
                       )),
                      )
-        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8", Ts8ParseTask, test_data)
+        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8ParseTask, test_data)
 
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""

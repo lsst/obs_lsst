@@ -21,7 +21,6 @@
 #
 import os.path
 import re
-import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
@@ -39,10 +38,7 @@ class Ts8(YamlCamera):
     def __init__(self, cameraYamlFile=None):
         """Construct lsstCam for ts8
         """
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ts8.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+        pass
 
 
 class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
