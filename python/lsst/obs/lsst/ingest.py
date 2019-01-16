@@ -2,6 +2,7 @@ import datetime
 import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
+from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from . import LsstCam
 
@@ -27,8 +28,43 @@ class LsstCamParseTask(ParseTask):
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
 
+        self.observationInfo = None
         if self.camera is None:
             self.camera = self._cameraClass()
+
+    def getInfoFromMetadata(self, md, info=None):
+        """Attempt to pull the desired information out of the header.
+
+        Notes
+        -----
+
+        This is done through two mechanisms:
+
+        * translation: a property is set directly from the relevant header keyword
+        * translator: a property is set with the result of calling a method
+
+        The translator methods receive the header metadata and should return the
+        appropriate value, or None if the value cannot be determined.
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList`
+            FITS header
+        info : `dict`, optional
+            File properties, to be supplemented
+
+        Returns
+        -------
+        info : `dict`
+            Updated information.
+        """
+        # Ensure that an ObservationInfo is calculated
+        if self.observationInfo is None:
+            self.observationInfo = ObservationInfo(md,
+                                                   pedantic=False)
+
+        info = super().getInfoFromMetadata(md, info)
+        return info
 
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
