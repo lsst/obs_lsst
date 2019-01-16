@@ -92,6 +92,7 @@ class LsstTS8Translator(StubTranslator):
     @cache_translation
     def to_datetime_begin(self):
         # Docstring will be inherited. Property defined in properties.py
+        self._used_these_cards("MJD-OBS")
         return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
 
     @cache_translation
