@@ -129,11 +129,7 @@ class Ts8ParseTask(LsstCamParseTask):
         return phuInfo, infoList
 
     def translate_detectorName(self, md):
-        detector = self.translate_detector(md)
-
-        return ["S00", "S01", "S02",
-                "S10", "S11", "S12",
-                "S20", "S21", "S22"][detector]
+        return self.observationInfo.detector_name
 
     def _translate_raftName(self, raftString):
         """Get the raft name from the string in the header"""
@@ -142,141 +138,8 @@ class Ts8ParseTask(LsstCamParseTask):
 
     def translate_detector(self, md):
         """Find the detector number from the serial
-
-        This should come from CHIPID, not LSST_NUM
         """
-        raftName = self._translate_raftName(md.getScalar("RAFTNAME"))
-        serial = md.getScalar("LSST_NUM")
-
-        # this seems to be appended more or less at random, and breaks the mapping dict
-        if serial.endswith('-Dev'):
-            serial = serial[:-4]
-
-        # a dict of dicts holding the raft serials
-        raftSerialData = {
-            'RTM-002': {  # config for RTM-002 aka ETU #1
-                'ITL-3800C-023': 0,  # S00
-                'ITL-3800C-032': 1,  # S01
-                'ITL-3800C-042': 2,  # S02
-                'ITL-3800C-090': 3,  # S10
-                'ITL-3800C-107': 4,  # S11
-                'ITL-3800C-007': 5,  # S12
-                'ITL-3800C-004': 6,  # S20
-                'ITL-3800C-139': 7,  # S21
-                'ITL-3800C-013': 8   # S22
-            },
-            'RTM-003': {  # config for RTM-003 aka ETU #2
-                'ITL-3800C-145': 0,  # S00
-                'ITL-3800C-022': 1,  # S01
-                'ITL-3800C-041': 2,  # S02
-                'ITL-3800C-100': 3,  # S10
-                'ITL-3800C-017': 4,  # S11
-                'ITL-3800C-018': 5,  # S12
-                'ITL-3800C-102': 6,  # S20
-                'ITL-3800C-146': 7,  # S21
-                'ITL-3800C-103': 8   # S22
-            },
-            'RTM-004': {  # config for RTM-004 aka RTM #1
-                'ITL-3800C-381': 0,  # S00
-                'ITL-3800C-333': 1,  # S01
-                'ITL-3800C-380': 2,  # S02
-                'ITL-3800C-346': 3,  # S10
-                'ITL-3800C-062': 4,  # S11
-                'ITL-3800C-371': 5,  # S12
-                'ITL-3800C-385': 6,  # S20
-                'ITL-3800C-424': 7,  # S21
-                'ITL-3800C-247': 8   # S22
-            },
-            'RTM-005': {  # config for RTM-005 aka RTM #2
-                'E2V-CCD250-220': 0,  # S00
-                'E2V-CCD250-239': 1,  # S01
-                'E2V-CCD250-154': 2,  # S02
-                'E2V-CCD250-165': 3,  # S10
-                'E2V-CCD250-130': 4,  # S11
-                'E2V-CCD250-153': 5,  # S12
-                'E2V-CCD250-163': 6,  # S20
-                'E2V-CCD250-216': 7,  # S21
-                'E2V-CCD250-252': 8   # S22
-            },
-            'RTM-006': {  # config for RTM-006 aka RTM #3
-                'E2V-CCD250-229': 0,  # S00
-                'E2V-CCD250-225': 1,  # S01
-                'E2V-CCD250-141': 2,  # S02
-                'E2V-CCD250-221': 3,  # S10
-                'E2V-CCD250-131': 4,  # S11
-                'E2V-CCD250-190': 5,  # S12
-                'E2V-CCD250-211': 6,  # S20
-                'E2V-CCD250-192': 7,  # S21
-                'E2V-CCD250-217': 8   # S22
-            },
-            'RTM-007': {  # config for RTM-007 aka RTM #4
-                'E2V-CCD250-260': 0,  # S00
-                'E2V-CCD250-182': 1,  # S01
-                'E2V-CCD250-175': 2,  # S02
-                'E2V-CCD250-167': 3,  # S10
-                'E2V-CCD250-195': 4,  # S11
-                'E2V-CCD250-201': 5,  # S12
-                'E2V-CCD250-222': 6,  # S20
-                'E2V-CCD250-213': 7,  # S21
-                'E2V-CCD250-177': 8   # S22
-            },
-            'RTM-008': {  # config for RTM-008 aka RTM #5
-                'E2V-CCD250-160': 0,  # S00
-                'E2V-CCD250-208': 1,  # S01
-                'E2V-CCD250-256': 2,  # S02
-                'E2V-CCD250-253': 3,  # S10
-                'E2V-CCD250-194': 4,  # S11
-                'E2V-CCD250-231': 5,  # S12
-                'E2V-CCD250-224': 6,  # S20
-                'E2V-CCD250-189': 7,  # S21
-                'E2V-CCD250-134': 8   # S22
-            },
-            'RTM-010': {  # config for RTM-010 aka RTM #7
-                'E2V-CCD250-266': 0,  # S00
-                'E2V-CCD250-268': 1,  # S01
-                'E2V-CCD250-200': 2,  # S02
-                'E2V-CCD250-273': 3,  # S10
-                'E2V-CCD250-179': 4,  # S11
-                'E2V-CCD250-263': 5,  # S12
-                'E2V-CCD250-226': 6,  # S20
-                'E2V-CCD250-264': 7,  # S21
-                'E2V-CCD250-137': 8,  # S22
-            },
-            'RTM-011': {  # config for RTM-011 aka RTM #8 NB Confluence lies here, values are from the data!
-                'ITL-3800C-083': 0,  # S00
-                'ITL-3800C-172': 1,  # S01
-                'ITL-3800C-142': 2,  # S02
-                'ITL-3800C-173': 3,  # S10
-                'ITL-3800C-136': 4,  # S11
-                'ITL-3800C-227': 5,  # S12
-                'ITL-3800C-226': 6,  # S20
-                'ITL-3800C-230': 7,  # S21
-                'ITL-3800C-235': 8,  # S22
-            },
-            'RTM-012': {  # config for RTM-012 aka RTM #9
-                'E2V-CCD250-281': 0,  # S00
-                'E2V-CCD250-237': 1,  # S01
-                'E2V-CCD250-234': 2,  # S02
-                'E2V-CCD250-277': 3,  # S10
-                'E2V-CCD250-251': 4,  # S11
-                'E2V-CCD250-149': 5,  # S12
-                'E2V-CCD250-166': 6,  # S20
-                'E2V-CCD250-214': 7,  # S21
-                'E2V-CCD250-228': 8,  # S22
-            },
-            'RTM-014': {  # config for RTM-014 aka RTM #11
-                'ITL-3800C-307': 0,  # S00
-                'ITL-3800C-325': 1,  # S01
-                'ITL-3800C-427': 2,  # S02
-                'ITL-3800C-361': 3,  # S10
-                'ITL-3800C-440': 4,  # S11
-                'ITL-3800C-411': 5,  # S12
-                'ITL-3800C-400': 6,  # S20
-                'ITL-3800C-455': 7,  # S21
-                'ITL-3800C-407': 8,  # S22
-            }
-        }
-        return raftSerialData[raftName][serial]
+        return self.observationInfo.detector_num
 
     def translate_filter(self, md):
         """Generate a filtername from a FILTPOS
@@ -297,24 +160,7 @@ class Ts8ParseTask(LsstCamParseTask):
         They need to be fixed once the camera acquisition system does
         this properly.
         """
-
-        try:
-            filterPos = md.getScalar("FILTPOS")
-        except KeyError:
-            print("FILTPOS key not found in header (assuming NONE)")
-            return "NONE"
-
-        try:
-            return {
-                2: 'g',
-                3: 'r',
-                4: 'i',
-                5: 'z',
-                6: 'y',
-            }[filterPos]
-        except KeyError:
-            print("Unknown filterPos (assuming NONE): %d" % (filterPos))
-            return "NONE"
+        return self.observationInfo.physical_filter
 
     def translate_visit(self, md):
         """Generate a unique visit number
@@ -333,9 +179,7 @@ class Ts8ParseTask(LsstCamParseTask):
         visit_num : `int`
             Visit number, as translated
         """
-        dateObs = self.translate_dateObs(md)
-
-        return computeVisit(dateObs)
+        return self.observationInfo.visit_id
 
     def translate_testSeqNum(self, md):
         """Translate the sequence number

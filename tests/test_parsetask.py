@@ -115,7 +115,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           detector=4,
                           dayObs='2018-07-24',
                           filter='z',
-                          visit=270095325,
+                          visit=201807241028453,
                           testSeqNum=17,
                       )),
                      )

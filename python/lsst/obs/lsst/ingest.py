@@ -5,6 +5,7 @@ from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from . import LsstCam
+from .translators.lsst import ROLLOVERTIME as MDROLLOVERTIME
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
@@ -110,14 +111,9 @@ class LsstCamParseTask(ParseTask):
         dateObs : `str`
             The date that the data was taken, e.g. 2018-08-20T21:56:24.608
         """
-        return self.__fixDateObs(md.getScalar("DATE-OBS"))
-
-    @staticmethod
-    def __fixDateObs(dateObs):
-        """Fix bad formatting in dateObs"""
-        dateObs = re.sub(r"\(UTC\)$", "", dateObs)  # TSEIA-83
-
-        return dateObs
+        dateObs = self.observationInfo.datetime_begin
+        dateObs.format = "isot"
+        return str(dateObs)
 
     def translate_dayObs(self, md):
         """Generate the day that the observation was taken
@@ -132,13 +128,11 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. 1958-02-05
         """
-        dateObs = self.__fixDateObs(md.getScalar("DATE-OBS"))
-
-        d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= ROLLOVERTIME
-        dayObs = d.strftime("%Y-%m-%d")
-
-        return dayObs
+        dateObs = self.observationInfo.datetime_begin
+        dateObs -= MDROLLOVERTIME
+        dateObs.format = "iso"
+        dateObs.out_subfmt = "date"  # YYYY-MM-DD format
+        return str(dateObs)
 
     def translate_snap(self, md):
         """Extract snap from metadata.
@@ -171,7 +165,7 @@ class LsstCamParseTask(ParseTask):
         ccdID : `str`
             name of ccd, e.g. S01
         """
-        return md.getScalar("CHIPID")[4:7]
+        return self.observationInfo.detector_name
 
     def translate_raftName(self, md):
         """Extract raft ID from CHIPID.
@@ -186,7 +180,7 @@ class LsstCamParseTask(ParseTask):
         raftID : `str`
             name of raft, e.g. R21
         """
-        return md.getScalar("CHIPID")[:3]
+        return self.observationInfo.detector_group
 
     def translate_detector(self, md):
         """Extract detector number from raft and detector name.
@@ -201,12 +195,7 @@ class LsstCamParseTask(ParseTask):
         detID : `str`
             detector ID, e.g. 4
         """
-        raftName = self.translate_raftName(md)
-        detectorName = self.translate_detectorName(md)
-        fullName = '_'.join([raftName, detectorName])
-        detId = self.camera[fullName].getId()
-
-        return detId
+        return self.observationInfo.detector_num
 
 #############################################################################################################
 
