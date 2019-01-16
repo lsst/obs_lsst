@@ -284,7 +284,7 @@ class Ts8ParseTask(LsstCamParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -348,7 +348,7 @@ class Ts8ParseTask(LsstCamParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns

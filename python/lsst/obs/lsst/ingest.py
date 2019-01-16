@@ -80,7 +80,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -102,13 +102,13 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
         -------
         dateObs : `str`
-            The day that the data was taken, e.g. 2018-08-20T21:56:24.608
+            The date that the data was taken, e.g. 2018-08-20T21:56:24.608
         """
         return self.__fixDateObs(md.getScalar("DATE-OBS"))
 
@@ -124,7 +124,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -145,7 +145,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -163,7 +163,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -178,7 +178,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -189,17 +189,17 @@ class LsstCamParseTask(ParseTask):
         return md.getScalar("CHIPID")[:3]
 
     def translate_detector(self, md):
-        """Extract raft ID from CHIPID.
+        """Extract detector number from raft and detector name.
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
         -------
-        raftID : `str`
-            name of raft, e.g. R21
+        detID : `str`
+            detector ID, e.g. 4
         """
         raftName = self.translate_raftName(md)
         detectorName = self.translate_detectorName(md)
