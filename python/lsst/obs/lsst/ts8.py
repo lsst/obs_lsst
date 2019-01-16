@@ -23,7 +23,6 @@ import datetime
 import os.path
 import re
 import lsst.utils as utils
-from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
@@ -120,7 +119,7 @@ class Ts8ParseTask(LsstCamParseTask):
         infoList : `list`
             A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
         """
-        phuInfo, infoList = ParseTask.getInfo(self, filename)
+        phuInfo, infoList = super().getInfo(filename)
 
         if False:
             pathname, basename = os.path.split(filename)
