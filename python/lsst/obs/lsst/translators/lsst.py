@@ -21,10 +21,15 @@
 
 """Metadata translation support code for LSST headers"""
 
-__alll__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION")
+__all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids")
+
+import os.path
+import yaml
 
 from astropy.time import Time, TimeDelta
 from astropy.coordinates import EarthLocation
+
+from lsst.utils import getPackageDir
 
 # LSST day clock starts at UTC+8
 ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
@@ -32,3 +37,42 @@ TZERO = Time("2010-01-01T00:00", format="isot", scale="utc")
 
 # LSST Default location in the absence of headers
 LSST_LOCATION = EarthLocation.from_geodetic(-30.244639, -70.749417, 2663.0)
+
+obs_lsst_packageDir = getPackageDir("obs_lsst")
+
+
+def read_detector_ids(policyFile):
+    """Read a camera policy file and retrieve the mapping from CCD name
+    to ID.
+
+    Parameters
+    ----------
+    policyFile : `str`
+        Name of YAML policy file to read, relative to the obs_lsst
+        package.
+
+    Returns
+    -------
+    mapping : `dict` of `str` to `int`
+        A `dict` with keys being the full names of the detectors, and the
+        value is the integer detector number.
+
+    Notes
+    -----
+    Reads the camera YAML definition file directly and extracts just the
+    IDs.  This routine does not use the standard
+    `~lsst.obs.base.yamlCamera.YAMLCamera` infrastructure or
+    `lsst.afw.cameraGeom`.  This is because the translators are intended to
+    have minimal dependencies on LSST infrastructure.
+    """
+
+    file = os.path.join(obs_lsst_packageDir, policyFile)
+    with open(file) as fh:
+        # Use the fast parser since these files are large
+        camera = yaml.load(fh, Loader=yaml.CLoader)
+
+    mapping = {}
+    for ccd, value in camera["CCDs"].items():
+        mapping[ccd] = int(value["id"])
+
+    return mapping

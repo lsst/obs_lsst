@@ -32,7 +32,7 @@ from astropy.coordinates import AltAz
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import LSST_LOCATION
+from .lsst import LSST_LOCATION, read_detector_ids
 
 log = logging.getLogger(__name__)
 
@@ -40,6 +40,11 @@ log = logging.getLogger(__name__)
 class LsstSimTranslator(StubTranslator):
     """Shared routines for LSST Simulated Data.
     """
+    cameraPolicyFile = None
+    """Path to policy file relative to obs_lsst root."""
+
+    detectorMapping = None
+    """Mapping of detector name to detector number."""
 
     @cache_translation
     def to_telescope(self):
@@ -78,18 +83,17 @@ class LsstSimTranslator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         raft = self.to_detector_group()
         detector = self.to_detector_name()
+        fullname = f"{raft}_{detector}"
 
-        try:
-            rnum = int(raft[1:])
-        except Exception as e:
-            raise ValueError(f"Raft name in unexpected format ({raft})") from e
+        num = None
+        if self.cameraPolicyFile is not None:
+            if self.detectorMapping is None:
+                self.__class__.detectorMapping = read_detector_ids(self.cameraPolicyFile)
+            if fullname in self.detectorMapping:
+                num = self.detectorMapping[fullname]
+            else:
+                log.warning("Unable to determine detector number from detector name {fullname}")
 
-        try:
-            ccdx = int(detector[1])
-            ccdy = int(detector[2])
-        except Exception as e:
-            raise ValueError(f"Unexpected form for detector name ({detector})") from e
-        num = rnum*9 + ccdy*3 + ccdx
         return num
 
     @cache_translation

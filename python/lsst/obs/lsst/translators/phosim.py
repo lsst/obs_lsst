@@ -69,6 +69,8 @@ class PhosimTranslator(LsstSimTranslator):
         "detector_serial": "LSST_NUM",
     }
 
+    cameraPolicyFile = "policy/phosim.yaml"
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the

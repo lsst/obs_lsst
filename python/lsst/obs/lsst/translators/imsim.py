@@ -63,6 +63,8 @@ class ImSimTranslator(LsstSimTranslator):
         "boresight_rotation_angle": ("ROTANGLE", dict(unit=u.deg)),
     }
 
+    cameraPolicyFile = "policy/imsim.yaml"
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
