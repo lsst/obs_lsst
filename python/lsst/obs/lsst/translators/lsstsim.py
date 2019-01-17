@@ -63,7 +63,7 @@ class LsstSimTranslator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         location = None
         tel = self.to_telescope()
-        if tel is not None and tel == "LSST":
+        if tel == "LSST":
             location = LSST_LOCATION
         return location
 

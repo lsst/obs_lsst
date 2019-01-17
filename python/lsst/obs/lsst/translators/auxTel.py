@@ -58,11 +58,11 @@ def is_non_science_or_lab(self):
         return
     if not self._is_on_mountain():
         return
-    raise KeyError("Required key is missing and this is a mountaint science observation")
+    raise KeyError("Required key is missing and this is a mountain science observation")
 
 
 class LsstAuxTelTranslator(StubTranslator):
-    """Metadata translator for LSST Aux Tel data.
+    """Metadata translator for LSST AuxTel data.
 
     For lab measurements many values are masked out.
     """
@@ -181,7 +181,7 @@ class LsstAuxTelTranslator(StubTranslator):
         """
         if "CALIB_ID" in self._header:
             self._used_these_cards("CALIB_ID")
-            return 0
+            return None
 
         dayobs = self._header["DAYOBS"]
         seqnum = self._header["SEQNUM"]
@@ -191,13 +191,15 @@ class LsstAuxTelTranslator(StubTranslator):
         idstr = f"{dayobs}{seqnum:06d}"
         return int(idstr)
 
+    # For now "visits" are defined to be identical to exposures.
     to_visit_id = to_exposure_id
 
     @cache_translation
     def to_observation_type(self):
         """Determine the observation type.
 
-        Lab data is always a dark if exposure time is non-zero, else bias.
+        In the absence of an ``IMGTYPE`` header, assumes lab data is always a
+        dark if exposure time is non-zero, else bias.
 
         Returns
         -------
@@ -217,8 +219,15 @@ class LsstAuxTelTranslator(StubTranslator):
     @cache_translation
     def to_physical_filter(self):
         # Docstring will be inherited. Property defined in properties.py
-        if self._is_on_mountain():
-            filter = self._header["FILTER"]
-            self._used_these_cards("FILTER")
-            return filter
-        return None
+        filters = []
+        for k in ("FILTER1", "FILTER2"):
+            if k in self._header:
+                filters.append(self._header[k])
+                self._used_these_cards(k)
+
+        if filters:
+            filterName = "|".join(filters)
+        else:
+            filterName = "NONE"
+
+        return filterName

@@ -57,7 +57,8 @@ class LsstTS8Translator(StubTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
-        "dark_time": 0.0*u.s,
+        "dark_time": float("NaN")*u.s,
+        "detector_group": "R00",  # Only a single raft
     }
 
     _trivial_map = {
@@ -70,7 +71,7 @@ class LsstTS8Translator(StubTranslator):
         """Indicate whether this translation class can translate the
         supplied header.
 
-        There is no ``INSTRUME`` header in PhoSim data. Instead we use
+        There is no ``INSTRUME`` header in TS8 data. Instead we use
         the ``TSTAND`` header. We also look at the file name to see if
         it starts with "ts8-".
 
@@ -127,22 +128,6 @@ class LsstTS8Translator(StubTranslator):
         if match:
             return match.group(0)
         raise ValueError(f"RAFTNAME has unexpected form of '{raft_name}'")
-
-    @cache_translation
-    def to_detector_group(self):
-        """Return the raft name in form "Rnn".
-
-        Extracts the name from the ``RAFTNAME`` header using the RTM-nnn
-        content.
-
-        Returns
-        -------
-        name : `str`
-            Name of raft.
-        """
-        rtm = self._to_raft_name()
-        # This will be in form RTM-0nn but we want Rnn
-        return f"R{rtm[5:]}"
 
     @cache_translation
     def to_detector_serial(self):
@@ -312,6 +297,12 @@ class LsstTS8Translator(StubTranslator):
         -------
         filter : `str`
             The filter name.  Returns "NONE" if no filter can be determined.
+
+        Notes
+        -----
+        The calculations here are examples rather than being accurate.
+        They need to be fixed once the camera acquisition system does
+        this properly.
         """
 
         try:
@@ -350,6 +341,7 @@ class LsstTS8Translator(StubTranslator):
         nsec.format = "sec"
         return int(nsec.value)
 
+    # For now assume that visit IDs and exposure IDs are identical
     to_visit_id = to_exposure_id
 
     @cache_translation
