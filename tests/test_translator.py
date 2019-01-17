@@ -58,12 +58,12 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            visit_id=204595,
                            wcs_params=dict(max_sep=3000.))),  # 2022
                      )
-        for file, expected in test_data:
-            with self.subTest(f"Testing {file}"):
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
                 # PhoSim data are in the future and Astropy complains
                 # about astrometry errors.
                 with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
-                    self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_auxtel_translator(self):
         test_data = (("auxTel-2018-09-20-05700065-det000.yaml",
@@ -89,9 +89,9 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            visit_id=20180920000065,
                            )),
                      )
-        for file, expected in test_data:
-            with self.subTest(f"Testing {file}"):
-                self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_imsim_translator(self):
         test_data = (("imsim-bias-lsst_a_3010002_R11_S00.yaml",
@@ -187,15 +187,15 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            wcs_params=dict(max_sep=3000.),  # 2022
                            )),
                      )
-        for file, expected in test_data:
-            with self.subTest(f"Testing {file}"):
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
                 # ImSim data are in the future and Astropy complains
                 # about astrometry errors.
                 if expected["observation_type"] == "science":
                     with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
-                        self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+                        self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
                 else:
-                    self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
@@ -229,9 +229,9 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            science_program="6006D",
                            visit_id=270095328)),
                      )
-        for file, expected in test_data:
-            with self.subTest(f"Testing {file}"):
-                self.assertObservationInfoFromYaml(file, dir=self.datadir, **expected)
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
 
 if __name__ == "__main__":
