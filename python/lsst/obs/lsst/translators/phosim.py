@@ -48,7 +48,7 @@ class PhosimTranslator(LsstSimTranslator):
         "instrument": "PhoSim",
         "boresight_rotation_coord": "sky",
         "observation_type": "science",
-        "object": "unknown",
+        "object": "UNKNOWN",
         "relative_humidity": 40.0,
     }
 

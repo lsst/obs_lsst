@@ -43,7 +43,7 @@ class ImSimTranslator(LsstSimTranslator):
     _const_map = {
         "instrument": "ImSim",
         "boresight_rotation_coord": "sky",
-        "object": "unknown",
+        "object": "UNKNOWN",
         "pressure": None,
         "temperature": None,
         "relative_humidity": 40.0,

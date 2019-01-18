@@ -52,7 +52,7 @@ class LsstTS8Translator(StubTranslator):
         "boresight_airmass": None,
         "tracking_radec": None,
         "altaz_begin": None,
-        "object": "NONE",
+        "object": "UNKNOWN",
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
