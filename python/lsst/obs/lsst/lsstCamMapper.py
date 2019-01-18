@@ -146,12 +146,7 @@ def assemble_raw(dataId, componentInfo, cls):
     #
     # We need to standardize, but have no legal way to call std_raw.  The butler should do this for us.
     #
-    global _camera, _lsstCamMapper      # Dangerous file-level cache set by Mapper.__initialiseCache()
-
-    try:
-        exposure = _lsstCamMapper.std_raw(exposure, dataId)
-    except Exception:
-        exposure = _lsstCamMapper.std_raw(exposure, dataId, filter=False)
+    global _camera                      # Dangerous file-level cache set by Mapper.__initialiseCache()
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
@@ -212,13 +207,12 @@ class LsstCamMapper(CameraMapper):
         We do this because it's expensive to build Cameras and Mappers, but it is not a good idea in the
         medium or long run!
         """
-        global _camera, _lsstCamMapper
+        global _camera
 
         try:
             _camera
         except NameError:
             _camera = self._makeCamera(None, None)
-            _lsstCamMapper = self
 
     @classmethod
     def __clearCache(cls):
@@ -227,11 +221,6 @@ class LsstCamMapper(CameraMapper):
 
         try:
             del globals()['_camera']
-        except KeyError:
-            pass
-
-        try:
-            del globals()['_lsstCamMapper']
         except KeyError:
             pass
 
