@@ -74,7 +74,7 @@ class LsstAuxTelTranslator(StubTranslator):
     """Supports the LATISS instrument."""
 
     _const_map = {
-        # TS8 is not attached to a telescope so many translations are null.
+        # AuxTel is not yet attached to a telescope so many translations are null.
         "instrument": "LATISS",
         "telescope": "LSSTAuxTel",
         "detector_group": "RXX",  # Single sensor, define a dummy raft
