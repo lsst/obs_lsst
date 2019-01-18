@@ -212,9 +212,12 @@ class LsstAuxTelTranslator(StubTranslator):
             return obstype.lower()
 
         exptime = self.to_exposure_time()
-        if exptime > 0.0:
-            return "dark"
-        return "bias"
+        if exptime == 0.0:
+            obstype = "bias"
+        else:
+            obstype = "unknown"
+        log.warning("Unable to determine observation type. Guessing '%s'", obstype)
+        return obstype
 
     @cache_translation
     def to_physical_filter(self):

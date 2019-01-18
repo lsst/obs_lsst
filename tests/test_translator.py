@@ -80,7 +80,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            exposure_time=27.0*u.s,
                            object=None,
                            observation_id="AT_C_20180920_000065",
-                           observation_type="dark",
+                           observation_type="unknown",
                            physical_filter="NONE",
                            pressure=None,
                            relative_humidity=None,
