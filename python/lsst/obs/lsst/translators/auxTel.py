@@ -95,7 +95,7 @@ class LsstAuxTelTranslator(StubTranslator):
         "dark_time": (["DARKTIME", "EXPTIME"], dict(unit=u.s)),
         "detector_serial": ["LSST_NUM", "DETSER"],
         "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
-        "object": ("OBJECT", dict(checker=is_non_science_or_lab)),
+        "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
         "boresight_rotation_angle": ("ROTANGLE", dict(checker=is_non_science_or_lab,
                                                       default=float("nan"), unit=u.deg)),
     }
