@@ -32,7 +32,7 @@ from astropy.coordinates import AltAz
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import LSST_LOCATION, read_detector_ids
+from .lsst import LSST_LOCATION, read_detector_ids, compute_detector_exposure_id
 
 log = logging.getLogger(__name__)
 
@@ -100,10 +100,7 @@ class LsstSimTranslator(StubTranslator):
     def to_detector_exposure_id(self):
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        max_num = 200
-        if num >= max_num:
-            raise ValueError(f"Detector number has value {num} >= {max_num}")
-        return max_num*exposure_id + num
+        return compute_detector_exposure_id(exposure_id, num, max_num=200, mode="multiply")
 
     @cache_translation
     def to_observation_type(self):

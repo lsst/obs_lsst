@@ -21,7 +21,8 @@
 
 """Metadata translation support code for LSST headers"""
 
-__all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids")
+__all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids",
+           "compute_detector_exposure_id")
 
 import os.path
 import yaml
@@ -76,3 +77,40 @@ def read_detector_ids(policyFile):
         mapping[ccd] = int(value["id"])
 
     return mapping
+
+
+def compute_detector_exposure_id(exposure_id, detector_num, max_num=1000, mode="concat"):
+    """Compute the detector_exposure_id from the exposure id and the
+    detector number.
+
+    Parameters
+    ----------
+    exposure_id : `int`
+        The exposure ID.
+    detector_num : `int`
+        The detector number.
+    max_num : `int`, optional
+        Maximum number of detectors to make space for. Defaults to 1000.
+    mode : `str`, optional
+        Computation mode. Defaults to "concat".
+        - concat : Concatenate the exposure ID and detector number, making
+                   sure that there is space for max_num and zero padding.
+        - multiply : Multiply the exposure ID by the maximum detector
+                     number and add the detector number.
+
+    Returns
+    -------
+    detector_exposure_id : `int`
+        Computed ID.
+    """
+
+    if detector_num >= max_num:
+        raise ValueError(f"Detector number has value {detector_num} >= {max_num}")
+
+    if mode == "concat":
+        npad = len(str(max_num))
+        return int(f"{exposure_id}{detector_num:0{npad}d}")
+    elif mode == "multiply":
+        return max_num*exposure_id + detector_num
+    else:
+        raise ValueError(f"Computation mode of '{mode}' is not understood")

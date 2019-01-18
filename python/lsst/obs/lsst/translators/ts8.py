@@ -31,7 +31,7 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import TZERO, ROLLOVERTIME
+from .lsst import TZERO, ROLLOVERTIME, compute_detector_exposure_id
 
 log = logging.getLogger(__name__)
 
@@ -316,7 +316,7 @@ class LsstTS8Translator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        return 10*exposure_id + num
+        return compute_detector_exposure_id(exposure_id, num, max_num=10, mode="multiply")
 
     @cache_translation
     def to_physical_filter(self):
