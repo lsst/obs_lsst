@@ -31,7 +31,7 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import TZERO, ROLLOVERTIME, compute_detector_exposure_id
+from .lsst import compute_detector_exposure_id
 
 log = logging.getLogger(__name__)
 
@@ -359,18 +359,21 @@ class LsstTS8Translator(StubTranslator):
         """Generate a unique exposure ID number
 
         Note that SEQNUM is not unique for a given day in TS8 data
-        so instead we use the number of seconds since TZERO as defined in
-        the main LSST part of the package.
+        so instead we convert the ISO date of observation directly to an
+        integer.
 
         Returns
         -------
         exposure_id : `int`
             Unique exposure number.
         """
+        iso = self._header["DATE-OBS"]
+        self._used_these_cards("DATE-OBS")
 
-        nsec = self.to_datetime_begin() - ROLLOVERTIME - TZERO
-        nsec.format = "sec"
-        return int(nsec.value)
+        # There is worry that seconds are too course so use 10th of second
+        # and read the first 21 characters.
+        exposure_id = re.sub(r"\D", "", iso[:21])
+        return int(exposure_id)
 
     # For now assume that visit IDs and exposure IDs are identical
     to_visit_id = to_exposure_id
