@@ -45,7 +45,6 @@ class LsstTS8Translator(StubTranslator):
 
     _const_map = {
         # TS8 is not attached to a telescope so many translations are null.
-        "instrument": "TS8",
         "telescope": "LSST",
         "location": None,
         "boresight_rotation_coord": None,
@@ -91,6 +90,19 @@ class LsstTS8Translator(StubTranslator):
         return cls.can_translate_with_options(header, {"TSTAND": "TS8"}, filename=filename)
 
     @cache_translation
+    def to_instrument(self):
+        """Calculate the instrument name.
+
+        Returns
+        -------
+        instrume : `str`
+            Name of the test stand and raft combination.
+            For example: "TS8-RTM-001"
+        """
+        raft = self._to_raft_name()
+        return f"TS8-{raft}"
+
+    @cache_translation
     def to_datetime_begin(self):
         # Docstring will be inherited. Property defined in properties.py
         self._used_these_cards("MJD-OBS")
@@ -115,7 +127,8 @@ class LsstTS8Translator(StubTranslator):
 
         Extracted from RAFTNAME header.
 
-        Raftname should be of the form: 'LCA-11021_RTM-011-Dev'
+        Raftname should be of the form: 'LCA-11021_RTM-011-Dev' and
+        the resulting name will have the form "RTM-NNN".
 
         Returns
         -------

@@ -200,7 +200,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
                       dict(telescope="LSST",
-                           instrument="TS8",
+                           instrument="TS8-RTM-010",
                            detector_exposure_id=2700961194,
                            detector_group="R00",
                            detector_name="S11",
@@ -215,7 +215,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            visit_id=270096119)),
                      ("ts8-E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845.yaml",
                       dict(telescope="LSST",
-                           instrument="TS8",
+                           instrument="TS8-RTM-010",
                            detector_exposure_id=2700953282,
                            detector_group="R00",
                            detector_name="S02",
