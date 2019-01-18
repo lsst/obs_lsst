@@ -291,6 +291,12 @@ class Ts8ParseTask(LsstCamParseTask):
         -------
         filter : `str`
             Filter name
+
+        Notes
+        -----
+        The calculations here are examples rather than being accurate.
+        They need to be fixed once the camera acquisition system does
+        this properly.
         """
 
         try:

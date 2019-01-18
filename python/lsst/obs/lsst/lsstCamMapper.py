@@ -21,8 +21,6 @@
 #
 """The LsstCam Mapper."""  # necessary to suppress D100 flake8 warning.
 
-from __future__ import division, print_function
-
 import os
 import re
 import lsst.log
@@ -30,7 +28,7 @@ import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
-from lsst.obs.base import CameraMapper, MakeRawVisitInfo, bboxFromIraf
+from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
 
 from . import lsstCam
@@ -38,37 +36,8 @@ from . import lsstCam
 __all__ = ["LsstCamMapper"]
 
 
-class LsstCamMakeRawVisitInfo(MakeRawVisitInfo):
-    """functor to make a VisitInfo from the FITS header of a raw image."""
-
-    def setArgDict(self, md, argDict):
-        """Fill an argument dict with arguments for makeVisitInfo and pop associated metadata.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-        argDict : `dict`
-            The argument dictionary used to construct the visit info, modified in place
-        """
-        super(LsstCamMakeRawVisitInfo, self).setArgDict(md, argDict)
-        argDict["darkTime"] = self.popFloat(md, "DARKTIME")
-
-        # Done setting argDict; check values now that all the header keywords have been consumed
-        argDict["darkTime"] = self.getDarkTime(argDict)
-
-    def getDateAvg(self, md, exposureTime):
-        """Return date at the middle of the exposure.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-        exposureTime : `float`
-            exposure time, measure in seconds
-        """
-        dateObs = self.popIsoDate(md, "DATE-OBS")
-        return self.offsetDate(dateObs, 0.5*exposureTime)
+class LsstCamMakeRawVisitInfo(MakeRawVisitInfoViaObsInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
 
 
 def assemble_raw(dataId, componentInfo, cls):
@@ -186,19 +155,17 @@ def assemble_raw(dataId, componentInfo, cls):
 
     setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
     if setWcsFromBoresight:
-        try:
-            ratel, dectel = md.getScalar("RATEL"), md.getScalar("DECTEL")
-            rotangle = md.getScalar("ROTANGLE")*afwGeom.degrees
-        except KeyError:
-            ratel, dectel, rotangle = '', '', ''
+        visitInfo = exposure.getInfo().getVisitInfo()
+        boresight = visitInfo.getBoresightRaDec()
+        rotangle = visitInfo.getBoresightRotAngle()
 
-        if ratel == '' or dectel == '' or rotangle == '':  # FITS for None
-            logger.warn("Unable to set WCS for %s from header as RATEL/DECTEL/ROTANGLE are unavailable" %
-                        (dataId,))
-        else:
-            boresight = afwGeom.SpherePoint(ratel, dectel, afwGeom.degrees)
+        if boresight.isFinite():
             exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
                                                90*afwGeom.degrees - rotangle))
+        else:
+            # Should only warn for science observations but VisitInfo does not know
+            logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
+                        (dataId,))
 
     return exposure
 

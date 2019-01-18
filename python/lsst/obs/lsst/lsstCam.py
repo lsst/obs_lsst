@@ -19,7 +19,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-from __future__ import division, print_function
 import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
