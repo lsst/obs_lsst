@@ -56,7 +56,6 @@ class LsstTS8Translator(StubTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
-        "dark_time": float("NaN")*u.s,
         "detector_group": "R00",  # Only a single raft
     }
 
@@ -112,6 +111,25 @@ class LsstTS8Translator(StubTranslator):
     def to_datetime_end(self):
         # Docstring will be inherited. Property defined in properties.py
         return self.to_datetime_begin() + self.to_exposure_time()
+
+    @cache_translation
+    def to_dark_time(self):
+        """Calculate the dark time.
+
+        If a DARKTIME header is not found, the value is assumed to be
+        identical to the exposure time.
+
+        Returns
+        -------
+        dark : `astropy.units.Quantity`
+            The dark time in seconds.
+        """
+        if "DARKTIME" in self._header:
+            darktime = self._header("DARKTIME")*u.s
+        else:
+            log.warning("Unable to determine dark time. Setting from exposure time.")
+            darktime = self.to_exposure_time()
+        return darktime
 
     @cache_translation
     def to_detector_name(self):
