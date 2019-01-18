@@ -59,33 +59,3 @@ class PhosimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = PhosimCam           # the class to instantiate for the class-scope camera
-
-    def translate_filter(self, md):
-        """Extract filter from metadata (ignoring for corner-raft chips)
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter : `str`
-            filter name
-        """
-        return md.getScalar("FILTER")
-
-    def translate_visit(self, md):
-        """Extract visit from metadata (as an int)
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit : `int`
-            visit number
-        """
-        return int(md.getScalar("OBSID"))

@@ -131,56 +131,6 @@ class Ts8ParseTask(LsstCamParseTask):
     def translate_detectorName(self, md):
         return self.observationInfo.detector_name
 
-    def _translate_raftName(self, raftString):
-        """Get the raft name from the string in the header"""
-        # should look something like 'LCA-11021_RTM-011-Dev'
-        return raftString[10:17]
-
-    def translate_detector(self, md):
-        """Find the detector number from the serial
-        """
-        return self.observationInfo.detector_num
-
-    def translate_filter(self, md):
-        """Generate a filtername from a FILTPOS
-
-        Parameters
-        ----------
-        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter : `str`
-            Filter name
-
-        Notes
-        -----
-        The calculations here are examples rather than being accurate.
-        They need to be fixed once the camera acquisition system does
-        this properly.
-        """
-        return self.observationInfo.physical_filter
-
-    def translate_visit(self, md):
-        """Generate a unique visit number
-
-        Note that SEQNUM is not unique for a given day in TS8 data
-        so instead we use the number of seconds since TZERO as defined in
-        the main LSST part of the package.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit_num : `int`
-            Visit number, as translated
-        """
-        return self.observationInfo.visit_id
-
     def translate_testSeqNum(self, md):
         """Translate the sequence number
 

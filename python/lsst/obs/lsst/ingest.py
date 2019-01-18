@@ -115,6 +115,8 @@ class LsstCamParseTask(ParseTask):
         dateObs.format = "isot"
         return str(dateObs)
 
+    translate_date = translate_dateObs
+
     def translate_dayObs(self, md):
         """Generate the day that the observation was taken
 
@@ -196,6 +198,31 @@ class LsstCamParseTask(ParseTask):
             detector ID, e.g. 4
         """
         return self.observationInfo.detector_num
+
+    def translate_expTime(self, md):
+        return self.observationInfo.exposure_time.value
+
+    def translate_object(self, md):
+        return self.observationInfo.object
+
+    def translate_imageType(self, md):
+        obstype = self.observationInfo.observation_type.upper()
+        # Dictionary for obstype values is not yet clear
+        if obstype == "SCIENCE":
+            obstype = "SKYEXP"
+        return obstype
+
+    def translate_filter(self, md):
+        return self.observationInfo.physical_filter
+
+    def translate_lsstSerial(self, md):
+        return self.observationInfo.detector_serial
+
+    def translate_run(self, md):
+        return self.observationInfo.science_program
+
+    def translate_visit(self, md):
+        return self.observationInfo.visit_id
 
 #############################################################################################################
 

@@ -121,27 +121,6 @@ class AuxTelParseTask(LsstCamParseTask):
 
         return phuInfo, infoList
 
-    def translate_detector(self, md):
-        return 0                        # we can't use config.parse.defaults as it only handles strings
-
-    def translate_visit(self, md):
-        """Generate a unique visit number
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit_num : `int`
-            Visit number, as translated
-        """
-        dayObs = self.translate_dayObs(md)
-        seqNum = self.translate_seqNum(md)
-
-        return computeVisit(dayObs, seqNum)
-
     def translate_wavelength(self, md):
         """Translate wavelength provided by auxtel readout.
 
@@ -156,31 +135,6 @@ class AuxTelParseTask(LsstCamParseTask):
             The recorded wavelength as an int
         """
         return -666
-
-    def translate_filter(self, md):
-        """Translate the two filter wheels into one filter string
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter name : `str`
-            The names of the two filters separated by a "|"; if both are empty return None
-        """
-        filters = []
-        for k in ["FILTER1", "FILTER2"]:
-            if md.exists(k):
-                filters.append(md.getScalar(k))
-
-        filterName = "|".join(filters)
-
-        if filterName == "":
-            filterName = "NONE"
-
-        return filterName
 
     def translate_seqNum(self, md):
         """Return the SEQNUM
