@@ -316,7 +316,7 @@ class LsstTS8Translator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        return compute_detector_exposure_id(exposure_id, num, max_num=10, mode="multiply")
+        return compute_detector_exposure_id(exposure_id, num, max_num=10, mode="concat")
 
     @cache_translation
     def to_physical_filter(self):

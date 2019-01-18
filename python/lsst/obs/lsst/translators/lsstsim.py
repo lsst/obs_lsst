@@ -100,7 +100,7 @@ class LsstSimTranslator(StubTranslator):
     def to_detector_exposure_id(self):
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        return compute_detector_exposure_id(exposure_id, num, max_num=200, mode="multiply")
+        return compute_detector_exposure_id(exposure_id, num, max_num=1000, mode="concat")
 
     @cache_translation
     def to_observation_type(self):
