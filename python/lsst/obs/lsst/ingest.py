@@ -25,6 +25,7 @@ class LsstCamParseTask(ParseTask):
 
     camera = None                       # class-scope camera to avoid instantiating once per file
     _cameraClass = LsstCam              # the class to instantiate for the class-scope camera
+    _translatorClass = None
 
     def __init__(self, config, *args, **kwargs):
         super(ParseTask, self).__init__(config, *args, **kwargs)
@@ -61,7 +62,7 @@ class LsstCamParseTask(ParseTask):
         """
         # Ensure that an ObservationInfo is calculated
         if self.observationInfo is None:
-            self.observationInfo = ObservationInfo(md,
+            self.observationInfo = ObservationInfo(md, translator_class=self._translatorClass,
                                                    pedantic=False)
 
         info = super().getInfoFromMetadata(md, info)

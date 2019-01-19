@@ -27,6 +27,7 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
+from .translators import LsstAuxTelTranslator
 
 __all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
 
@@ -95,6 +96,7 @@ class AuxTelParseTask(LsstCamParseTask):
     """
 
     _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
+    _translatorClass = LsstAuxTelTranslator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the filename/path.

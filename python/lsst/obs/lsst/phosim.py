@@ -24,6 +24,7 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .ingest import LsstCamParseTask
+from .translators import PhosimTranslator
 
 __all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
 
@@ -59,3 +60,4 @@ class PhosimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = PhosimCam           # the class to instantiate for the class-scope camera
+    _translatorClass = PhosimTranslator

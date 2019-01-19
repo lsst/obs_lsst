@@ -27,6 +27,7 @@ from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
 from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME, TZERO
+from .translators import LsstTS8Translator
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
@@ -101,6 +102,7 @@ class Ts8ParseTask(LsstCamParseTask):
     """
 
     _cameraClass = Ts8           # the class to instantiate for the class-scope camera
+    _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the filename/path.

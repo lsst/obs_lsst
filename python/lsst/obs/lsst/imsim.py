@@ -24,6 +24,7 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .ingest import LsstCamParseTask
+from .translators import ImSimTranslator
 
 __all__ = ["ImsimMapper", "ImsimCam", "ImsimParseTask"]
 
@@ -59,3 +60,4 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = ImsimCam           # the class to instantiate for the class-scope camera
+    _translatorClass = ImSimTranslator
