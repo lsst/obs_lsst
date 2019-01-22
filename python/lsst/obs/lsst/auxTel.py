@@ -19,7 +19,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import datetime
 import os.path
 import re
 import lsst.utils as utils
@@ -46,17 +45,6 @@ class AuxTelCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dayObs, seqNum):
-    """Compute a visit number given a dayObs and seqNum"""
-
-    try:
-        date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:          # requires py 3.7
-        date = datetime.date(*[int(f) for f in dayObs.split('-')])
-
-    return (date.toordinal() - 736900)*100000 + seqNum
-
-
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
 
@@ -71,7 +59,7 @@ class AuxTelMapper(LsstCamMapper):
         return "auxTel"
 
     def _extractDetectorName(self, dataId):
-        return 0                        # "S1"
+        return f"{LsstAuxTelTranslator.DETECTOR_GROUP_NAME}_{LsstAuxTelTranslator.DETECTOR_NAME}"
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -81,10 +69,17 @@ class AuxTelMapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dayObs'], dataId["seqNum"])
-        detector = self._extractDetectorName(dataId)
+        if 'visit' in dataId:
+            visit = dataId['visit']
+        else:
+            visit = LsstAuxTelTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"])
 
-        return 200*visit + detector
+        if "detector" in dataId:
+            detector = dataId["detector"]
+        else:
+            detector = 0
+
+        return LsstAuxTelTranslator.compute_detector_exposure_id(visit, detector)
 
 
 class AuxTelParseTask(LsstCamParseTask):

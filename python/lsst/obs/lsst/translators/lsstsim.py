@@ -32,7 +32,7 @@ from astropy.coordinates import AltAz
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import LSST_LOCATION, read_detector_ids, compute_detector_exposure_id
+from .lsst import LSST_LOCATION, read_detector_ids, compute_detector_exposure_id_generic
 
 log = logging.getLogger(__name__)
 
@@ -45,6 +45,29 @@ class LsstSimTranslator(StubTranslator):
 
     detectorMapping = None
     """Mapping of detector name to detector number."""
+
+    @staticmethod
+    def compute_detector_exposure_id(exposure_id, detector_num):
+        """Compute the detector exposure ID from detector number and
+        exposure ID.
+
+        This is a helper method to allow code working outside the translator
+        infrastructure to use the same algorithm.
+
+        Parameters
+        ----------
+        exposure_id : `int`
+            Unique exposure ID.
+        detector_num : `int`
+            Detector number.
+
+        Returns
+        -------
+        detector_exposure_id : `int`
+            The calculated ID.
+        """
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000,
+                                                    mode="concat")
 
     @cache_translation
     def to_telescope(self):
@@ -100,7 +123,7 @@ class LsstSimTranslator(StubTranslator):
     def to_detector_exposure_id(self):
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        return compute_detector_exposure_id(exposure_id, num, max_num=1000, mode="concat")
+        return self.compute_detector_exposure_id(exposure_id, num)
 
     @cache_translation
     def to_observation_type(self):

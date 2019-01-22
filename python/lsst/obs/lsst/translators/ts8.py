@@ -31,9 +31,13 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation, StubTranslator
 
-from .lsst import compute_detector_exposure_id
+from .lsst import compute_detector_exposure_id_generic
 
 log = logging.getLogger(__name__)
+
+# Define the group name for TS8 globally so that it can be used
+# in multiple places. There is only a single raft.
+_DETECTOR_GROUP_NAME = "R00"
 
 
 class LsstTS8Translator(StubTranslator):
@@ -56,13 +60,21 @@ class LsstTS8Translator(StubTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
-        "detector_group": "R00",  # Only a single raft
+        "detector_group": _DETECTOR_GROUP_NAME,
     }
 
     _trivial_map = {
         "science_program": "RUNNUM",
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
     }
+
+    DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
+    """Fixed name of detector group."""
+
+    _detector_names = ["S00", "S01", "S02",
+                       "S10", "S11", "S12",
+                       "S20", "S21", "S22"]
+    """Detector names in detector number order."""
 
     @classmethod
     def can_translate(cls, header, filename=None):
@@ -87,6 +99,94 @@ class LsstTS8Translator(StubTranslator):
             otherwise.
         """
         return cls.can_translate_with_options(header, {"TSTAND": "TS8"}, filename=filename)
+
+    @classmethod
+    def compute_detector_num_from_name(cls, detector_name):
+        """Helper method to return the detector number from the name.
+
+        Parameters
+        ----------
+        detector_name : `str`
+            Detector name.
+
+        Returns
+        -------
+        num : `int`
+            Detector number.
+
+        Raises
+        ------
+        ValueError
+            The supplied name is not known.
+        """
+        return cls._detector_names.index(detector_name)
+
+    @classmethod
+    def compute_detector_name_from_num(cls, detector_num):
+        """Helper method to return the detector name from the number.
+
+        Parameters
+        ----------
+        detector_num : `int`
+            Detector number.
+
+        Returns
+        -------
+        name : `str`
+            Detector name.
+
+        Raises
+        ------
+        IndexError
+            The supplied index is out of range.
+        TypeError
+            The supplied index is not an `int`.
+        """
+        return cls._detector_names[detector_num]
+
+    @staticmethod
+    def compute_detector_exposure_id(exposure_id, detector_num):
+        """Compute the detector exposure ID from detector number and
+        exposure ID.
+
+        This is a helper method to allow code working outside the translator
+        infrastructure to use the same algorithm.
+
+        Parameters
+        ----------
+        exposure_id : `int`
+            Unique exposure ID.
+        detector_num : `int`
+            Detector number.
+
+        Returns
+        -------
+        detector_exposure_id : `int`
+            The calculated ID.
+        """
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=10,
+                                                    mode="concat")
+
+    @staticmethod
+    def compute_exposure_id(dateobs, seqnum=0):
+        """Helper method to calculate the AuxTel exposure_id.
+
+        Parameters
+        ----------
+        dateobs : `str`
+            Date of observation in FITS ISO format.
+        seqnum : `int`, unused
+            Sequence number. Ignored.
+
+        Returns
+        -------
+        exposure_id : `int`
+            Exposure ID.
+        """
+        # There is worry that seconds are too course so use 10th of second
+        # and read the first 21 characters.
+        exposure_id = re.sub(r"\D", "", dateobs[:21])
+        return int(exposure_id)
 
     @cache_translation
     def to_instrument(self):
@@ -135,10 +235,7 @@ class LsstTS8Translator(StubTranslator):
     def to_detector_name(self):
         # Docstring will be inherited. Property defined in properties.py
         detector = self.to_detector_num()
-
-        return ["S00", "S01", "S02",
-                "S10", "S11", "S12",
-                "S20", "S21", "S22"][detector]
+        return self.compute_detector_name_from_num(detector)
 
     def _to_raft_name(self):
         """Returns the full name of the raft.
@@ -316,7 +413,7 @@ class LsstTS8Translator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         exposure_id = self.to_exposure_id()
         num = self.to_detector_num()
-        return compute_detector_exposure_id(exposure_id, num, max_num=10, mode="concat")
+        return self.compute_detector_exposure_id(exposure_id, num)
 
     @cache_translation
     def to_physical_filter(self):
@@ -370,10 +467,7 @@ class LsstTS8Translator(StubTranslator):
         iso = self._header["DATE-OBS"]
         self._used_these_cards("DATE-OBS")
 
-        # There is worry that seconds are too course so use 10th of second
-        # and read the first 21 characters.
-        exposure_id = re.sub(r"\D", "", iso[:21])
-        return int(exposure_id)
+        return self.compute_exposure_id(iso)
 
     # For now assume that visit IDs and exposure IDs are identical
     to_visit_id = to_exposure_id

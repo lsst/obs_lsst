@@ -22,7 +22,7 @@
 """Metadata translation support code for LSST headers"""
 
 __all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids",
-           "compute_detector_exposure_id")
+           "compute_detector_exposure_id_generic")
 
 import os.path
 import yaml
@@ -79,7 +79,7 @@ def read_detector_ids(policyFile):
     return mapping
 
 
-def compute_detector_exposure_id(exposure_id, detector_num, max_num=1000, mode="concat"):
+def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000, mode="concat"):
     """Compute the detector_exposure_id from the exposure id and the
     detector number.
 

@@ -78,7 +78,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            detector_serial="ITL-3800C-098",
                            exposure_id=20180920000065,
                            exposure_time=27.0*u.s,
-                           object=None,
+                           object="UNKNOWN",
                            observation_id="AT_C_20180920_000065",
                            observation_type="unknown",
                            physical_filter="NONE",

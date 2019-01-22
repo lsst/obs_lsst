@@ -19,14 +19,13 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import datetime
 import os.path
 import re
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME, TZERO
+from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstTS8Translator
 
 __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
@@ -46,15 +45,6 @@ class Ts8(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dateObs):
-    """Compute a visit number from the full dateObs"""
-
-    fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-    visit = int((fullDateTime - ROLLOVERTIME - TZERO).total_seconds())
-
-    return visit
-
-
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
 
@@ -70,11 +60,12 @@ class Ts8Mapper(LsstCamMapper):
         return "ts8"
 
     def _extractDetectorName(self, dataId):
-        if 'detector' in dataId:
-            return dataId['detector']
+        if 'detectorName' in dataId:
+            detectorName = dataId['detectorName']
         else:
-            detectors = ["S00", "S01", "S02", "S10", "S11", "S12", "S22", "S20", "S21", "S22"]
-            return detectors.index(dataId["detectorName"])
+            detectorName = LsstTS8Translator.compute_detector_name_from_num(dataId['detector'])
+        detectorGroup = LsstTS8Translator.DETECTOR_GROUP_NAME
+        return f"{detectorGroup}_{detectorName}"
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -87,10 +78,13 @@ class Ts8Mapper(LsstCamMapper):
         if 'visit' in dataId:
             visit = dataId['visit']
         else:
-            visit = computeVisit(dataId['dateObs'])
-        detector = self._extractDetectorName(dataId)
+            visit = LsstTS8Translator.compute_exposure_id(dataId['dateObs'])
+        if 'detector' in dataId:
+            detector = dataId['detector']
+        else:
+            detector = LsstTS8Translator.compute_detector_num_from_name(dataId['detectorName'])
 
-        return 10*visit + detector
+        return LsstTS8Translator.compute_detector_exposure_id(visit, detector)
 
 
 class Ts8ParseTask(LsstCamParseTask):
