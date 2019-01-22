@@ -24,7 +24,7 @@ import re
 import lsst.utils as utils
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstAuxTelTranslator
 
@@ -45,9 +45,14 @@ class AuxTelCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
+class AuxTelMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = LsstAuxTelTranslator
+
+
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
-
+    MakeRawVisitInfoClass = AuxTelMakeRawVisitInfo
     yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):

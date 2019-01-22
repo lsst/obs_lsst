@@ -23,7 +23,7 @@ import os.path
 import re
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstTS8Translator
@@ -45,9 +45,14 @@ class Ts8(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
+class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = LsstTS8Translator
+
+
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
-
+    MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 

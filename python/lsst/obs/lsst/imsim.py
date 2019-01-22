@@ -22,7 +22,7 @@
 import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import ImSimTranslator
 
@@ -43,9 +43,15 @@ class ImsimCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
+class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = ImSimTranslator
+
+
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
     translatorClass = ImSimTranslator
+    MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
     @classmethod
     def getCameraName(cls):

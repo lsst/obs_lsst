@@ -33,7 +33,7 @@ import lsst.daf.persistence as dafPersist
 
 from . import lsstCam
 
-__all__ = ["LsstCamMapper"]
+__all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfoViaObsInfo):

@@ -22,7 +22,7 @@
 import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import PhosimTranslator
 
@@ -43,9 +43,15 @@ class PhosimCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
+class PhosimRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = PhosimTranslator
+
+
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
     translatorClass = PhosimTranslator
+    MakeRawVisitInfoClass = PhosimRawVisitInfo
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
