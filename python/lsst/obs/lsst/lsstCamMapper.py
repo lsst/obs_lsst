@@ -265,7 +265,7 @@ class LsstCamMapper(CameraMapper):
             if not kwargs.get('calibRoot', None):
                 lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find valid calib root directory")
 
-        super(LsstCamMapper, self).__init__(policy, os.path.dirname(policyFile), **kwargs)
+        super().__init__(policy, os.path.dirname(policyFile), **kwargs)
         #
         # The composite objects don't seem to set these
         #

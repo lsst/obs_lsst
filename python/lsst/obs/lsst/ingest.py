@@ -28,7 +28,7 @@ class LsstCamParseTask(ParseTask):
     _translatorClass = None
 
     def __init__(self, config, *args, **kwargs):
-        super(ParseTask, self).__init__(config, *args, **kwargs)
+        super().__init__(config, *args, **kwargs)
 
         self.observationInfo = None
         if self.camera is None:
