@@ -69,6 +69,35 @@ class LsstSimTranslator(StubTranslator):
         return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000,
                                                     mode="concat")
 
+    @classmethod
+    def compute_detector_num_from_name(cls, detector_group, detector_name):
+        """Helper method to return the detector number from the name.
+
+        Parameters
+        ----------
+        detector_group : `str`
+            Name of the detector grouping.  This is generally the raft name.
+        detector_name : `str`
+            Detector name.
+
+        Returns
+        -------
+        num : `int`
+            Detector number.
+        """
+        fullname = f"{detector_group}_{detector_name}"
+
+        num = None
+        if cls.cameraPolicyFile is not None:
+            if cls.detectorMapping is None:
+                cls.detectorMapping = read_detector_ids(cls.cameraPolicyFile)
+            if fullname in cls.detectorMapping:
+                num = cls.detectorMapping[fullname]
+            else:
+                log.warning("Unable to determine detector number from detector name {fullname}")
+
+        return num
+
     @cache_translation
     def to_telescope(self):
         # Docstring will be inherited. Property defined in properties.py
@@ -106,18 +135,7 @@ class LsstSimTranslator(StubTranslator):
         # Docstring will be inherited. Property defined in properties.py
         raft = self.to_detector_group()
         detector = self.to_detector_name()
-        fullname = f"{raft}_{detector}"
-
-        num = None
-        if self.cameraPolicyFile is not None:
-            if self.detectorMapping is None:
-                self.__class__.detectorMapping = read_detector_ids(self.cameraPolicyFile)
-            if fullname in self.detectorMapping:
-                num = self.detectorMapping[fullname]
-            else:
-                log.warning("Unable to determine detector number from detector name {fullname}")
-
-        return num
+        return self.compute_detector_num_from_name(raft, detector)
 
     @cache_translation
     def to_detector_exposure_id(self):

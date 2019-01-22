@@ -338,9 +338,8 @@ class LsstCamMapper(CameraMapper):
         if "detector" in dataId:
             detector = dataId["detector"]
         else:
-            camera = self.camera
-            fullName = self._extractDetectorName(dataId)
-            detector = camera[fullName].getId()
+            detector = self.translatorClass.compute_detector_num_from_name(dataId['raftName'],
+                                                                           dataId['detectorName'])
 
         return self.translatorClass.compute_detector_exposure_id(visit, detector)
 
