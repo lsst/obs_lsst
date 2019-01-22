@@ -60,12 +60,13 @@ class LsstCamParseTask(ParseTask):
         info : `dict`
             Updated information.
         """
-        # Ensure that an ObservationInfo is calculated
-        if self.observationInfo is None:
-            self.observationInfo = ObservationInfo(md, translator_class=self._translatorClass,
-                                                   pedantic=False)
+        # Always calculate a new ObservationInfo since getInfo calls
+        # this method repeatedly for each header.
+        self.observationInfo = ObservationInfo(md, translator_class=self._translatorClass,
+                                               pedantic=False)
 
         info = super().getInfoFromMetadata(md, info)
+        self.observationInfo = None
         return info
 
     def translate_wavelength(self, md):
