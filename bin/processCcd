@@ -12,7 +12,7 @@ while [ X$1 != X ]; do
 	    shift
 	    PRODUCT_DIR=$1;;
 	-h)
-	    echo <<EOF
+	    cat <<EOF
 Run the isr
 Usage:
 	runIsr [options] cameras
@@ -24,7 +24,7 @@ Options:
    --rerun R  Rerun for processing (not calibs)
    -x, -v     Set bash option
 EOF
-	    ;;
+	    exit 0;;
 	-i|--id|--ids)
 	    shift
 	    _ids="$_ids $1"

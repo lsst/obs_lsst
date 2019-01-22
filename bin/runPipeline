@@ -13,7 +13,7 @@ while [ X$1 != X ]; do
 	    shift
 	    PRODUCT_DIR=$1;;
 	-h)
-	    echo <<EOF
+	    cat <<EOF
 Process the test data for the cameras from end-to-end:
    ingestion,
    calibration products generation,
@@ -29,7 +29,7 @@ Options:
    --rerun R  Rerun for processing (not calibs)
    -x, -v     Set bash option
 EOF
-	    ;;
+	    exit 0;;
 	--raw)
 	    shift
 	    rawUningestedDir="$1";;
