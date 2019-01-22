@@ -45,6 +45,7 @@ class PhosimCam(YamlCamera):
 
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
+    translatorClass = PhosimTranslator
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""

@@ -45,6 +45,7 @@ class ImsimCam(YamlCamera):
 
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
+    translatorClass = ImSimTranslator
 
     @classmethod
     def getCameraName(cls):

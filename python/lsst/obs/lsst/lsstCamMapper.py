@@ -205,6 +205,7 @@ class LsstCamMapper(CameraMapper):
     packageName = 'obs_lsst'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
+    translatorClass = None
 
     def __initialiseCache(self):
         """Initialise file-level cache.
@@ -341,7 +342,7 @@ class LsstCamMapper(CameraMapper):
             fullName = self._extractDetectorName(dataId)
             detector = camera[fullName].getId()
 
-        return 200*visit + detector
+        return self.translatorClass.compute_detector_exposure_id(visit, detector)
 
     def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
         return self._computeCcdExposureId(dataId)
