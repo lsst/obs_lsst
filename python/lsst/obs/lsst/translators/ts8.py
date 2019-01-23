@@ -183,7 +183,7 @@ class LsstTS8Translator(StubTranslator):
         exposure_id : `int`
             Exposure ID.
         """
-        # There is worry that seconds are too course so use 10th of second
+        # There is worry that seconds are too coarse so use 10th of second
         # and read the first 21 characters.
         exposure_id = re.sub(r"\D", "", dateobs[:21])
         return int(exposure_id)

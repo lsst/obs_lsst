@@ -37,28 +37,32 @@ class LsstCamParseTask(ParseTask):
     def getInfoFromMetadata(self, md, info=None):
         """Attempt to pull the desired information out of the header.
 
-        Notes
-        -----
-
-        This is done through two mechanisms:
-
-        * translation: a property is set directly from the relevant header keyword
-        * translator: a property is set with the result of calling a method
-
-        The translator methods receive the header metadata and should return the
-        appropriate value, or None if the value cannot be determined.
-
         Parameters
         ----------
         md : `lsst.daf.base.PropertyList`
             FITS header
         info : `dict`, optional
-            File properties, to be supplemented
+            File properties, to be updated by this routine. If `None`
+            it will be created.
 
         Returns
         -------
         info : `dict`
-            Updated information.
+            Translated information from the metadata. Updated form of the
+            input parameter.
+
+        Notes
+        -----
+
+        This is done through two mechanisms:
+
+        * translation: a property is set directly from the relevant header
+                       keyword.
+        * translator: a property is set with the result of calling a method.
+
+        The translator methods receive the header metadata and should return
+        the appropriate value, or None if the value cannot be determined.
+
         """
         # Always calculate a new ObservationInfo since getInfo calls
         # this method repeatedly for each header.
@@ -66,6 +70,9 @@ class LsstCamParseTask(ParseTask):
                                                pedantic=False)
 
         info = super().getInfoFromMetadata(md, info)
+
+        # Ensure that the translated ObservationInfo is cleared.
+        # This avoids possible confusion.
         self.observationInfo = None
         return info
 
@@ -196,7 +203,7 @@ class LsstCamParseTask(ParseTask):
 
         Returns
         -------
-        detID : `str`
+        detID : `int`
             detector ID, e.g. 4
         """
         return self.observationInfo.detector_num
