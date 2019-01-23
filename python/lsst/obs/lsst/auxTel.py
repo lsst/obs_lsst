@@ -21,6 +21,7 @@
 #
 import os.path
 import re
+import lsst.log
 import lsst.utils as utils
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
@@ -81,6 +82,9 @@ class AuxTelMapper(LsstCamMapper):
 
         if "detector" in dataId:
             detector = dataId["detector"]
+            if detector != 0:
+                lsst.log.Log.getLogger("AuxTelMapper").warn("Got detector %d for AuxTel when it should"
+                                                            " always be 0", detector)
         else:
             detector = 0
 
