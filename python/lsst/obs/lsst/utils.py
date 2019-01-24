@@ -24,6 +24,8 @@
 Miscellaneous utilities related to lsst cameras
 """
 
+__all__ = ("readRawFile",)
+
 import lsst.afw.image as afwImage
 from lsst.obs.lsst.lsstCamMapper import assemble_raw
 try:
