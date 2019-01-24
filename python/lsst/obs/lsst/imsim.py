@@ -24,7 +24,7 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import ImSimTranslator
+from .translators import ImsimTranslator
 
 __all__ = ["ImsimMapper", "ImsimCam", "ImsimParseTask"]
 
@@ -48,12 +48,12 @@ class ImsimCam(YamlCamera):
 
 class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = ImSimTranslator
+    metadataTranslator = ImsimTranslator
 
 
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
-    translatorClass = ImSimTranslator
+    translatorClass = ImsimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
     @classmethod
@@ -77,4 +77,4 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = ImsimCam           # the class to instantiate for the class-scope camera
-    _translatorClass = ImSimTranslator
+    _translatorClass = ImsimTranslator
