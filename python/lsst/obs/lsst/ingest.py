@@ -96,9 +96,18 @@ class LsstCamParseTask(ParseTask):
         Returns
         -------
         wavelength : `int`
-            The recorded wavelength as an int
+            The recorded wavelength in nanometers as an int
         """
+        bad_wl = -6e66  # Bad value for wavelength
+        if "MONOWL" not in md:
+            return bad_wl
+
         raw_wl = md.getScalar("MONOWL")
+
+        # Negative wavelengths are bad so normalize the bad value
+        if raw_wl < 0:
+            return bad_wl
+
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
             logger = lsstLog.Log.getLogger('obs.lsst.ingest')

@@ -127,21 +127,6 @@ class AuxTelParseTask(LsstCamParseTask):
 
         return phuInfo, infoList
 
-    def translate_wavelength(self, md):
-        """Translate wavelength provided by auxtel readout.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        wavelength : `int`
-            The recorded wavelength as an int
-        """
-        return -666
-
     def translate_seqNum(self, md):
         """Return the SEQNUM
 
