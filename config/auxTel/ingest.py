@@ -2,29 +2,16 @@ from lsst.obs.lsst.auxTel import AuxTelParseTask
 
 config.parse.retarget(AuxTelParseTask)
 
-config.parse.translation = {
-    'expTime': 'EXPTIME',
-    'object': 'OBJECT',
-    'imageType': 'IMGTYPE',
-    'detectorName': '',
-    'dateObs': 'DATE-OBS',
-    'date': 'DATE-OBS',
-    #'seqNum': 'SEQNUM',
-}
-config.parse.translators = {
-    'dayObs': 'translate_dayObs',
-    'detector': 'translate_detector',   # set this way as I can't use a default of 0
-    'filter': 'translate_filter',       # we have two filter wheels
-    'seqNum': 'translate_seqNum',       # an ID valid within a day
-    'visit': 'translate_visit',
-    'wavelength': 'translate_wavelength',
-}
-config.parse.defaults = {
-    #'detector': 0,                      # values must be strings as per ParseConfig in pipe_tasks
-    'detectorName': "S1",
-    'object': "UNKNOWN",
-    'imageType': "UNKNOWN",
-}
+del config.parse.translation['testType']
+
+del config.parse.translators['run']
+del config.parse.translators['raftName']
+del config.parse.translators['lsstSerial']
+del config.parse.translators['snap']
+
+config.parse.translators['dayObs'] = 'translate_dayObs'
+config.parse.translators['seqNum'] = 'translate_seqNum'
+
 config.parse.hdu = 0
 
 config.register.columns = {

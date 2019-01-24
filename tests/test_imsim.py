@@ -43,10 +43,10 @@ class TestImsim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 32
-        exposureIds = {'raw': 40919042,
-                       'bias': 40919042,
-                       'dark': 40919042,
-                       'flat': 40919042
+        exposureIds = {'raw': 2045950042,
+                       'bias': 2045950042,
+                       'dark': 2045950042,
+                       'flat': 2045950042
                        }
         filters = {'raw': 'i',
                    'bias': '_unknown_',

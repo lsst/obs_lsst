@@ -12,7 +12,7 @@ while [ X$1 != X ]; do
 	    shift
 	    PRODUCT_DIR=$1;;
 	-h)
-	    echo <<EOF
+	    cat <<EOF
 Create the calibration products
 Usage:
 	createCalibs [options] cameras
@@ -22,7 +22,7 @@ Options:
    --dir DIR  Base directory for data
    -x, -v   Set bash option
 EOF
-	    ;;
+	    exit 0;;
 	-j)
 	    shift
 	    nproc=$1;;
@@ -87,7 +87,7 @@ for camera in $cameras; do
 
     if [ X"$configs" != X ]; then
 	configs="-c $configs"
-    fi    
+    fi
 
     constructBias.py $DATA_DIR --rerun $rerun --id $biasIds $configs --batch-type none -j $nproc &&
     ingestCalibs.py $DATA_DIR --output $DATA_DIR/CALIB --validity 1800 \

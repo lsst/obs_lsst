@@ -2,8 +2,10 @@ import datetime
 import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
+from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from . import LsstCam
+from .translators.lsst import ROLLOVERTIME as MDROLLOVERTIME
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
@@ -23,12 +25,56 @@ class LsstCamParseTask(ParseTask):
 
     camera = None                       # class-scope camera to avoid instantiating once per file
     _cameraClass = LsstCam              # the class to instantiate for the class-scope camera
+    _translatorClass = None
 
     def __init__(self, config, *args, **kwargs):
-        super(ParseTask, self).__init__(config, *args, **kwargs)
+        super().__init__(config, *args, **kwargs)
 
+        self.observationInfo = None
         if self.camera is None:
             self.camera = self._cameraClass()
+
+    def getInfoFromMetadata(self, md, info=None):
+        """Attempt to pull the desired information out of the header.
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList`
+            FITS header
+        info : `dict`, optional
+            File properties, to be updated by this routine. If `None`
+            it will be created.
+
+        Returns
+        -------
+        info : `dict`
+            Translated information from the metadata. Updated form of the
+            input parameter.
+
+        Notes
+        -----
+
+        This is done through two mechanisms:
+
+        * translation: a property is set directly from the relevant header
+                       keyword.
+        * translator: a property is set with the result of calling a method.
+
+        The translator methods receive the header metadata and should return
+        the appropriate value, or None if the value cannot be determined.
+
+        """
+        # Always calculate a new ObservationInfo since getInfo calls
+        # this method repeatedly for each header.
+        self.observationInfo = ObservationInfo(md, translator_class=self._translatorClass,
+                                               pedantic=False)
+
+        info = super().getInfoFromMetadata(md, info)
+
+        # Ensure that the translated ObservationInfo is cleared.
+        # This avoids possible confusion.
+        self.observationInfo = None
+        return info
 
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
@@ -44,15 +90,24 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
         -------
         wavelength : `int`
-            The recorded wavelength as an int
+            The recorded wavelength in nanometers as an int
         """
-        raw_wl = md.get("MONOWL")
+        bad_wl = -6e66  # Bad value for wavelength
+        if "MONOWL" not in md:
+            return bad_wl
+
+        raw_wl = md.getScalar("MONOWL")
+
+        # Negative wavelengths are bad so normalize the bad value
+        if raw_wl < 0:
+            return bad_wl
+
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
             logger = lsstLog.Log.getLogger('obs.lsst.ingest')
@@ -66,29 +121,26 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
         -------
         dateObs : `str`
-            The day that the data was taken, e.g. 2018-08-20T21:56:24.608
+            The date that the data was taken, e.g. 2018-08-20T21:56:24.608
         """
-        return self.__fixDateObs(md.get("DATE-OBS"))
+        dateObs = self.observationInfo.datetime_begin
+        dateObs.format = "isot"
+        return str(dateObs)
 
-    @staticmethod
-    def __fixDateObs(dateObs):
-        """Fix bad formatting in dateObs"""
-        dateObs = re.sub(r"\(UTC\)$", "", dateObs)  # TSEIA-83
-
-        return dateObs
+    translate_date = translate_dateObs
 
     def translate_dayObs(self, md):
         """Generate the day that the observation was taken
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -96,20 +148,18 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. 1958-02-05
         """
-        dateObs = self.__fixDateObs(md.get("DATE-OBS"))
-
-        d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= ROLLOVERTIME
-        dayObs = d.strftime("%Y-%m-%d")
-
-        return dayObs
+        dateObs = self.observationInfo.datetime_begin
+        dateObs -= MDROLLOVERTIME
+        dateObs.format = "iso"
+        dateObs.out_subfmt = "date"  # YYYY-MM-DD format
+        return str(dateObs)
 
     def translate_snap(self, md):
         """Extract snap from metadata.
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -118,7 +168,7 @@ class LsstCamParseTask(ParseTask):
             snap number (default: 0)
         """
         try:
-            return int(md.get("SNAP"))
+            return int(md.getScalar("SNAP"))
         except KeyError:
             return 0
 
@@ -127,7 +177,7 @@ class LsstCamParseTask(ParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -135,14 +185,14 @@ class LsstCamParseTask(ParseTask):
         ccdID : `str`
             name of ccd, e.g. S01
         """
-        return md.get("CHIPID")[4:7]
+        return self.observationInfo.detector_name
 
     def translate_raftName(self, md):
         """Extract raft ID from CHIPID.
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
@@ -150,27 +200,47 @@ class LsstCamParseTask(ParseTask):
         raftID : `str`
             name of raft, e.g. R21
         """
-        return md.get("CHIPID")[:3]
+        return self.observationInfo.detector_group
 
     def translate_detector(self, md):
-        """Extract raft ID from CHIPID.
+        """Extract detector number from raft and detector name.
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
             image metadata
 
         Returns
         -------
-        raftID : `str`
-            name of raft, e.g. R21
+        detID : `int`
+            detector ID, e.g. 4
         """
-        raftName = self.translate_raftName(md)
-        detectorName = self.translate_detectorName(md)
-        fullName = '_'.join([raftName, detectorName])
-        detId = self.camera[fullName].getId()
+        return self.observationInfo.detector_num
 
-        return detId
+    def translate_expTime(self, md):
+        return self.observationInfo.exposure_time.value
+
+    def translate_object(self, md):
+        return self.observationInfo.object
+
+    def translate_imageType(self, md):
+        obstype = self.observationInfo.observation_type.upper()
+        # Dictionary for obstype values is not yet clear
+        if obstype == "SCIENCE":
+            obstype = "SKYEXP"
+        return obstype
+
+    def translate_filter(self, md):
+        return self.observationInfo.physical_filter
+
+    def translate_lsstSerial(self, md):
+        return self.observationInfo.detector_serial
+
+    def translate_run(self, md):
+        return self.observationInfo.science_program
+
+    def translate_visit(self, md):
+        return self.observationInfo.visit_id
 
 #############################################################################################################
 
@@ -180,7 +250,7 @@ class LsstCamCalibsParseTask(CalibsParseTask):
 
     def _translateFromCalibId(self, field, md):
         """Get a value from the CALIB_ID written by constructCalibs."""
-        data = md.get("CALIB_ID")
+        data = md.getScalar("CALIB_ID")
         match = re.search(r".*%s=(\S+)" % field, data)
         return match.groups()[0]
 

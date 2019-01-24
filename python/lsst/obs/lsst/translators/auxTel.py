@@ -44,6 +44,12 @@ AUXTEL_LOCATION = EarthLocation.from_geodetic(-30.244728, -70.747698, 2663.0)
 # since the headers have not historically been reliable
 TSTART = Time("2019-06-01T00:00", format="isot", scale="utc")
 
+# Define the sensor and group name for AuxTel globally so that it can be used
+# in multiple places. There is no raft but for consistency with other LSST
+# cameras we define one.
+_DETECTOR_GROUP_NAME = "RXX"
+_DETECTOR_NAME = "S00"
+
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -77,9 +83,9 @@ class LsstAuxTelTranslator(StubTranslator):
         # AuxTel is not yet attached to a telescope so many translations are null.
         "instrument": "LATISS",
         "telescope": "LSSTAuxTel",
-        "detector_group": "RXX",  # Single sensor, define a dummy raft
+        "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
-        "detector_name": "S00",  # Single sensor
+        "detector_name": _DETECTOR_NAME,  # Single sensor
         "boresight_rotation_coord": "unknown",
         "science_program": "unknown",
         "relative_humidity": None,
@@ -95,10 +101,16 @@ class LsstAuxTelTranslator(StubTranslator):
         "dark_time": (["DARKTIME", "EXPTIME"], dict(unit=u.s)),
         "detector_serial": ["LSST_NUM", "DETSER"],
         "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
-        "object": ("OBJECT", dict(checker=is_non_science_or_lab)),
+        "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
         "boresight_rotation_angle": ("ROTANGLE", dict(checker=is_non_science_or_lab,
                                                       default=float("nan"), unit=u.deg)),
     }
+
+    DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
+    """Fixed name of detector group."""
+
+    DETECTOR_NAME = _DETECTOR_NAME
+    """Fixed name of single sensor."""
 
     @classmethod
     def can_translate(cls, header, filename=None):
@@ -135,6 +147,52 @@ class LsstAuxTelTranslator(StubTranslator):
             return True
         return False
 
+    @staticmethod
+    def compute_detector_exposure_id(exposure_id, detector_num):
+        """Compute the detector exposure ID from detector number and
+        exposure ID.
+
+        This is a helper method to allow code working outside the translator
+        infrastructure to use the same algorithm.
+
+        Parameters
+        ----------
+        exposure_id : `int`
+            Unique exposure ID.
+        detector_num : `int`
+            Detector number.
+
+        Returns
+        -------
+        detector_exposure_id : `int`
+            The calculated ID.
+        """
+        if detector_num != 0:
+            log.warning("Unexpected non-zero detector number for AuxTel")
+        return exposure_id
+
+    @staticmethod
+    def compute_exposure_id(dayobs, seqnum):
+        """Helper method to calculate the AuxTel exposure_id.
+
+        Parameters
+        ----------
+        dayobs : `str`
+            Day of observation in either YYYYMMDD or YYYY-MM-DD format.
+        seqnum : `int` or `str`
+            Sequence number.
+
+        Returns
+        -------
+        exposure_id : `int`
+            Exposure ID in form YYYYMMDDnnnnn form.
+        """
+        dayobs = dayobs.replace("-", "")
+
+        # Form the number as a string zero padding the sequence number
+        idstr = f"{dayobs}{seqnum:06d}"
+        return int(idstr)
+
     @cache_translation
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
@@ -167,8 +225,11 @@ class LsstAuxTelTranslator(StubTranslator):
     @cache_translation
     def to_detector_exposure_id(self):
         # Docstring will be inherited. Property defined in properties.py
-        return self.to_exposure_id()
+        exposure_id = self.to_exposure_id()
+        detector_num = self.to_detector_num()
+        return self.compute_detector_exposure_id(exposure_id, detector_num)
 
+    @cache_translation
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
@@ -187,9 +248,7 @@ class LsstAuxTelTranslator(StubTranslator):
         seqnum = self._header["SEQNUM"]
         self._used_these_cards("DAYOBS", "SEQNUM")
 
-        # Form the number as a string zero padding the sequence number
-        idstr = f"{dayobs}{seqnum:06d}"
-        return int(idstr)
+        return self.compute_exposure_id(dayobs, seqnum)
 
     # For now "visits" are defined to be identical to exposures.
     to_visit_id = to_exposure_id

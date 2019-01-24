@@ -33,7 +33,7 @@ import lsst.daf.persistence as dafPersist
 
 from . import lsstCam
 
-__all__ = ["LsstCamMapper"]
+__all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfoViaObsInfo):
@@ -205,6 +205,7 @@ class LsstCamMapper(CameraMapper):
     packageName = 'obs_lsst'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
+    translatorClass = None
 
     def __initialiseCache(self):
         """Initialise file-level cache.
@@ -265,7 +266,7 @@ class LsstCamMapper(CameraMapper):
             if not kwargs.get('calibRoot', None):
                 lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find valid calib root directory")
 
-        super(LsstCamMapper, self).__init__(policy, os.path.dirname(policyFile), **kwargs)
+        super().__init__(policy, os.path.dirname(policyFile), **kwargs)
         #
         # The composite objects don't seem to set these
         #
@@ -337,11 +338,10 @@ class LsstCamMapper(CameraMapper):
         if "detector" in dataId:
             detector = dataId["detector"]
         else:
-            camera = self.camera
-            fullName = "%s_%s" % (dataId["raftName"], dataId["detectorName"])
-            detector = camera[fullName].getId()
+            detector = self.translatorClass.compute_detector_num_from_name(dataId['raftName'],
+                                                                           dataId['detectorName'])
 
-        return 200*visit + detector
+        return self.translatorClass.compute_detector_exposure_id(visit, detector)
 
     def bypass_ccdExposureId(self, datasetType, pythonType, location, dataId):
         return self._computeCcdExposureId(dataId)

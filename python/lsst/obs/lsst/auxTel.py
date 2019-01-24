@@ -19,14 +19,15 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import datetime
 import os.path
 import re
+import lsst.log
 import lsst.utils as utils
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask, EXTENSIONS
+from .translators import LsstAuxTelTranslator
 
 __all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
 
@@ -45,20 +46,14 @@ class AuxTelCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dayObs, seqNum):
-    """Compute a visit number given a dayObs and seqNum"""
-
-    try:
-        date = datetime.data.fromisoformat(dayObs)
-    except AttributeError:          # requires py 3.7
-        date = datetime.date(*[int(f) for f in dayObs.split('-')])
-
-    return (date.toordinal() - 736900)*100000 + seqNum
+class AuxTelMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = LsstAuxTelTranslator
 
 
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
-
+    MakeRawVisitInfoClass = AuxTelMakeRawVisitInfo
     yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
@@ -70,7 +65,7 @@ class AuxTelMapper(LsstCamMapper):
         return "auxTel"
 
     def _extractDetectorName(self, dataId):
-        return 0                        # "S1"
+        return f"{LsstAuxTelTranslator.DETECTOR_GROUP_NAME}_{LsstAuxTelTranslator.DETECTOR_NAME}"
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -80,10 +75,20 @@ class AuxTelMapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        visit = computeVisit(dataId['dayObs'], dataId["seqNum"])
-        detector = self._extractDetectorName(dataId)
+        if 'visit' in dataId:
+            visit = dataId['visit']
+        else:
+            visit = LsstAuxTelTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"])
 
-        return 200*visit + detector
+        if "detector" in dataId:
+            detector = dataId["detector"]
+            if detector != 0:
+                lsst.log.Log.getLogger("AuxTelMapper").warn("Got detector %d for AuxTel when it should"
+                                                            " always be 0", detector)
+        else:
+            detector = 0
+
+        return LsstAuxTelTranslator.compute_detector_exposure_id(visit, detector)
 
 
 class AuxTelParseTask(LsstCamParseTask):
@@ -95,6 +100,7 @@ class AuxTelParseTask(LsstCamParseTask):
     """
 
     _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
+    _translatorClass = LsstAuxTelTranslator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the filename/path.
@@ -121,67 +127,6 @@ class AuxTelParseTask(LsstCamParseTask):
 
         return phuInfo, infoList
 
-    def translate_detector(self, md):
-        return 0                        # we can't use config.parse.defaults as it only handles strings
-
-    def translate_visit(self, md):
-        """Generate a unique visit number
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit_num : `int`
-            Visit number, as translated
-        """
-        dayObs = self.translate_dayObs(md)
-        seqNum = self.translate_seqNum(md)
-
-        return computeVisit(dayObs, seqNum)
-
-    def translate_wavelength(self, md):
-        """Translate wavelength provided by auxtel readout.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        wavelength : `int`
-            The recorded wavelength as an int
-        """
-        return -666
-
-    def translate_filter(self, md):
-        """Translate the two filter wheels into one filter string
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter name : `str`
-            The names of the two filters separated by a "|"; if both are empty return None
-        """
-        filters = []
-        for k in ["FILTER1", "FILTER2"]:
-            if md.exists(k):
-                filters.append(md.get(k))
-
-        filterName = "|".join(filters)
-
-        if filterName == "":
-            filterName = "NONE"
-
-        return filterName
-
     def translate_seqNum(self, md):
         """Return the SEQNUM
 
@@ -197,11 +142,11 @@ class AuxTelParseTask(LsstCamParseTask):
         """
 
         if md.exists("SEQNUM"):
-            return md.get("SEQNUM")
+            return md.getScalar("SEQNUM")
         #
         # Oh dear.  Extract it from the filename
         #
-        imgname = md.get("IMGNAME")           # e.g. AT-O-20180816-00008
+        imgname = md.getScalar("IMGNAME")           # e.g. AT-O-20180816-00008
         seqNum = imgname[-5:]                 # 00008
         seqNum = re.sub(r'^0+', '', seqNum)   # 8
 

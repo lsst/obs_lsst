@@ -43,7 +43,7 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 32
-        exposureIds = {'raw': 40919042}
+        exposureIds = {'raw': 2045950042}
         filters = {'raw': 'i'}
         exptimes = {'raw': 30.0}
         detectorIds = {'raw': 42}

@@ -22,8 +22,9 @@
 import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
+from .translators import PhosimTranslator
 
 __all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
 
@@ -42,8 +43,15 @@ class PhosimCam(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
+class PhosimRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = PhosimTranslator
+
+
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
+    translatorClass = PhosimTranslator
+    MakeRawVisitInfoClass = PhosimRawVisitInfo
 
     def _makeCamera(self, policy, repositoryDir):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
@@ -59,33 +67,4 @@ class PhosimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = PhosimCam           # the class to instantiate for the class-scope camera
-
-    def translate_filter(self, md):
-        """Extract filter from metadata (ignoring for corner-raft chips)
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter : `str`
-            filter name
-        """
-        return md.get("FILTER")
-
-    def translate_visit(self, md):
-        """Extract visit from metadata (as an int)
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit : `int`
-            visit number
-        """
-        return int(md.get("OBSID"))
+    _translatorClass = PhosimTranslator

@@ -43,7 +43,7 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 32
-        exposureIds = {'raw': 1140013000, 'bias': 1140013000}
+        exposureIds = {'raw': 5700065, 'bias': 20180920000065}
         filters = {'raw': 'NONE', 'bias': '_unknown_'}
         exptimes = {'raw': 27.0, 'bias': 0}
         detectorIds = {'raw': 0, 'bias': 0}
