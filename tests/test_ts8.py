@@ -33,7 +33,7 @@ from lsst.obs.lsst.testHelper import ObsLsstButlerTests
 
 
 class TestTs8(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
-    instrumentDir = "ts8"
+    instrumentDir = "ts8e2v"
 
     def setUp(self):
         dataIds = {'raw': {'visit': 270095325, 'detectorName': 'S11'},
