@@ -1,20 +1,14 @@
-import datetime
 import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from . import LsstCam
-from .translators.lsst import ROLLOVERTIME as MDROLLOVERTIME
+from .translators.lsst import ROLLOVERTIME
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-# This is needed elsewhere and should only be defined in one place
-# roll over at 8am UTC
-ROLLOVERTIME = datetime.timedelta(hours=8)
-TZERO = datetime.datetime(2010, 1, 1, tzinfo=datetime.timezone.utc)
-
-__all__ = ["LsstCamParseTask", "ROLLOVERTIME", "TZERO"]
+__all__ = ["LsstCamParseTask"]
 
 
 class LsstCamParseTask(ParseTask):
@@ -149,7 +143,7 @@ class LsstCamParseTask(ParseTask):
             The day that the data was taken, e.g. 1958-02-05
         """
         dateObs = self.observationInfo.datetime_begin
-        dateObs -= MDROLLOVERTIME
+        dateObs -= ROLLOVERTIME
         dateObs.format = "iso"
         dateObs.out_subfmt = "date"  # YYYY-MM-DD format
         return str(dateObs)
