@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     raftData = {}
     for raftName, detectorName, detector in \
-        butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId): # noqa E125
+            butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId):
 
         dataId["detector"] = detector   # more of the butler stupidity
 

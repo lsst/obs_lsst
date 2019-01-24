@@ -55,7 +55,7 @@ if __name__ == "__main__":
             fields = fields[:29]
             assert len(fields) == 29
 
-            gain, gainVariation           = fields[7],  fields[8] # noqa E221
+            gain, gainVariation = fields[7], fields[8]
             readNoise, readNoiseVariation = fields[11], fields[12]
 
             if False:

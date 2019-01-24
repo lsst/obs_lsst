@@ -89,7 +89,7 @@ def assemble_raw(dataId, componentInfo, cls):
                             amp.getRawBBox(), ampExp.getBBox())
                 warned = True
 
-            w,  h  = ampExp.getBBox().getDimensions()  # noqa E221, E241
+            w, h = ampExp.getBBox().getDimensions()
             ow, oh = amp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
             #
             # We could trust the BIASSEC keyword, or we can just assume that they've changed
