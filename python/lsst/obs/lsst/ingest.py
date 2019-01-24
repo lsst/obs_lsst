@@ -98,7 +98,7 @@ class LsstCamParseTask(ParseTask):
         wavelength : `int`
             The recorded wavelength in nanometers as an int
         """
-        bad_wl = -6e66  # Bad value for wavelength
+        bad_wl = -666  # Bad value for wavelength
         if "MONOWL" not in md:
             return bad_wl
 
