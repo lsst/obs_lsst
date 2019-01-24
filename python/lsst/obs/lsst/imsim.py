@@ -31,12 +31,15 @@ __all__ = ["ImsimMapper", "ImsimCam", "ImsimParseTask"]
 
 class ImsimCam(YamlCamera):
     """The imsim realisation of the real LSST 3.2Gpix Camera
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional.
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for imsim
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
 
@@ -55,10 +58,17 @@ class ImsimMapper(LsstCamMapper):
 
     @classmethod
     def getCameraName(cls):
+        """Return the camera name for this mapper."""
         return "imsim"
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return ImsimCam()
 
 

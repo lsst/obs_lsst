@@ -34,8 +34,6 @@ class Ts8itl(Ts8):
     """
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for ts8
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ts8itl.yaml")
 

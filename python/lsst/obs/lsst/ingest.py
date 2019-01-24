@@ -57,6 +57,11 @@ class LsstCamParseTask(ParseTask):
         The translator methods receive the header metadata and should return
         the appropriate value, or None if the value cannot be determined.
 
+        This implementation constructs an
+        `~astro_metadata_translator.ObservationInfo` object prior to calling
+        each translator method, making the translated information available
+        through the ``observationInfo`` attribute.
+
         """
         # Always calculate a new ObservationInfo since getInfo calls
         # this method repeatedly for each header.
@@ -73,14 +78,17 @@ class LsstCamParseTask(ParseTask):
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
 
-        The teststand driving script asks for a wavelength, and then reads the value back to ensure that
-        the correct position was moved to. This number is therefore read back with sub-nm precision.
-        Typically the position is within 0.005nm of the desired position, so we warn if it's not very
-        close to an integer value.
+        The teststand driving script asks for a wavelength, and then reads the
+        value back to ensure that the correct position was moved to. This
+        number is therefore read back with sub-nm precision.  Typically the
+        position is within 0.005nm of the desired position, so we warn if it's
+        not very close to an integer value.
 
-        Future users should be aware that the HIERARCH MONOCH-WAVELENG key is NOT the requested value, and
-        therefore cannot be used as a cross-check that the wavelength was close to the one requested.
-        The only record of the wavelength that was set is in the original filename.
+        Future users should be aware that the ``HIERARCH MONOCH-WAVELENG`` key
+        is NOT the requested value, and therefore cannot be used as a
+        cross-check that the wavelength was close to the one requested.
+        The only record of the wavelength that was set is in the original
+        filename.
 
         Parameters
         ----------
@@ -111,7 +119,7 @@ class LsstCamParseTask(ParseTask):
         return wl
 
     def translate_dateObs(self, md):
-        """Convert DATE-OBS to a legal format; TSEIA-83
+        """Retrieve the date of observation as an ISO format string.
 
         Parameters
         ----------
@@ -121,7 +129,8 @@ class LsstCamParseTask(ParseTask):
         Returns
         -------
         dateObs : `str`
-            The date that the data was taken, e.g. 2018-08-20T21:56:24.608
+            The date that the data was taken in FITS ISO format,
+            e.g. 2018-08-20T21:56:24.608
         """
         dateObs = self.observationInfo.datetime_begin
         dateObs.format = "isot"
@@ -130,7 +139,7 @@ class LsstCamParseTask(ParseTask):
     translate_date = translate_dateObs
 
     def translate_dayObs(self, md):
-        """Generate the day that the observation was taken
+        """Generate the day that the observation was taken.
 
         Parameters
         ----------
@@ -149,7 +158,7 @@ class LsstCamParseTask(ParseTask):
         return str(dateObs)
 
     def translate_snap(self, md):
-        """Extract snap from metadata.
+        """Extract snap number from metadata.
 
         Parameters
         ----------
@@ -236,8 +245,6 @@ class LsstCamParseTask(ParseTask):
     def translate_visit(self, md):
         return self.observationInfo.visit_id
 
-#############################################################################################################
-
 
 class LsstCamCalibsParseTask(CalibsParseTask):
     """Parser for calibs."""
@@ -255,8 +262,9 @@ class LsstCamCalibsParseTask(CalibsParseTask):
         return self._translateFromCalibId("detectorName", md)
 
     def translate_detector(self, md):
-        # this is not a _great_ fix, but this obs_package is enforcing that detectors be integers
-        # and there's not an elegant way of ensuring this is the right type really
+        # this is not a _great_ fix, but this obs_package is enforcing that
+        # detectors be integers and there's not an elegant way of ensuring
+        # this is the right type really
         return int(self._translateFromCalibId("detector", md))
 
     def translate_filter(self, md):

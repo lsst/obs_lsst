@@ -49,7 +49,8 @@ if __name__ == "__main__":
 
     dataId = dict(visit=visit)
     #
-    # Due to butler stupidity it can't/won't lookup things when you also specify a channel.  Sigh
+    # Due to butler stupidity it can't/won't lookup things when you also
+    # specify a channel.  Sigh
     #
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
 

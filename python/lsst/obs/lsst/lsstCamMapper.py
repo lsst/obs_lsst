@@ -50,7 +50,8 @@ def assemble_raw(dataId, componentInfo, cls):
     dataId : `lsst.daf.persistence.dataId.DataId`
         the data ID
     componentInfo : `dict`
-        dict containing the components, as defined by the composite definition in the mapper policy
+        dict containing the components, as defined by the composite definition
+        in the mapper policy.
     cls : 'object'
         unused
 
@@ -106,8 +107,9 @@ def assemble_raw(dataId, componentInfo, cls):
             amp.setRawHorizontalOverscanBBox(hOverscanBBox)
             amp.setRawVerticalOverscanBBox(vOverscanBBox)
             #
-            # This gets all the geometry right for the amplifier, but the size of the untrimmed image
-            # will be wrong and we'll put the amp sections in the wrong places, i.e.
+            # This gets all the geometry right for the amplifier, but the size
+            # of the untrimmed image will be wrong and we'll put the amp
+            # sections in the wrong places, i.e.
             #   amp.getRawXYOffset()
             # will be wrong.  So we need to recalculate the offsets.
             #
@@ -144,7 +146,8 @@ def assemble_raw(dataId, componentInfo, cls):
     md = componentInfo['raw_hdu'].obj
     exposure.setMetadata(md)
     #
-    # We need to standardize, but have no legal way to call std_raw.  The butler should do this for us.
+    # We need to standardize, but have no legal way to call std_raw.
+    # The butler should do this for us.
     #
     global _camera, _lsstCamMapper      # Dangerous file-level cache set by Mapper.__initialiseCache()
 
@@ -169,25 +172,37 @@ def assemble_raw(dataId, componentInfo, cls):
 
     return exposure
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
 #
-# This code will be replaced by functionality in afw;  DM-14932 (done), DM-14980
+# This code will be replaced by functionality in afw;
+# DM-14932 (done), DM-14980
 #
-import lsst.afw.cameraGeom as cameraGeom # noqa F811
+import lsst.afw.cameraGeom as cameraGeom  # noqa: E402
 
 
 def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
-    """Given a camera, detector and (boresight, rotation), return that detector's WCS
+    """Given a camera, detector and (boresight, rotation), return that
+    detector's WCS.
 
-        Parameters
-        ----------
-        camera: `lsst.afw.cameraGeom.Camera`  The camera containing the detector
-        detector: `lsst.afw.cameraGeom.Detector`  A detector in a camera
-        boresight: `lsst.afw.geom.SpherePoint`  The boresight of the observation
-        rotation: `lsst.afw.geom.Angle` The rotation angle of the camera
+    Parameters
+    ----------
+    camera : `lsst.afw.cameraGeom.Camera`
+        The camera containing the detector.
+    detector : `lsst.afw.cameraGeom.Detector`
+        A detector in a camera.
+    boresight : `lsst.afw.geom.SpherePoint`
+       The boresight of the observation.
+    rotation : `lsst.afw.geom.Angle`, optional
+        The rotation angle of the camera.
+        The rotation is "rotskypos", the angle of sky relative to camera
+        coordinates (from North over East)
+    flipX : `bool`, optional
+        Flip the X axis?
 
-    The rotation is "rotskypos", the angle of sky relative to camera coordinates
-    (from North over East)
+    Returns
+    -------
+    wcs : `lsst::afw::geom::SkyWcs`
+        The calculated WCS.
     """
     trans = camera.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
                                 detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
@@ -196,11 +211,10 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
 
     return wcs
 
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
 
 class LsstCamMapper(CameraMapper):
-    """The Mapper for LsstCam."""
+    """The Mapper for LsstCam.
+    """
 
     packageName = 'obs_lsst'
     MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
@@ -210,8 +224,8 @@ class LsstCamMapper(CameraMapper):
     def __initialiseCache(self):
         """Initialise file-level cache.
 
-        We do this because it's expensive to build Cameras and Mappers, but it is not a good idea in the
-        medium or long run!
+        We do this because it's expensive to build Cameras and Mappers, but it
+        is not a good idea in the medium or long run!
         """
         global _camera, _lsstCamMapper
 
@@ -237,7 +251,6 @@ class LsstCamMapper(CameraMapper):
             pass
 
     def __init__(self, inputPolicy=None, **kwargs):
-        """Initialization for the LsstCam Mapper."""
         #
         # Merge the list of .yaml files
         #
@@ -290,8 +303,9 @@ class LsstCamMapper(CameraMapper):
 
     @classmethod
     def defineFilters(cls):
-        # The order of these defineFilter commands matters as their IDs are used to generate at least some
-        # object IDs (e.g. on coadds) and changing the order will invalidate old objIDs
+        # The order of these defineFilter commands matters as their IDs are
+        # used to generate at least some object IDs (e.g. on coadds) and
+        # changing the order will invalidate old objIDs
         afwImageUtils.resetFilters()
         afwImageUtils.defineFilter('NONE', 0.0, alias=['no_filter', "OPEN"])
         afwImageUtils.defineFilter('275CutOn', 0.0, alias=[])
@@ -306,11 +320,18 @@ class LsstCamMapper(CameraMapper):
         afwImageUtils.defineFilter('y', lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4'])
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return lsstCam.LsstCam()
 
     def _getRegistryValue(self, dataId, k):
-        """Return a value from a dataId, or look it up in the registry if it isn't present"""
+        """Return a value from a dataId, or look it up in the registry if it
+        isn't present."""
         if k in dataId:
             return dataId[k]
         else:
@@ -331,7 +352,15 @@ class LsstCamMapper(CameraMapper):
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
-        @param dataId (dict) Data identifier including visit and detector
+        Parameters
+        ----------
+        dataId : `dict`
+            Data identifier including dayObs and seqNum
+
+        Returns
+        -------
+        id : `int`
+            Integer identifier for a CCD exposure.
         """
         visit = dataId['visit']
 
@@ -352,10 +381,14 @@ class LsstCamMapper(CameraMapper):
 
     def _computeCoaddExposureId(self, dataId, singleFilter):
         """Compute the 64-bit (long) identifier for a coadd.
-        @param dataId (dict)       Data identifier with tract and patch.
-        @param singleFilter (bool) True means the desired ID is for a single-
-                                   filter coadd, in which case dataId
-                                   must contain filter.
+
+        Parameters
+        ----------
+        dataId : `dict`
+            Data identifier with tract and patch.
+        singleFilter : `bool`
+            True means the desired ID is for a single-filter coadd, in which
+            case ``dataId`` must contain filter.
         """
 
         tract = int(dataId['tract'])
@@ -398,10 +431,20 @@ class LsstCamMapper(CameraMapper):
         return self.bypass_deepMergedCoaddId(datasetType, pythonType, location, dataId)
 
     def query_raw_amp(self, format, dataId):
-        """!Return a list of tuples of values of the fields specified in format, in order.
+        """Return a list of tuples of values of the fields specified in
+        format, in order.
 
-        @param format  The desired set of keys
-        @param dataId  A possible-incomplete dataId
+        Parameters
+        ----------
+        format : `list`
+            The desired set of keys
+        dataId : `dict`
+            A possible-incomplete ``dataId``.
+
+        Returns
+        -------
+        fields : `list` of `tuple`
+            Values of the fields specified in ``format``.
         """
         nChannel = 16                   # number of possible channels, 1..nChannel
 
@@ -430,42 +473,48 @@ class LsstCamMapper(CameraMapper):
 
         return dids
     #
-    # The composite type "raw" doesn't provide e.g. query_raw, so we defined type _raw in the .paf file
-    # with the same template, and forward requests as necessary
+    # The composite type "raw" doesn't provide e.g. query_raw, so we defined
+    # type _raw in the .paf file with the same template, and forward requests
+    # as necessary
     #
 
     def query_raw(self, *args, **kwargs):
         """Magic method that is called automatically if it exists.
 
-        This code redirects the call to the right place, necessary because of leading underscore on _raw.
+        This code redirects the call to the right place, necessary because of
+        leading underscore on _raw.
         """
         return self.query__raw(*args, **kwargs)
 
     def map_raw_md(self, *args, **kwargs):
         """Magic method that is called automatically if it exists.
 
-        This code redirects the call to the right place, necessary because of leading underscore on _raw.
+        This code redirects the call to the right place, necessary because of
+        leading underscore on _raw.
         """
         return self.map__raw_md(*args, **kwargs)
 
     def map_raw_filename(self, *args, **kwargs):
         """Magic method that is called automatically if it exists.
 
-        This code redirects the call to the right place, necessary because of leading underscore on _raw.
+        This code redirects the call to the right place, necessary because of
+        leading underscore on _raw.
         """
         return self.map__raw_filename(*args, **kwargs)
 
     def bypass_raw_filename(self, *args, **kwargs):
         """Magic method that is called automatically if it exists.
 
-        This code redirects the call to the right place, necessary because of leading underscore on _raw.
+        This code redirects the call to the right place, necessary because of
+        leading underscore on _raw.
         """
         return self.bypass__raw_filename(*args, **kwargs)
 
     def map_raw_visitInfo(self, *args, **kwargs):
         """Magic method that is called automatically if it exists.
 
-        This code redirects the call to the right place, necessary because of leading underscore on _raw.
+        This code redirects the call to the right place, necessary because of
+        leading underscore on _raw.
         """
         return self.map__raw_visitInfo(*args, **kwargs)
 
@@ -493,6 +542,7 @@ class LsstCamMapper(CameraMapper):
                                          trimmed=False, setVisitInfo=False)
 
     def std_raw(self, item, dataId, filter=True):
-        """Standardize a raw dataset by converting it to an Exposure instead of an Image"""
+        """Standardize a raw dataset by converting it to an Exposure instead
+        of an Image"""
         return self._standardizeExposure(self.exposures['raw'], item, dataId,
                                          trimmed=False, setVisitInfo=True, filter=filter)

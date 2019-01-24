@@ -32,12 +32,15 @@ __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
 class Ts8(YamlCamera):
     """The ts8's single raft Camera
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional.
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for ts8
-        """
         pass
 
 
@@ -53,7 +56,13 @@ class Ts8Mapper(LsstCamMapper):
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return Ts8()
 
     @classmethod
@@ -92,15 +101,16 @@ class Ts8ParseTask(LsstCamParseTask):
     """Parser suitable for ts8 data.
 
     We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override getInfo
-    and provide some translation methods
+    there's information we need from the filename, so we need to override
+    `LsstCamParseTask.getInfo` and provide some translation methods.
     """
 
     _cameraClass = Ts8           # the class to instantiate for the class-scope camera
     _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):
-        """Get the basename and other data which is only available from the filename/path.
+        """Get the basename and other data which is only available from the
+        filename/path.
 
         This is horribly fragile!
 
@@ -112,9 +122,11 @@ class Ts8ParseTask(LsstCamParseTask):
         Returns
         -------
         phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config from the primary HDU
+            Dictionary containing the header keys defined in the ingest config
+            from the primary HDU
         infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
+            A list of dictionaries containing the phuInfo(s) for the various
+            extensions in MEF files
         """
         phuInfo, infoList = super().getInfo(filename)
 
