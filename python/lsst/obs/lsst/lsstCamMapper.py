@@ -30,6 +30,7 @@ import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
 import lsst.daf.persistence as dafPersist
+import lsst.afw.cameraGeom as cameraGeom
 
 from . import lsstCam
 
@@ -177,7 +178,6 @@ def assemble_raw(dataId, componentInfo, cls):
 # This code will be replaced by functionality in afw;
 # DM-14932 (done), DM-14980
 #
-import lsst.afw.cameraGeom as cameraGeom  # noqa: E402
 
 
 def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
