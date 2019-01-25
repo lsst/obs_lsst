@@ -35,10 +35,10 @@ import lsst.daf.persistence as dafPersist
 
 
 def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
-    print("""\
-%s :
-  detectorType : %s
-  raftSerial : %s
+    print(f"""\
+{raftName} :
+  detectorType : {detectorType}
+  raftSerial : {raftSerial}
 
   ccdSerials :
     S00 : ITL-3800C-145-Dev
@@ -52,12 +52,12 @@ def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
     S22 : ITL-3800C-103-Dev
 
   amplifiers :\
-""" % (raftName, detectorType, raftSerial), file=fd)
+""", file=fd)
     for ccdName in ccdData:
-        print("    %s :" % (ccdName), file=fd)
+        print(f"    {ccdName} :", file=fd)
 
         for ampName, (gain, readNoise) in ccdData[ccdName].items():
-            print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
+            print(f"      {ampName} : {{ gain : {gain:5.3f}, readNoise : {readNoise:4.2f} }}", file=fd)
 
 
 if __name__ == "__main__":
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
 
     if verbose:
-        print("DataId = %s" % dataId)
+        print(f"DataId = {dataId}")
 
     raftData = {}
     for raftName, detectorName, detector in \
@@ -131,7 +131,7 @@ if __name__ == "__main__":
 
     raftId = 0
     for raftName, ccdData in raftData.items():
-        raftSerial = "LCA-11021_RTM-%03d" % raftId    # won't be deterministic in reality!
+        raftSerial = f"LCA-11021_RTM-{raftId:03d}"  # won't be deterministic in reality!
         raftId += 1
 
         if raftName in ("R00", "R40", "R04", "R44"):
@@ -139,6 +139,6 @@ if __name__ == "__main__":
         if args.output_dir:
             prefix = args.output_dir
         else:
-            prefix = ""
-        with open(os.path.join(prefix, "%s.yaml") % raftName, "w") as fd:
+            prefix = os.path.curdir
+        with open(os.path.join(prefix, f"{raftName}.yaml"), "w") as fd:
             writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
