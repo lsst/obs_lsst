@@ -1,6 +1,6 @@
 #
-# A python script to split out a phoSim "segmentation" file into the per-raft datafiles
-# used by generateCamera.py
+# A python script to split out a phoSim "segmentation" file into the per-raft
+# datafiles used by generateCamera.py
 #
 # This is not really part of obs_lsst, but it's useful to keep it here
 #
@@ -55,7 +55,7 @@ if __name__ == "__main__":
             fields = fields[:29]
             assert len(fields) == 29
 
-            gain, gainVariation           = fields[7],  fields[8] # noqa E221
+            gain, gainVariation = fields[7], fields[8]
             readNoise, readNoiseVariation = fields[11], fields[12]
 
             if False:

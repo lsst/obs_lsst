@@ -30,13 +30,16 @@ __all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
 
 
 class PhosimCam(YamlCamera):
-    """The phosim realisation of the real LSST 3.2Gpix Camera
+    """The phosim realisation of the real LSST 3.2Gpix Camera.
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for phosim
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "phosim.yaml")
 
@@ -54,7 +57,13 @@ class PhosimMapper(LsstCamMapper):
     MakeRawVisitInfoClass = PhosimRawVisitInfo
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return PhosimCam()
 
     @classmethod

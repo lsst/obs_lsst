@@ -19,6 +19,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
+
+__all__ = ("LsstCam",)
+
 import os.path
 import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
@@ -26,12 +29,15 @@ from lsst.obs.base.yamlCamera import YamlCamera
 
 class LsstCam(YamlCamera):
     """The real LSST 3.2Gpix Camera
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "lsstCam.yaml")
 

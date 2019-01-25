@@ -34,12 +34,15 @@ __all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
 
 class AuxTelCam(YamlCamera):
     """The auxTel's single CCD Camera
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for auxTel
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "auxTel.yaml")
 
@@ -57,11 +60,18 @@ class AuxTelMapper(LsstCamMapper):
     yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return AuxTelCam()
 
     @classmethod
     def getCameraName(cls):
+        """Return the camera name for this mapper."""
         return "auxTel"
 
     def _extractDetectorName(self, dataId):
@@ -70,7 +80,15 @@ class AuxTelMapper(LsstCamMapper):
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
-        @param dataId (dict) Data identifier including dayObs and seqNum
+        Parameters
+        ----------
+        dataId : `dict`
+            Data identifier including dayObs and seqNum.
+
+        Returns
+        -------
+        id : `int`
+            Integer identifier for a CCD exposure.
         """
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
@@ -95,29 +113,33 @@ class AuxTelParseTask(LsstCamParseTask):
     """Parser suitable for auxTel data.
 
     We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override getInfo
-    and provide some translation methods
+    there's information we need from the filename, so we need to override
+    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
+    translation methods.
     """
 
     _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
     _translatorClass = LsstAuxTelTranslator
 
     def getInfo(self, filename):
-        """Get the basename and other data which is only available from the filename/path.
+        """Get the basename and other data which is only available from the
+        filename/path.
 
         This is horribly fragile!
 
         Parameters
         ----------
         filename : `str`
-            The filename
+            The filename.
 
         Returns
         -------
         phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config from the primary HDU
+            Dictionary containing the header keys defined in the ingest config
+            from the primary HDU.
         infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
+            A list of dictionaries containing the phuInfo(s) for the various
+            extensions in MEF files.
         """
         phuInfo, infoList = ParseTask.getInfo(self, filename)
 
@@ -128,17 +150,17 @@ class AuxTelParseTask(LsstCamParseTask):
         return phuInfo, infoList
 
     def translate_seqNum(self, md):
-        """Return the SEQNUM
+        """Return the sequence number.
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
+            Image metadata.
 
         Returns
         -------
-        the sequence number : `int`
-            An identifier valid within a day
+        seqnum : `int`
+            The sequence number identifier valid within a day.
         """
 
         if md.exists("SEQNUM"):

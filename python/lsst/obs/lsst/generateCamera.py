@@ -104,7 +104,8 @@ CCDs :\
                 except KeyError:
                     sensorTypes = None
 
-                # only include CCDs in the raft for which we have a serial (the value isn't checked)
+                # only include CCDs in the raft for which we have a serial
+                # (the value isn't checked)
                 ccds = {}
                 for ccdName in raftCcdData["ccdSerials"]:
                     ccds[ccdName] = _ccds[ccdName]

@@ -24,19 +24,22 @@ import lsst.utils as utils
 from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import ImSimTranslator
+from .translators import ImsimTranslator
 
 __all__ = ["ImsimMapper", "ImsimCam", "ImsimParseTask"]
 
 
 class ImsimCam(YamlCamera):
-    """The imsim realisation of the real LSST 3.2Gpix Camera
+    """The imsim realisation of the real LSST 3.2Gpix Camera.
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for imsim
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
 
@@ -45,20 +48,27 @@ class ImsimCam(YamlCamera):
 
 class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = ImSimTranslator
+    metadataTranslator = ImsimTranslator
 
 
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
-    translatorClass = ImSimTranslator
+    translatorClass = ImsimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
     @classmethod
     def getCameraName(cls):
+        """Return the camera name for this mapper."""
         return "imsim"
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return ImsimCam()
 
 
@@ -67,4 +77,4 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _cameraClass = ImsimCam           # the class to instantiate for the class-scope camera
-    _translatorClass = ImSimTranslator
+    _translatorClass = ImsimTranslator

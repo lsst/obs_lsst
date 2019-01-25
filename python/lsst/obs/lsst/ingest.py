@@ -1,26 +1,21 @@
-import datetime
 import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from . import LsstCam
-from .translators.lsst import ROLLOVERTIME as MDROLLOVERTIME
+from .translators.lsst import ROLLOVERTIME
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-# This is needed elsewhere and should only be defined in one place
-# roll over at 8am UTC
-ROLLOVERTIME = datetime.timedelta(hours=8)
-TZERO = datetime.datetime(2010, 1, 1, tzinfo=datetime.timezone.utc)
-
-__all__ = ["LsstCamParseTask", "ROLLOVERTIME", "TZERO"]
+__all__ = ["LsstCamParseTask"]
 
 
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
 
-    See https://docushare.lsstcorp.org/docushare/dsweb/Get/Version-43119/FITS_Raft.pdf
+    See `LCA-13501 <https://ls.st/LCA-13501>`_ and
+    `LSE-400 <https://ls.st/LSE-400>`_.
     """
 
     camera = None                       # class-scope camera to avoid instantiating once per file
@@ -40,7 +35,7 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `lsst.daf.base.PropertyList`
-            FITS header
+            FITS header.
         info : `dict`, optional
             File properties, to be updated by this routine. If `None`
             it will be created.
@@ -63,6 +58,11 @@ class LsstCamParseTask(ParseTask):
         The translator methods receive the header metadata and should return
         the appropriate value, or None if the value cannot be determined.
 
+        This implementation constructs an
+        `~astro_metadata_translator.ObservationInfo` object prior to calling
+        each translator method, making the translated information available
+        through the ``observationInfo`` attribute.
+
         """
         # Always calculate a new ObservationInfo since getInfo calls
         # this method repeatedly for each header.
@@ -79,24 +79,27 @@ class LsstCamParseTask(ParseTask):
     def translate_wavelength(self, md):
         """Translate wavelength provided by teststand readout.
 
-        The teststand driving script asks for a wavelength, and then reads the value back to ensure that
-        the correct position was moved to. This number is therefore read back with sub-nm precision.
-        Typically the position is within 0.005nm of the desired position, so we warn if it's not very
-        close to an integer value.
+        The teststand driving script asks for a wavelength, and then reads the
+        value back to ensure that the correct position was moved to. This
+        number is therefore read back with sub-nm precision.  Typically the
+        position is within 0.005nm of the desired position, so we warn if it's
+        not very close to an integer value.
 
-        Future users should be aware that the HIERARCH MONOCH-WAVELENG key is NOT the requested value, and
-        therefore cannot be used as a cross-check that the wavelength was close to the one requested.
-        The only record of the wavelength that was set is in the original filename.
+        Future users should be aware that the ``HIERARCH MONOCH-WAVELENG`` key
+        is NOT the requested value, and therefore cannot be used as a
+        cross-check that the wavelength was close to the one requested.
+        The only record of the wavelength that was set is in the original
+        filename.
 
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         wavelength : `int`
-            The recorded wavelength in nanometers as an int
+            The recorded wavelength in nanometers as an `int`.
         """
         bad_wl = -666  # Bad value for wavelength
         if "MONOWL" not in md:
@@ -117,17 +120,18 @@ class LsstCamParseTask(ParseTask):
         return wl
 
     def translate_dateObs(self, md):
-        """Convert DATE-OBS to a legal format; TSEIA-83
+        """Retrieve the date of observation as an ISO format string.
 
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         dateObs : `str`
-            The date that the data was taken, e.g. 2018-08-20T21:56:24.608
+            The date that the data was taken in FITS ISO format,
+            e.g. ``2018-08-20T21:56:24.608``.
         """
         dateObs = self.observationInfo.datetime_begin
         dateObs.format = "isot"
@@ -136,7 +140,7 @@ class LsstCamParseTask(ParseTask):
     translate_date = translate_dateObs
 
     def translate_dayObs(self, md):
-        """Generate the day that the observation was taken
+        """Generate the day that the observation was taken.
 
         Parameters
         ----------
@@ -146,26 +150,26 @@ class LsstCamParseTask(ParseTask):
         Returns
         -------
         dayObs : `str`
-            The day that the data was taken, e.g. 1958-02-05
+            The day that the data was taken, e.g. ``1958-02-05``.
         """
         dateObs = self.observationInfo.datetime_begin
-        dateObs -= MDROLLOVERTIME
+        dateObs -= ROLLOVERTIME
         dateObs.format = "iso"
         dateObs.out_subfmt = "date"  # YYYY-MM-DD format
         return str(dateObs)
 
     def translate_snap(self, md):
-        """Extract snap from metadata.
+        """Extract snap number from metadata.
 
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         snap : `int`
-            snap number (default: 0)
+            Snap number (default: 0).
         """
         try:
             return int(md.getScalar("SNAP"))
@@ -178,12 +182,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         ccdID : `str`
-            name of ccd, e.g. S01
+            Name of ccd, e.g. ``S01``.
         """
         return self.observationInfo.detector_name
 
@@ -193,12 +197,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         raftID : `str`
-            name of raft, e.g. R21
+            Name of raft, e.g. ``R21``.
         """
         return self.observationInfo.detector_group
 
@@ -208,12 +212,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         detID : `int`
-            detector ID, e.g. 4
+            Detector ID, e.g. ``4``.
         """
         return self.observationInfo.detector_num
 
@@ -242,14 +246,12 @@ class LsstCamParseTask(ParseTask):
     def translate_visit(self, md):
         return self.observationInfo.visit_id
 
-#############################################################################################################
-
 
 class LsstCamCalibsParseTask(CalibsParseTask):
     """Parser for calibs."""
 
     def _translateFromCalibId(self, field, md):
-        """Get a value from the CALIB_ID written by constructCalibs."""
+        """Get a value from the CALIB_ID written by ``constructCalibs``."""
         data = md.getScalar("CALIB_ID")
         match = re.search(r".*%s=(\S+)" % field, data)
         return match.groups()[0]
@@ -261,8 +263,9 @@ class LsstCamCalibsParseTask(CalibsParseTask):
         return self._translateFromCalibId("detectorName", md)
 
     def translate_detector(self, md):
-        # this is not a _great_ fix, but this obs_package is enforcing that detectors be integers
-        # and there's not an elegant way of ensuring this is the right type really
+        # this is not a _great_ fix, but this obs_package is enforcing that
+        # detectors be integers and there's not an elegant way of ensuring
+        # this is the right type really
         return int(self._translateFromCalibId("detector", md))
 
     def translate_filter(self, md):

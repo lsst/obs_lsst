@@ -49,7 +49,8 @@ if __name__ == "__main__":
 
     dataId = dict(visit=visit)
     #
-    # Due to butler stupidity it can't/won't lookup things when you also specify a channel.  Sigh
+    # Due to butler stupidity it can't/won't lookup things when you also
+    # specify a channel.  Sigh
     #
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
 
@@ -58,7 +59,7 @@ if __name__ == "__main__":
 
     raftData = {}
     for raftName, detectorName, detector in \
-        butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId): # noqa E125
+            butler.queryMetadata("raw", ["raftName", "detectorName", "detector"], dataId):
 
         dataId["detector"] = detector   # more of the butler stupidity
 

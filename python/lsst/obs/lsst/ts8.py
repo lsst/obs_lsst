@@ -31,13 +31,16 @@ __all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
 
 
 class Ts8(YamlCamera):
-    """The ts8's single raft Camera
+    """The ts8's single raft Camera.
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for ts8
-        """
         pass
 
 
@@ -53,7 +56,13 @@ class Ts8Mapper(LsstCamMapper):
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return Ts8()
 
     @classmethod
@@ -71,7 +80,10 @@ class Ts8Mapper(LsstCamMapper):
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
-        @param dataId (dict) Data identifier including dayObs and seqNum
+        Parameters
+        ----------
+        dataId : `dict`
+            Data identifier including ``dayObs`` and ``seqNum``.
         """
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
@@ -92,29 +104,33 @@ class Ts8ParseTask(LsstCamParseTask):
     """Parser suitable for ts8 data.
 
     We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override getInfo
-    and provide some translation methods
+    there's information we need from the filename, so we need to override
+    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
+    translation methods.
     """
 
     _cameraClass = Ts8           # the class to instantiate for the class-scope camera
     _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):
-        """Get the basename and other data which is only available from the filename/path.
+        """Get the basename and other data which is only available from the
+        filename/path.
 
         This is horribly fragile!
 
         Parameters
         ----------
         filename : `str`
-            The filename
+            The filename.
 
         Returns
         -------
         phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config from the primary HDU
+            Dictionary containing the header keys defined in the ingest config
+            from the primary HDU.
         infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
+            A list of dictionaries containing the phuInfo(s) for the various
+            extensions in MEF files.
         """
         phuInfo, infoList = super().getInfo(filename)
 
@@ -129,7 +145,7 @@ class Ts8ParseTask(LsstCamParseTask):
         return self.observationInfo.detector_name
 
     def translate_testSeqNum(self, md):
-        """Translate the sequence number
+        """Translate the sequence number.
 
         Sometimes this is present, sometimes it is not. When it is, return it
         as an int. When it's not, provide a default value of 0 as an int.
@@ -139,12 +155,12 @@ class Ts8ParseTask(LsstCamParseTask):
         Parameters
         ----------
         md : `lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         seqNum : `int`
-            The seqNum, with a default value of 0 if required
+            The seqNum, with a default value of ``0`` if required.
         """
         try:
             seqNum = md.getScalar("SEQNUM")
