@@ -4,6 +4,7 @@
 _build.*
 config.log
 bin
+tests/R11.yaml
 ups/*.cfgc
 python/lsst/obs/lsst/version.py
 .coverage
