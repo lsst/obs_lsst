@@ -29,6 +29,7 @@
 import argparse
 import re
 import sys
+import os
 
 import lsst.daf.persistence as dafPersist
 
@@ -66,6 +67,8 @@ if __name__ == "__main__":
     parser.add_argument('--id', type=str, help="ID for data (visit=XXX)", default=None)
     parser.add_argument('--visit', type=int, help="visit to read", default=None)
     parser.add_argument('-v', '--verbose', action="store_true", help="How chatty should I be?", default=False)
+    parser.add_argument('--output_dir', type=str,
+                        help="Path to output data directory (must exist)", default=None)
 
     args = parser.parse_args()
     ids = args.id
@@ -133,5 +136,9 @@ if __name__ == "__main__":
 
         if raftName in ("R00", "R40", "R04", "R44"):
             continue
-        with open("%s.yaml" % raftName, "w") as fd:
+        if args.output_dir:
+            prefix = args.output_dir
+        else:
+            prefix = ""
+        with open(os.path.join(prefix, "%s.yaml") % raftName, "w") as fd:
             writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
