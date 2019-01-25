@@ -32,7 +32,32 @@ import sys
 
 import lsst.daf.persistence as dafPersist
 
-from segmentationToRafts import writeRaftFile
+
+def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
+    print("""\
+%s :
+  detectorType : %s
+  raftSerial : %s
+
+  ccdSerials :
+    S00 : ITL-3800C-145-Dev
+    S01 : ITL-3800C-022-Dev
+    S02 : ITL-3800C-041-Dev
+    S10 : ITL-3800C-100-Dev
+    S11 : ITL-3800C-017-Dev
+    S12 : ITL-3800C-018-Dev
+    S20 : ITL-3800C-102-Dev
+    S21 : ITL-3800C-146-Dev
+    S22 : ITL-3800C-103-Dev
+
+  amplifiers :\
+""" % (raftName, detectorType, raftSerial), file=fd)
+    for ccdName in ccdData:
+        print("    %s :" % (ccdName), file=fd)
+
+        for ampName, (gain, readNoise) in ccdData[ccdName].items():
+            print("      %s : { gain : %5.3f, readNoise : %4.2f }" % (ampName, gain, readNoise), file=fd)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read phoSim headers and write the per-raft datafiles")
