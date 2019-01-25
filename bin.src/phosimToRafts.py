@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # A python script to read phoSim's headers and write the per-raft datafiles
 # used by generateCamera.py

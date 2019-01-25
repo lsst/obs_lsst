@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # A python script to split out a phoSim "segmentation" file into the per-raft
 # datafiles used by generateCamera.py

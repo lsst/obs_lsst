@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
