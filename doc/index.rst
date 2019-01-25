@@ -9,5 +9,4 @@ obs_lsst documentation preview
 .. toctree::
    :maxdepth: 1
 
-   obs_lsst/index
    lsst.obs.lsst/index
