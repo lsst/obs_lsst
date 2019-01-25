@@ -32,7 +32,7 @@ class LsstCam(YamlCamera):
 
     Parameters
     ----------
-    cameraYamlFile : `str`, optional.
+    cameraYamlFile : `str`, optional
         Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'

@@ -37,7 +37,7 @@ class AuxTelCam(YamlCamera):
 
     Parameters
     ----------
-    cameraYamlFile : `str`, optional.
+    cameraYamlFile : `str`, optional
         Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
@@ -83,7 +83,7 @@ class AuxTelMapper(LsstCamMapper):
         Parameters
         ----------
         dataId : `dict`
-            Data identifier including dayObs and seqNum
+            Data identifier including dayObs and seqNum.
 
         Returns
         -------
@@ -114,7 +114,8 @@ class AuxTelParseTask(LsstCamParseTask):
 
     We need this because as of 2018-07-20 the headers are essentially empty and
     there's information we need from the filename, so we need to override
-    `~LsstCamParseTask.getInfo` and provide some translation methods.
+    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
+    translation methods.
     """
 
     _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
@@ -129,7 +130,7 @@ class AuxTelParseTask(LsstCamParseTask):
         Parameters
         ----------
         filename : `str`
-            The filename
+            The filename.
 
         Returns
         -------

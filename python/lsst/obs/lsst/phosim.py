@@ -30,11 +30,11 @@ __all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
 
 
 class PhosimCam(YamlCamera):
-    """The phosim realisation of the real LSST 3.2Gpix Camera
+    """The phosim realisation of the real LSST 3.2Gpix Camera.
 
     Parameters
     ----------
-    cameraYamlFile : `str`, optional.
+    cameraYamlFile : `str`, optional
         Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'

@@ -48,17 +48,17 @@ def assemble_raw(dataId, componentInfo, cls):
     Parameters
     ----------
     dataId : `lsst.daf.persistence.dataId.DataId`
-        the data ID
+        The data ID.
     componentInfo : `dict`
         dict containing the components, as defined by the composite definition
         in the mapper policy.
     cls : 'object'
-        unused
+        Unused.
 
     Returns
     -------
     exposure : `lsst.afw.image.exposure.exposure`
-        The assembled exposure
+        The assembled exposure.
     """
     from lsst.ip.isr import AssembleCcdTask
 
@@ -195,7 +195,7 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
     rotation : `lsst.afw.geom.Angle`, optional
         The rotation angle of the camera.
         The rotation is "rotskypos", the angle of sky relative to camera
-        coordinates (from North over East)
+        coordinates (from North over East).
     flipX : `bool`, optional
         Flip the X axis?
 
@@ -355,7 +355,7 @@ class LsstCamMapper(CameraMapper):
         Parameters
         ----------
         dataId : `dict`
-            Data identifier including dayObs and seqNum
+            Data identifier including dayObs and seqNum.
 
         Returns
         -------
@@ -404,7 +404,7 @@ class LsstCamMapper(CameraMapper):
         return oid
 
     def bypass_deepCoaddId_bits(self, *args, **kwargs):
-        """The number of bits used up for patch ID bits"""
+        """The number of bits used up for patch ID bits."""
         return 64 - LsstCamMapper._nbit_id
 
     def bypass_deepCoaddId(self, datasetType, pythonType, location, dataId):
@@ -417,14 +417,14 @@ class LsstCamMapper(CameraMapper):
         return self.bypass_deepCoaddId(datasetType, pythonType, location, dataId)
 
     def bypass_deepMergedCoaddId_bits(self, *args, **kwargs):
-        """The number of bits used up for patch ID bits"""
+        """The number of bits used up for patch ID bits."""
         return 64 - LsstCamMapper._nbit_id
 
     def bypass_deepMergedCoaddId(self, datasetType, pythonType, location, dataId):
         return self._computeCoaddExposureId(dataId, False)
 
     def bypass_dcrMergedCoaddId_bits(self, *args, **kwargs):
-        """The number of bits used up for patch ID bits"""
+        """The number of bits used up for patch ID bits."""
         return self.bypass_deepMergedCoaddId_bits(*args, **kwargs)
 
     def bypass_dcrMergedCoaddId(self, datasetType, pythonType, location, dataId):
@@ -437,7 +437,7 @@ class LsstCamMapper(CameraMapper):
         Parameters
         ----------
         format : `list`
-            The desired set of keys
+            The desired set of keys.
         dataId : `dict`
             A possible-incomplete ``dataId``.
 
@@ -482,7 +482,7 @@ class LsstCamMapper(CameraMapper):
         """Magic method that is called automatically if it exists.
 
         This code redirects the call to the right place, necessary because of
-        leading underscore on _raw.
+        leading underscore on ``_raw``.
         """
         return self.query__raw(*args, **kwargs)
 
@@ -490,7 +490,7 @@ class LsstCamMapper(CameraMapper):
         """Magic method that is called automatically if it exists.
 
         This code redirects the call to the right place, necessary because of
-        leading underscore on _raw.
+        leading underscore on ``_raw``.
         """
         return self.map__raw_md(*args, **kwargs)
 
@@ -498,7 +498,7 @@ class LsstCamMapper(CameraMapper):
         """Magic method that is called automatically if it exists.
 
         This code redirects the call to the right place, necessary because of
-        leading underscore on _raw.
+        leading underscore on ``_raw``.
         """
         return self.map__raw_filename(*args, **kwargs)
 
@@ -506,7 +506,7 @@ class LsstCamMapper(CameraMapper):
         """Magic method that is called automatically if it exists.
 
         This code redirects the call to the right place, necessary because of
-        leading underscore on _raw.
+        leading underscore on ``_raw``.
         """
         return self.bypass__raw_filename(*args, **kwargs)
 
@@ -514,7 +514,7 @@ class LsstCamMapper(CameraMapper):
         """Magic method that is called automatically if it exists.
 
         This code redirects the call to the right place, necessary because of
-        leading underscore on _raw.
+        leading underscore on ``_raw``.
         """
         return self.map__raw_visitInfo(*args, **kwargs)
 
@@ -542,7 +542,7 @@ class LsstCamMapper(CameraMapper):
                                          trimmed=False, setVisitInfo=False)
 
     def std_raw(self, item, dataId, filter=True):
-        """Standardize a raw dataset by converting it to an Exposure instead
-        of an Image"""
+        """Standardize a raw dataset by converting it to an
+        `~lsst.afw.image.Exposure` instead of an `~lsst.afw.image.Image`."""
         return self._standardizeExposure(self.exposures['raw'], item, dataId,
                                          trimmed=False, setVisitInfo=True, filter=filter)

@@ -14,7 +14,8 @@ __all__ = ["LsstCamParseTask"]
 class LsstCamParseTask(ParseTask):
     """Parser suitable for lsstCam data.
 
-    See https://docushare.lsstcorp.org/docushare/dsweb/Get/Version-43119/FITS_Raft.pdf
+    See `LCA-13501 <https://ls.st/LCA-13501>`_ and
+    `LSE-400 <https://ls.st/LSE-400>`_.
     """
 
     camera = None                       # class-scope camera to avoid instantiating once per file
@@ -34,7 +35,7 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `lsst.daf.base.PropertyList`
-            FITS header
+            FITS header.
         info : `dict`, optional
             File properties, to be updated by this routine. If `None`
             it will be created.
@@ -93,12 +94,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         wavelength : `int`
-            The recorded wavelength in nanometers as an int
+            The recorded wavelength in nanometers as an `int`.
         """
         bad_wl = -666  # Bad value for wavelength
         if "MONOWL" not in md:
@@ -124,13 +125,13 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         dateObs : `str`
             The date that the data was taken in FITS ISO format,
-            e.g. 2018-08-20T21:56:24.608
+            e.g. ``2018-08-20T21:56:24.608``.
         """
         dateObs = self.observationInfo.datetime_begin
         dateObs.format = "isot"
@@ -149,7 +150,7 @@ class LsstCamParseTask(ParseTask):
         Returns
         -------
         dayObs : `str`
-            The day that the data was taken, e.g. 1958-02-05
+            The day that the data was taken, e.g. ``1958-02-05``.
         """
         dateObs = self.observationInfo.datetime_begin
         dateObs -= ROLLOVERTIME
@@ -163,12 +164,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         snap : `int`
-            snap number (default: 0)
+            Snap number (default: 0).
         """
         try:
             return int(md.getScalar("SNAP"))
@@ -181,12 +182,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         ccdID : `str`
-            name of ccd, e.g. S01
+            Name of ccd, e.g. ``S01``.
         """
         return self.observationInfo.detector_name
 
@@ -196,12 +197,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         raftID : `str`
-            name of raft, e.g. R21
+            Name of raft, e.g. ``R21``.
         """
         return self.observationInfo.detector_group
 
@@ -211,12 +212,12 @@ class LsstCamParseTask(ParseTask):
         Parameters
         ----------
         md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
-            image metadata
+            Image metadata.
 
         Returns
         -------
         detID : `int`
-            detector ID, e.g. 4
+            Detector ID, e.g. ``4``.
         """
         return self.observationInfo.detector_num
 
@@ -250,7 +251,7 @@ class LsstCamCalibsParseTask(CalibsParseTask):
     """Parser for calibs."""
 
     def _translateFromCalibId(self, field, md):
-        """Get a value from the CALIB_ID written by constructCalibs."""
+        """Get a value from the CALIB_ID written by ``constructCalibs``."""
         data = md.getScalar("CALIB_ID")
         match = re.search(r".*%s=(\S+)" % field, data)
         return match.groups()[0]

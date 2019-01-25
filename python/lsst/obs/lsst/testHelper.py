@@ -44,7 +44,7 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
     """
 
     instrumentDir = "TBD"  # Override in subclass
-    """Name of instrument directory within data/input"""
+    """Name of instrument directory within data/input."""
 
     @classmethod
     def tearDownClass(cls):

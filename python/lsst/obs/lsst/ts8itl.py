@@ -30,7 +30,7 @@ __all__ = ["Ts8itlMapper", "Ts8itl"]
 class Ts8itl(Ts8):
     """The ts8's single raft Camera with ITL chips
 
-    N.b. This will be superseded when Butler Gen3 versions camera data
+    N.b. This will be superseded when Butler Gen3 versions camera data.
     """
 
     def __init__(self, cameraYamlFile=None):
@@ -44,7 +44,13 @@ class Ts8itlMapper(Ts8Mapper):
     """The Mapper for the ts8 ITL camera."""
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return Ts8itl()
 
     @classmethod

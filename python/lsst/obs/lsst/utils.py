@@ -38,12 +38,19 @@ except ImportError:
 
 
 def readRawFile(fileName, dataId={}):
-    """Read a raw file from fileName, assembling it nicely
+    """Read a raw file from fileName, assembling it nicely.
 
-    @param filename `str`
-           The fully-qualified filename
-    @param dataId `lsst.daf.persist.DataId`
-           If provided, used to look up e.g. the filter
+    Parameters
+    ----------
+    filename : `str`
+        The fully-qualified filename.
+    dataId : `lsst.daf.persistence.DataId`
+        If provided, used to look up e.g. the filter.
+
+    Returns
+    -------
+    exposure : `lsst.afw.image.Exposure`
+        The assembled exposure from the supplied filename.
     """
 
     class Info():
