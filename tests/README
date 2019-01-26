@@ -1,10 +1,3 @@
-This package should be tested via the `bin/runPipeline` script.
+CI tests are available for this package in https://github.com/lsst-dm/ci_lsst.
 
-Test data is available in https://github.com/lsst-dm/testdata_obs_lsst
-where data is available to test
-     auxTel
-     imsim
-     phosim
-     ts8
-
-See `bin/README.md` for instructions on running the test script.
+Test data for CI is available in https://github.com/lsst-dm/testdata_obs_lsst
