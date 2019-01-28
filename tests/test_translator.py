@@ -235,6 +235,44 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_ucdcam_translator(self):
+        test_data = (("UCD-E2V-CCD250-112-04_flat_flat_100_20181205153143.yaml",
+                      dict(telescope="LSST",
+                           instrument="LSST-UCDCam",
+                           dark_time=0.5*u.s,
+                           detector_exposure_id=201812052331480,
+                           detector_group="R00",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="E2V-CCD250-112-04",
+                           exposure_id=20181205233148,
+                           exposure_time=0.5*u.s,
+                           observation_id="E2V-CCD250-112-04_flat_flat_100_20181205153143",
+                           observation_type="flat",
+                           physical_filter="r",
+                           science_program="2018-12-05",
+                           visit_id=20181205233148)),
+                     ("UCD-ITL-3800C-002_flat_flat_100_20180530080354.yaml",
+                      dict(telescope="LSST",
+                           instrument="LSST-UCDCam",
+                           dark_time=0.5*u.s,
+                           detector_exposure_id=201805301503552,
+                           detector_group="R02",
+                           detector_name="S00",
+                           detector_num=2,
+                           detector_serial="ITL-3800C-002",
+                           exposure_id=20180530150355,
+                           exposure_time=0.5*u.s,
+                           observation_id="ITL-3800C-002_flat_flat_100_20180530080354",
+                           observation_type="flat",
+                           physical_filter="r",
+                           science_program="2018-05-30",
+                           visit_id=20180530150355)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
 
 if __name__ == "__main__":
     unittest.main()
