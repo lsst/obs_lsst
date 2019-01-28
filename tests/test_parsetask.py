@@ -188,7 +188,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-12-05',
                           filter='r',
                           visit=20181205233148,
-                          testSeqNum='100',
+                          testSeqNum=100,
                       )),
                      ("raw/ITL-3800C-002_flat_flat_100_20180530080354_naked.fits",
                       dict(
@@ -207,7 +207,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-05-30',
                           filter='r',
                           visit=20180530150355,
-                          testSeqNum='100',
+                          testSeqNum=100,
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)

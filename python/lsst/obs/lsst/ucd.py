@@ -115,7 +115,7 @@ class UcdParseTask(LsstCamParseTask):
             The seqNum, with a default value of 0 if required
         """
         try:
-            seqNum = md.getScalar("SEQNUM")
+            seqNum = int(md.getScalar("SEQNUM"))
         except KeyError:
             seqNum = 0
         return seqNum
