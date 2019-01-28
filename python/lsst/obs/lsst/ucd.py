@@ -1,9 +1,10 @@
+# This file is part of obs_lsst.
 #
-# LSST Data Management System
-# Copyright 2017 LSST Corporation.
-#
-# This product includes software developed by the
-# LSST Project (http://www.lsst.org/).
+# Developed for the LSST Data Management System.
+# This product includes software developed by the LSST Project
+# (http://www.lsst.org).
+# See the COPYRIGHT file at the top-level directory of this distribution
+# for details of code ownership.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -31,13 +32,16 @@ __all__ = ["UcdMapper", "Ucd", "UcdParseTask"]
 
 
 class Ucd(YamlCamera):
-    """A single raft camera for UC Davis data
+    """A single raft camera for UC Davis data.
+
+    Parameters
+    ----------
+    cameraYamlFile : `str`, optional
+        Path to camera YAML file. Will default to one in this package.
     """
     packageName = 'obs_lsst'
 
     def __init__(self, cameraYamlFile=None):
-        """Construct lsstCam for ucd
-        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ucd.yaml")
 
@@ -50,7 +54,7 @@ class UcdMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 
 class UcdMapper(LsstCamMapper):
-    """The Mapper for the ucd camera."""
+    """The Mapper for the UCDavis camera."""
     translatorClass = LsstUCDCamTranslator
     MakeRawVisitInfoClass = UcdMakeRawVisitInfo
 
@@ -58,7 +62,13 @@ class UcdMapper(LsstCamMapper):
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _makeCamera(self, policy, repositoryDir):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
         return Ucd()
 
     @classmethod
@@ -78,11 +88,9 @@ class UcdMapper(LsstCamMapper):
 
 
 class UcdParseTask(LsstCamParseTask):
-    """Parser suitable for ucd data.
+    """Parser suitable for UCD data.
 
     We need this to parse the UC Davis headers.
-    There's information we need from the filename, so we need to override getInfo
-    and provide some translation methods
     """
 
     _cameraClass = Ucd           # the class to instantiate for the class-scope camera

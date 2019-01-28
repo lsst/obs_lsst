@@ -41,7 +41,7 @@ class ImsimMapper(LsstCamMapper):
 
 
 class ImsimParseTask(LsstCamParseTask):
-    """Parser suitable for phosim data.
+    """Parser suitable for imsim data.
     """
 
     _mapperClass = ImsimMapper
