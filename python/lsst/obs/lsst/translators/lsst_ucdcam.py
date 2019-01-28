@@ -98,6 +98,56 @@ class LsstUCDCamTranslator(StubTranslator):
                 return False
         return True
 
+    @classmethod
+    def compute_detector_num_from_name(cls, detector_group, detector_name):
+        """Helper method to return the detector number from the name.
+
+        Parameters
+        ----------
+        detector_group : `str`
+            Detector group name.  This is generally the raft name.
+        detector_name : `str`
+            Detector name.
+
+        Returns
+        -------
+        num : `int`
+            Detector number.
+
+        Raises
+        ------
+        ValueError
+            The supplied name is not known.
+        """
+        for num, group in cls._detector_map:
+            if group == detector_group:
+                return num
+        raise ValueError(f"Detector {detector_group}_{detector_name} is not known to UCDCam")
+
+    @classmethod
+    def compute_detector_group_from_num(cls, detector_num):
+        """Helper method to return the detector group from the number.
+
+        Parameters
+        ----------
+        detector_num : `int`
+            Detector number.
+
+        Returns
+        -------
+        group : `str`
+            Detector group.
+
+        Raises
+        ------
+        IndexError
+            The supplied number is not known.
+        """
+        for num, group in cls._detector_map:
+            if num == detector_num:
+                return group
+        raise IndexError(f"Detector {detector_num} is not known for UCDCam")
+
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
         """Compute the detector exposure ID from detector number and

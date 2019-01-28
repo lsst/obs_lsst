@@ -66,28 +66,15 @@ class UcdMapper(LsstCamMapper):
         return "ucd"
 
     def _extractDetectorName(self, dataId):
-        if 'detector' in dataId:
-            return dataId['detector']
+        if 'detectorName' in dataId:
+            detectorName = dataId['detectorName']
         else:
-            detectors = ["S00", "S01", "S02", "S10", "S11", "S12", "S22", "S20", "S21", "S22"]
-            return detectors.index(dataId["detectorName"])
-
-    def _computeCcdExposureId(self, dataId):
-        """Compute the 64-bit (long) identifier for a CCD exposure.
-
-        @param dataId (dict) Data identifier including dayObs and seqNum
-        """
-        if len(dataId) == 0:
-            return 0                    # give up.  Useful if reading files without a butler
-
-        if 'visit' in dataId:
-            visit = dataId['visit']
+            detectorName = LsstUCDCamTranslator.DETECTOR_NAME
+        if 'raftName' in dataId:
+            raftName = dataId['raftName']
         else:
-            pass
-            # visit = computeVisit(dataId['dateObs'])
-        detector = self._extractDetectorName(dataId)
-
-        return 10*visit + detector
+            raftName = LsstUCDCamTranslator.compute_detector_group_from_num(dataId['detector'])
+        return f"{raftName}_{detectorName}"
 
 
 class UcdParseTask(LsstCamParseTask):
