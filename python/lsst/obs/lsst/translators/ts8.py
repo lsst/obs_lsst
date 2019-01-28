@@ -158,7 +158,7 @@ class LsstTS8Translator(StubTranslator):
 
     @staticmethod
     def compute_exposure_id(dateobs, seqnum=0):
-        """Helper method to calculate the AuxTel exposure_id.
+        """Helper method to calculate the TS8 exposure_id.
 
         Parameters
         ----------
