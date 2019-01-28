@@ -19,15 +19,13 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import datetime
 import os.path
-import re
 import lsst.utils as utils
-from lsst.pipe.tasks.ingest import ParseTask
 from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS, ROLLOVERTIME, TZERO
+from .ingest import LsstCamParseTask
+from .translators import LsstUCDCamTranslator
 
 __all__ = ["UcdMapper", "Ucd", "UcdParseTask"]
 
@@ -46,17 +44,15 @@ class Ucd(YamlCamera):
         YamlCamera.__init__(self, cameraYamlFile)
 
 
-def computeVisit(dateObs):
-    """Compute a visit number from the full dateObs"""
-
-    fullDateTime = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-    visit = int((fullDateTime - ROLLOVERTIME - TZERO).total_seconds())
-
-    return visit
+class UcdMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
+    """Make a VisitInfo from the FITS header of a raw image."""
+    metadataTranslator = LsstUCDCamTranslator
 
 
 class UcdMapper(LsstCamMapper):
     """The Mapper for the ucd camera."""
+    translatorClass = LsstUCDCamTranslator
+    MakeRawVisitInfoClass = UcdMakeRawVisitInfo
 
     yamlFileList = ["ucd/ucdMapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
@@ -87,7 +83,8 @@ class UcdMapper(LsstCamMapper):
         if 'visit' in dataId:
             visit = dataId['visit']
         else:
-            visit = computeVisit(dataId['dateObs'])
+            pass
+            # visit = computeVisit(dataId['dateObs'])
         detector = self._extractDetectorName(dataId)
 
         return 10*visit + detector
@@ -102,126 +99,7 @@ class UcdParseTask(LsstCamParseTask):
     """
 
     _cameraClass = Ucd           # the class to instantiate for the class-scope camera
-
-    def getInfo(self, filename):
-        """Get the basename and other data which is only available from the filename/path.
-
-        This is horribly fragile!
-
-        Parameters
-        ----------
-        filename : `str`
-            The filename
-
-        Returns
-        -------
-        phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config from the primary HDU
-        infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various extensions in MEF files
-        """
-        phuInfo, infoList = ParseTask.getInfo(self, filename)
-
-        if False:
-            pathname, basename = os.path.split(filename)
-            basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
-            phuInfo['basename'] = basename
-
-        return phuInfo, infoList
-
-    def translate_detectorName(self, md):
-        detector = self.translate_detector(md)
-
-        return ["S00", "S01", "S02",
-                "S10", "S11", "S12",
-                "S20", "S21", "S22"][detector]
-
-    def _translate_raftName(self, raftString):
-        """Get the raft name from the string in the header"""
-        # should look something like 'LCA-11021_RTM-011-Dev'
-        return 'RTM-999'
-
-    def translate_detector(self, md):
-        """Find the detector number from the serial
-
-        This should come from CHIPID, not LSST_NUM
-        """
-        raftName = 'RTM-999'
-        # raftName = self._translate_raftName(md.get("RAFTNAME"))
-        serial = md.get("LSST_NUM")
-
-        # this seems to be appended more or less at random, and breaks the mapping dict
-        if serial.endswith('-Dev'):
-            serial = serial[:-4]
-
-        # a dict of dicts holding the raft serials
-        raftSerialData = {
-            'RTM-999': {  # Dummy Raft for UC Davis data
-                'E2V-CCD250-112-04': 0,  # S00
-                'ITL-3800C-029': 1,  # S01
-                'ITL-3800C-002': 2,  # S02
-                'E2V-CCD250-165': 3,  # S10
-                'E2V-CCD250-130': 4,  # S11
-                'E2V-CCD250-153': 5,  # S12
-                'E2V-CCD250-163': 6,  # S20
-                'E2V-CCD250-216': 7,  # S21
-                'E2V-CCD250-252': 8   # S22
-            },
-        }
-        return raftSerialData[raftName][serial]
-
-    def translate_filter(self, md):
-        """Generate a filtername from FILTER
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        filter : `str`
-            Filter name
-        """
-
-        filter = md.get("FILTER")
-        try:
-            return {
-                'g': 'g',
-                'r': 'r',
-                'i': 'i',
-                'z': 'z',
-                'y': 'y',
-                'G': 'g',
-                'R': 'r',
-                'I': 'i',
-                'Z': 'z',
-                'Y': 'y',
-            }[filter]
-        except KeyError:
-            print("Unknown filter (assuming NONE): %s" % (filter))
-            return "NONE"
-
-    def translate_visit(self, md):
-        """Generate a unique visit number
-
-        Note that SEQNUM is not unique for a given day in TS8 data
-        so instead we use the number of seconds since TZERO as defined in
-        the main LSST part of the package.
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        visit_num : `int`
-            Visit number, as translated
-        """
-        dateObs = self.translate_dateObs(md)
-
-        return computeVisit(dateObs)
+    _translatorClass = LsstUCDCamTranslator
 
     def translate_testSeqNum(self, md):
         """Translate the sequence number
@@ -233,8 +111,8 @@ class UcdParseTask(LsstCamParseTask):
 
         Parameters
         ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
+            Image metadata.
 
         Returns
         -------
@@ -242,61 +120,7 @@ class UcdParseTask(LsstCamParseTask):
             The seqNum, with a default value of 0 if required
         """
         try:
-            seqNum = md.get("SEQNUM")
+            seqNum = md.getScalar("SEQNUM")
         except KeyError:
             seqNum = 0
         return seqNum
-
-    def translate_dateObs(self, md):
-        """Get a legal dateObs by parsing DATE-OBS
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        dateObs : `str`
-            The day that the data was taken, e.g. 2018-08-20T21:56:24.608
-        """
-
-        d = datetime.datetime.strptime(md.get("DATE-OBS"), "%a %b %d %H:%M:%S %Z %Y")
-        dateObs = d.strftime("%Y-%m-%dT%H:%M:%S.%f%z")
-        return dateObs
-
-    def translate_dayObs(self, md):
-        """Generate the day that the observation was taken
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        dayObs : `str`
-            The day that the data was taken, e.g. 1958-02-05
-        """
-        dateObs = self.translate_dateObs(md)
-
-        d = datetime.datetime.strptime(dateObs + "+0000", "%Y-%m-%dT%H:%M:%S.%f%z")
-        d -= ROLLOVERTIME
-        dayObs = d.strftime("%Y-%m-%d")
-
-        return dayObs
-
-    def translate_runNum(self, md):
-        """Generate a run number from the date
-
-        Parameters
-        ----------
-        md : `lsst.daf.base.PropertyList or PropertySet`
-            image metadata
-
-        Returns
-        -------
-        run : `int`
-        """
-        run = self.translate_dayObs(md)
-        return run

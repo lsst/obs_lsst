@@ -29,6 +29,7 @@ from lsst.obs.lsst.auxTel import AuxTelParseTask
 from lsst.obs.lsst.ts8e2v import Ts8e2vParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
+from lsst.obs.lsst.ucd import UcdParseTask
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 ROOTDIR = os.path.normpath(os.path.join(TESTDIR, os.path.pardir))
@@ -166,6 +167,50 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimParseTask, test_data)
+
+    def test_parsetask_ucd_translator(self):
+        """Run the gen 2 metadata extraction code for UCDCam"""
+        self.maxDiff = None
+        test_data = (("raw/E2V-CCD250-112-04_flat_flat_100_20181205153143_naked.fits",
+                      dict(
+                          expTime=0.5,
+                          object='UNKNOWN',
+                          imageType='FLAT',
+                          testType='flat',
+                          lsstSerial='E2V-CCD250-112-04',
+                          date='2018-12-05T23:31:48.288',
+                          dateObs='2018-12-05T23:31:48.288',
+                          run='2018-12-05',
+                          wavelength=-666,
+                          raftName='R00',
+                          detectorName='S00',
+                          detector=0,
+                          dayObs='2018-12-05',
+                          filter='r',
+                          visit=20181205233148,
+                          testSeqNum='100',
+                      )),
+                     ("raw/ITL-3800C-002_flat_flat_100_20180530080354_naked.fits",
+                      dict(
+                          expTime=0.5,
+                          object='UNKNOWN',
+                          imageType='FLAT',
+                          testType='flat',
+                          lsstSerial='ITL-3800C-002',
+                          date='2018-05-30T15:03:55.872',
+                          dateObs='2018-05-30T15:03:55.872',
+                          run='2018-05-30',
+                          wavelength=-666,
+                          raftName='R02',
+                          detectorName='S00',
+                          detector=2,
+                          dayObs='2018-05-30',
+                          filter='r',
+                          visit=20180530150355,
+                          testSeqNum='100',
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)
 
 
 if __name__ == "__main__":
