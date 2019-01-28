@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 # A python script to read phoSim's headers and write the per-raft datafiles
 # used by generateCamera.py
@@ -28,10 +29,36 @@
 import argparse
 import re
 import sys
+import os
 
 import lsst.daf.persistence as dafPersist
 
-from segmentationToRafts import writeRaftFile
+
+def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
+    print(f"""\
+{raftName} :
+  detectorType : {detectorType}
+  raftSerial : {raftSerial}
+
+  ccdSerials :
+    S00 : ITL-3800C-145-Dev
+    S01 : ITL-3800C-022-Dev
+    S02 : ITL-3800C-041-Dev
+    S10 : ITL-3800C-100-Dev
+    S11 : ITL-3800C-017-Dev
+    S12 : ITL-3800C-018-Dev
+    S20 : ITL-3800C-102-Dev
+    S21 : ITL-3800C-146-Dev
+    S22 : ITL-3800C-103-Dev
+
+  amplifiers :\
+""", file=fd)
+    for ccdName in ccdData:
+        print(f"    {ccdName} :", file=fd)
+
+        for ampName, (gain, readNoise) in ccdData[ccdName].items():
+            print(f"      {ampName} : {{ gain : {gain:5.3f}, readNoise : {readNoise:4.2f} }}", file=fd)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Read phoSim headers and write the per-raft datafiles")
@@ -40,6 +67,8 @@ if __name__ == "__main__":
     parser.add_argument('--id', type=str, help="ID for data (visit=XXX)", default=None)
     parser.add_argument('--visit', type=int, help="visit to read", default=None)
     parser.add_argument('-v', '--verbose', action="store_true", help="How chatty should I be?", default=False)
+    parser.add_argument('--output_dir', type=str,
+                        help="Path to output data directory (must exist)", default=None)
 
     args = parser.parse_args()
     ids = args.id
@@ -76,7 +105,7 @@ if __name__ == "__main__":
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
 
     if verbose:
-        print("DataId = %s" % dataId)
+        print(f"DataId = {dataId}")
 
     raftData = {}
     for raftName, detectorName, detector in \
@@ -102,10 +131,14 @@ if __name__ == "__main__":
 
     raftId = 0
     for raftName, ccdData in raftData.items():
-        raftSerial = "LCA-11021_RTM-%03d" % raftId    # won't be deterministic in reality!
+        raftSerial = f"LCA-11021_RTM-{raftId:03d}"  # won't be deterministic in reality!
         raftId += 1
 
         if raftName in ("R00", "R40", "R04", "R44"):
             continue
-        with open("%s.yaml" % raftName, "w") as fd:
+        if args.output_dir:
+            prefix = args.output_dir
+        else:
+            prefix = os.path.curdir
+        with open(os.path.join(prefix, f"{raftName}.yaml"), "w") as fd:
             writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])

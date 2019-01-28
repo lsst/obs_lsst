@@ -19,7 +19,7 @@ python = "{} python".format(libpathstr)
 
 for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8e2v", "ts8itl"]:
     commandInst = env.Command("%s.yaml" % camera, "",
-                              "%s python/lsst/obs/lsst/generateCamera.py --path %s:lsstCam:. $TARGET" %
+                              "%s bin/generateCamera.py --path %s:lsstCam:. $TARGET" %
                               (python, camera))
 
     env.Depends(commandInst, lsst.sconsUtils.targets["python"])
