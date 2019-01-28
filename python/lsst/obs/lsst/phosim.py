@@ -20,31 +20,11 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import lsst.utils as utils
-from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper, LsstCamMakeRawVisitInfo
+from . import LsstCamMapper
 from .ingest import LsstCamParseTask
 from .translators import PhosimTranslator
 
-__all__ = ["PhosimMapper", "PhosimCam", "PhosimParseTask"]
-
-
-class PhosimCam(YamlCamera):
-    """The phosim realisation of the real LSST 3.2Gpix Camera.
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "phosim.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+__all__ = ["PhosimMapper", "PhosimParseTask"]
 
 
 class PhosimRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -57,24 +37,39 @@ class PhosimMapper(LsstCamMapper):
     translatorClass = PhosimTranslator
     MakeRawVisitInfoClass = PhosimRawVisitInfo
 
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return PhosimCam()
-
-    @classmethod
-    def getCameraName(cls):
-        return 'phosim'
+    _cameraName = "phosim"
 
 
 class PhosimParseTask(LsstCamParseTask):
     """Parser suitable for phosim data.
     """
 
-    _cameraClass = PhosimCam           # the class to instantiate for the class-scope camera
-    _translatorClass = PhosimTranslator
+    def translate_filter(self, md):
+        """Extract filter from metadata (ignoring for corner-raft chips)
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        filter : `str`
+            filter name
+        """
+        return md.get("FILTER")
+
+    def translate_visit(self, md):
+        """Extract visit from metadata (as an int)
+
+        Parameters
+        ----------
+        md : `lsst.daf.base.PropertyList or PropertySet`
+            image metadata
+
+        Returns
+        -------
+        visit : `int`
+            visit number
+        """
+        return int(md.get("OBSID"))

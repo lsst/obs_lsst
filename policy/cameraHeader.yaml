@@ -27,15 +27,13 @@
 # N.b. Ignoring corner rafts for now
 
 name : "lsstCam"
-plateScale : 20.00                      # plate scale, in arcseconds on sky/mm
-radialCoeffs : [0.0, 1.0, 0.0, 1.0]     # radial distortion coefficients (c_0 + c_1 r + c_2 r^2 + ...)
 
 #
 # A single amplifier ("segment" to the camera team)
 #
 AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a CCD has not been checked
                                         # in detail (e.g. off by one errors)
-    perAmpData : True                   # data is provided independentally for each amplifier
+    perAmpData : True                   # data is provided independently for each amplifier
     # trimmed
     dataExtent : [512, 2002]
     readCorner : LL

@@ -22,27 +22,17 @@
 #
 import os.path
 import re
-from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper, LsstCamMakeRawVisitInfo
+from lsst.pipe.tasks.ingest import ParseTask
+from . import LsstCamMapper
 from .auxTel import AuxTelMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstTS8Translator
 
-__all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
+__all__ = ["Ts8Mapper", "Ts8ParseTask"]
 
 
-class Ts8(YamlCamera):
-    """The ts8's single raft Camera.
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        pass
+def computeVisit(dateObs):
+    """Compute a visit number from the full dateObs"""
 
 
 class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -52,23 +42,10 @@ class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
-    MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
+
+    _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return Ts8()
-
-    @classmethod
-    def getCameraName(cls):
-        return "ts8"
 
     def _extractDetectorName(self, dataId):
         if 'detectorName' in dataId:
@@ -109,9 +86,6 @@ class Ts8ParseTask(LsstCamParseTask):
     `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
     translation methods.
     """
-
-    _cameraClass = Ts8           # the class to instantiate for the class-scope camera
-    _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the

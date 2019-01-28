@@ -64,6 +64,10 @@ if __name__ == "__main__":
     with open(cameraSklFile) as fd:
         cameraSkl = yaml.load(fd, Loader=yaml.Loader)
 
+    cameraTransformsFile = findYamlOnPath("cameraTransforms.yaml", searchPath)
+    with open(cameraTransformsFile) as fd:
+        cameraTransforms = yaml.load(fd, Loader=yaml.Loader)
+
     with open(findYamlOnPath("rafts.yaml", searchPath)) as fd:
         raftData = yaml.load(fd, Loader=yaml.Loader)
 
@@ -80,6 +84,14 @@ if __name__ == "__main__":
         return(nindent*dindent - 1)*" "   # print will add the extra " "
 
     with open(cameraFile, "a") as fd:
+        print("""
+#
+# Specify the geometrical transformations relavant to the camera in all appropriate
+# (and known!) coordinate systems
+#""", file=fd)
+        for k, v in cameraTransforms.items():
+            print("%s : %s" % (k, v), file=fd)
+
         print("""
 #
 # Define our specific devices

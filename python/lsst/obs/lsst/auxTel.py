@@ -22,32 +22,12 @@
 #
 import os.path
 import re
-import lsst.log
-import lsst.utils as utils
 from lsst.pipe.tasks.ingest import ParseTask
-from lsst.obs.base.yamlCamera import YamlCamera
-from . import LsstCamMapper, LsstCamMakeRawVisitInfo
+from . import LsstCamMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstAuxTelTranslator
 
-__all__ = ["AuxTelMapper", "AuxTelCam", "AuxTelParseTask"]
-
-
-class AuxTelCam(YamlCamera):
-    """The auxTel's single CCD Camera
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "auxTel.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+__all__ = ["AuxTelMapper", "AuxTelParseTask"]
 
 
 class AuxTelMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -57,23 +37,9 @@ class AuxTelMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
-    MakeRawVisitInfoClass = AuxTelMakeRawVisitInfo
+
+    _cameraName = "auxTel"
     yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return AuxTelCam()
-
-    @classmethod
-    def getCameraName(cls):
-        """Return the camera name for this mapper."""
-        return "auxTel"
 
     def _extractDetectorName(self, dataId):
         return f"{LsstAuxTelTranslator.DETECTOR_GROUP_NAME}_{LsstAuxTelTranslator.DETECTOR_NAME}"
@@ -118,9 +84,6 @@ class AuxTelParseTask(LsstCamParseTask):
     `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
     translation methods.
     """
-
-    _cameraClass = AuxTelCam           # the class to instantiate for the class-scope camera
-    _translatorClass = LsstAuxTelTranslator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the
