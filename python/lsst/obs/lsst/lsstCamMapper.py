@@ -357,7 +357,7 @@ class LsstCamMapper(CameraMapper):
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
-        return 32  # just a guess, but this leaves plenty of space for sources
+        return 36  # just a guess, but this leaves plenty of space for sources
 
     def _computeCoaddExposureId(self, dataId, singleFilter):
         """Compute the 64-bit (long) identifier for a coadd.
