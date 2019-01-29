@@ -197,6 +197,44 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 else:
                     self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_ts3_translator(self):
+        test_data = (("ts3-E2V-CCD250-411_lambda_flat_1000_025_20181115075559.yaml",
+                      dict(telescope="LSST",
+                           instrument="TS3-E2V",
+                           dark_time=44.631*u.s,
+                           detector_exposure_id=201811151255111,
+                           detector_group="RXX",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="E2V-CCD250-411",
+                           exposure_id=201811151255111,
+                           exposure_time=44.631*u.s,
+                           observation_id="E2V-CCD250-411_lambda_flat_1000_025_20181115075559",
+                           observation_type="flat",
+                           physical_filter="550CutOn",
+                           science_program="2018-11-15",
+                           visit_id=201811151255111)),
+                     ("ts3-ITL-3800C-098_lambda_flat_1000_067_20160722020740.yaml",
+                      dict(telescope="LSST",
+                           instrument="TS3-ITL",
+                           dark_time=30.611*u.s,
+                           detector_exposure_id=201607220607067,
+                           detector_group="RXX",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-098",
+                           exposure_id=201607220607067,
+                           exposure_time=30.611*u.s,
+                           observation_id="ITL-3800C-098_lambda_flat_1000_067_20160722020740",
+                           observation_type="flat",
+                           physical_filter="550CutOn",
+                           science_program="2016-07-22",
+                           visit_id=201607220607067)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
                       dict(telescope="LSST",
