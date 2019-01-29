@@ -30,10 +30,6 @@ from .translators import LsstTS8Translator
 __all__ = ["Ts8Mapper", "Ts8ParseTask"]
 
 
-def computeVisit(dateObs):
-    """Compute a visit number from the full dateObs"""
-
-
 class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
     metadataTranslator = LsstTS8Translator
@@ -41,7 +37,7 @@ class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
-
+    MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
     _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
@@ -87,6 +83,7 @@ class Ts8ParseTask(LsstCamParseTask):
     """
 
     _mapperClass = Ts8Mapper
+    _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the

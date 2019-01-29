@@ -147,7 +147,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     md = componentInfo['raw_hdu'].obj
     exposure.setMetadata(md)
-    visitInfo = LsstCamMakeRawVisitInfo(logger)(md, exposureId=-1)
+    visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
     exposure.getInfo().setVisitInfo(visitInfo)
 
     boresight = visitInfo.getBoresightRaDec()
@@ -207,8 +207,14 @@ class LsstCamMapper(CameraMapper):
 
     packageName = 'obs_lsst'
     _cameraName = "lsst"
-    MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
+    #
+    # do not set MakeRawVisitInfoClass or translatorClass to anything other than None!
+    #
+    # assemble_raw relies on autodetect as in butler Gen2 it doesn't know its mapper and cannot
+    # use mapper.makeRawVisitInfo()
+    #
+    MakeRawVisitInfoClass = None
     translatorClass = None
 
     def __init__(self, inputPolicy=None, **kwargs):
@@ -266,7 +272,18 @@ class LsstCamMapper(CameraMapper):
 
     @classmethod
     def _makeCamera(cls, policy=None, repositoryDir=None, cameraYamlFile=None):
-        """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
+        """Make a camera  describing the camera geometry.
+
+        policy : ignored
+        repositoryDir : ignored
+        cameraYamlFile : `str`
+           The full path to a yaml file to be passed to `yamlCamera.makeCamera`
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
 
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(cls.packageName), "policy",

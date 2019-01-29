@@ -45,3 +45,4 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _mapperClass = ImsimMapper
+    _translatorClass = ImsimTranslator

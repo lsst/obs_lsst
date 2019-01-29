@@ -22,7 +22,7 @@ To add a new camera (e.g. fooCam, made up of 9 CCDs in a single "raft" -- call i
    policy/phosim for the format -- basically a dict crosstalk indexed by the CCD type.  There
    are 256 coefficients (16 amplifiers and 256 == 16^2), and we assume for now that all CCDs from
    a given vendor are the same (but the fix to generateCamera.py to handle per-CCD coefficients
-   would be easy) 
+   would be easy)
  - Edit policy/SConscript to add your new camera "fooCam" to the `for camera in ...` loop.
    note the magic `--path` options -- it tells the code to use your data in fooCam to override
    lsstCam values.  This is why there's no imsim directory and phosim only contains the crosstalk

@@ -87,6 +87,7 @@ class AuxTelParseTask(LsstCamParseTask):
     """
 
     _mapperClass = AuxTelMapper
+    _translatorClass = LsstAuxTelTranslator
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the

@@ -40,6 +40,8 @@ def readRawFile(fileName, dataId={}, detector=None):
         The fully-qualified filename.
     dataId : `lsst.daf.persistence.DataId`
         If provided, used to look up e.g. the filter.
+    detector : `lsst.afw.cameraGeom.Detector`
+        If provided, add this detector to the returned Exposure
 
     Returns
     -------
