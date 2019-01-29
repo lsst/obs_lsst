@@ -39,6 +39,8 @@ class AuxTelMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 class AuxTelMapper(LsstCamMapper):
     """The Mapper for the auxTel camera."""
 
+    MakeRawVisitInfoClass = AuxTelMakeRawVisitInfo
+
     _cameraName = "auxTel"
     yamlFileList = ["auxTel/auxTelMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 

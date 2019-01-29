@@ -524,5 +524,7 @@ class LsstCamMapper(CameraMapper):
     def std_raw(self, item, dataId, filter=True):
         """Standardize a raw dataset by converting it to an
         `~lsst.afw.image.Exposure` instead of an `~lsst.afw.image.Image`."""
-        return self._standardizeExposure(self.exposures['raw'], item, dataId,
-                                         trimmed=False, setVisitInfo=False, filter=filter)
+
+        return self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
+                                         setVisitInfo=False,  # it's already set, and the metadata's stripped
+                                         filter=filter)

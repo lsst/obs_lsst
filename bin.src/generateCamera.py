@@ -62,17 +62,17 @@ if __name__ == "__main__":
 
     cameraSklFile = findYamlOnPath("cameraHeader.yaml", searchPath)
     with open(cameraSklFile) as fd:
-        cameraSkl = yaml.load(fd)
+        cameraSkl = yaml.load(fd, Loader=yaml.CLoader)
 
     cameraTransformsFile = findYamlOnPath("cameraTransforms.yaml", searchPath)
     with open(cameraTransformsFile) as fd:
-        cameraTransforms = yaml.load(fd)
+        cameraTransforms = yaml.load(fd, Loader=yaml.CLoader)
 
     with open(findYamlOnPath("rafts.yaml", searchPath)) as fd:
-        raftData = yaml.load(fd)
+        raftData = yaml.load(fd, Loader=yaml.CLoader)
 
     with open(findYamlOnPath("ccdData.yaml", searchPath)) as fd:
-        ccdData = yaml.load(fd)
+        ccdData = yaml.load(fd, Loader=yaml.CLoader)
 
     shutil.copyfile(cameraSklFile, cameraFile)
 
@@ -104,7 +104,7 @@ CCDs :\
         for raftName, perRaftData in raftData["rafts"].items():
             try:
                 with open(findYamlOnPath("%s.yaml" % raftName, searchPath)) as yfd:
-                    raftCcdData = yaml.load(yfd)[raftName]
+                    raftCcdData = yaml.load(yfd, Loader=yaml.CLoader)[raftName]
             except FileNotFoundError:
                 print("Unable to load CCD descriptions for raft %s" % raftName, file=sys.stderr)
                 continue
