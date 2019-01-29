@@ -1,5 +1,5 @@
 R02 :
-  detectorType : ITL
+  detectorType : ITL_UCD
   raftSerial : LCA-11021_ITL-02
   ccdSerials :
     S00 : ITL-3800C-002

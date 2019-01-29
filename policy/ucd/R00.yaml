@@ -1,5 +1,5 @@
 R00 :
-  detectorType : E2V
+  detectorType : E2V_UCD
   raftSerial : LCA-11021_RTM-E2V-00
   ccdSerials :
     S00 : E2V-CCD250-112-04

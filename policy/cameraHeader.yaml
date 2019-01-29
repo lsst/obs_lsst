@@ -248,6 +248,7 @@ CCD_ITL : &CCD_ITL
         <<: *C07_ITL
         hdu : 16
         ixy : [0, 1]
+
 #
 # Layout of CCDs within an ITL raft
 #
@@ -346,3 +347,190 @@ RAFT_E2V:
       << : *S00_E2V
       id : 8
       offset : [ 42.36,  42.20]
+
+#
+# The following support the UC Davis camera, with a different amplifier read order
+#
+
+CCD_E2V_UCD : &CCD_E2V_UCD
+    detectorType : 0
+    refpos : [2047.5, 2001.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4095, 4003]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C17: &C17_E2V_UCD
+        <<: *AMP_E2V
+        hdu : 1
+        flipXY : [True, False]
+        ixy : [7, 0]
+      C16: &C16_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 2
+        ixy : [6, 0]
+      C15: &C15_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 3
+        ixy : [5, 0]
+      C14: &C14_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 4
+        ixy : [4, 0]
+      C13: &C13_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 5
+        ixy : [3, 0]
+      C12: &C12_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 6
+        ixy : [2, 0]
+      C11: &C11_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 7
+        ixy : [1, 0]
+      C10: &C10_E2V_UCD
+        <<: *C17_E2V_UCD
+        hdu : 8
+        ixy : [0, 0]
+      C00: &C00_E2V_UCD
+        <<: *AMP_E2V
+        hdu : 9
+        flipXY : [False, True]
+        ixy : [0, 1]
+      C01: &C01_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 10
+        ixy : [1, 1]
+      C02: &C02_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 11
+        ixy : [2, 1]
+      C03: &C03_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 12
+        ixy : [3, 1]
+      C04: &C04_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 13
+        ixy : [4, 1]
+      C05: &C05_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 14
+        ixy : [5, 1]
+      C06: &C06_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 15
+        ixy : [6, 1]
+      C07: &C07_E2V_UCD
+        <<: *C00_E2V_UCD
+        hdu : 16
+        ixy : [7, 1]
+
+CCD_ITL_UCD : &CCD_ITL_UCD
+    detectorType : 0
+    refpos : [2036.5, 2000.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4071, 3999]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C13: &C13_ITL_UCD
+        <<: *AMP_ITL
+        hdu : 1
+        flipXY : [False, False]
+        ixy : [4, 0]
+      C12: &C12_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 2
+        ixy : [5, 0]
+      C11: &C11_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 3
+        ixy : [6, 0]
+      C10: &C10_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 4
+        ixy : [7, 0]
+      C17: &C17_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 5
+        ixy : [0, 0]
+      C16: &C16_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 6
+        ixy : [1, 0]
+      C15: &C15_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 7
+        ixy : [2, 0]
+      C14: &C14_ITL_UCD
+        <<: *C13_ITL_UCD
+        hdu : 8
+        ixy : [3, 0]
+      C07: &C07_ITL_UCD
+        <<: *AMP_ITL
+        hdu : 9
+        flipXY : [False, True]
+        ixy : [0, 1]
+      C06: &C06_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 10
+        ixy : [1, 1]
+      C05: &C05_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 11
+        ixy : [2, 1]
+      C04: &C04_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 12
+        ixy : [3, 1]
+      C03: &C03_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 13
+        ixy : [4, 1]
+      C02: &C02_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 14
+        ixy : [5, 1]
+      C01: &C01_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 15
+        ixy : [6, 1]
+      C00: &C00_ITL_UCD
+        <<: *C07_ITL_UCD
+        hdu : 16
+        ixy : [7, 1]
+
+#
+# Layout of CCDs within an ITL_UCD raft
+#
+RAFT_ITL_UCD:
+  ccds :
+    S00: &S00_ITL_UCD                       # Sensor (0, 0)
+      << : *CCD_ITL_UCD
+      id : 0
+      offset : [0.0, 0.0]
+
+#
+# Layout of CCDs within an E2V_UCD raft
+#
+#
+RAFT_E2V_UCD:
+  ccds :
+    S00: &S00_E2V_UCD                       # Sensor (0, 0)
+      << : *CCD_E2V_UCD
+      id : 0
+      offset : [0.0, 0.0]
