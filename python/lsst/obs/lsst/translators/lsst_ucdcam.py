@@ -119,7 +119,7 @@ class LsstUCDCamTranslator(StubTranslator):
         ValueError
             The supplied name is not known.
         """
-        for num, group in cls._detector_map:
+        for num, group in cls._detector_map.values():
             if group == detector_group:
                 return num
         raise ValueError(f"Detector {detector_group}_{detector_name} is not known to UCDCam")
@@ -143,7 +143,7 @@ class LsstUCDCamTranslator(StubTranslator):
         IndexError
             The supplied number is not known.
         """
-        for num, group in cls._detector_map:
+        for num, group in cls._detector_map.values():
             if num == detector_num:
                 return group
         raise IndexError(f"Detector {detector_num} is not known for UCDCam")
