@@ -21,4 +21,4 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
-config.processCcd.isr.doCrosstalk=False
+config.processCcd.isr.doCrosstalk=True
