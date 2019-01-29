@@ -171,7 +171,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
     def test_parsetask_ucd_translator(self):
         """Run the gen 2 metadata extraction code for UCDCam"""
         self.maxDiff = None
-        test_data = (("raw/E2V-CCD250-112-04_flat_flat_100_20181205153143_naked.fits",
+        test_data = (("raw/2018-12-05/20181205233148-S00-det000.fits",
                       dict(
                           expTime=0.5,
                           object='UNKNOWN',
@@ -190,7 +190,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           visit=20181205233148,
                           testSeqNum=100,
                       )),
-                     ("raw/ITL-3800C-002_flat_flat_100_20180530080354_naked.fits",
+                     ("raw/2018-05-30/20180530150355-S00-det002.fits",
                       dict(
                           expTime=0.5,
                           object='UNKNOWN',
