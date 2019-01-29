@@ -38,9 +38,13 @@ To add a new camera (e.g. fooCam, made up of 9 CCDs in a single "raft" -- call i
    
    The name you provided as _cameraName is also used to e.g. provide per-camera configuration files (for
    example config/auxTel/ingest.py)
- - Add a FooCamParseTask to python/lsst/obs/lsst/fooCam.py
+
+   Don't forget to add FooCamMapper to __all__
+ - Add a FooCamParseTask to python/lsst/obs/lsst/fooCam.py.  It'll need to set a class variable
+      _mapperClass = FooCamMapper
+   Don't forget to add FooCamParseTask to __all__
  - Put a _mapper file in the root of your repository, containing lsst.obs.lsstCam.fooCam.FooCamMapper 
- - Retarget config.parse in config/fooCam/ingest.py
+ - Retarget config.parse in config/fooCam/ingest.py to FooCamParseTask
  - You will probably also want to copy e.g. config/auxTel/auxTel.py to config/fooCam/fooCam.py
    and also files such as config/auxTel/bias.py -- don't forget to modify them to import fooCam.py!
  - Add FooCam.yaml to policy/.gitignore

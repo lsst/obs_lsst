@@ -20,7 +20,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import ImsimTranslator
 
@@ -44,4 +44,4 @@ class ImsimParseTask(LsstCamParseTask):
     """Parser suitable for phosim data.
     """
 
-    pass
+    _mapperClass = ImsimMapper

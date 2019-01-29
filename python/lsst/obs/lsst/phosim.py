@@ -20,7 +20,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import PhosimTranslator
 
@@ -43,6 +43,8 @@ class PhosimMapper(LsstCamMapper):
 class PhosimParseTask(LsstCamParseTask):
     """Parser suitable for phosim data.
     """
+
+    _mapperClass = PhosimMapper
 
     def translate_filter(self, md):
         """Extract filter from metadata (ignoring for corner-raft chips)

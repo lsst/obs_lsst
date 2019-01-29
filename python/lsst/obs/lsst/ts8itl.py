@@ -20,40 +20,20 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import lsst.utils as utils
-from lsst.obs.base.yamlCamera import YamlCamera
-from .ts8 import Ts8, Ts8Mapper
+#    N.b. This will be superseded when Butler Gen3 versions camera data.
+#
+from .ts8 import Ts8Mapper, Ts8ParseTask
 
-__all__ = ["Ts8itlMapper", "Ts8itl"]
-
-
-class Ts8itl(Ts8):
-    """The ts8's single raft Camera with ITL chips
-
-    N.b. This will be superseded when Butler Gen3 versions camera data.
-    """
-
-    def __init__(self, cameraYamlFile=None):
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ts8itl.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+__all__ = ["Ts8itlMapper", "Ts8itlParseTask"]
 
 
 class Ts8itlMapper(Ts8Mapper):
     """The Mapper for the ts8 ITL camera."""
+    _cameraName = "ts8itl"
 
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
 
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return Ts8itl()
+class Ts8itlParseTask(Ts8ParseTask):
+    """Parser suitable for ts8 ITL data.
+    """
 
-    @classmethod
-    def getCameraName(cls):
-        return "ts8itl"
+    _mapperClass = Ts8itlMapper

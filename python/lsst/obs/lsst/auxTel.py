@@ -22,8 +22,9 @@
 #
 import os.path
 import re
+import lsst.log
 from lsst.pipe.tasks.ingest import ParseTask
-from . import LsstCamMapper
+from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstAuxTelTranslator
 
@@ -84,6 +85,8 @@ class AuxTelParseTask(LsstCamParseTask):
     `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
     translation methods.
     """
+
+    _mapperClass = AuxTelMapper
 
     def getInfo(self, filename):
         """Get the basename and other data which is only available from the

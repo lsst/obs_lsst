@@ -29,16 +29,9 @@ __all__ = ("readRawFile",)
 
 import lsst.afw.image as afwImage
 from lsst.obs.lsst.lsstCamMapper import assemble_raw
-try:
-    from lsst.obs.lsst.lsstCamMapper import _camera
-except ImportError:
-    from lsst.obs.lsst.auxTel import AuxTelMapper
-    mapper = AuxTelMapper()    # Sets the sleazy _camera global
-
-    from lsst.obs.lsst.lsstCamMapper import _camera
 
 
-def readRawFile(fileName, dataId={}):
+def readRawFile(fileName, dataId={}, detector=None):
     """Read a raw file from fileName, assembling it nicely.
 
     Parameters
@@ -61,7 +54,7 @@ def readRawFile(fileName, dataId={}):
     amps = []
     for hdu in range(1, 16+1):
         exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
-        exp.setDetector(_camera[0])
+        exp.setDetector(detector)
         amps.append(exp)
 
     component_info = {}

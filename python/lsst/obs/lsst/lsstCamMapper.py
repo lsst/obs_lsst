@@ -35,8 +35,6 @@ import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 import lsst.afw.cameraGeom as cameraGeom
 
-from . import lsstCam
-
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
 
@@ -266,12 +264,13 @@ class LsstCamMapper(CameraMapper):
     def getCameraName(cls):
         return cls._cameraName
 
-    def _makeCamera(self, policy, repositoryDir, cameraYamlFile=None):
+    @classmethod
+    def _makeCamera(cls, policy=None, repositoryDir=None, cameraYamlFile=None):
         """Make a camera (instance of lsst.afw.cameraGeom.Camera) describing the camera geometry."""
 
         if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy",
-                                          ("%s.yaml" % self.getCameraName()))
+            cameraYamlFile = os.path.join(utils.getPackageDir(cls.packageName), "policy",
+                                          ("%s.yaml" % cls.getCameraName()))
 
         return yamlCamera.makeCamera(cameraYamlFile)
 
