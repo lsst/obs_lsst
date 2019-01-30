@@ -6,19 +6,19 @@ R00 :
 
   amplifiers :
     S00 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 4.511, readNoise : 14.4 }
+      C01 : { gain : 4.536, readNoise : 14.6 }
+      C02 : { gain : 4.474, readNoise : 11.3 }
+      C03 : { gain : 4.389, readNoise : 12.4 }
+      C04 : { gain : 3.505, readNoise : 15.4 }
+      C05 : { gain : 3.519, readNoise : 15.0 }
+      C06 : { gain : 3.395, readNoise : 13.1 }
+      C07 : { gain : 3.599, readNoise : 15.3 }
+      C10 : { gain : 4.421, readNoise : 19.4 }
+      C11 : { gain : 4.266, readNoise : 9.91 }
+      C12 : { gain : 4.362, readNoise : 13.7 }
+      C13 : { gain : 4.482, readNoise : 15.0 }
+      C14 : { gain : 4.533, readNoise : 16.3 }
+      C15 : { gain : 4.511, readNoise : 13.4 }
+      C16 : { gain : 4.358, readNoise : 14.8 }
+      C17 : { gain : 4.339, readNoise : 8.35 }
