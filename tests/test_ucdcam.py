@@ -31,31 +31,30 @@ import lsst.obs.base.tests
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests
 
 
-class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
-    instrumentDir = "auxTel"
+class TestUcdCam(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+    instrumentDir = "ucd"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 5700065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
-                   'bias': {'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
+        dataIds = {'raw': {'visit': 20180530150355, 'detectorName': 'S00', 'raftName': 'R02'},
+                   'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 5700065, 'bias': 20180920000065}
-        filters = {'raw': 'NONE', 'bias': '_unknown_'}
-        exptimes = {'raw': 27.0, 'bias': 0}
-        detectorIds = {'raw': 0, 'bias': 0}
-        detector_names = {'raw': 'RXX_S00', 'bias': 'RXX_S00'}
-        detector_serials = {'raw': 'ITL-3800C-098', 'bias': 'ITL-3800C-098'}
-        dimensions = {'raw': Extent2I(4608, 4096),
-                      'bias': Extent2I(4072, 4000)}
+        exposureIds = {'raw': 201805301503552}
+        filters = {'raw': 'r'}
+        exptimes = {'raw': 0.5}
+        detectorIds = {'raw': 2}
+        detector_names = {'raw': 'R02_S00'}
+        detector_serials = {'raw': 'ITL-3800C-002'}
+        dimensions = {'raw': Extent2I(0, 0)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': 'NONE'}, 1),
-                       ({'level': 'sensor', 'visit': 5700065}, 1),
-                       ({'level': 'filter', 'visit': 5700065}, 1),
-                       ({'level': 'visit', 'filter': 'NONE'}, 1)
+        raw_subsets = (({'level': 'detector', 'filter': 'r'}, 2),
+                       ({'level': 'detector', 'visit': 20180530150355}, 1),
+                       ({'level': 'filter', 'visit': 20180530150355}, 1),
+                       ({'level': 'visit', 'filter': 'r'}, 2)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -71,14 +70,13 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "2018-09-20", "05700065-det000.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "2018-05-30", "20180530150355-S00-det002")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
+                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
-        query_format = ["visit", "seqNum", "dayObs"]
-        queryMetadata = (({'visit': 5700065}, [(5700065, 65, '2018-09-20')]),
-                         ({'detector': 0}, [(5700065, 65, '2018-09-20')]),
-                         ({'seqNum': 65}, [(5700065, 65, '2018-09-20')]),
+        query_format = ["visit", "filter"]
+        queryMetadata = (({'visit': 20180530150355}, [(20180530150355, 'r')]),
+                         ({'detector': '2'}, [(20180530150355, 'r')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
@@ -86,11 +84,11 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '05700065-det000.fits'
+        raw_filename = '20180530150355-S00-det002'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'dayObs'])),
-                      ('filter', set(['visit', 'detector', 'dayObs'])),
-                      ('visit', set(['visit', 'detector', 'dayObs']))
+        raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
+                      ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
+                      ('visit', set(['visit', 'detector', 'run', 'detectorName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
@@ -105,12 +103,12 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           raw_filename=raw_filename,
                           default_level=default_level,
                           raw_levels=raw_levels,
-                          test_config_metadata=False,
+                          test_config_metadata=False
                           )
 
         self.setUp_camera(camera_name='lsstCam',
-                          n_detectors=1,
-                          first_detector_name='RXX_S00',
+                          n_detectors=3,
+                          first_detector_name='R00_S00',
                           plate_scale=20.0 * arcseconds,
                           )
 
