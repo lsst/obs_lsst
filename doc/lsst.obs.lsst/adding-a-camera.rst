@@ -129,3 +129,9 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
 
 If my instructions are complete and correct you are good to go. Once
 you’re happy commit all your changes to git, and push.
+
+We would ideally like to be able to run the integration tests to include
+the new camera.  To enable this please also add some test data to the
+`testdata_obs_lsst <https://github.com/lsst-dm/testdata_obs_lsst>`_ repository,
+and update the `ci_lsst <https://github.com/lsst-dm/ci_lsst>`_ package so that
+the new instrument is included in the integration test.
