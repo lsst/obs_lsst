@@ -1,0 +1,79 @@
+Adding a new camera
+===================
+
+The ``policy`` directory in the ``obs_lsst`` package contains the files
+needed to describe cameras made up of LSST chips. The eventual goal is
+to describe the real camera, but for now we also have variants to handle
+phosim and imsim simulations (they differ in e.g., the gain and
+crosstalk values).
+
+Once Butler Gen3 is ready this configuration data will be moved out of
+the obs package and into the calibration registry, which will allow us
+to track evolution of the system (including replacing failed rafts – not
+that that’s going to happen).
+
+The basic strategy is that the ``SConscript`` file in the directory
+assembles a suitable ``camera.yaml`` file (e.g. phosim.yaml) and we put
+the appropriate entry in the ``_mapper`` file in the data repository.
+
+To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
+“raft” – call it ``RXX`` for now):
+
+-  Add a directory ``policy/fooCam``
+-  Put a file ``rafts.yaml`` in that directory describing RXX (you can
+   start with ``policy/rafts.yaml``).
+-  Put a file ``RXX.yaml`` in policy/fooCam (you can start with
+   ``policy/lsstCam/R11.yaml``). Note that you can choose an ITL or E2V
+   device. Note that you must provide a serial number for each CCD in
+   the raft as that’s how I know how many CCDs there are in the “raft”
+   (e.g. auxTel has only one)
+-  If you want to add a camera-specific set of transformations, put a
+   file ``cameraTransforms.yaml`` in ``policy/fooCam``. Look at the one
+   in ``policy/cameraTransforms.yaml`` for inspiration.
+-  If you’re plagued by crosstalk, put a file ``ccdData.yaml`` in
+   ``policy/fooCam``. Look at the one in ``policy/phosim`` for the
+   format – basically a dict crosstalk indexed by the CCD type. There
+   are 256 coefficients (16 amplifiers and 256 == 16^2), and we assume
+   for now that all CCDs from a given vendor are the same (but the fix
+   to ``bin.src/generateCamera.py`` to handle per-CCD coefficients would
+   be easy)
+-  Edit ``policy/SConscript`` to add your new camera “fooCam” to the
+   ``for camera in ...`` loop. note the magic ``--path`` options – it
+   tells the code to use your data in fooCam to override lsstCam values.
+   This is why there’s no imsim directory and phosim only contains the
+   crosstalk coefficients; they take almost everything from
+   :literal:`policy/`` and`\ policy/lsstCam\`
+-  run ``scons`` in the ``obs_lsst`` directory (or ``scons -u`` in
+   policy)
+-  add ``fooCam.yaml`` to ``policy/.gitignore``
+-  Create a new file ``python/lsst/obs/lsst/fooCam.py`` (see
+   ``auxTel.py`` for an example)
+
+   Add a class ``FooCamMapper`` to the same file, setting a class-level
+   string ``_cameraName`` to “fooCam”. Look at the example in
+   ``python/lsst/obs/lsst/auxTel/auxTel.py`` – you’ll see that this
+   overrides some entries in ``lsstCamMapper.yaml`` (in the class data
+   member ``yamlFileList``) with ``auxTelMapper.yaml``. If want to
+   provide your own templates you’ll need to do the same thing, adding a
+   file ``policy/fooCam/fooCamMapper.yaml``
+
+   The name you provided as ``_cameraName`` is also used to e.g.,
+   provide per-camera configuration files (for example
+   ``config/auxTel/ingest.py``)
+
+   Don’t forget to add ``FooCamMapper`` to ``__all__``
+-  Add a ``FooCamParseTask`` to ``python/lsst/obs/lsst/fooCam.py``.
+   It’ll need to set a class variable ``_mapperClass = FooCamMapper``
+   Don’t forget to add ``FooCamParseTask`` to ``__all__``
+-  Put a ``_mapper`` file in the root of your repository, containing
+   ``lsst.obs.lsstCam.fooCam.FooCamMapper``
+-  Retarget ``config.parse`` in ``config/fooCam/ingest.py`` to
+   ``FooCamParseTask``
+-  You will probably also want to copy e.g., ``config/auxTel/auxTel.py``
+   to ``config/fooCam/fooCam.py`` and also files such as
+   config/auxTel/bias.py – don’t forget to modify them to import
+   ``fooCam.py``!
+-  Add ``FooCam.yaml`` to ``policy/.gitignore``
+
+If my instructions are complete and correct you are good to go. Once
+you’re happy commit all your changes to git, and push.
