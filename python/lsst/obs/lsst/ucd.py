@@ -20,32 +20,12 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import lsst.utils as utils
-from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
 from .ingest import LsstCamParseTask
 from .translators import LsstUCDCamTranslator
 
-__all__ = ["UcdMapper", "Ucd", "UcdParseTask"]
-
-
-class Ucd(YamlCamera):
-    """A single raft camera for UC Davis data.
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "ucd.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+__all__ = ["UcdMapper", "UcdParseTask"]
 
 
 class UcdMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -58,22 +38,9 @@ class UcdMapper(LsstCamMapper):
     translatorClass = LsstUCDCamTranslator
     MakeRawVisitInfoClass = UcdMakeRawVisitInfo
 
+    _cameraName = "ucd"
     yamlFileList = ["ucd/ucdMapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return Ucd()
-
-    @classmethod
-    def getCameraName(cls):
-        return "ucd"
 
     def _extractDetectorName(self, dataId):
         if 'detectorName' in dataId:
@@ -93,7 +60,7 @@ class UcdParseTask(LsstCamParseTask):
     We need this to parse the UC Davis headers.
     """
 
-    _cameraClass = Ucd           # the class to instantiate for the class-scope camera
+    _mapperClass = UcdMapper
     _translatorClass = LsstUCDCamTranslator
 
     def translate_testSeqNum(self, md):
