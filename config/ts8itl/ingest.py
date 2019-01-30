@@ -24,6 +24,6 @@ from lsst.utils import getPackageDir
 
 from lsst.obs.lsst.ts8itl import Ts8itlParseTask
 
-config.parse.retarget(Ts8itlParseTask)
-
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "ts8", "ingest.py"))
+
+config.parse.retarget(Ts8itlParseTask)
