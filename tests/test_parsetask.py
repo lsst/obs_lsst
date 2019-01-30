@@ -26,7 +26,7 @@ from lsst.pipe.tasks.ingest import IngestConfig
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
-from lsst.obs.lsst.ts8 import Ts8ParseTask
+from lsst.obs.lsst.ts8e2v import Ts8e2vParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 
@@ -119,7 +119,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=17,
                       )),
                      )
-        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8ParseTask, test_data)
+        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8e2vParseTask, test_data)
 
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""
