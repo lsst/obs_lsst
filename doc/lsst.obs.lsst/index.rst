@@ -16,7 +16,7 @@ Contributing
 ============
 
 ``lsst.obs.lsst`` is developed at https://github.com/lsst/obs_lsst.
-You can find Jira issues for this module under the `example <https://jira.lsstcorp.org/issues/?jql=project%20%3D%20DM%20AND%20component%20%3D%20obs_lsst>`_ component.
+You can find Jira issues for this module under the `obs_lsst <https://jira.lsstcorp.org/issues/?jql=project%20%3D%20DM%20AND%20component%20%3D%20obs_lsst>`_ component.
 
 .. toctree::
    :maxdepth: 1
