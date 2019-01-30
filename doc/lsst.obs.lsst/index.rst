@@ -6,7 +6,7 @@
 lsst.obs.lsst
 #############
 
-The ``obs_lsst`` moduel defines LSST camera specific configuration.
+The ``obs_lsst`` module defines LSST camera specific configuration.
 
 .. Add subsections with toctree to individual topic pages.
 
