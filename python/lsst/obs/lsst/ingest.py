@@ -24,7 +24,6 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
-from . import LsstCam
 from .translators.lsst import ROLLOVERTIME
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
@@ -39,8 +38,7 @@ class LsstCamParseTask(ParseTask):
     `LSE-400 <https://ls.st/LSE-400>`_.
     """
 
-    camera = None                       # class-scope camera to avoid instantiating once per file
-    _cameraClass = LsstCam              # the class to instantiate for the class-scope camera
+    camera = None
     _translatorClass = None
 
     def __init__(self, config, *args, **kwargs):
@@ -48,7 +46,7 @@ class LsstCamParseTask(ParseTask):
 
         self.observationInfo = None
         if self.camera is None:
-            self.camera = self._cameraClass()
+            self.camera = self._mapperClass._makeCamera()
 
     def getInfoFromMetadata(self, md, info=None):
         """Attempt to pull the desired information out of the header.
@@ -228,7 +226,7 @@ class LsstCamParseTask(ParseTask):
         return self.observationInfo.detector_group
 
     def translate_detector(self, md):
-        """Extract detector number from raft and detector name.
+        """Extract detector ID from metadata
 
         Parameters
         ----------

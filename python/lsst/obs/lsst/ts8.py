@@ -22,27 +22,12 @@
 #
 import os.path
 import re
-from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
 from .ingest import LsstCamParseTask, EXTENSIONS
 from .translators import LsstTS8Translator
 
-__all__ = ["Ts8Mapper", "Ts8", "Ts8ParseTask"]
-
-
-class Ts8(YamlCamera):
-    """The ts8's single raft Camera.
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        pass
+__all__ = ["Ts8Mapper", "Ts8ParseTask"]
 
 
 class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -53,22 +38,9 @@ class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
     MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
+    _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return Ts8()
-
-    @classmethod
-    def getCameraName(cls):
-        return "ts8"
 
     def _extractDetectorName(self, dataId):
         if 'detectorName' in dataId:
@@ -110,7 +82,7 @@ class Ts8ParseTask(LsstCamParseTask):
     translation methods.
     """
 
-    _cameraClass = Ts8           # the class to instantiate for the class-scope camera
+    _mapperClass = Ts8Mapper
     _translatorClass = LsstTS8Translator
 
     def getInfo(self, filename):

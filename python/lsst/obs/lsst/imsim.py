@@ -20,31 +20,11 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import lsst.utils as utils
-from lsst.obs.base.yamlCamera import YamlCamera
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import ImsimTranslator
 
-__all__ = ["ImsimMapper", "ImsimCam", "ImsimParseTask"]
-
-
-class ImsimCam(YamlCamera):
-    """The imsim realisation of the real LSST 3.2Gpix Camera.
-
-    Parameters
-    ----------
-    cameraYamlFile : `str`, optional
-        Path to camera YAML file. Will default to one in this package.
-    """
-    packageName = 'obs_lsst'
-
-    def __init__(self, cameraYamlFile=None):
-        if not cameraYamlFile:
-            cameraYamlFile = os.path.join(utils.getPackageDir(self.packageName), "policy", "imsim.yaml")
-
-        YamlCamera.__init__(self, cameraYamlFile)
+__all__ = ["ImsimMapper", "ImsimParseTask"]
 
 
 class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -57,25 +37,12 @@ class ImsimMapper(LsstCamMapper):
     translatorClass = ImsimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
-    @classmethod
-    def getCameraName(cls):
-        """Return the camera name for this mapper."""
-        return "imsim"
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return ImsimCam()
+    _cameraName = "imsim"
 
 
 class ImsimParseTask(LsstCamParseTask):
     """Parser suitable for phosim data.
     """
 
-    _cameraClass = ImsimCam           # the class to instantiate for the class-scope camera
+    _mapperClass = ImsimMapper
     _translatorClass = ImsimTranslator

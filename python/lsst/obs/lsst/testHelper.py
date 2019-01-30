@@ -48,7 +48,6 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls._mapper._LsstCamMapper__clearCache()
         del cls._mapper
         del cls._butler
 
@@ -57,5 +56,4 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
         cls.data_dir = os.path.normpath(os.path.join(DATAROOT, cls.instrumentDir))
         cls._butler = lsst.daf.persistence.Butler(root=cls.data_dir)
         mapper_class = cls._butler.getMapperClass(root=cls.data_dir)
-        mapper_class._LsstCamMapper__clearCache()
         cls._mapper = mapper_class(root=cls.data_dir)

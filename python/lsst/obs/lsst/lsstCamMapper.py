@@ -25,15 +25,15 @@
 import os
 import re
 import lsst.log
+import lsst.utils as utils
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
+import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 import lsst.afw.cameraGeom as cameraGeom
-
-from . import lsstCam
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
@@ -147,30 +147,19 @@ def assemble_raw(dataId, componentInfo, cls):
 
     md = componentInfo['raw_hdu'].obj
     exposure.setMetadata(md)
-    #
-    # We need to standardize, but have no legal way to call std_raw.
-    # The butler should do this for us.
-    #
-    global _camera, _lsstCamMapper      # Dangerous file-level cache set by Mapper.__initialiseCache()
+    visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
+    exposure.getInfo().setVisitInfo(visitInfo)
 
-    try:
-        exposure = _lsstCamMapper.std_raw(exposure, dataId)
-    except Exception:
-        exposure = _lsstCamMapper.std_raw(exposure, dataId, filter=False)
+    boresight = visitInfo.getBoresightRaDec()
+    rotangle = visitInfo.getBoresightRotAngle()
 
-    setWcsFromBoresight = True          # Construct the initial WCS from the boresight/rotation?
-    if setWcsFromBoresight:
-        visitInfo = exposure.getInfo().getVisitInfo()
-        boresight = visitInfo.getBoresightRaDec()
-        rotangle = visitInfo.getBoresightRotAngle()
-
-        if boresight.isFinite():
-            exposure.setWcs(getWcsFromDetector(_camera, exposure.getDetector(), boresight,
-                                               90*afwGeom.degrees - rotangle))
-        else:
-            # Should only warn for science observations but VisitInfo does not know
-            logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
-                        (dataId,))
+    if boresight.isFinite():
+        exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight,
+                                           90*afwGeom.degrees - rotangle))
+    else:
+        # Should only warn for science observations but VisitInfo does not know
+        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
+                    (dataId,))
 
     return exposure
 
@@ -181,9 +170,8 @@ def assemble_raw(dataId, componentInfo, cls):
 #
 
 
-def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
-    """Given a camera, detector and (boresight, rotation), return that
-    detector's WCS.
+def getWcsFromDetector(detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
+    """Given a detector and (boresight, rotation), return that detector's WCS
 
     Parameters
     ----------
@@ -205,8 +193,8 @@ def getWcsFromDetector(camera, detector, boresight, rotation=0*afwGeom.degrees, 
     wcs : `lsst::afw::geom::SkyWcs`
         The calculated WCS.
     """
-    trans = camera.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
-                                detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
+    trans = detector.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
+                                  detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
 
     wcs = afwGeom.makeSkyWcs(trans, rotation, flipX, boresight)
 
@@ -218,38 +206,16 @@ class LsstCamMapper(CameraMapper):
     """
 
     packageName = 'obs_lsst'
-    MakeRawVisitInfoClass = LsstCamMakeRawVisitInfo
+    _cameraName = "lsst"
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
+    #
+    # do not set MakeRawVisitInfoClass or translatorClass to anything other than None!
+    #
+    # assemble_raw relies on autodetect as in butler Gen2 it doesn't know its mapper and cannot
+    # use mapper.makeRawVisitInfo()
+    #
+    MakeRawVisitInfoClass = None
     translatorClass = None
-
-    def __initialiseCache(self):
-        """Initialise file-level cache.
-
-        We do this because it's expensive to build Cameras and Mappers, but it
-        is not a good idea in the medium or long run!
-        """
-        global _camera, _lsstCamMapper
-
-        try:
-            _camera
-        except NameError:
-            _camera = self._makeCamera(None, None)
-            _lsstCamMapper = self
-
-    @classmethod
-    def __clearCache(cls):
-        """Clear file-level cache.
-        """
-
-        try:
-            del globals()['_camera']
-        except KeyError:
-            pass
-
-        try:
-            del globals()['_lsstCamMapper']
-        except KeyError:
-            pass
 
     def __init__(self, inputPolicy=None, **kwargs):
         #
@@ -289,8 +255,6 @@ class LsstCamMapper(CameraMapper):
 
         self.defineFilters()
 
-        self.__initialiseCache()
-
         LsstCamMapper._nbit_tract = 16
         LsstCamMapper._nbit_patch = 5
         LsstCamMapper._nbit_filter = 6
@@ -301,6 +265,31 @@ class LsstCamMapper(CameraMapper):
         if len(afwImage.Filter.getNames()) >= 2**LsstCamMapper._nbit_filter:
             raise RuntimeError("You have more filters defined than fit into the %d bits allocated" %
                                LsstCamMapper._nbit_filter)
+
+    @classmethod
+    def getCameraName(cls):
+        return cls._cameraName
+
+    @classmethod
+    def _makeCamera(cls, policy=None, repositoryDir=None, cameraYamlFile=None):
+        """Make a camera  describing the camera geometry.
+
+        policy : ignored
+        repositoryDir : ignored
+        cameraYamlFile : `str`
+           The full path to a yaml file to be passed to `yamlCamera.makeCamera`
+
+        Returns
+        -------
+        camera : `lsst.afw.cameraGeom.Camera`
+            Camera geometry.
+        """
+
+        if not cameraYamlFile:
+            cameraYamlFile = os.path.join(utils.getPackageDir(cls.packageName), "policy",
+                                          ("%s.yaml" % cls.getCameraName()))
+
+        return yamlCamera.makeCamera(cameraYamlFile)
 
     @classmethod
     def defineFilters(cls):
@@ -319,16 +308,6 @@ class LsstCamMapper(CameraMapper):
         afwImageUtils.defineFilter('z', lambdaEff=866.85, lambdaMin=922.0, lambdaMax=997.0)
         # official y filter
         afwImageUtils.defineFilter('y', lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4'])
-
-    def _makeCamera(self, policy, repositoryDir):
-        """Make a camera  describing the camera geometry.
-
-        Returns
-        -------
-        camera : `lsst.afw.cameraGeom.Camera`
-            Camera geometry.
-        """
-        return lsstCam.LsstCam()
 
     def _getRegistryValue(self, dataId, k):
         """Return a value from a dataId, or look it up in the registry if it
@@ -545,5 +524,7 @@ class LsstCamMapper(CameraMapper):
     def std_raw(self, item, dataId, filter=True):
         """Standardize a raw dataset by converting it to an
         `~lsst.afw.image.Exposure` instead of an `~lsst.afw.image.Image`."""
-        return self._standardizeExposure(self.exposures['raw'], item, dataId,
-                                         trimmed=False, setVisitInfo=True, filter=filter)
+
+        return self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
+                                         setVisitInfo=False,  # it's already set, and the metadata's stripped
+                                         filter=filter)

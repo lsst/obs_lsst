@@ -31,5 +31,5 @@ for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8e2v", "ts8itl"]:
         for f in glob.glob(os.path.join(d, "*.yaml")):
             env.Depends(commandInst, f)
         
-    for f in ["cameraHeader.yaml", "rafts.yaml", env.Glob("R??.yaml")]:
+    for f in ["cameraHeader.yaml", "cameraTransforms.yaml", "rafts.yaml", env.Glob("R??.yaml")]:
         env.Depends(commandInst, f)
