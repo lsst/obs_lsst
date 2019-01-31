@@ -515,7 +515,7 @@ class LsstCamMapper(CameraMapper):
             else:
                 md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
 
-            return afwImage.VisitInfo(md)
+            return self.MakeRawVisitInfoClass(log=self.log)(md)
 
     def std_raw_amp(self, item, dataId):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
