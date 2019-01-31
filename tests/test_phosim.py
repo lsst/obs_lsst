@@ -26,12 +26,11 @@ import unittest
 import lsst.utils.tests
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
 
     def setUp(self):

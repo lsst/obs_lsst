@@ -26,12 +26,11 @@ import unittest
 import lsst.utils.tests
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestImsim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "imsim"
 
     def setUp(self):

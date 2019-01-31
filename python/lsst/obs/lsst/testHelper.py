@@ -21,11 +21,12 @@
 #
 
 """Test support classes for obs_lsst"""
-__all__ = ("ObsLsstButlerTests",)
+__all__ = ("ObsLsstButlerTests", "ObsLsstObsBaseOverrides")
 
 import os.path
 import unittest
 import lsst.utils.tests
+import lsst.obs.base.tests
 from lsst.utils import getPackageDir
 
 # Define the data location relative to this package
@@ -65,3 +66,22 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
         cls._butler = lsst.daf.persistence.Butler(root=cls.data_dir)
         mapper_class = cls._butler.getMapperClass(root=cls.data_dir)
         cls._mapper = mapper_class(root=cls.data_dir)
+
+
+class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
+    """Specialist butler tests for obs_lsst."""
+
+    def testRawVisitInfo(self):
+        visitInfo = self.butler.get("raw_visitInfo", self.dataIds["raw"])
+        self.assertIsInstance(visitInfo, lsst.afw.image.VisitInfo)
+        # We should always get a valid date and exposure time
+        self.assertIsInstance(visitInfo.getDate(), lsst.daf.base.DateTime)
+        self.assertTrue(visitInfo.getDate().isValid())
+        self.assertEqual(visitInfo.getExposureTime(), self.butler_get_data.exptimes["raw"])
+
+    def testRawFilename(self):
+        filepath = self.butler.get("raw_filename", self.dataIds["raw"])[0]
+        if "[" in filepath:  # Remove trailing HDU specifier
+            filepath = filepath[:filepath.find("[")]
+        filename = os.path.split(filepath)[1]
+        self.assertEqual(filename, self.mapper_data.raw_filename)

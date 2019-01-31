@@ -26,13 +26,12 @@ import unittest
 import lsst.utils.tests
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 import lsst.obs.lsst
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestTs8(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts8e2v"
 
     def setUp(self):

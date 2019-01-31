@@ -26,12 +26,12 @@ import unittest
 import lsst.utils.tests
 from lsst.afw.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
+import lsst.daf.base
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "auxTel"
 
     def setUp(self):
