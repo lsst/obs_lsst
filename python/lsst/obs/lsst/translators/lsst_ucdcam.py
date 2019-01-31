@@ -107,7 +107,7 @@ class LsstUCDCamTranslator(StubTranslator):
         detector_group : `str`
             Detector group name.  This is generally the raft name.
         detector_name : `str`
-            Detector name.
+            Detector name. Checked to ensure it is the expected name.
 
         Returns
         -------
@@ -119,6 +119,8 @@ class LsstUCDCamTranslator(StubTranslator):
         ValueError
             The supplied name is not known.
         """
+        if detector_name != cls.DETECTOR_NAME:
+            raise ValueError(f"Detector {detector_name} is not known to UCDCam")
         for num, group in cls._detector_map.values():
             if group == detector_group:
                 return num
