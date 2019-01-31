@@ -24,6 +24,7 @@
 __all__ = ("ObsLsstButlerTests",)
 
 import os.path
+import unittest
 import lsst.utils.tests
 from lsst.utils import getPackageDir
 
@@ -46,6 +47,9 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
     instrumentDir = "TBD"  # Override in subclass
     """Name of instrument directory within data/input."""
 
+    _mapper = None
+    _butler = None
+
     @classmethod
     def tearDownClass(cls):
         del cls._mapper
@@ -54,6 +58,10 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.data_dir = os.path.normpath(os.path.join(DATAROOT, cls.instrumentDir))
+        # Protection against the base class values being used
+        if not os.path.exists(cls.data_dir):
+            raise unittest.SkipTest(f"Data directory {cls.data_dir} does not exist.")
+
         cls._butler = lsst.daf.persistence.Butler(root=cls.data_dir)
         mapper_class = cls._butler.getMapperClass(root=cls.data_dir)
         cls._mapper = mapper_class(root=cls.data_dir)
