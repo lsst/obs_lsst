@@ -116,6 +116,23 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         super().setUp()
 
+    def testCcdExposureId(self):
+        exposureId = self.butler.get('ccdExposureId', dataId={})
+        self.assertEqual(exposureId, 0)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 0})
+        self.assertEqual(exposureId, 1)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1})
+        self.assertEqual(exposureId, 1)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 999})
+        self.assertEqual(exposureId, 20200101000999)
+
+        with self.assertLogs(level="WARNING"):
+            exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(exposureId, 1)
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

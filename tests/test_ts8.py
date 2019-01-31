@@ -116,6 +116,32 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         super().setUp()
 
+    def testCcdExposureId(self):
+        exposureId = self.butler.get('ccdExposureId', dataId={})
+        self.assertEqual(exposureId, 0)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(exposureId, 101)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S01"})
+        self.assertEqual(exposureId, 101)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"dateObs": "2018-12-31T05:06:33.54",
+                                                              "detectorName": "S01"})
+        self.assertEqual(exposureId, 20181231050633501)
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1})
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"detector": 1})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 10})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S44"})
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
