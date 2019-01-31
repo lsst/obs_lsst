@@ -39,6 +39,30 @@ CONFIGDIR = os.path.join(ROOTDIR, "config")
 
 class LsstCamParseTaskTestCase(unittest.TestCase):
 
+    def _constructParseTask(self, configdir, name, parseTaskClass):
+        """Construct a parser task suitable for testing translation methods.
+
+        Parameters
+        ----------
+        configdir : `str`
+            Root of the config directory. This directory must include a
+            directory of name ``name``.
+        name : `str`
+            Name of instrument within data directory and config directory.
+        parseTaskClass : `lsst.pipe.tasks.ParseTask`
+            Class, not instance, to use to extract information from header.
+
+        Returns
+        -------
+        parseTask : `lsst.pipe.tasks.ParseTask`
+            Instance of a ``parseTaskClass`` class.
+        """
+        ingestConfig = IngestConfig()
+        ingestConfig.load(os.path.join(configdir, "ingest.py"))
+        ingestConfig.load(os.path.join(configdir, name, "ingest.py"))
+        parser = parseTaskClass(ingestConfig.parse, name=name)
+        return parser
+
     def assertParseCompare(self, datadir, configdir, name, parseTask, testData):
         """Compare parsed output from headers with expected output.
 
@@ -65,10 +89,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
             If the results differ from the expected values.
 
         """
-        ingestConfig = IngestConfig()
-        ingestConfig.load(os.path.join(configdir, "ingest.py"))
-        ingestConfig.load(os.path.join(configdir, name, "ingest.py"))
-        parser = parseTask(ingestConfig.parse, name=name)
+        parser = self._constructParseTask(configdir, name, parseTask)
         for fileFragment, expected in testData:
             file = os.path.join(DATADIR, name, fileFragment)
             with self.subTest(f"Testing {file}"):
