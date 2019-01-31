@@ -84,7 +84,7 @@ class TestUcdCam(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '20180530150355-S00-det002'
+        raw_filename = '20180530150355-S00-det002.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
                       ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
