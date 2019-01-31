@@ -85,3 +85,33 @@ class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
             filepath = filepath[:filepath.find("[")]
         filename = os.path.split(filepath)[1]
         self.assertEqual(filename, self.mapper_data.raw_filename)
+
+    def _testCoaddId(self, idName):
+        coaddId = self.butler.get(idName, dataId={"tract": 9813, "patch": "3,4",
+                                                  "filter": self.butler_get_data.filters["raw"]})
+        self.assertIsInstance(coaddId, int)
+        maxbits = self.butler.get(f"{idName}_bits")
+        self.assertLess(maxbits, 64)
+        self.assertLess(coaddId.bit_length(), maxbits, f"compare bit length for {idName}")
+
+        # Check failure modes
+        with self.assertRaises(RuntimeError):
+            self.butler.get(idName, dataId={"tract": 9813, "patch": "-3,4"})
+        with self.assertRaises(RuntimeError):
+            self.butler.get(idName, dataId={"tract": -9813, "patch": "3,4"})
+        with self.assertRaises(RuntimeError):
+            self.butler.get(idName, dataId={"tract": 2**self.mapper._nbit_tract+1, "patch": "3,4"})
+        with self.assertRaises(RuntimeError):
+            self.butler.get(idName, dataId={"tract": 2, "patch": f"3,{2**self.mapper._nbit_patch+1}"})
+
+    def testDeepCoaddId(self):
+        self._testCoaddId("deepCoaddId")
+
+    def testDcrCoaddId(self):
+        self._testCoaddId("dcrCoaddId")
+
+    def testDeepMergedCoaddId(self):
+        self._testCoaddId("deepMergedCoaddId")
+
+    def testDcrMergedCoaddId(self):
+        self._testCoaddId("dcrMergedCoaddId")
