@@ -133,13 +133,28 @@ class AuxTelParseTask(LsstCamParseTask):
             The sequence number identifier valid within a day.
         """
 
-        if md.exists("SEQNUM"):
+        if "SEQNUM" in md:
             return md.getScalar("SEQNUM")
         #
         # Oh dear.  Extract it from the filename
         #
-        imgname = md.getScalar("IMGNAME")           # e.g. AT-O-20180816-00008
-        seqNum = imgname[-5:]                 # 00008
-        seqNum = re.sub(r'^0+', '', seqNum)   # 8
+        seqNum = 0
+        for k in ("IMGNAME", "FILENAME"):
+            if k not in md:
+                continue
+            name = md.getScalar(k)           # e.g. AT-O-20180816-00008
+            # Trim trailing extensions
+            name = os.path.splitext(name)[0]
 
-        return int(seqNum)
+            # Want final digits
+            mat = re.search(r"(\d+)$", name)
+            if mat:
+                seqNum = int(mat.group(1))    # 00008
+                break
+
+        if seqNum == 0:
+            logger = lsst.log.Log.getLogger('obs.lsst.AuxTelParseTask')
+            logger.warn(
+                'Could not determine sequence number. Assuming %d ', seqNum)
+
+        return seqNum
