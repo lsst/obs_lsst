@@ -139,6 +139,12 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
         seqNum = parseTask.translate_seqNum(md)
         self.assertEqual(seqNum, 0)
 
+        # Test the wavelength code path for non integer wavelength
+        # Cannot test that the warning appeared since those go to stdout
+        md["MONOWL"] = 600.4
+        wl = parseTask.translate_wavelength(md)
+        self.assertEqual(wl, int(md.getScalar("MONOWL")))
+
     def test_parsetask_ts8_translator(self):
         """Run the gen 2 metadata extraction code for TS8"""
         test_data = (("raw/6006D/00270095325-S11-det004.fits",
