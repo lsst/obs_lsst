@@ -28,6 +28,7 @@ import lsst.log
 import lsst.utils as utils
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
+import lsst.geom as geom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
@@ -99,11 +100,11 @@ def assemble_raw(dataId, componentInfo, cls):
             # the latter is safer
             #
             bbox = amp.getRawHorizontalOverscanBBox()
-            hOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
-                                         afwGeom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
+            hOverscanBBox = geom.BoxI(bbox.getBegin(),
+                                      geom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
             bbox = amp.getRawVerticalOverscanBBox()
-            vOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
-                                         afwGeom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
+            vOverscanBBox = geom.BoxI(bbox.getBegin(),
+                                      geom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
 
             amp.setRawBBox(ampExp.getBBox())
             amp.setRawHorizontalOverscanBBox(hOverscanBBox)
@@ -120,7 +121,7 @@ def assemble_raw(dataId, componentInfo, cls):
             x0, y0 = amp.getRawXYOffset()
             ix, iy = x0//ow, y0/oh
             x0, y0 = ix*xRawExtent, iy*yRawExtent
-            amp.setRawXYOffset(afwGeom.ExtentI(ix*xRawExtent, iy*yRawExtent))
+            amp.setRawXYOffset(geom.ExtentI(ix*xRawExtent, iy*yRawExtent))
         #
         # Check the "IRAF" keywords, but don't abort if they're wrong
         #
@@ -155,7 +156,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     if boresight.isFinite():
         exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight,
-                                           90*afwGeom.degrees - rotangle))
+                                           90*geom.degrees - rotangle))
     else:
         # Should only warn for science observations but VisitInfo does not know
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
@@ -170,7 +171,7 @@ def assemble_raw(dataId, componentInfo, cls):
 #
 
 
-def getWcsFromDetector(detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
+def getWcsFromDetector(detector, boresight, rotation=0*geom.degrees, flipX=False):
     """Given a detector and (boresight, rotation), return that detector's WCS
 
     Parameters
