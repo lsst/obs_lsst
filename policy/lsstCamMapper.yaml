@@ -605,17 +605,8 @@ datasets:
     storage: ConfigStorage
     python: lsst.dia.pipe.associationDriver.associationDriverConfig
     template: config/associationDriver.py
-  associationDriver_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: BoostStorage
   forcedPhotCcdDiaDriver_config:
     persistable: Config
     storage: ConfigStorage
     python: lsst.dia.pipe.associationDriver.forcedPhotCcdDiaDriverConfig
     template: config/forcedPhotCcdDiaDriver.py
-  forcedPhotCcdDiaDriver_metadata:
-    persistable: PropertySet
-    python: lsst.daf.base.PropertySet
-    storage: BoostStorage
-
