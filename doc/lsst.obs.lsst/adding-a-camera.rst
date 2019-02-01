@@ -4,8 +4,8 @@ Adding a new camera
 The ``policy`` directory in the ``obs_lsst`` package contains the files
 needed to describe cameras made up of LSST chips. The eventual goal is
 to describe the real camera, but for now we also have variants to handle
-phosim and imsim simulations (they differ in e.g., the gain and
-crosstalk values).
+AuxTel data, phosim and imsim simulations (they differ in e.g., the gain and
+crosstalk values) and data from various test stands.
 
 Once Butler Gen3 is ready this configuration data will be moved out of
 the obs package and into the calibration registry, which will allow us
