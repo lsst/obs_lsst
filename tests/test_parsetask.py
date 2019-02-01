@@ -23,6 +23,7 @@ import os.path
 import unittest
 
 from lsst.pipe.tasks.ingest import IngestConfig
+import lsst.daf.base
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
@@ -119,6 +120,15 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "auxTel", AuxTelParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "auxTel", AuxTelParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        md["IMGNAME"] = "AT-O-20180816-00008"
+        seqNum = parseTask.translate_seqNum(md)
+        self.assertEqual(seqNum, 8)
 
     def test_parsetask_ts8_translator(self):
         """Run the gen 2 metadata extraction code for TS8"""
