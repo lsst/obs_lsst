@@ -22,6 +22,7 @@ You can find Jira issues for this module under the `obs_lsst <https://jira.lsstc
    :maxdepth: 1
 
    adding-a-camera.rst
+   testing.rst
 
 .. _lsst.obs.lsst-pyapi:
 

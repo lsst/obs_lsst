@@ -94,37 +94,15 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    ``FooCamParseTask``
 -  You will probably also want to copy e.g., ``config/auxTel/auxTel.py``
    to ``config/fooCam/fooCam.py`` and also files such as
-   config/auxTel/bias.py – don’t forget to modify them to import
+   ``config/auxTel/bias.py`` – don’t forget to modify them to import
    ``fooCam.py``!
 -  Add ``FooCam.yaml`` to ``policy/.gitignore``
--  Generate a raw test data file (or files) that is as small as possible.
-   The butler tests will work even if the data array is empty so long as those
-   dimensions are reflected in the butler tests. To retain the correct
-   dimensional information one technique is to zero out the pixel array and
-   compress with gzip.  Do not use a ``.gz`` extension as we still need the
-   template strings to work to be able to locate the file. This file or files
-   should be added to the test butler repository in ``data/input``. Create
-   ``data/input/fooCam/`` and then run:
+-  Add test data and associated unit tests following the instructions in
+   :ref:`obs_lsst_testing`.
 
-   .. code-block:: bash
-
-      ingestImages.py ./data/input/fooCam --mode=copy fooCamtest.fits
-
-   specifying the path to the test files. This will store them in the butler
-   repository.
-
--  For calibrated data, if available, the individual image, mask, and
-   variance planes, can be zeroed and put into the repository using the
-   appropriate ``butler.put`` call. This writes the files as tile compressed
-   by default.
--  Copy one of the ``tests/test_cam.py`` files most closely related to your
-   camera.  You can include tests for processed data here but if you only
-   have raw files with no calibrations it may be easiest to use
-   ``test_ucd.py``.  These tests should be modified to reflect your test
-   data dimensions and metadata.
-
-If my instructions are complete and correct you are good to go. Once
-you’re happy commit all your changes to git, and push.
+If these instructions are complete and correct you are good to go. Once
+you’re happy commit all your changes to a branch git, and push, and make
+a pull request.
 
 We would ideally like to be able to run the integration tests to include
 the new camera.  To enable this please also add some test data to the
