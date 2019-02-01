@@ -116,7 +116,6 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           seqNum=65,
                           visit=20180920000065,
                           wavelength=-666,
-                          basename='05700065-det000',
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "auxTel", AuxTelParseTask, test_data)

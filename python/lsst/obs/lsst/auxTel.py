@@ -23,9 +23,8 @@
 import os.path
 import re
 import lsst.log
-from lsst.pipe.tasks.ingest import ParseTask
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .ingest import LsstCamParseTask, EXTENSIONS
+from .ingest import LsstCamParseTask
 from .translators import LsstAuxTelTranslator
 
 __all__ = ["AuxTelMapper", "AuxTelParseTask"]
@@ -90,34 +89,6 @@ class AuxTelParseTask(LsstCamParseTask):
 
     _mapperClass = AuxTelMapper
     _translatorClass = LsstAuxTelTranslator
-
-    def getInfo(self, filename):
-        """Get the basename and other data which is only available from the
-        filename/path.
-
-        This is horribly fragile!
-
-        Parameters
-        ----------
-        filename : `str`
-            The filename.
-
-        Returns
-        -------
-        phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config
-            from the primary HDU.
-        infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various
-            extensions in MEF files.
-        """
-        phuInfo, infoList = ParseTask.getInfo(self, filename)
-
-        pathname, basename = os.path.split(filename)
-        basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
-        phuInfo['basename'] = basename
-
-        return phuInfo, infoList
 
     def translate_seqNum(self, md):
         """Return the sequence number.
