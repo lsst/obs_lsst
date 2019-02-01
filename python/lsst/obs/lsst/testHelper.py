@@ -86,6 +86,33 @@ class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
         filename = os.path.split(filepath)[1]
         self.assertEqual(filename, self.mapper_data.raw_filename)
 
+    def testQueryRawAmp(self):
+        # Base the tests on the first reference metadata query
+        formats = self.mapper_data.query_format.copy()
+        query, expect = self.mapper_data.queryMetadata[0]
+        result = self.mapper.queryMetadata("raw_amp", formats, query)
+        self.assertEqual(sorted(result), sorted(expect))
+
+        # Listing all channels -- we expect the result to be the expected
+        # result copied for each channel
+        formats = formats.copy()
+        formats.insert(0, "channel")
+        expectall = [(i+1, *expect[0]) for i in range(16)]
+        result = self.mapper.queryMetadata("raw_amp", formats, query)
+        self.assertEqual(sorted(result), sorted(expectall))
+
+        # Now fix a channel
+        query = query.copy()
+        query["channel"] = 3
+        result = self.mapper.queryMetadata("raw_amp", formats, query)
+        expect = [(query["channel"], *expect[0])]
+        self.assertEqual(sorted(result), sorted(expect))
+
+        # Fix a channel out of range
+        query["channel"] = 20
+        with self.assertRaises(ValueError):
+            self.mapper.queryMetadata("raw_amp", formats, query)
+
     def _testCoaddId(self, idName):
         coaddId = self.butler.get(idName, dataId={"tract": 9813, "patch": "3,4",
                                                   "filter": self.butler_get_data.filters["raw"]})

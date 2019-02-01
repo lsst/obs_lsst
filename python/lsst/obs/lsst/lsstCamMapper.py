@@ -426,12 +426,20 @@ class LsstCamMapper(CameraMapper):
         -------
         fields : `list` of `tuple`
             Values of the fields specified in ``format``.
+
+        Raises
+        ------
+        ValueError
+            The channel number requested in ``dataId`` is out of range.
         """
         nChannel = 16                   # number of possible channels, 1..nChannel
 
         if "channel" in dataId:         # they specified a channel
             dataId = dataId.copy()
-            channels = [dataId.pop('channel')]
+            channel = dataId.pop('channel')  # Do not include in query below
+            if channel > nChannel or channel < 1:
+                raise ValueError(f"Requested channel is out of range 0 < {channel} <= {nChannel}")
+            channels = [channel]
         else:
             channels = range(1, nChannel + 1)  # we want all possible channels
 
