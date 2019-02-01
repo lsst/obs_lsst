@@ -1,3 +1,5 @@
+.. _obs_lsst_adding_camera:
+
 Adding a new camera
 ===================
 
