@@ -13,34 +13,12 @@ to track evolution of the system (including replacing failed rafts – not
 that that’s going to happen).
 
 The basic strategy is that the ``SConscript`` file in the directory
-assembles a suitable ``camera.yaml`` file (e.g. phosim.yaml) and we put
+assembles a suitable ``camera.yaml`` file (e.g. ``phosim.yaml``) and we put
 the appropriate entry in the ``_mapper`` file in the data repository.
 
 To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
 “raft” – call it ``RXX`` for now):
 
--  Write a header translator for your instrument. This should be placed in
-   ``python/lsst/obs/lsst/translators/fooCam.py``. You can follow the examples
-   from other translators there.  Remember to add the new file to
-   ``python/lsst/obs/lsst/translators/__init__.py``.
-   You can test the translator by running
-
-   .. code-block:: bash
-
-      translate_header.py -p lsst.obs.lsst.translators testfile.fits
-
-   The translators must define the properties specified and defined by
-   `~astro_metadata_translator.ObservationInfo`.
-   Pay careful attention to how you decide to define ``detector_group``
-   and ``detector_name``.  You can read your detector IDs out of the camera
-   YAML file once it's created or hard code them into your translator.
-   ``exposure_id`` and ``detector_exposure_id`` should be written in such
-   a way that they can be called from the mapper class to allow the values
-   to be determined from dataIds.
-   Add tests for the translator in ``tests/test_translator.py``. The tests
-   use serialized headers in YAML format and stored in ``tests/headers/``.
-   You can generate the YAML by using the ``-d`` option to
-   ``translate_header.py``.
 -  Add a directory ``policy/fooCam``
 -  Put a file ``rafts.yaml`` in that directory describing RXX (you can
    start with ``policy/rafts.yaml``).
@@ -85,6 +63,24 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    ``config/auxTel/ingest.py``)
 
    Don’t forget to add ``FooCamMapper`` to ``__all__``
+-  Write a header translator for your instrument. This should be placed in
+   ``python/lsst/obs/lsst/translators/fooCam.py``. You can follow the examples
+   from other translators there.  Remember to add the new file to
+   ``python/lsst/obs/lsst/translators/__init__.py``.
+   You can test the translator by running
+
+   .. code-block:: bash
+
+      translate_header.py -p lsst.obs.lsst.translators testfile.fits
+
+   The translators must define the properties specified and defined by
+   `~astro_metadata_translator.ObservationInfo`.
+   Pay careful attention to how you decide to define ``detector_group``
+   and ``detector_name``.  You can read your detector IDs out of the camera
+   YAML file once it's created or hard code them into your translator.
+   ``exposure_id`` and ``detector_exposure_id`` should be written in such
+   a way that they can be called from the mapper class to allow the values
+   to be determined from dataIds.
 -  Add a ``FooCamParseTask`` to ``python/lsst/obs/lsst/fooCam.py``.
    It’ll need to set a class variable ``_mapperClass = FooCamMapper`` and
    also a class variable ``_translatorClass = LsstFooCamTranslator`` (the same
