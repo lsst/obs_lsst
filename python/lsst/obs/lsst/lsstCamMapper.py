@@ -500,23 +500,15 @@ class LsstCamMapper(CameraMapper):
         return self.map__raw_visitInfo(*args, **kwargs)
 
     def bypass_raw_visitInfo(self, datasetType, pythonType, location, dataId):
-        if False:
-            # lsst.afw.fits.readMetadata() doesn't honour [hdu] suffixes in filenames
-            #
-            # We could workaround this by moving the "else" block into obs_base,
-            # or by changing afw
-            #
-            return self.bypass__raw_visitInfo(datasetType, pythonType, location, dataId)
+        fileName = location.getLocationsWithRoot()[0]
+        mat = re.search(r"\[(\d+)\]$", fileName)
+        if mat:
+            hdu = int(mat.group(1))
+            md = readMetadata(fileName, hdu=hdu)
         else:
-            fileName = location.getLocationsWithRoot()[0]
-            mat = re.search(r"\[(\d+)\]$", fileName)
-            if mat:
-                hdu = int(mat.group(1))
-                md = readMetadata(fileName, hdu=hdu)
-            else:
-                md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
+            md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
 
-            return self.MakeRawVisitInfoClass(log=self.log)(md)
+        return self.MakeRawVisitInfoClass(log=self.log)(md)
 
     def std_raw_amp(self, item, dataId):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
