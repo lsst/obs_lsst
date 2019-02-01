@@ -138,6 +138,16 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R00",
                                                      "detectorName": "S01"})
 
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"detectorName": "S02", "raftName": "R00"})
+        self.assertEqual(name, "R00_S02")
+
+        name = self.mapper._extractDetectorName({"detector": 2})
+        self.assertEqual(name, "R02_S00")
+
+        with self.assertRaises(ValueError):
+            self.mapper._extractDetectorName({"detector": 3})
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

@@ -142,6 +142,13 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         with self.assertRaises(ValueError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S44"})
 
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"detectorName": "S02"})
+        self.assertEqual(name, "R00_S02")
+
+        name = self.mapper._extractDetectorName({"detector": 3})
+        self.assertEqual(name, "R00_S10")
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

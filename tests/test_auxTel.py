@@ -133,6 +133,10 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
         self.assertEqual(exposureId, 1)
 
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({})
+        self.assertEqual(name, "RXX_S00")
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

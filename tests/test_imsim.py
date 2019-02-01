@@ -162,6 +162,25 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R99",
                                                      "detectorName": "S01"})
 
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
+        self.assertEqual(name, "R00_S00")
+
+        name = self.mapper._extractDetectorName({'visit': 204595, 'detectorName': 'S20'})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'visit': 204595, 'detector': 42})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'detector': 42})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'visit': 204595})
+        self.assertEqual(name, "R11_S20")
+
+        with self.assertRaises(RuntimeError):
+            self.mapper._extractDetectorName({'visit': 1})
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
