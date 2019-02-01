@@ -564,13 +564,12 @@ datasets:
     python: builtins.str
     storage: TextStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
-
   deepDiff_diaObject:
     description: "Catalog of combined diaSrc objects."
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
-    template: deepDiff/%(tract)08d/%(patch)s/diaObject-%(tract)d-%(patch)s.fits
+    template: deepDiff/%(tract)d/%(patch)s/diaObject-%(tract)d-%(patch)s.fits
   deepDiff_diaObject_schema:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
@@ -581,7 +580,7 @@ datasets:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
-    template: deepDiff/v%(visit)08d/diaForced-%(ccd)02d.fits
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_forced_dia_src_schema:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
