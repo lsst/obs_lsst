@@ -168,6 +168,17 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8e2vParseTask, test_data)
 
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "ts8e2v", Ts8e2vParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 0)
+        md["SEQNUM"] = 5
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 5)
+
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""
         test_data = (("raw/204595/R11/00204595-R11-S20-det042-000.fits",
@@ -257,6 +268,17 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "ucd", UcdParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 0)
+        md["SEQNUM"] = 5
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 5)
 
 
 if __name__ == "__main__":
