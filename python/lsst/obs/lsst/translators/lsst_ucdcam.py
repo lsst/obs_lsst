@@ -142,13 +142,13 @@ class LsstUCDCamTranslator(StubTranslator):
 
         Raises
         ------
-        IndexError
+        ValueError
             The supplied number is not known.
         """
         for num, group in cls._detector_map.values():
             if num == detector_num:
                 return group
-        raise IndexError(f"Detector {detector_num} is not known for UCDCam")
+        raise ValueError(f"Detector {detector_num} is not known for UCDCam")
 
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
