@@ -95,9 +95,9 @@ def assemble_raw(dataId, componentInfo, cls):
             w, h = ampExp.getBBox().getDimensions()
             ow, oh = amp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
             #
-            # We could trust the BIASSEC keyword, or we can just assume that they've changed
-            # the number of overscan pixels (serial and/or parallel).  As Jim Chiang points out,
-            # the latter is safer
+            # We could trust the BIASSEC keyword, or we can just assume that
+            # they've changed the number of overscan pixels (serial and/or
+            # parallel).  As Jim Chiang points out, the latter is safer
             #
             bbox = amp.getRawHorizontalOverscanBBox()
             hOverscanBBox = geom.BoxI(bbox.getBegin(),
@@ -210,10 +210,11 @@ class LsstCamMapper(CameraMapper):
     _cameraName = "lsst"
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
     #
-    # do not set MakeRawVisitInfoClass or translatorClass to anything other than None!
+    # do not set MakeRawVisitInfoClass or translatorClass to anything other
+    # than None!
     #
-    # assemble_raw relies on autodetect as in butler Gen2 it doesn't know its mapper and cannot
-    # use mapper.makeRawVisitInfo()
+    # assemble_raw relies on autodetect as in butler Gen2 it doesn't know
+    # its mapper and cannot use mapper.makeRawVisitInfo()
     #
     MakeRawVisitInfoClass = None
     translatorClass = None

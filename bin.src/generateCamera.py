@@ -28,7 +28,8 @@ import yaml
 
 
 def findYamlOnPath(fileName, searchPath):
-    """Find and return a file somewhere in the directories listed in searchPath"""
+    """Find and return a file somewhere in the directories listed in
+    searchPath"""
     for d in searchPath:
         f = os.path.join(d, fileName)
         if os.path.exists(f):
@@ -40,10 +41,12 @@ def findYamlOnPath(fileName, searchPath):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="""
-    Generate a camera.yaml file for a camera by assembling descriptions of rafts, sensors, etc.
+    Generate a camera.yaml file for a camera by assembling descriptions of
+    rafts, sensors, etc.
 
-    Because we have many similar cameras, the assembly uses a :-separated search path of directories
-    to find desired information.  The _first_ occurrence of a filename is used.
+    Because we have many similar cameras, the assembly uses a :-separated
+    search path of directories to find desired information.  The _first_
+    occurrence of a filename is used.
     """)
 
     parser.add_argument('outputFile', type=str, help="Name of generated file")
