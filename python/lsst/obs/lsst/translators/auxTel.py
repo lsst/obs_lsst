@@ -69,7 +69,8 @@ class LsstAuxTelTranslator(StubTranslator):
     """Supports the LATISS instrument."""
 
     _const_map = {
-        # AuxTel is not yet attached to a telescope so many translations are null.
+        # AuxTel is not yet attached to a telescope so many translations
+        # are null.
         "instrument": "LATISS",
         "telescope": "LSSTAuxTel",
         "detector_group": _DETECTOR_GROUP_NAME,

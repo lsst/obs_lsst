@@ -263,7 +263,8 @@ class LsstTS8Translator(StubTranslator):
         serial = self._header["LSST_NUM"]
         self._used_these_cards("LSST_NUM")
 
-        # this seems to be appended more or less at random and should be removed.
+        # this seems to be appended more or less at random and should be
+        # removed.
         serial = re.sub("-Dev$", "", serial)
         return serial
 

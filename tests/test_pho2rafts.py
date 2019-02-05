@@ -49,8 +49,8 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         with open(os.path.join(EXPYAMLDIR, 'R11.yaml')) as fh:
             exp_doc = yaml.load(fh)
         # The test data only have the S20 chip
-        # Note: as of python 3 the iterator on dicts is not a list, so we need to manually
-        # create one since we are deleting entries from the dict.
+        # Note: as of python 3 the iterator on dicts is not a list, so we need
+        # to manually create one since we are deleting entries from the dict.
         for key in list(exp_doc['R11']['amplifiers']):
             if key != 'S20':
                 del exp_doc['R11']['amplifiers'][key]
