@@ -24,15 +24,13 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
-import lsst.obs.lsst
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestTs8(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts8e2v"
 
     def setUp(self):
@@ -116,6 +114,39 @@ class TestTs8(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           )
 
         super().setUp()
+
+    def testCcdExposureId(self):
+        exposureId = self.butler.get('ccdExposureId', dataId={})
+        self.assertEqual(exposureId, 0)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(exposureId, 101)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S01"})
+        self.assertEqual(exposureId, 101)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"dateObs": "2018-12-31T05:06:33.54",
+                                                              "detectorName": "S01"})
+        self.assertEqual(exposureId, 20181231050633501)
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1})
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"detector": 1})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 10})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S44"})
+
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"detectorName": "S02"})
+        self.assertEqual(name, "R00_S02")
+
+        name = self.mapper._extractDetectorName({"detector": 3})
+        self.assertEqual(name, "R00_S10")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

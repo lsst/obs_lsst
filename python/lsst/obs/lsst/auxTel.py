@@ -23,9 +23,8 @@
 import os.path
 import re
 import lsst.log
-from lsst.pipe.tasks.ingest import ParseTask
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .ingest import LsstCamParseTask, EXTENSIONS
+from .ingest import LsstCamParseTask
 from .translators import LsstAuxTelTranslator
 
 __all__ = ["AuxTelMapper", "AuxTelParseTask"]
@@ -81,43 +80,10 @@ class AuxTelMapper(LsstCamMapper):
 
 class AuxTelParseTask(LsstCamParseTask):
     """Parser suitable for auxTel data.
-
-    We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override
-    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
-    translation methods.
     """
 
     _mapperClass = AuxTelMapper
     _translatorClass = LsstAuxTelTranslator
-
-    def getInfo(self, filename):
-        """Get the basename and other data which is only available from the
-        filename/path.
-
-        This is horribly fragile!
-
-        Parameters
-        ----------
-        filename : `str`
-            The filename.
-
-        Returns
-        -------
-        phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config
-            from the primary HDU.
-        infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various
-            extensions in MEF files.
-        """
-        phuInfo, infoList = ParseTask.getInfo(self, filename)
-
-        pathname, basename = os.path.split(filename)
-        basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
-        phuInfo['basename'] = basename
-
-        return phuInfo, infoList
 
     def translate_seqNum(self, md):
         """Return the sequence number.
@@ -133,13 +99,28 @@ class AuxTelParseTask(LsstCamParseTask):
             The sequence number identifier valid within a day.
         """
 
-        if md.exists("SEQNUM"):
+        if "SEQNUM" in md:
             return md.getScalar("SEQNUM")
         #
         # Oh dear.  Extract it from the filename
         #
-        imgname = md.getScalar("IMGNAME")           # e.g. AT-O-20180816-00008
-        seqNum = imgname[-5:]                 # 00008
-        seqNum = re.sub(r'^0+', '', seqNum)   # 8
+        seqNum = 0
+        for k in ("IMGNAME", "FILENAME"):
+            if k not in md:
+                continue
+            name = md.getScalar(k)           # e.g. AT-O-20180816-00008
+            # Trim trailing extensions
+            name = os.path.splitext(name)[0]
 
-        return int(seqNum)
+            # Want final digits
+            mat = re.search(r"(\d+)$", name)
+            if mat:
+                seqNum = int(mat.group(1))    # 00008
+                break
+
+        if seqNum == 0:
+            logger = lsst.log.Log.getLogger('obs.lsst.AuxTelParseTask')
+            logger.warn(
+                'Could not determine sequence number. Assuming %d ', seqNum)
+
+        return seqNum

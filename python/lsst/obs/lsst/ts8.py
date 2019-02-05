@@ -20,11 +20,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
-import os.path
-import re
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .auxTel import AuxTelMapper
-from .ingest import LsstCamParseTask, EXTENSIONS
+from .ingest import LsstCamParseTask
 from .translators import LsstTS8Translator
 
 __all__ = ["Ts8Mapper", "Ts8ParseTask"]
@@ -75,44 +73,10 @@ class Ts8Mapper(LsstCamMapper):
 
 class Ts8ParseTask(LsstCamParseTask):
     """Parser suitable for ts8 data.
-
-    We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override
-    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
-    translation methods.
     """
 
     _mapperClass = Ts8Mapper
     _translatorClass = LsstTS8Translator
-
-    def getInfo(self, filename):
-        """Get the basename and other data which is only available from the
-        filename/path.
-
-        This is horribly fragile!
-
-        Parameters
-        ----------
-        filename : `str`
-            The filename.
-
-        Returns
-        -------
-        phuInfo : `dict`
-            Dictionary containing the header keys defined in the ingest config
-            from the primary HDU.
-        infoList : `list`
-            A list of dictionaries containing the phuInfo(s) for the various
-            extensions in MEF files.
-        """
-        phuInfo, infoList = super().getInfo(filename)
-
-        if False:
-            pathname, basename = os.path.split(filename)
-            basename = re.sub(r"\.(%s)$" % "|".join(EXTENSIONS), "", basename)
-            phuInfo['basename'] = basename
-
-        return phuInfo, infoList
 
     def translate_detectorName(self, md):
         return self.observationInfo.detector_name

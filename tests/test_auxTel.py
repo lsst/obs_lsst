@@ -23,15 +23,15 @@ import os
 import sys
 import unittest
 
+import lsst.log
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "auxTel"
 
     def setUp(self):
@@ -115,6 +115,30 @@ class TestAuxTel(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           )
 
         super().setUp()
+
+    def testCcdExposureId(self):
+        exposureId = self.butler.get('ccdExposureId', dataId={})
+        self.assertEqual(exposureId, 0)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 0})
+        self.assertEqual(exposureId, 1)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1})
+        self.assertEqual(exposureId, 1)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 999})
+        self.assertEqual(exposureId, 20200101000999)
+
+        # This will trigger a Python log message and lsst.log message
+        with self.assertLogs(level="WARNING") as cm:
+            with lsst.log.UsePythonLogging():
+                exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(len(cm.output), 2)
+        self.assertEqual(exposureId, 1)
+
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({})
+        self.assertEqual(name, "RXX_S00")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

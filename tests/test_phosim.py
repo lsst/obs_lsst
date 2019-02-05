@@ -24,14 +24,13 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
 
     def setUp(self):
@@ -113,6 +112,46 @@ class TestPhosim(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           )
 
         super().setUp()
+
+    def testCcdExposureId(self):
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={})
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(exposureId, 10001)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
+                                                              "detectorName": "S01"})
+        self.assertEqual(exposureId, 10001)
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R99",
+                                                     "detectorName": "S01"})
+
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
+        self.assertEqual(name, "R00_S00")
+
+        name = self.mapper._extractDetectorName({'visit': 204595, 'detectorName': 'S20'})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'visit': 204595, 'detector': 42})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'detector': 42})
+        self.assertEqual(name, "R11_S20")
+
+        name = self.mapper._extractDetectorName({'visit': 204595})
+        self.assertEqual(name, "R11_S20")
+
+        with self.assertRaises(RuntimeError):
+            self.mapper._extractDetectorName({'visit': 1})
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

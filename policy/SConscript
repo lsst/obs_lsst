@@ -18,8 +18,10 @@ libpathstr = lsst.sconsUtils.utils.libraryLoaderEnvironment()
 python = "{} python".format(libpathstr)
 
 for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8e2v", "ts8itl", "ucd"]:
+    # Invoke the bin.src variant so that we do not depend on the shebang
+    # target having been run
     commandInst = env.Command("%s.yaml" % camera, "",
-                              "%s bin/generateCamera.py --path %s:lsstCam:. $TARGET" %
+                              "%s bin.src/generateCamera.py --path %s:lsstCam:. $TARGET" %
                               (python, camera))
 
     env.Depends(commandInst, lsst.sconsUtils.targets["python"])

@@ -91,10 +91,17 @@ def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000
     -------
     detector_exposure_id : `int`
         Computed ID.
+
+    Raises
+    ------
+    ValueError
+        The detector number is out of range.
     """
 
-    if detector_num >= max_num:
-        raise ValueError(f"Detector number has value {detector_num} >= {max_num}")
+    if detector_num is None:
+        raise ValueError("Detector number must be defined.")
+    if detector_num >= max_num or detector_num < 0:
+        raise ValueError(f"Detector number out of range 0 <= {detector_num} <= {max_num}")
 
     if mode == "concat":
         npad = len(str(max_num))

@@ -38,15 +38,12 @@ class LsstCamParseTask(ParseTask):
     `LSE-400 <https://ls.st/LSE-400>`_.
     """
 
-    camera = None
     _translatorClass = None
 
     def __init__(self, config, *args, **kwargs):
         super().__init__(config, *args, **kwargs)
 
         self.observationInfo = None
-        if self.camera is None:
-            self.camera = self._mapperClass._makeCamera()
 
     def getInfoFromMetadata(self, md, info=None):
         """Attempt to pull the desired information out of the header.

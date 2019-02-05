@@ -28,6 +28,7 @@ import lsst.log
 import lsst.utils as utils
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.geom as afwGeom
+import lsst.geom as geom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
@@ -99,11 +100,11 @@ def assemble_raw(dataId, componentInfo, cls):
             # the latter is safer
             #
             bbox = amp.getRawHorizontalOverscanBBox()
-            hOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
-                                         afwGeom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
+            hOverscanBBox = geom.BoxI(bbox.getBegin(),
+                                      geom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
             bbox = amp.getRawVerticalOverscanBBox()
-            vOverscanBBox = afwGeom.BoxI(bbox.getBegin(),
-                                         afwGeom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
+            vOverscanBBox = geom.BoxI(bbox.getBegin(),
+                                      geom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
 
             amp.setRawBBox(ampExp.getBBox())
             amp.setRawHorizontalOverscanBBox(hOverscanBBox)
@@ -120,7 +121,7 @@ def assemble_raw(dataId, componentInfo, cls):
             x0, y0 = amp.getRawXYOffset()
             ix, iy = x0//ow, y0/oh
             x0, y0 = ix*xRawExtent, iy*yRawExtent
-            amp.setRawXYOffset(afwGeom.ExtentI(ix*xRawExtent, iy*yRawExtent))
+            amp.setRawXYOffset(geom.ExtentI(ix*xRawExtent, iy*yRawExtent))
         #
         # Check the "IRAF" keywords, but don't abort if they're wrong
         #
@@ -155,7 +156,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     if boresight.isFinite():
         exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight,
-                                           90*afwGeom.degrees - rotangle))
+                                           90*geom.degrees - rotangle))
     else:
         # Should only warn for science observations but VisitInfo does not know
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
@@ -170,7 +171,7 @@ def assemble_raw(dataId, componentInfo, cls):
 #
 
 
-def getWcsFromDetector(detector, boresight, rotation=0*afwGeom.degrees, flipX=False):
+def getWcsFromDetector(detector, boresight, rotation=0*geom.degrees, flipX=False):
     """Given a detector and (boresight, rotation), return that detector's WCS
 
     Parameters
@@ -425,12 +426,20 @@ class LsstCamMapper(CameraMapper):
         -------
         fields : `list` of `tuple`
             Values of the fields specified in ``format``.
+
+        Raises
+        ------
+        ValueError
+            The channel number requested in ``dataId`` is out of range.
         """
         nChannel = 16                   # number of possible channels, 1..nChannel
 
         if "channel" in dataId:         # they specified a channel
             dataId = dataId.copy()
-            channels = [dataId.pop('channel')]
+            channel = dataId.pop('channel')  # Do not include in query below
+            if channel > nChannel or channel < 1:
+                raise ValueError(f"Requested channel is out of range 0 < {channel} <= {nChannel}")
+            channels = [channel]
         else:
             channels = range(1, nChannel + 1)  # we want all possible channels
 
@@ -499,23 +508,16 @@ class LsstCamMapper(CameraMapper):
         return self.map__raw_visitInfo(*args, **kwargs)
 
     def bypass_raw_visitInfo(self, datasetType, pythonType, location, dataId):
-        if False:
-            # lsst.afw.fits.readMetadata() doesn't honour [hdu] suffixes in filenames
-            #
-            # We could workaround this by moving the "else" block into obs_base,
-            # or by changing afw
-            #
-            return self.bypass__raw_visitInfo(datasetType, pythonType, location, dataId)
+        fileName = location.getLocationsWithRoot()[0]
+        mat = re.search(r"\[(\d+)\]$", fileName)
+        if mat:
+            hdu = int(mat.group(1))
+            md = readMetadata(fileName, hdu=hdu)
         else:
-            fileName = location.getLocationsWithRoot()[0]
-            mat = re.search(r"\[(\d+)\]$", fileName)
-            if mat:
-                hdu = int(mat.group(1))
-                md = readMetadata(fileName, hdu=hdu)
-            else:
-                md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
+            md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
 
-            return afwImage.VisitInfo(md)
+        makeVisitInfo = self.MakeRawVisitInfoClass(log=self.log)
+        return makeVisitInfo(md)
 
     def std_raw_amp(self, item, dataId):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,

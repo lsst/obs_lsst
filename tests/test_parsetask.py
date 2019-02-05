@@ -23,6 +23,8 @@ import os.path
 import unittest
 
 from lsst.pipe.tasks.ingest import IngestConfig
+import lsst.daf.base
+import lsst.log
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
@@ -38,6 +40,30 @@ CONFIGDIR = os.path.join(ROOTDIR, "config")
 
 
 class LsstCamParseTaskTestCase(unittest.TestCase):
+
+    def _constructParseTask(self, configdir, name, parseTaskClass):
+        """Construct a parser task suitable for testing translation methods.
+
+        Parameters
+        ----------
+        configdir : `str`
+            Root of the config directory. This directory must include a
+            directory of name ``name``.
+        name : `str`
+            Name of instrument within data directory and config directory.
+        parseTaskClass : `lsst.pipe.tasks.ParseTask`
+            Class, not instance, to use to extract information from header.
+
+        Returns
+        -------
+        parseTask : `lsst.pipe.tasks.ParseTask`
+            Instance of a ``parseTaskClass`` class.
+        """
+        ingestConfig = IngestConfig()
+        ingestConfig.load(os.path.join(configdir, "ingest.py"))
+        ingestConfig.load(os.path.join(configdir, name, "ingest.py"))
+        parser = parseTaskClass(ingestConfig.parse, name=name)
+        return parser
 
     def assertParseCompare(self, datadir, configdir, name, parseTask, testData):
         """Compare parsed output from headers with expected output.
@@ -65,10 +91,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
             If the results differ from the expected values.
 
         """
-        ingestConfig = IngestConfig()
-        ingestConfig.load(os.path.join(configdir, "ingest.py"))
-        ingestConfig.load(os.path.join(configdir, name, "ingest.py"))
-        parser = parseTask(ingestConfig.parse, name=name)
+        parser = self._constructParseTask(configdir, name, parseTask)
         for fileFragment, expected in testData:
             file = os.path.join(DATADIR, name, fileFragment)
             with self.subTest(f"Testing {file}"):
@@ -94,10 +117,37 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           seqNum=65,
                           visit=20180920000065,
                           wavelength=-666,
-                          basename='05700065-det000',
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "auxTel", AuxTelParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "auxTel", AuxTelParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        md["IMGNAME"] = "AT-O-20180816-00008"
+        seqNum = parseTask.translate_seqNum(md)
+        self.assertEqual(seqNum, 8)
+
+        del md["IMGNAME"]
+        md["FILENAME"] = "ats_exp_27_AT_C_20180920_000065.fits"
+        seqNum = parseTask.translate_seqNum(md)
+        self.assertEqual(seqNum, 65)
+
+        # This will issue a warning
+        md["FILENAME"] = "ats_exp_27_AT_C.fits"
+        with self.assertLogs(level="WARNING"):
+            with lsst.log.UsePythonLogging():
+                seqNum = parseTask.translate_seqNum(md)
+        self.assertEqual(seqNum, 0)
+
+        # Test the wavelength code path for non integer wavelength
+        md["MONOWL"] = 600.4
+        with self.assertLogs(level="WARNING"):
+            with lsst.log.UsePythonLogging():
+                wl = parseTask.translate_wavelength(md)
+        self.assertEqual(wl, int(md.getScalar("MONOWL")))
 
     def test_parsetask_ts8_translator(self):
         """Run the gen 2 metadata extraction code for TS8"""
@@ -121,6 +171,17 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8e2vParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "ts8e2v", Ts8e2vParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 0)
+        md["SEQNUM"] = 5
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 5)
 
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""
@@ -211,6 +272,17 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "ucd", UcdParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 0)
+        md["SEQNUM"] = 5
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 5)
 
 
 if __name__ == "__main__":

@@ -24,14 +24,13 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.obs.base.tests
 
-from lsst.obs.lsst.testHelper import ObsLsstButlerTests
+from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestUcdCam(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
+class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ucd"
 
     def setUp(self):
@@ -84,7 +83,7 @@ class TestUcdCam(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '20180530150355-S00-det002'
+        raw_filename = '20180530150355-S00-det002.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
                       ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
@@ -113,6 +112,41 @@ class TestUcdCam(lsst.obs.base.tests.ObsTests, ObsLsstButlerTests):
                           )
 
         super().setUp()
+
+    def testCcdExposureId(self):
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={})
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
+        self.assertEqual(exposureId, 11)
+
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
+                                                              "detectorName": "S00"})
+        self.assertEqual(exposureId, 11)
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 4})
+
+        with self.assertRaises(KeyError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R05",
+                                                     "detectorName": "S00"})
+
+        with self.assertRaises(ValueError):
+            self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R00",
+                                                     "detectorName": "S01"})
+
+    def testDetectorName(self):
+        name = self.mapper._extractDetectorName({"detectorName": "S02", "raftName": "R00"})
+        self.assertEqual(name, "R00_S02")
+
+        name = self.mapper._extractDetectorName({"detector": 2})
+        self.assertEqual(name, "R02_S00")
+
+        with self.assertRaises(ValueError):
+            self.mapper._extractDetectorName({"detector": 3})
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
