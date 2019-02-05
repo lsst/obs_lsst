@@ -24,7 +24,7 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
@@ -148,15 +148,15 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
         self.assertEqual(exposureId, 10001)
 
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
+                                                              "detectorName": "S01"})
+        self.assertEqual(exposureId, 10001)
+
         with self.assertRaises(ValueError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})
 
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={"visit": 1})
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
-                                                              "detectorName": "S01"})
-        self.assertEqual(exposureId, 10001)
 
         with self.assertRaises(ValueError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R99",

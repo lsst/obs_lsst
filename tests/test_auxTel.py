@@ -24,9 +24,8 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.afw.geom import arcseconds, Extent2I
+from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
-import lsst.daf.base
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 

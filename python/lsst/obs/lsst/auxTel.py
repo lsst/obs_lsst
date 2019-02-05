@@ -80,11 +80,6 @@ class AuxTelMapper(LsstCamMapper):
 
 class AuxTelParseTask(LsstCamParseTask):
     """Parser suitable for auxTel data.
-
-    We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override
-    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
-    translation methods.
     """
 
     _mapperClass = AuxTelMapper

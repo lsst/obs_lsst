@@ -73,11 +73,6 @@ class Ts8Mapper(LsstCamMapper):
 
 class Ts8ParseTask(LsstCamParseTask):
     """Parser suitable for ts8 data.
-
-    We need this because as of 2018-07-20 the headers are essentially empty and
-    there's information we need from the filename, so we need to override
-    `lsst.obs.lsst.ingest.LsstCamParseTask.getInfo` and provide some
-    translation methods.
     """
 
     _mapperClass = Ts8Mapper
