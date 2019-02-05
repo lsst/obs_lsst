@@ -24,6 +24,7 @@ import unittest
 
 from lsst.pipe.tasks.ingest import IngestConfig
 import lsst.daf.base
+import lsst.log
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
@@ -136,13 +137,16 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
         # This will issue a warning
         md["FILENAME"] = "ats_exp_27_AT_C.fits"
-        seqNum = parseTask.translate_seqNum(md)
+        with self.assertLogs(level="WARNING"):
+            with lsst.log.UsePythonLogging():
+                seqNum = parseTask.translate_seqNum(md)
         self.assertEqual(seqNum, 0)
 
         # Test the wavelength code path for non integer wavelength
-        # Cannot test that the warning appeared since those go to stdout
         md["MONOWL"] = 600.4
-        wl = parseTask.translate_wavelength(md)
+        with self.assertLogs(level="WARNING"):
+            with lsst.log.UsePythonLogging():
+                wl = parseTask.translate_wavelength(md)
         self.assertEqual(wl, int(md.getScalar("MONOWL")))
 
     def test_parsetask_ts8_translator(self):
