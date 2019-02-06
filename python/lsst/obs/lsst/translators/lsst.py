@@ -43,14 +43,15 @@ def read_detector_ids(policyFile):
 
     Returns
     -------
-    mapping : `dict` of `str` to `int`
+    mapping : `dict` of `str` to (`int`, `str`)
         A `dict` with keys being the full names of the detectors, and the
-        value is the integer detector number.
+        value is a `tuple` containing the integer detector number and the
+        detector serial number.
 
     Notes
     -----
     Reads the camera YAML definition file directly and extracts just the
-    IDs.  This routine does not use the standard
+    IDs and serials.  This routine does not use the standard
     `~lsst.obs.base.yamlCamera.YAMLCamera` infrastructure or
     `lsst.afw.cameraGeom`.  This is because the translators are intended to
     have minimal dependencies on LSST infrastructure.
@@ -63,7 +64,7 @@ def read_detector_ids(policyFile):
 
     mapping = {}
     for ccd, value in camera["CCDs"].items():
-        mapping[ccd] = int(value["id"])
+        mapping[ccd] = (int(value["id"]), value["serial"])
 
     return mapping
 
