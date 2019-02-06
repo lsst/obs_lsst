@@ -28,7 +28,6 @@ config.parse.retarget(Ts8ParseTask)
 config.parse.translation['wavelength'] = 'MONOWL'
 
 # what used to be config.parse.translators = {
-del config.parse.translators['raftName']
 del config.parse.translators['snap']
 config.parse.translators['dayObs'] = 'translate_dayObs'
 config.parse.translators['testSeqNum'] = 'translate_testSeqNum'
@@ -38,7 +37,6 @@ config.parse.translators['testSeqNum'] = 'translate_testSeqNum'
 config.parse.hdu = 0
 
 # what used to be config.register.columns = {
-del config.register.columns['raftName']
 del config.register.columns['snap']
 config.register.columns['dayObs'] = 'text'
 config.register.columns['testSeqNum'] = 'int'
