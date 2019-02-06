@@ -17,7 +17,7 @@ libpathstr = lsst.sconsUtils.utils.libraryLoaderEnvironment()
 # We always run these commands with an explicit python rather than relying on the shebang
 python = "{} python".format(libpathstr)
 
-for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8e2v", "ts8itl", "ucd"]:
+for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8", "ts8e2v", "ts8itl", "ucd"]:
     # Invoke the bin.src variant so that we do not depend on the shebang
     # target having been run
     commandInst = env.Command("%s.yaml" % camera, "",
@@ -33,5 +33,5 @@ for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8e2v", "ts8itl", "ucd"
         for f in glob.glob(os.path.join(d, "*.yaml")):
             env.Depends(commandInst, f)
 
-    for f in ["cameraHeader.yaml", "cameraTransforms.yaml", "rafts.yaml", env.Glob("R??.yaml")]:
+    for f in ["cameraHeader.yaml", "cameraTransforms.yaml", "rafts.yaml", env.Glob("R*[0-9][0-9].yaml")]:
         env.Depends(commandInst, f)
