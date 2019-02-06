@@ -134,6 +134,7 @@ class LsstSimTranslator(StubTranslator):
             num = detector_mapping[fullname]
         else:
             log.warning(f"Unable to determine detector number from detector name {fullname}")
+            return None
 
         return num[0]
 
