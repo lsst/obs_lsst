@@ -31,29 +31,29 @@ from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
 class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
-    instrumentDir = "ts8e2v"
+    instrumentDir = "ts8"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 270095325, 'detectorName': 'S11'},
-                   'bias': {'detectorName': 'S11', 'dateObs': '2018-07-24T10:28:45.342'},
+        dataIds = {'raw': {'visit': 201807241028453, 'detectorName': 'S11', 'raftName': 'RTM-010'},
+                   'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 27009532504, 'bias': 20180724102845304}
+        exposureIds = {'raw': 201807241028453067, 'bias': 20180724102845304}
         filters = {'raw': 'z', 'bias': '_unknown_'}
         exptimes = {'raw': 21.913, 'bias': 0}
-        detectorIds = {'raw': 4, 'bias': 4}
-        detector_names = {'raw': 'R00_S11', 'bias': 'R00_S11'}
+        detectorIds = {'raw': 67, 'bias': 4}
+        detector_names = {'raw': 'RTM-010_S11', 'bias': 'R00_S11'}
         detector_serials = {'raw': 'E2V-CCD250-179', 'bias': 'E2V-CCD250-179'}
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4096, 4004)}
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor', 'filter': 'z'}, 1),
-                       ({'level': 'sensor', 'visit': 270095325}, 1),
-                       ({'level': 'filter', 'visit': 270095325}, 1),
+                       ({'level': 'sensor', 'visit': 201807241028453}, 1),
+                       ({'level': 'filter', 'visit': 201807241028453}, 1),
                        ({'level': 'visit', 'filter': 'z'}, 1)
                        )
         linearizer_type = unittest.SkipTest
@@ -70,14 +70,14 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "00270095325-S11-det004.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-S11-det067.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
         query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 270095325}, [(270095325, 'z')]),
-                         ({'detector': 4}, [(270095325, 'z')]),
-                         ({'detectorName': 'S11'}, [(270095325, 'z')]),
+        queryMetadata = (({'visit': 201807241028453}, [(201807241028453, 'z')]),
+                         ({'detector': 67}, [(201807241028453, 'z')]),
+                         ({'detectorName': 'S11', 'raftName': 'RTM-010'}, [(201807241028453, 'z')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
@@ -85,7 +85,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '00270095325-S11-det004.fits'
+        raw_filename = '201807241028453-S11-det067.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
                       ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
@@ -108,8 +108,8 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         self.setUp_camera(camera_name='lsstCam',
-                          n_detectors=9,
-                          first_detector_name='R00_S00',
+                          n_detectors=99,
+                          first_detector_name='RTM-002_S00',
                           plate_scale=20.0 * arcseconds,
                           )
 
@@ -120,14 +120,11 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.assertEqual(exposureId, 0)
 
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 101)
+        self.assertEqual(exposureId, 1001)
 
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S01"})
-        self.assertEqual(exposureId, 101)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"dateObs": "2018-12-31T05:06:33.54",
-                                                              "detectorName": "S01"})
-        self.assertEqual(exposureId, 20181231050633501)
+        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S01",
+                                                              "raftName": "RTM-002"})
+        self.assertEqual(exposureId, 1001)
 
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={"visit": 1})
@@ -135,18 +132,15 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={"detector": 1})
 
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 10})
-
-        with self.assertRaises(ValueError):
+        with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S44"})
 
     def testDetectorName(self):
-        name = self.mapper._extractDetectorName({"detectorName": "S02"})
-        self.assertEqual(name, "R00_S02")
+        name = self.mapper._extractDetectorName({"detectorName": "S02", "raftName": "RTM-002"})
+        self.assertEqual(name, "RTM-002_S02")
 
-        name = self.mapper._extractDetectorName({"detector": 3})
-        self.assertEqual(name, "R00_S10")
+        name = self.mapper._extractDetectorName({"detector": 67, 'visit': 201807241028453})
+        self.assertEqual(name, "RTM-010_S11")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
