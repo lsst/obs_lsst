@@ -26,6 +26,7 @@ config.parse.retarget(LsstCamCalibsParseTask)
 config.register.columns = {'filter': 'text',
                            'detector': 'int',
                            'detectorName': 'text',
+                           'raftName': 'text',
                            'calibDate': 'text',
                            'validStart': 'text',
                            'validEnd': 'text',
@@ -35,6 +36,7 @@ config.register.detector = ['filter', 'detector']
 
 config.parse.translators = {'detector': 'translate_detector',
                             'detectorName': 'translate_detectorName',
+                            'raftName': 'translate_raftName',
                             'filter': 'translate_filter',
                             'calibDate': 'translate_calibDate',
                             }
