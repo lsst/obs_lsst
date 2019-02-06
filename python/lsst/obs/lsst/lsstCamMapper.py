@@ -207,7 +207,7 @@ class LsstCamMapper(CameraMapper):
     """
 
     packageName = 'obs_lsst'
-    _cameraName = "lsst"
+    _cameraName = "lsstCam"
     yamlFileList = ("lsstCamMapper.yaml",)  # list of yaml files to load, keeping the first occurrence
     #
     # do not set MakeRawVisitInfoClass or translatorClass to anything other
