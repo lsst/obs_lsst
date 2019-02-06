@@ -35,6 +35,7 @@ class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
+    translatorClass = LsstTS8Translator
     MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
     _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
