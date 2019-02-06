@@ -100,6 +100,8 @@ class LsstSimTranslator(StubTranslator):
                 serials = {}
                 for fullname, (id, serial) in cls.detectorMapping.items():
                     raft, detector_name = fullname.split("_")
+                    if serial in serials:
+                        raise RuntimeError(f"Serial {serial} is defined in multiple places")
                     serials[serial] = (raft, detector_name, id)
                 cls.detectorSerials = serials
             else:
