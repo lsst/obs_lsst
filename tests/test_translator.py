@@ -230,6 +230,22 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            physical_filter="z",
                            science_program="6006D",
                            visit_id=201807241028453)),
+                     ("ts8-E2V-CCD250-220_fe55_fe55_094_6288_20171215114006.yaml",
+                      dict(telescope="LSST",
+                           instrument="LSST-TS8",
+                           dark_time=300.0*u.s,
+                           detector_exposure_id=201712151140062027,
+                           detector_group="RTM-005",
+                           detector_name="S00",
+                           detector_num=27,
+                           detector_serial="E2V-CCD250-220",
+                           exposure_id=201712151140062,
+                           exposure_time=300.0*u.s,
+                           observation_id="E2V-CCD250-220_fe55_fe55_094_6288_20171215114006",
+                           observation_type="fe55",
+                           physical_filter="i",
+                           science_program="6288",
+                           visit_id=201712151140062)),
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):

@@ -64,6 +64,9 @@ class LsstTS8Translator(LsstSimTranslator):
         the ``TSTAND`` header. We also look at the file name to see if
         it starts with "ts8-".
 
+        Older data has no ``TSTAND`` header so we must use a combination
+        of headers.
+
         Parameters
         ----------
         header : `dict`-like
@@ -77,7 +80,15 @@ class LsstTS8Translator(LsstSimTranslator):
             `True` if the header is recognized by this class. `False`
             otherwise.
         """
-        return cls.can_translate_with_options(header, {"TSTAND": "TS8"}, filename=filename)
+        can = cls.can_translate_with_options(header, {"TSTAND": "TS8"}, filename=filename)
+        if can:
+            return True
+
+        if "LSST_NUM" in header and "REBNAME" in header and \
+                "CONTNUM" in header and header["CONTNUM"] == "000018910e0c":
+            return True
+
+        return False
 
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
