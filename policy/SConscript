@@ -20,9 +20,8 @@ python = "{} python".format(libpathstr)
 for camera in ["auxTel", "lsstCam", "imsim", "phosim", "ts8", "ts8e2v", "ts8itl", "ucd"]:
     # Invoke the bin.src variant so that we do not depend on the shebang
     # target having been run
-    commandInst = env.Command("%s.yaml" % camera, "",
-                              "%s bin.src/generateCamera.py --path %s:lsstCam:. $TARGET" %
-                              (python, camera))
+    commandInst = env.Command(f"{camera}.yaml", "",
+                              f"{python} bin.src/generateCamera.py --path {camera}:lsstCam:. $TARGET")
 
     env.Depends(commandInst, lsst.sconsUtils.targets["python"])
     dirList = ["lsstCam"]
