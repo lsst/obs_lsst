@@ -142,6 +142,9 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         name = self.mapper._extractDetectorName({"detector": 67, 'visit': 201807241028453})
         self.assertEqual(name, "RTM-010_S11")
 
+        name = self.mapper._extractDetectorName({"detector": 67, 'visit': 201807241028453, "channel": 1})
+        self.assertEqual(name, "RTM-010_S11")
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass

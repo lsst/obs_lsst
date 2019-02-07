@@ -326,6 +326,9 @@ class LsstCamMapper(CameraMapper):
                                    (k, dataType, dataId))
 
     def _extractDetectorName(self, dataId):
+        if "channel" in dataId:    # they specified a channel
+            dataId = dataId.copy()
+            del dataId["channel"]  # Do not include in query
         raftName = self._getRegistryValue(dataId, "raftName")
         detectorName = self._getRegistryValue(dataId, "detectorName")
 
