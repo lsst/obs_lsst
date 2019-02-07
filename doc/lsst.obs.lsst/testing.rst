@@ -23,7 +23,7 @@ New data can be added as follow:
    compress with gzip.  Do not use a ``.gz`` extension as we still need the
    template strings to work to be able to locate the file. This file or files
    should be added to the test butler repository in ``data/input``. Create
-   ``data/input/fooCam/``, if required, into that directory add a file
+   directory ``data/input/fooCam``, if required, and into that directory add a file
    ``_mapper`` with contents ``lsst.obs.lsst.fooCam.FooCamMapper`` and then
    run:
 
