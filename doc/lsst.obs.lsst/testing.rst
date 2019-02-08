@@ -35,13 +35,15 @@ New data can be added as follow:
    repository.
 -  To test calibrated data butler access, if data are available,
    the individual image, mask, and variance planes, can be zeroed and put into
-   the repository using the appropriate ``butler.put`` call. This writes the
-   files as tile compressed by default. You can use ``ingestCalibs.py`` to
-   do this:
+   the repository using the appropriate ``butler.put`` call to the test
+   butler repository. This writes the file as tile compressed by default.
+
+   Alternatively you can zero the file out and compress it using ``fpack`` and
+   then use ``ingestCalibs.py`` to add it to the test repository:
 
    .. code-block:: bash
 
-      ingestCalibs.py ./data/input/fooCam --mode=copy --validity=99999 --output ./data/input/fooCam calibfile.fits
+      ingestCalibs.py ./data/input/fooCam --mode=copy --validity=99999 --output ./data/input/fooCam/CALIB calibfile.fits
 
 -  Copy one of the ``tests/test_cam.py`` files most closely related to your
    camera.  You can include tests for processed data here but if you only

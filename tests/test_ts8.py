@@ -35,18 +35,19 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
     def setUp(self):
         dataIds = {'raw': {'visit': 201807241028453, 'detectorName': 'S11', 'raftName': 'RTM-010'},
-                   'bias': unittest.SkipTest,
+                   'bias': {'detectorName': 'S11', 'raftName': 'RTM-010',
+                            'dateObs': '2018-07-24T10:28:45.342'},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 201807241028453067, 'bias': 20180724102845304}
+        exposureIds = {'raw': 201807241028453067, 'bias': 201807241028453067}
         filters = {'raw': 'z', 'bias': '_unknown_'}
         exptimes = {'raw': 21.913, 'bias': 0}
-        detectorIds = {'raw': 67, 'bias': 4}
-        detector_names = {'raw': 'RTM-010_S11', 'bias': 'R00_S11'}
+        detectorIds = {'raw': 67, 'bias': 67}
+        detector_names = {'raw': 'RTM-010_S11', 'bias': 'RTM-010_S11'}
         detector_serials = {'raw': 'E2V-CCD250-179', 'bias': 'E2V-CCD250-179'}
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4096, 4004)}
@@ -70,7 +71,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-S11-det067.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-RTM-010-S11-det067.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
@@ -85,11 +86,11 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '201807241028453-S11-det067.fits'
+        raw_filename = '201807241028453-RTM-010-S11-det067.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
-                      ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
-                      ('visit', set(['visit', 'detector', 'run', 'detectorName']))
+        raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('filter', set(['visit', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('visit', set(['visit', 'detector', 'run', 'detectorName', 'raftName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
