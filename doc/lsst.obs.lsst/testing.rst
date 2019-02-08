@@ -23,7 +23,9 @@ New data can be added as follow:
    compress with gzip.  Do not use a ``.gz`` extension as we still need the
    template strings to work to be able to locate the file. This file or files
    should be added to the test butler repository in ``data/input``. Create
-   ``data/input/fooCam/`` if required and then run:
+   directory ``data/input/fooCam``, if required, and into that directory add a file
+   ``_mapper`` with contents ``lsst.obs.lsst.fooCam.FooCamMapper`` and then
+   run:
 
    .. code-block:: bash
 
@@ -33,8 +35,16 @@ New data can be added as follow:
    repository.
 -  To test calibrated data butler access, if data are available,
    the individual image, mask, and variance planes, can be zeroed and put into
-   the repository using the appropriate ``butler.put`` call. This writes the
-   files as tile compressed by default.
+   the repository using the appropriate ``butler.put`` call to the test
+   butler repository. This writes the file as tile compressed by default.
+
+   Alternatively you can zero the file out and compress it using ``fpack`` and
+   then use ``ingestCalibs.py`` to add it to the test repository:
+
+   .. code-block:: bash
+
+      ingestCalibs.py ./data/input/fooCam --mode=copy --validity=99999 --output ./data/input/fooCam/CALIB calibfile.fits
+
 -  Copy one of the ``tests/test_cam.py`` files most closely related to your
    camera.  You can include tests for processed data here but if you only
    have raw files with no calibrations it may be easiest to use

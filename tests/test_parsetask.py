@@ -28,7 +28,7 @@ import lsst.log
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
-from lsst.obs.lsst.ts8e2v import Ts8e2vParseTask
+from lsst.obs.lsst.ts8 import Ts8ParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
@@ -151,7 +151,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_ts8_translator(self):
         """Run the gen 2 metadata extraction code for TS8"""
-        test_data = (("raw/6006D/00270095325-S11-det004.fits",
+        test_data = (("raw/6006D/201807241028453-RTM-010-S11-det067.fits",
                       dict(
                           expTime=21.913,
                           object='UNKNOWN',
@@ -163,18 +163,19 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           run='6006D',
                           wavelength=700,
                           detectorName='S11',
-                          detector=4,
+                          raftName="RTM-010",
+                          detector=67,
                           dayObs='2018-07-24',
                           filter='z',
                           visit=201807241028453,
                           testSeqNum=17,
                       )),
                      )
-        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8e2v", Ts8e2vParseTask, test_data)
+        self.assertParseCompare(DATADIR, CONFIGDIR, "ts8", Ts8ParseTask, test_data)
 
         # Need to test some code paths for translations where we don't have
         # example headers.
-        parseTask = self._constructParseTask(CONFIGDIR, "ts8e2v", Ts8e2vParseTask)
+        parseTask = self._constructParseTask(CONFIGDIR, "ts8", Ts8ParseTask)
 
         md = lsst.daf.base.PropertyList()
         wl = parseTask.translate_testSeqNum(md)

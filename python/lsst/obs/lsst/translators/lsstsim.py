@@ -33,7 +33,10 @@ class LsstSimTranslator(StubTranslator):
     """Path to policy file relative to obs_lsst root."""
 
     detectorMapping = None
-    """Mapping of detector name to detector number."""
+    """Mapping of detector name to detector number and serial."""
+
+    detectorSerials = None
+    """Mapping of detector serial number to raft, number, and name."""
 
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
@@ -59,6 +62,54 @@ class LsstSimTranslator(StubTranslator):
                                                     mode="concat")
 
     @classmethod
+    def detector_mapping(cls):
+        """Returns the mapping of full name to detector ID and serial.
+
+        Returns
+        -------
+        mapping : `dict` of `str`:`tuple`
+            Returns the mapping of full detector name (group+detector)
+            to detector number and serial.
+
+        Notes
+        -----
+        Will construct the mapping if none has previously been constructed.
+        """
+        if cls.cameraPolicyFile is not None:
+            if cls.detectorMapping is None:
+                cls.detectorMapping = read_detector_ids(cls.cameraPolicyFile)
+
+        return cls.detectorMapping
+
+    @classmethod
+    def detector_serials(cls):
+        """Obtain the mapping of detector serial to detector group, name,
+        and number.
+
+        Returns
+        -------
+        info : `dict` of `tuple` of (`str`, `str`, `int`)
+            A `dict` with the serial numbers as keys and values of detector
+            group, name, and number.
+        """
+        if cls.detectorSerials is None:
+            detector_mapping = cls.detector_mapping()
+
+            if detector_mapping is not None:
+                # Form mapping to go from serial number to names/numbers
+                serials = {}
+                for fullname, (id, serial) in cls.detectorMapping.items():
+                    raft, detector_name = fullname.split("_")
+                    if serial in serials:
+                        raise RuntimeError(f"Serial {serial} is defined in multiple places")
+                    serials[serial] = (raft, detector_name, id)
+                cls.detectorSerials = serials
+            else:
+                raise RuntimeError("Unable to obtain detector mapping information")
+
+        return cls.detectorSerials
+
+    @classmethod
     def compute_detector_num_from_name(cls, detector_group, detector_name):
         """Helper method to return the detector number from the name.
 
@@ -77,15 +128,42 @@ class LsstSimTranslator(StubTranslator):
         fullname = f"{detector_group}_{detector_name}"
 
         num = None
-        if cls.cameraPolicyFile is not None:
-            if cls.detectorMapping is None:
-                cls.detectorMapping = read_detector_ids(cls.cameraPolicyFile)
-            if fullname in cls.detectorMapping:
-                num = cls.detectorMapping[fullname]
-            else:
-                log.warning(f"Unable to determine detector number from detector name {fullname}")
+        detector_mapping = cls.detector_mapping()
+        if detector_mapping is None:
+            raise RuntimeError("Unable to obtain detector mapping information")
 
-        return num
+        if fullname in detector_mapping:
+            num = detector_mapping[fullname]
+        else:
+            log.warning(f"Unable to determine detector number from detector name {fullname}")
+            return None
+
+        return num[0]
+
+    @classmethod
+    def compute_detector_info_from_serial(cls, detector_serial):
+        """Helper method to return the detector information from the serial.
+
+        Parameters
+        ----------
+        detector_serial : `str`
+            Detector serial ID.
+
+        Returns
+        -------
+        info : `tuple` of (`str`, `str`, `int`)
+            Detector group, name, and number.
+        """
+        serial_mapping = cls.detector_serials()
+        if serial_mapping is None:
+            raise RuntimeError("Unable to obtain serial mapping information")
+
+        if detector_serial in serial_mapping:
+            info = serial_mapping[detector_serial]
+        else:
+            log.warning(f"Unable to determine detector information from detector serial {detector_serial}")
+
+        return info
 
     @cache_translation
     def to_telescope(self):

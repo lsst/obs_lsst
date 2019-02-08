@@ -1,16 +1,16 @@
-R00 :
+RTM-007 :
   detectorType : E2V
-  raftSerial : LCA-11021_RTM-010-Dev
+  raftSerial : LCA-11021_RTM-007-Dev
   ccdSerials :
-    S00 : E2V-CCD250-266-Dev
-    S01 : E2V-CCD250-268-Dev
-    S02 : E2V-CCD250-200-Dev
-    S10 : E2V-CCD250-273-Dev
-    S11 : E2V-CCD250-179
-    S12 : ITL-3800C-018                 # update me!
-    S20 : ITL-3800C-102
-    S21 : ITL-3800C-146
-    S22 : ITL-3800C-103
+    S00 : E2V-CCD250-260
+    S01 : E2V-CCD250-182
+    S02 : E2V-CCD250-175
+    S10 : E2V-CCD250-167
+    S11 : E2V-CCD250-195
+    S12 : E2V-CCD250-201
+    S20 : E2V-CCD250-222
+    S21 : E2V-CCD250-213
+    S22 : E2V-CCD250-177
 
   amplifiers :
     S00 :

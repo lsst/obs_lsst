@@ -326,6 +326,9 @@ class LsstCamMapper(CameraMapper):
                                    (k, dataType, dataId))
 
     def _extractDetectorName(self, dataId):
+        if "channel" in dataId:    # they specified a channel
+            dataId = dataId.copy()
+            del dataId["channel"]  # Do not include in query
         raftName = self._getRegistryValue(dataId, "raftName")
         detectorName = self._getRegistryValue(dataId, "detectorName")
 
@@ -344,7 +347,10 @@ class LsstCamMapper(CameraMapper):
         id : `int`
             Integer identifier for a CCD exposure.
         """
-        visit = dataId['visit']
+        try:
+            visit = self._getRegistryValue(dataId, "visit")
+        except Exception:
+            raise KeyError(f"Require a visit ID to calculate detector exposure ID. Got: {dataId}")
 
         if "detector" in dataId:
             detector = dataId["detector"]

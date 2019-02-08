@@ -1,0 +1,37 @@
+#
+# A list of all the rafts in the camera
+#
+rafts :
+  RTM-002 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 0                             # id for S00, incrementing uniformly
+  RTM-003 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 9                             # id for S00, incrementing uniformly
+  RTM-004 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 18                            # id for S00, incrementing uniformly
+  RTM-005 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 27                            # id for S00, incrementing uniformly
+  RTM-006 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 36                            # id for S00, incrementing uniformly
+  RTM-007 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 45                            # id for S00, incrementing uniformly
+  RTM-008 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 54                            # id for S00, incrementing uniformly
+  RTM-010 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 63                            # id for S00, incrementing uniformly
+  RTM-011 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 72                            # id for S00, incrementing uniformly
+  RTM-012 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 81                            # id for S00, incrementing uniformly
+  RTM-014 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 90                            # id for S00, incrementing uniformly

@@ -35,18 +35,11 @@ class Ts8MakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
+    translatorClass = LsstTS8Translator
     MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
     _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
         list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
-
-    def _extractDetectorName(self, dataId):
-        if 'detectorName' in dataId:
-            detectorName = dataId['detectorName']
-        else:
-            detectorName = LsstTS8Translator.compute_detector_name_from_num(dataId['detector'])
-        detectorGroup = LsstTS8Translator.DETECTOR_GROUP_NAME
-        return f"{detectorGroup}_{detectorName}"
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -59,16 +52,7 @@ class Ts8Mapper(LsstCamMapper):
         if len(dataId) == 0:
             return 0                    # give up.  Useful if reading files without a butler
 
-        if 'visit' in dataId:
-            visit = dataId['visit']
-        else:
-            visit = LsstTS8Translator.compute_exposure_id(dataId['dateObs'])
-        if 'detector' in dataId:
-            detector = dataId['detector']
-        else:
-            detector = LsstTS8Translator.compute_detector_num_from_name(dataId['detectorName'])
-
-        return LsstTS8Translator.compute_detector_exposure_id(visit, detector)
+        return super()._computeCcdExposureId(dataId)
 
 
 class Ts8ParseTask(LsstCamParseTask):
@@ -77,9 +61,6 @@ class Ts8ParseTask(LsstCamParseTask):
 
     _mapperClass = Ts8Mapper
     _translatorClass = LsstTS8Translator
-
-    def translate_detectorName(self, md):
-        return self.observationInfo.detector_name
 
     def translate_testSeqNum(self, md):
         """Translate the sequence number.
