@@ -19,18 +19,19 @@ import os.path
 import astropy.units as u
 from astropy.time import Time
 
-from astro_metadata_translator import cache_translation, StubTranslator
+from astro_metadata_translator import cache_translation
+
+from .lsst import compute_detector_exposure_id_generic
+from .lsstsim import LsstSimTranslator
 
 log = logging.getLogger(__name__)
 
-# Define the group name for TS8 globally so that it can be used
-# in multiple places. There is only a single sensor so define a
-# raft for consistency with other LSST cameras.
-_DETECTOR_GROUP_NAME = "RXX"
+# There is only a single sensor at a time so define a
+# fixed sensor name
 _DETECTOR_NAME = "S00"
 
 
-class LsstTS3Translator(StubTranslator):
+class LsstTS3Translator(LsstSimTranslator):
     """Metadata translator for LSST BNL Test Stand 3 data.
     """
 
@@ -50,9 +51,7 @@ class LsstTS3Translator(StubTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
-        "detector_group": _DETECTOR_GROUP_NAME,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "detector_num": 0,
     }
 
     _trivial_map = {
@@ -61,11 +60,10 @@ class LsstTS3Translator(StubTranslator):
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
     }
 
-    DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
-    """Fixed name of detector group."""
-
     DETECTOR_NAME = _DETECTOR_NAME
     """Fixed name of single sensor."""
+
+    cameraPolicyFile = "policy/ts3.yaml"
 
     @classmethod
     def can_translate(cls, header, filename=None):
@@ -110,13 +108,14 @@ class LsstTS3Translator(StubTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        if detector_num != 0:
-            log.warning("Unexpected non-zero detector number for TS3")
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=999,
+                                                    mode="concat")
+
         return exposure_id
 
     @staticmethod
     def compute_exposure_id(dateobs, seqnum=0):
-        """Helper method to calculate the TS8 exposure_id.
+        """Helper method to calculate the TS3 exposure_id.
 
         Parameters
         ----------
@@ -142,12 +141,9 @@ class LsstTS3Translator(StubTranslator):
         Returns
         -------
         instrume : `str`
-            Name of the test stand and manufacturer.
-            For example: "TS3-E2V"
+            Name of the test stand.
         """
-        manu = self._header["CCD_MANU"]
-        self._used_these_cards("CCD_MANU")
-        return f"TS3-{manu}"
+        return "LSST-TS3"
 
     @cache_translation
     def to_datetime_begin(self):
@@ -189,7 +185,7 @@ class LsstTS3Translator(StubTranslator):
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
-        Note that SEQNUM is not unique for a given day in TS8 data
+        Note that SEQNUM is not unique for a given day in TS3 data
         so instead we convert the ISO date of observation directly to an
         integer.
 
@@ -237,3 +233,10 @@ class LsstTS3Translator(StubTranslator):
         obstype = self._header["IMGTYPE"]
         self._used_these_cards("IMGTYPE")
         return obstype.lower()
+
+    @cache_translation
+    def to_detector_group(self):
+        # Docstring will be inherited. Property defined in properties.py
+        serial = self.to_detector_serial()
+        detector_info = self.compute_detector_info_from_serial(serial)
+        return detector_info[0]
