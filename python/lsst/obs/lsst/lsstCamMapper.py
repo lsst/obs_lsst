@@ -347,7 +347,10 @@ class LsstCamMapper(CameraMapper):
         id : `int`
             Integer identifier for a CCD exposure.
         """
-        visit = dataId['visit']
+        try:
+            visit = self._getRegistryValue(dataId, "visit")
+        except Exception:
+            raise KeyError(f"Require a visit ID to calculate detector exposure ID. Got: {dataId}")
 
         if "detector" in dataId:
             detector = dataId["detector"]
