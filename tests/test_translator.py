@@ -200,7 +200,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
     def test_ts3_translator(self):
         test_data = (("ts3-E2V-CCD250-411_lambda_flat_1000_025_20181115075559.yaml",
                       dict(telescope="LSST",
-                           instrument="TS3-E2V",
+                           instrument="LSST-TS3",
                            dark_time=44.631*u.s,
                            detector_exposure_id=201811151255111433,
                            detector_group="R433",
@@ -216,7 +216,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            visit_id=201811151255111)),
                      ("ts3-ITL-3800C-098_lambda_flat_1000_067_20160722020740.yaml",
                       dict(telescope="LSST",
-                           instrument="TS3-ITL",
+                           instrument="LSST-TS3",
                            dark_time=30.611*u.s,
                            detector_exposure_id=201607220607067071,
                            detector_group="R071",
