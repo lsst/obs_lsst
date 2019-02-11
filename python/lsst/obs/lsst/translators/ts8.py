@@ -143,7 +143,7 @@ class LsstTS8Translator(LsstSimTranslator):
         instrume : `str`
             Name of the test stand.
         """
-        return f"LSST-TS8"
+        return "LSST-TS8"
 
     @cache_translation
     def to_datetime_begin(self):
