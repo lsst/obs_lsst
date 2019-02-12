@@ -20,8 +20,25 @@ New data can be added as follow:
    The butler tests will work even if the data array is empty so long as those
    dimensions are reflected in the butler tests. To retain the correct
    dimensional information one technique is to zero out the pixel array and
-   compress with gzip.  Do not use a ``.gz`` extension as we still need the
-   template strings to work to be able to locate the file. This file or files
+   compress with gzip.  The following code shows one method of zeroing out all
+   the amplifiers:
+
+   ..code-block:: python
+
+      from astropy.io import fits
+      import numpy
+
+      aim = fits.open("rawfile.fits")
+      aim.info()  # inspect to ensure the extension numbers are plausible
+      for i in range(16):
+          amp = aim[i+1]
+          amp.data = numpy.zeros(amp.data.shape, dtype=amp.data.dtype)
+      aim.writeto('zeroed.fits')
+
+   Do not use a ``.gz`` extension as we still need the
+   template strings to work to be able to locate the file.
+
+-  This file or files
    should be added to the test butler repository in ``data/input``. Create
    directory ``data/input/fooCam``, if required, and into that directory add a file
    ``_mapper`` with contents ``lsst.obs.lsst.fooCam.FooCamMapper`` and then
