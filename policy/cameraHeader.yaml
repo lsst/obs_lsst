@@ -83,7 +83,7 @@ AMP_ITL : &AMP_ITL
     linearityThreshold : 0
     linearityMax : 142857                # == saturation
     linearityCoeffs : [0, 142857]        # == [linearityThreshold, linearityMax]
-  
+
 #
 # A single CCD ("sensor" to the camera team)
 #
