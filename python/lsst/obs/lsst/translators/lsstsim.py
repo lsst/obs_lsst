@@ -161,7 +161,8 @@ class LsstSimTranslator(StubTranslator):
         if detector_serial in serial_mapping:
             info = serial_mapping[detector_serial]
         else:
-            log.warning(f"Unable to determine detector information from detector serial {detector_serial}")
+            raise RuntimeError("Unable to determine detector information from detector serial"
+                               f" {detector_serial}")
 
         return info
 

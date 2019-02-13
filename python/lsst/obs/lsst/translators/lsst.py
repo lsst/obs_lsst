@@ -58,9 +58,12 @@ def read_detector_ids(policyFile):
     """
 
     file = os.path.join(obs_lsst_packageDir, policyFile)
-    with open(file) as fh:
-        # Use the fast parser since these files are large
-        camera = yaml.load(fh, Loader=yaml.CLoader)
+    try:
+        with open(file) as fh:
+            # Use the fast parser since these files are large
+            camera = yaml.load(fh, Loader=yaml.CLoader)
+    except OSError as e:
+        raise ValueError(f"Could not load camera policy file {file}") from e
 
     mapping = {}
     for ccd, value in camera["CCDs"].items():

@@ -24,9 +24,6 @@ from lsst.obs.lsst.ts8 import Ts8ParseTask
 
 config.parse.retarget(Ts8ParseTask)
 
-# what used to be config.parse.translation = {
-config.parse.translation['wavelength'] = 'MONOWL'
-
 # what used to be config.parse.translators = {
 del config.parse.translators['snap']
 config.parse.translators['dayObs'] = 'translate_dayObs'

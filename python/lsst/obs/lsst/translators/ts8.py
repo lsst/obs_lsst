@@ -85,7 +85,15 @@ class LsstTS8Translator(LsstSimTranslator):
             return True
 
         if "LSST_NUM" in header and "REBNAME" in header and \
-                "CONTNUM" in header and header["CONTNUM"] == "000018910e0c":
+                "CONTNUM" in header and \
+                header["CONTNUM"] in ("000018910e0c", "000018ee33b7", "000018ee0f35", "000018ee3b40",
+                                      "00001891fcc7", "000018edfd65", "0000123b5ba8", "000018911b05",
+                                      "00001891fa3e", "000018910d7f", "000018ed9f12", "000018edf4a7",
+                                      "000018ee34e6", "000018ef1464", "000018eda120", "000018edf8a2",
+                                      "000018ef3819", "000018ed9486", "000018ee02c8", "000018edfb24",
+                                      "000018ee34c0", "000018edfb51", "0000123b51d1", "0000123b5862",
+                                      "0000123b8ca9", "0000189208fa", "0000189111af", "0000189126e1",
+                                      "000018ee0618", "000018ee3b78", "000018ef1534"):
             return True
 
         return False
@@ -143,7 +151,7 @@ class LsstTS8Translator(LsstSimTranslator):
         instrume : `str`
             Name of the test stand.
         """
-        return f"LSST-TS8"
+        return "LSST-TS8"
 
     @cache_translation
     def to_datetime_begin(self):
