@@ -1,0 +1,1744 @@
+#
+# A list of all the rafts in the camera
+#
+rafts :
+  R000 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   0                           # id for S00, incrementing uniformly
+
+  R001 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   1                           # id for S00, incrementing uniformly
+
+  R002 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   2                           # id for S00, incrementing uniformly
+
+  R003 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   3                           # id for S00, incrementing uniformly
+
+  R004 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   4                           # id for S00, incrementing uniformly
+
+  R005 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   5                           # id for S00, incrementing uniformly
+
+  R006 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   6                           # id for S00, incrementing uniformly
+
+  R007 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   7                           # id for S00, incrementing uniformly
+
+  R008 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   8                           # id for S00, incrementing uniformly
+
+  R009 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :   9                           # id for S00, incrementing uniformly
+
+  R010 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  10                           # id for S00, incrementing uniformly
+
+  R011 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  11                           # id for S00, incrementing uniformly
+
+  R012 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  12                           # id for S00, incrementing uniformly
+
+  R013 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  13                           # id for S00, incrementing uniformly
+
+  R014 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  14                           # id for S00, incrementing uniformly
+
+  R015 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  15                           # id for S00, incrementing uniformly
+
+  R016 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  16                           # id for S00, incrementing uniformly
+
+  R017 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  17                           # id for S00, incrementing uniformly
+
+  R018 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  18                           # id for S00, incrementing uniformly
+
+  R019 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  19                           # id for S00, incrementing uniformly
+
+  R020 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  20                           # id for S00, incrementing uniformly
+
+  R021 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  21                           # id for S00, incrementing uniformly
+
+  R022 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  22                           # id for S00, incrementing uniformly
+
+  R023 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  23                           # id for S00, incrementing uniformly
+
+  R024 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  24                           # id for S00, incrementing uniformly
+
+  R025 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  25                           # id for S00, incrementing uniformly
+
+  R026 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  26                           # id for S00, incrementing uniformly
+
+  R027 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  27                           # id for S00, incrementing uniformly
+
+  R028 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  28                           # id for S00, incrementing uniformly
+
+  R029 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  29                           # id for S00, incrementing uniformly
+
+  R030 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  30                           # id for S00, incrementing uniformly
+
+  R031 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  31                           # id for S00, incrementing uniformly
+
+  R032 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  32                           # id for S00, incrementing uniformly
+
+  R033 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  33                           # id for S00, incrementing uniformly
+
+  R034 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  34                           # id for S00, incrementing uniformly
+
+  R035 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  35                           # id for S00, incrementing uniformly
+
+  R036 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  36                           # id for S00, incrementing uniformly
+
+  R037 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  37                           # id for S00, incrementing uniformly
+
+  R038 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  38                           # id for S00, incrementing uniformly
+
+  R039 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  39                           # id for S00, incrementing uniformly
+
+  R040 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  40                           # id for S00, incrementing uniformly
+
+  R041 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  41                           # id for S00, incrementing uniformly
+
+  R042 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  42                           # id for S00, incrementing uniformly
+
+  R043 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  43                           # id for S00, incrementing uniformly
+
+  R044 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  44                           # id for S00, incrementing uniformly
+
+  R045 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  45                           # id for S00, incrementing uniformly
+
+  R046 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  46                           # id for S00, incrementing uniformly
+
+  R047 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  47                           # id for S00, incrementing uniformly
+
+  R048 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  48                           # id for S00, incrementing uniformly
+
+  R049 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  49                           # id for S00, incrementing uniformly
+
+  R050 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  50                           # id for S00, incrementing uniformly
+
+  R051 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  51                           # id for S00, incrementing uniformly
+
+  R052 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  52                           # id for S00, incrementing uniformly
+
+  R053 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  53                           # id for S00, incrementing uniformly
+
+  R054 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  54                           # id for S00, incrementing uniformly
+
+  R055 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  55                           # id for S00, incrementing uniformly
+
+  R056 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  56                           # id for S00, incrementing uniformly
+
+  R057 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  57                           # id for S00, incrementing uniformly
+
+  R058 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  58                           # id for S00, incrementing uniformly
+
+  R059 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  59                           # id for S00, incrementing uniformly
+
+  R060 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  60                           # id for S00, incrementing uniformly
+
+  R061 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  61                           # id for S00, incrementing uniformly
+
+  R062 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  62                           # id for S00, incrementing uniformly
+
+  R063 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  63                           # id for S00, incrementing uniformly
+
+  R064 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  64                           # id for S00, incrementing uniformly
+
+  R065 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  65                           # id for S00, incrementing uniformly
+
+  R066 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  66                           # id for S00, incrementing uniformly
+
+  R067 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  67                           # id for S00, incrementing uniformly
+
+  R068 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  68                           # id for S00, incrementing uniformly
+
+  R069 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  69                           # id for S00, incrementing uniformly
+
+  R070 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  70                           # id for S00, incrementing uniformly
+
+  R071 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  71                           # id for S00, incrementing uniformly
+
+  R072 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  72                           # id for S00, incrementing uniformly
+
+  R073 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  73                           # id for S00, incrementing uniformly
+
+  R074 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  74                           # id for S00, incrementing uniformly
+
+  R075 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  75                           # id for S00, incrementing uniformly
+
+  R076 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  76                           # id for S00, incrementing uniformly
+
+  R077 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  77                           # id for S00, incrementing uniformly
+
+  R078 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  78                           # id for S00, incrementing uniformly
+
+  R079 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  79                           # id for S00, incrementing uniformly
+
+  R080 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  80                           # id for S00, incrementing uniformly
+
+  R081 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  81                           # id for S00, incrementing uniformly
+
+  R082 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  82                           # id for S00, incrementing uniformly
+
+  R083 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  83                           # id for S00, incrementing uniformly
+
+  R084 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  84                           # id for S00, incrementing uniformly
+
+  R085 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  85                           # id for S00, incrementing uniformly
+
+  R086 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  86                           # id for S00, incrementing uniformly
+
+  R087 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  87                           # id for S00, incrementing uniformly
+
+  R088 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  88                           # id for S00, incrementing uniformly
+
+  R089 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  89                           # id for S00, incrementing uniformly
+
+  R090 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  90                           # id for S00, incrementing uniformly
+
+  R091 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  91                           # id for S00, incrementing uniformly
+
+  R092 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  92                           # id for S00, incrementing uniformly
+
+  R093 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  93                           # id for S00, incrementing uniformly
+
+  R094 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  94                           # id for S00, incrementing uniformly
+
+  R095 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  95                           # id for S00, incrementing uniformly
+
+  R096 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  96                           # id for S00, incrementing uniformly
+
+  R097 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  97                           # id for S00, incrementing uniformly
+
+  R098 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  98                           # id for S00, incrementing uniformly
+
+  R099 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 :  99                           # id for S00, incrementing uniformly
+
+  R100 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 100                           # id for S00, incrementing uniformly
+
+  R101 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 101                           # id for S00, incrementing uniformly
+
+  R102 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 102                           # id for S00, incrementing uniformly
+
+  R103 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 103                           # id for S00, incrementing uniformly
+
+  R104 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 104                           # id for S00, incrementing uniformly
+
+  R105 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 105                           # id for S00, incrementing uniformly
+
+  R106 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 106                           # id for S00, incrementing uniformly
+
+  R107 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 107                           # id for S00, incrementing uniformly
+
+  R108 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 108                           # id for S00, incrementing uniformly
+
+  R109 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 109                           # id for S00, incrementing uniformly
+
+  R110 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 110                           # id for S00, incrementing uniformly
+
+  R111 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 111                           # id for S00, incrementing uniformly
+
+  R112 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 112                           # id for S00, incrementing uniformly
+
+  R113 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 113                           # id for S00, incrementing uniformly
+
+  R114 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 114                           # id for S00, incrementing uniformly
+
+  R115 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 115                           # id for S00, incrementing uniformly
+
+  R116 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 116                           # id for S00, incrementing uniformly
+
+  R117 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 117                           # id for S00, incrementing uniformly
+
+  R118 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 118                           # id for S00, incrementing uniformly
+
+  R119 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 119                           # id for S00, incrementing uniformly
+
+  R120 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 120                           # id for S00, incrementing uniformly
+
+  R121 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 121                           # id for S00, incrementing uniformly
+
+  R122 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 122                           # id for S00, incrementing uniformly
+
+  R123 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 123                           # id for S00, incrementing uniformly
+
+  R124 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 124                           # id for S00, incrementing uniformly
+
+  R125 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 125                           # id for S00, incrementing uniformly
+
+  R126 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 126                           # id for S00, incrementing uniformly
+
+  R127 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 127                           # id for S00, incrementing uniformly
+
+  R128 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 128                           # id for S00, incrementing uniformly
+
+  R129 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 129                           # id for S00, incrementing uniformly
+
+  R130 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 130                           # id for S00, incrementing uniformly
+
+  R131 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 131                           # id for S00, incrementing uniformly
+
+  R132 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 132                           # id for S00, incrementing uniformly
+
+  R133 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 133                           # id for S00, incrementing uniformly
+
+  R134 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 134                           # id for S00, incrementing uniformly
+
+  R135 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 135                           # id for S00, incrementing uniformly
+
+  R136 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 136                           # id for S00, incrementing uniformly
+
+  R137 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 137                           # id for S00, incrementing uniformly
+
+  R138 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 138                           # id for S00, incrementing uniformly
+
+  R139 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 139                           # id for S00, incrementing uniformly
+
+  R140 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 140                           # id for S00, incrementing uniformly
+
+  R141 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 141                           # id for S00, incrementing uniformly
+
+  R142 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 142                           # id for S00, incrementing uniformly
+
+  R143 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 143                           # id for S00, incrementing uniformly
+
+  R144 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 144                           # id for S00, incrementing uniformly
+
+  R145 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 145                           # id for S00, incrementing uniformly
+
+  R146 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 146                           # id for S00, incrementing uniformly
+
+  R147 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 147                           # id for S00, incrementing uniformly
+
+  R148 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 148                           # id for S00, incrementing uniformly
+
+  R149 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 149                           # id for S00, incrementing uniformly
+
+  R150 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 150                           # id for S00, incrementing uniformly
+
+  R151 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 151                           # id for S00, incrementing uniformly
+
+  R152 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 152                           # id for S00, incrementing uniformly
+
+  R153 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 153                           # id for S00, incrementing uniformly
+
+  R154 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 154                           # id for S00, incrementing uniformly
+
+  R155 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 155                           # id for S00, incrementing uniformly
+
+  R156 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 156                           # id for S00, incrementing uniformly
+
+  R157 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 157                           # id for S00, incrementing uniformly
+
+  R158 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 158                           # id for S00, incrementing uniformly
+
+  R159 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 159                           # id for S00, incrementing uniformly
+
+  R160 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 160                           # id for S00, incrementing uniformly
+
+  R161 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 161                           # id for S00, incrementing uniformly
+
+  R162 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 162                           # id for S00, incrementing uniformly
+
+  R163 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 163                           # id for S00, incrementing uniformly
+
+  R164 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 164                           # id for S00, incrementing uniformly
+
+  R165 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 165                           # id for S00, incrementing uniformly
+
+  R166 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 166                           # id for S00, incrementing uniformly
+
+  R167 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 167                           # id for S00, incrementing uniformly
+
+  R168 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 168                           # id for S00, incrementing uniformly
+
+  R169 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 169                           # id for S00, incrementing uniformly
+
+  R170 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 170                           # id for S00, incrementing uniformly
+
+  R171 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 171                           # id for S00, incrementing uniformly
+
+  R172 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 172                           # id for S00, incrementing uniformly
+
+  R173 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 173                           # id for S00, incrementing uniformly
+
+  R174 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 174                           # id for S00, incrementing uniformly
+
+  R175 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 175                           # id for S00, incrementing uniformly
+
+  R176 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 176                           # id for S00, incrementing uniformly
+
+  R177 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 177                           # id for S00, incrementing uniformly
+
+  R178 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 178                           # id for S00, incrementing uniformly
+
+  R179 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 179                           # id for S00, incrementing uniformly
+
+  R180 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 180                           # id for S00, incrementing uniformly
+
+  R181 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 181                           # id for S00, incrementing uniformly
+
+  R182 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 182                           # id for S00, incrementing uniformly
+
+  R183 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 183                           # id for S00, incrementing uniformly
+
+  R184 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 184                           # id for S00, incrementing uniformly
+
+  R185 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 185                           # id for S00, incrementing uniformly
+
+  R186 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 186                           # id for S00, incrementing uniformly
+
+  R187 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 187                           # id for S00, incrementing uniformly
+
+  R188 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 188                           # id for S00, incrementing uniformly
+
+  R189 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 189                           # id for S00, incrementing uniformly
+
+  R190 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 190                           # id for S00, incrementing uniformly
+
+  R191 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 191                           # id for S00, incrementing uniformly
+
+  R192 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 192                           # id for S00, incrementing uniformly
+
+  R193 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 193                           # id for S00, incrementing uniformly
+
+  R194 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 194                           # id for S00, incrementing uniformly
+
+  R195 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 195                           # id for S00, incrementing uniformly
+
+  R196 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 196                           # id for S00, incrementing uniformly
+
+  R197 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 197                           # id for S00, incrementing uniformly
+
+  R198 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 198                           # id for S00, incrementing uniformly
+
+  R199 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 199                           # id for S00, incrementing uniformly
+
+  R200 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 200                           # id for S00, incrementing uniformly
+
+  R201 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 201                           # id for S00, incrementing uniformly
+
+  R202 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 202                           # id for S00, incrementing uniformly
+
+  R203 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 203                           # id for S00, incrementing uniformly
+
+  R204 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 204                           # id for S00, incrementing uniformly
+
+  R205 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 205                           # id for S00, incrementing uniformly
+
+  R206 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 206                           # id for S00, incrementing uniformly
+
+  R207 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 207                           # id for S00, incrementing uniformly
+
+  R208 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 208                           # id for S00, incrementing uniformly
+
+  R209 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 209                           # id for S00, incrementing uniformly
+
+  R210 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 210                           # id for S00, incrementing uniformly
+
+  R211 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 211                           # id for S00, incrementing uniformly
+
+  R212 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 212                           # id for S00, incrementing uniformly
+
+  R213 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 213                           # id for S00, incrementing uniformly
+
+  R214 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 214                           # id for S00, incrementing uniformly
+
+  R215 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 215                           # id for S00, incrementing uniformly
+
+  R216 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 216                           # id for S00, incrementing uniformly
+
+  R217 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 217                           # id for S00, incrementing uniformly
+
+  R218 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 218                           # id for S00, incrementing uniformly
+
+  R219 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 219                           # id for S00, incrementing uniformly
+
+  R220 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 220                           # id for S00, incrementing uniformly
+
+  R221 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 221                           # id for S00, incrementing uniformly
+
+  R222 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 222                           # id for S00, incrementing uniformly
+
+  R223 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 223                           # id for S00, incrementing uniformly
+
+  R224 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 224                           # id for S00, incrementing uniformly
+
+  R225 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 225                           # id for S00, incrementing uniformly
+
+  R226 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 226                           # id for S00, incrementing uniformly
+
+  R227 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 227                           # id for S00, incrementing uniformly
+
+  R228 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 228                           # id for S00, incrementing uniformly
+
+  R229 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 229                           # id for S00, incrementing uniformly
+
+  R230 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 230                           # id for S00, incrementing uniformly
+
+  R231 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 231                           # id for S00, incrementing uniformly
+
+  R232 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 232                           # id for S00, incrementing uniformly
+
+  R233 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 233                           # id for S00, incrementing uniformly
+
+  R234 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 234                           # id for S00, incrementing uniformly
+
+  R235 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 235                           # id for S00, incrementing uniformly
+
+  R236 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 236                           # id for S00, incrementing uniformly
+
+  R237 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 237                           # id for S00, incrementing uniformly
+
+  R238 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 238                           # id for S00, incrementing uniformly
+
+  R239 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 239                           # id for S00, incrementing uniformly
+
+  R240 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 240                           # id for S00, incrementing uniformly
+
+  R241 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 241                           # id for S00, incrementing uniformly
+
+  R242 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 242                           # id for S00, incrementing uniformly
+
+  R243 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 243                           # id for S00, incrementing uniformly
+
+  R244 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 244                           # id for S00, incrementing uniformly
+
+  R245 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 245                           # id for S00, incrementing uniformly
+
+  R246 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 246                           # id for S00, incrementing uniformly
+
+  R247 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 247                           # id for S00, incrementing uniformly
+
+  R248 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 248                           # id for S00, incrementing uniformly
+
+  R249 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 249                           # id for S00, incrementing uniformly
+
+  R250 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 250                           # id for S00, incrementing uniformly
+
+  R251 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 251                           # id for S00, incrementing uniformly
+
+  R252 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 252                           # id for S00, incrementing uniformly
+
+  R253 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 253                           # id for S00, incrementing uniformly
+
+  R254 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 254                           # id for S00, incrementing uniformly
+
+  R255 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 255                           # id for S00, incrementing uniformly
+
+  R256 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 256                           # id for S00, incrementing uniformly
+
+  R257 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 257                           # id for S00, incrementing uniformly
+
+  R258 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 258                           # id for S00, incrementing uniformly
+
+  R259 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 259                           # id for S00, incrementing uniformly
+
+  R260 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 260                           # id for S00, incrementing uniformly
+
+  R261 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 261                           # id for S00, incrementing uniformly
+
+  R262 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 262                           # id for S00, incrementing uniformly
+
+  R263 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 263                           # id for S00, incrementing uniformly
+
+  R264 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 264                           # id for S00, incrementing uniformly
+
+  R265 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 265                           # id for S00, incrementing uniformly
+
+  R266 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 266                           # id for S00, incrementing uniformly
+
+  R267 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 267                           # id for S00, incrementing uniformly
+
+  R268 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 268                           # id for S00, incrementing uniformly
+
+  R269 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 269                           # id for S00, incrementing uniformly
+
+  R270 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 270                           # id for S00, incrementing uniformly
+
+  R271 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 271                           # id for S00, incrementing uniformly
+
+  R272 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 272                           # id for S00, incrementing uniformly
+
+  R273 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 273                           # id for S00, incrementing uniformly
+
+  R274 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 274                           # id for S00, incrementing uniformly
+
+  R275 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 275                           # id for S00, incrementing uniformly
+
+  R276 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 276                           # id for S00, incrementing uniformly
+
+  R277 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 277                           # id for S00, incrementing uniformly
+
+  R278 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 278                           # id for S00, incrementing uniformly
+
+  R279 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 279                           # id for S00, incrementing uniformly
+
+  R280 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 280                           # id for S00, incrementing uniformly
+
+  R281 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 281                           # id for S00, incrementing uniformly
+
+  R282 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 282                           # id for S00, incrementing uniformly
+
+  R283 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 283                           # id for S00, incrementing uniformly
+
+  R284 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 284                           # id for S00, incrementing uniformly
+
+  R285 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 285                           # id for S00, incrementing uniformly
+
+  R286 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 286                           # id for S00, incrementing uniformly
+
+  R287 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 287                           # id for S00, incrementing uniformly
+
+  R288 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 288                           # id for S00, incrementing uniformly
+
+  R289 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 289                           # id for S00, incrementing uniformly
+
+  R290 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 290                           # id for S00, incrementing uniformly
+
+  R291 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 291                           # id for S00, incrementing uniformly
+
+  R292 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 292                           # id for S00, incrementing uniformly
+
+  R293 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 293                           # id for S00, incrementing uniformly
+
+  R294 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 294                           # id for S00, incrementing uniformly
+
+  R295 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 295                           # id for S00, incrementing uniformly
+
+  R296 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 296                           # id for S00, incrementing uniformly
+
+  R297 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 297                           # id for S00, incrementing uniformly
+
+  R298 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 298                           # id for S00, incrementing uniformly
+
+  R299 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 299                           # id for S00, incrementing uniformly
+
+  R300 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 300                           # id for S00, incrementing uniformly
+
+  R301 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 301                           # id for S00, incrementing uniformly
+
+  R302 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 302                           # id for S00, incrementing uniformly
+
+  R303 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 303                           # id for S00, incrementing uniformly
+
+  R304 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 304                           # id for S00, incrementing uniformly
+
+  R305 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 305                           # id for S00, incrementing uniformly
+
+  R306 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 306                           # id for S00, incrementing uniformly
+
+  R307 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 307                           # id for S00, incrementing uniformly
+
+  R308 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 308                           # id for S00, incrementing uniformly
+
+  R309 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 309                           # id for S00, incrementing uniformly
+
+  R310 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 310                           # id for S00, incrementing uniformly
+
+  R311 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 311                           # id for S00, incrementing uniformly
+
+  R312 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 312                           # id for S00, incrementing uniformly
+
+  R313 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 313                           # id for S00, incrementing uniformly
+
+  R314 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 314                           # id for S00, incrementing uniformly
+
+  R315 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 315                           # id for S00, incrementing uniformly
+
+  R316 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 316                           # id for S00, incrementing uniformly
+
+  R317 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 317                           # id for S00, incrementing uniformly
+
+  R318 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 318                           # id for S00, incrementing uniformly
+
+  R319 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 319                           # id for S00, incrementing uniformly
+
+  R320 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 320                           # id for S00, incrementing uniformly
+
+  R321 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 321                           # id for S00, incrementing uniformly
+
+  R322 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 322                           # id for S00, incrementing uniformly
+
+  R323 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 323                           # id for S00, incrementing uniformly
+
+  R324 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 324                           # id for S00, incrementing uniformly
+
+  R325 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 325                           # id for S00, incrementing uniformly
+
+  R326 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 326                           # id for S00, incrementing uniformly
+
+  R327 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 327                           # id for S00, incrementing uniformly
+
+  R328 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 328                           # id for S00, incrementing uniformly
+
+  R329 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 329                           # id for S00, incrementing uniformly
+
+  R330 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 330                           # id for S00, incrementing uniformly
+
+  R331 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 331                           # id for S00, incrementing uniformly
+
+  R332 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 332                           # id for S00, incrementing uniformly
+
+  R333 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 333                           # id for S00, incrementing uniformly
+
+  R334 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 334                           # id for S00, incrementing uniformly
+
+  R335 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 335                           # id for S00, incrementing uniformly
+
+  R336 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 336                           # id for S00, incrementing uniformly
+
+  R337 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 337                           # id for S00, incrementing uniformly
+
+  R338 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 338                           # id for S00, incrementing uniformly
+
+  R339 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 339                           # id for S00, incrementing uniformly
+
+  R340 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 340                           # id for S00, incrementing uniformly
+
+  R341 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 341                           # id for S00, incrementing uniformly
+
+  R342 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 342                           # id for S00, incrementing uniformly
+
+  R343 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 343                           # id for S00, incrementing uniformly
+
+  R344 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 344                           # id for S00, incrementing uniformly
+
+  R345 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 345                           # id for S00, incrementing uniformly
+
+  R346 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 346                           # id for S00, incrementing uniformly
+
+  R347 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 347                           # id for S00, incrementing uniformly
+
+  R348 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 348                           # id for S00, incrementing uniformly
+
+  R349 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 349                           # id for S00, incrementing uniformly
+
+  R350 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 350                           # id for S00, incrementing uniformly
+
+  R351 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 351                           # id for S00, incrementing uniformly
+
+  R352 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 352                           # id for S00, incrementing uniformly
+
+  R353 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 353                           # id for S00, incrementing uniformly
+
+  R354 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 354                           # id for S00, incrementing uniformly
+
+  R355 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 355                           # id for S00, incrementing uniformly
+
+  R356 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 356                           # id for S00, incrementing uniformly
+
+  R357 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 357                           # id for S00, incrementing uniformly
+
+  R358 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 358                           # id for S00, incrementing uniformly
+
+  R359 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 359                           # id for S00, incrementing uniformly
+
+  R360 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 360                           # id for S00, incrementing uniformly
+
+  R361 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 361                           # id for S00, incrementing uniformly
+
+  R362 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 362                           # id for S00, incrementing uniformly
+
+  R363 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 363                           # id for S00, incrementing uniformly
+
+  R364 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 364                           # id for S00, incrementing uniformly
+
+  R365 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 365                           # id for S00, incrementing uniformly
+
+  R366 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 366                           # id for S00, incrementing uniformly
+
+  R367 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 367                           # id for S00, incrementing uniformly
+
+  R368 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 368                           # id for S00, incrementing uniformly
+
+  R369 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 369                           # id for S00, incrementing uniformly
+
+  R370 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 370                           # id for S00, incrementing uniformly
+
+  R371 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 371                           # id for S00, incrementing uniformly
+
+  R372 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 372                           # id for S00, incrementing uniformly
+
+  R373 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 373                           # id for S00, incrementing uniformly
+
+  R374 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 374                           # id for S00, incrementing uniformly
+
+  R375 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 375                           # id for S00, incrementing uniformly
+
+  R376 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 376                           # id for S00, incrementing uniformly
+
+  R377 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 377                           # id for S00, incrementing uniformly
+
+  R378 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 378                           # id for S00, incrementing uniformly
+
+  R379 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 379                           # id for S00, incrementing uniformly
+
+  R380 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 380                           # id for S00, incrementing uniformly
+
+  R381 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 381                           # id for S00, incrementing uniformly
+
+  R382 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 382                           # id for S00, incrementing uniformly
+
+  R383 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 383                           # id for S00, incrementing uniformly
+
+  R384 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 384                           # id for S00, incrementing uniformly
+
+  R385 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 385                           # id for S00, incrementing uniformly
+
+  R386 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 386                           # id for S00, incrementing uniformly
+
+  R387 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 387                           # id for S00, incrementing uniformly
+
+  R388 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 388                           # id for S00, incrementing uniformly
+
+  R389 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 389                           # id for S00, incrementing uniformly
+
+  R390 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 390                           # id for S00, incrementing uniformly
+
+  R391 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 391                           # id for S00, incrementing uniformly
+
+  R392 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 392                           # id for S00, incrementing uniformly
+
+  R393 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 393                           # id for S00, incrementing uniformly
+
+  R394 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 394                           # id for S00, incrementing uniformly
+
+  R395 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 395                           # id for S00, incrementing uniformly
+
+  R396 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 396                           # id for S00, incrementing uniformly
+
+  R397 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 397                           # id for S00, incrementing uniformly
+
+  R398 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 398                           # id for S00, incrementing uniformly
+
+  R399 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 399                           # id for S00, incrementing uniformly
+
+  R400 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 400                           # id for S00, incrementing uniformly
+
+  R401 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 401                           # id for S00, incrementing uniformly
+
+  R402 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 402                           # id for S00, incrementing uniformly
+
+  R403 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 403                           # id for S00, incrementing uniformly
+
+  R404 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 404                           # id for S00, incrementing uniformly
+
+  R405 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 405                           # id for S00, incrementing uniformly
+
+  R406 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 406                           # id for S00, incrementing uniformly
+
+  R407 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 407                           # id for S00, incrementing uniformly
+
+  R408 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 408                           # id for S00, incrementing uniformly
+
+  R409 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 409                           # id for S00, incrementing uniformly
+
+  R410 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 410                           # id for S00, incrementing uniformly
+
+  R411 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 411                           # id for S00, incrementing uniformly
+
+  R412 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 412                           # id for S00, incrementing uniformly
+
+  R413 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 413                           # id for S00, incrementing uniformly
+
+  R414 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 414                           # id for S00, incrementing uniformly
+
+  R415 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 415                           # id for S00, incrementing uniformly
+
+  R416 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 416                           # id for S00, incrementing uniformly
+
+  R417 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 417                           # id for S00, incrementing uniformly
+
+  R418 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 418                           # id for S00, incrementing uniformly
+
+  R419 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 419                           # id for S00, incrementing uniformly
+
+  R420 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 420                           # id for S00, incrementing uniformly
+
+  R421 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 421                           # id for S00, incrementing uniformly
+
+  R422 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 422                           # id for S00, incrementing uniformly
+
+  R423 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 423                           # id for S00, incrementing uniformly
+
+  R424 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 424                           # id for S00, incrementing uniformly
+
+  R425 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 425                           # id for S00, incrementing uniformly
+
+  R426 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 426                           # id for S00, incrementing uniformly
+
+  R427 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 427                           # id for S00, incrementing uniformly
+
+  R428 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 428                           # id for S00, incrementing uniformly
+
+  R429 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 429                           # id for S00, incrementing uniformly
+
+  R430 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 430                           # id for S00, incrementing uniformly
+
+  R431 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 431                           # id for S00, incrementing uniformly
+
+  R432 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 432                           # id for S00, incrementing uniformly
+
+  R433 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 433                           # id for S00, incrementing uniformly
+
+  R434 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 434                           # id for S00, incrementing uniformly
+

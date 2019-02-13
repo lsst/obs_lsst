@@ -1,0 +1,24 @@
+R354 :
+  detectorType : E2V
+  raftSerial : TS3-BNL-R354-E2V-CCD250-238
+  ccdSerials :
+    S00 : E2V-CCD250-238
+
+  amplifiers :
+    S00 :
+      C00 : { gain : 1.700, readNoise : 7.00 }
+      C01 : { gain : 1.700, readNoise : 7.00 }
+      C02 : { gain : 1.700, readNoise : 7.00 }
+      C03 : { gain : 1.700, readNoise : 7.00 }
+      C04 : { gain : 1.700, readNoise : 7.00 }
+      C05 : { gain : 1.700, readNoise : 7.00 }
+      C06 : { gain : 1.700, readNoise : 7.00 }
+      C07 : { gain : 1.700, readNoise : 7.00 }
+      C10 : { gain : 1.700, readNoise : 7.00 }
+      C11 : { gain : 1.700, readNoise : 7.00 }
+      C12 : { gain : 1.700, readNoise : 7.00 }
+      C13 : { gain : 1.700, readNoise : 7.00 }
+      C14 : { gain : 1.700, readNoise : 7.00 }
+      C15 : { gain : 1.700, readNoise : 7.00 }
+      C16 : { gain : 1.700, readNoise : 7.00 }
+      C17 : { gain : 1.700, readNoise : 7.00 }

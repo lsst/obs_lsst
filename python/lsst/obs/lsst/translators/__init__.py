@@ -9,6 +9,7 @@
 # license that can be found in the LICENSE file.
 
 from .phosim import *
+from .ts3 import *
 from .ts8 import *
 from .imsim import *
 from .auxTel import *
