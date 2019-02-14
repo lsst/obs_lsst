@@ -179,9 +179,16 @@ class LsstAuxTelTranslator(StubTranslator):
         """
         dayobs = dayobs.replace("-", "")
 
-        # Form the number as a string zero padding the sequence number
+        if len(dayobs) != 8:
+            raise ValueError(f"Malformed dayobs: {dayobs}")
+
         # Expect no more than 99,999 exposures in a day
-        idstr = f"{dayobs}{seqnum:05d}"
+        maxdigits = 5
+        if seqnum >= 10**maxdigits:
+            raise ValueError(f"Sequence number ({seqnum}) exceeds limit")
+
+        # Form the number as a string zero padding the sequence number
+        idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
         return int(idstr)
 
     @cache_translation

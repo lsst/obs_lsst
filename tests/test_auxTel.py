@@ -136,6 +136,12 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.assertEqual(len(cm.output), 2)
         self.assertEqual(exposureId, 1)
 
+        with self.assertRaises(ValueError):
+            exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 1000000})
+
+        with self.assertRaises(ValueError):
+            exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "20-01-01", "seqNum": 9999})
+
     def testDetectorName(self):
         name = self.mapper._extractDetectorName({})
         self.assertEqual(name, "RXX_S00")
