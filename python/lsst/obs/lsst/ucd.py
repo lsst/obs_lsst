@@ -53,6 +53,10 @@ class UcdMapper(LsstCamMapper):
             raftName = LsstUCDCamTranslator.compute_detector_group_from_num(dataId['detector'])
         return f"{raftName}_{detectorName}"
 
+    def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
+        """How many bits are required for the maximum exposure ID"""
+        return 48  # max detector_exposure_id ~ 203012122359590
+
 
 class UcdParseTask(LsstCamParseTask):
     """Parser suitable for UCD data.

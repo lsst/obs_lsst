@@ -41,7 +41,7 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 36
+        ccdExposureId_bits = 58
         exposureIds = {'raw': 201607220607067071}
         filters = {'raw': '550CutOn'}
         exptimes = {'raw': 30.611}

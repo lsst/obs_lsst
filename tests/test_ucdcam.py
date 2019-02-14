@@ -41,7 +41,7 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 36
+        ccdExposureId_bits = 48
         exposureIds = {'raw': 201805301503552}
         filters = {'raw': 'r'}
         exptimes = {'raw': 0.5}

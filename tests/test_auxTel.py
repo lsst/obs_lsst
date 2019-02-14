@@ -42,7 +42,7 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 36
+        ccdExposureId_bits = 51
         exposureIds = {'raw': 2018092000065, 'bias': 2018092000065}
         filters = {'raw': 'NONE', 'bias': '_unknown_'}
         exptimes = {'raw': 27.0, 'bias': 0}
