@@ -103,7 +103,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_auxtel_translator(self):
         """Run the gen 2 metadata extraction code for AuxTel"""
-        test_data = (("raw/2018-09-20/05700065-det000.fits",
+        test_data = (("raw/2018-09-20/2018092000065-det000.fits",
                       dict(
                           expTime=27.0,
                           object='UNKNOWN',
@@ -115,7 +115,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           detector=0,
                           filter='NONE',
                           seqNum=65,
-                          visit=20180920000065,
+                          visit=2018092000065,
                           wavelength=-666,
                       )),
                      )

@@ -180,7 +180,8 @@ class LsstAuxTelTranslator(StubTranslator):
         dayobs = dayobs.replace("-", "")
 
         # Form the number as a string zero padding the sequence number
-        idstr = f"{dayobs}{seqnum:06d}"
+        # Expect no more than 99,999 exposures in a day
+        idstr = f"{dayobs}{seqnum:05d}"
         return int(idstr)
 
     @cache_translation

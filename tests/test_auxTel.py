@@ -35,7 +35,7 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "auxTel"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 5700065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
+        dataIds = {'raw': {'visit': 2018092000065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'bias': {'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
@@ -43,7 +43,7 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 5700065, 'bias': 20180920000065}
+        exposureIds = {'raw': 2018092000065, 'bias': 2018092000065}
         filters = {'raw': 'NONE', 'bias': '_unknown_'}
         exptimes = {'raw': 27.0, 'bias': 0}
         detectorIds = {'raw': 0, 'bias': 0}
@@ -53,8 +53,8 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor', 'filter': 'NONE'}, 1),
-                       ({'level': 'sensor', 'visit': 5700065}, 1),
-                       ({'level': 'filter', 'visit': 5700065}, 1),
+                       ({'level': 'sensor', 'visit': 2018092000065}, 1),
+                       ({'level': 'filter', 'visit': 2018092000065}, 1),
                        ({'level': 'visit', 'filter': 'NONE'}, 1)
                        )
         linearizer_type = unittest.SkipTest
@@ -71,14 +71,14 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "2018-09-20", "05700065-det000.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "2018-09-20", "2018092000065-det000.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
         query_format = ["visit", "seqNum", "dayObs"]
-        queryMetadata = (({'visit': 5700065}, [(5700065, 65, '2018-09-20')]),
-                         ({'detector': 0}, [(5700065, 65, '2018-09-20')]),
-                         ({'seqNum': 65}, [(5700065, 65, '2018-09-20')]),
+        queryMetadata = (({'visit': 2018092000065}, [(2018092000065, 65, '2018-09-20')]),
+                         ({'detector': 0}, [(2018092000065, 65, '2018-09-20')]),
+                         ({'seqNum': 65}, [(2018092000065, 65, '2018-09-20')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
@@ -86,7 +86,7 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
-        raw_filename = '05700065-det000.fits'
+        raw_filename = '2018092000065-det000.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'dayObs'])),
                       ('filter', set(['visit', 'detector', 'dayObs'])),
@@ -127,7 +127,7 @@ class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.assertEqual(exposureId, 1)
 
         exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 999})
-        self.assertEqual(exposureId, 20200101000999)
+        self.assertEqual(exposureId, 2020010100999)
 
         # This will trigger a Python log message and lsst.log message
         with self.assertLogs(level="WARNING") as cm:

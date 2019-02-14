@@ -71,12 +71,12 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=27.0*u.s,
-                           detector_exposure_id=20180920000065,
+                           detector_exposure_id=2018092000065,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
                            detector_serial="ITL-3800C-098",
-                           exposure_id=20180920000065,
+                           exposure_id=2018092000065,
                            exposure_time=27.0*u.s,
                            object="UNKNOWN",
                            observation_id="AT_C_20180920_000065",
@@ -86,7 +86,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            relative_humidity=None,
                            science_program="unknown",
                            temperature=None,
-                           visit_id=20180920000065,
+                           visit_id=2018092000065,
                            )),
                      )
         for filename, expected in test_data:
