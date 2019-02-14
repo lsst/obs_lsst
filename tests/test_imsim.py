@@ -42,10 +42,10 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 2045950042,
-                       'bias': 2045950042,
-                       'dark': 2045950042,
-                       'flat': 2045950042
+        exposureIds = {'raw': 204595042,
+                       'bias': 204595042,
+                       'dark': 204595042,
+                       'flat': 204595042
                        }
         filters = {'raw': 'i',
                    'bias': '_unknown_',
@@ -146,11 +146,11 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             self.butler.get('ccdExposureId', dataId={})
 
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 10001)
+        self.assertEqual(exposureId, 1001)
 
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
                                                               "detectorName": "S01"})
-        self.assertEqual(exposureId, 10001)
+        self.assertEqual(exposureId, 1001)
 
         with self.assertRaises(ValueError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})

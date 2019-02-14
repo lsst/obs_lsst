@@ -42,7 +42,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
         ccdExposureId_bits = 36
-        exposureIds = {'raw': 2045950042}
+        exposureIds = {'raw': 204595042}
         filters = {'raw': 'i'}
         exptimes = {'raw': 30.0}
         detectorIds = {'raw': 42}
@@ -118,11 +118,11 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             self.butler.get('ccdExposureId', dataId={})
 
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 10001)
+        self.assertEqual(exposureId, 1001)
 
         exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
                                                               "detectorName": "S01"})
-        self.assertEqual(exposureId, 10001)
+        self.assertEqual(exposureId, 1001)
 
         with self.assertRaises(ValueError):
             self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})

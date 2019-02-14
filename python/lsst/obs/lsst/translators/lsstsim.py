@@ -58,7 +58,7 @@ class LsstSimTranslator(StubTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000,
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=999,
                                                     mode="concat")
 
     @classmethod
