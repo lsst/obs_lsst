@@ -21,12 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 """
-LSST Cam-specific overrides for IsrTask
+LSST Cam generic settings
 """
-
-config.doLinearize = False
-config.doDefect = False
-config.doCrosstalk=True
-config.doAddDistortionModel = False
-config.qa.doThumbnailOss = False
-config.qa.doThumbnailFlattened = False
+if hasattr(config, 'ccdKeys'):
+    config.ccdKeys = ['detector', 'snap', 'raftName', 'detectorName']

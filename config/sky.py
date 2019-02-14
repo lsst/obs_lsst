@@ -28,10 +28,11 @@ from lsst.utils import getPackageDir
 #from lsst.obs.lsst.isr import SubaruIsrTask
 #config.isr.retarget(SubaruIsrTask)
 #config.isr.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
-
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
-
 configDir = os.path.join(getPackageDir("obs_lsst"), "config")
+
+config.load(os.path.join(configDir, "lsstCamCommon.py"))
+config.isr.load(os.path.join(configDir, "isr.py"))
+
 bgFile = os.path.join(configDir, "background.py")
 fpBgFile = os.path.join(configDir, "focalPlaneBackground.py")
 

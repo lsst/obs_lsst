@@ -23,4 +23,5 @@
 import os.path
 from lsst.utils import getPackageDir
 
+config.load(os.path.join(getPackageDir("obs_lsst"), "config", "lsstCamCommon.py"))
 config.isr.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
