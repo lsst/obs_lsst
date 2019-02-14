@@ -29,6 +29,7 @@ import lsst.log
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
 from lsst.obs.lsst.ts8 import Ts8ParseTask
+from lsst.obs.lsst.ts3 import Ts3ParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
@@ -176,6 +177,60 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
         # Need to test some code paths for translations where we don't have
         # example headers.
         parseTask = self._constructParseTask(CONFIGDIR, "ts8", Ts8ParseTask)
+
+        md = lsst.daf.base.PropertyList()
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 0)
+        md["SEQNUM"] = 5
+        wl = parseTask.translate_testSeqNum(md)
+        self.assertEqual(wl, 5)
+
+    def test_parsetask_ts3_translator(self):
+        """Run the gen 2 metadata extraction code for TS3"""
+        test_data = (("raw/2016-07-22/201607220607067-R071-S00-det071.fits",
+                      dict(
+                          expTime=30.611,
+                          object='UNKNOWN',
+                          imageType='FLAT',
+                          testType='LAMBDA',
+                          lsstSerial='ITL-3800C-098',
+                          date='2016-07-22T06:07:06.784',
+                          dateObs='2016-07-22T06:07:06.784',
+                          run='2016-07-22',
+                          wavelength=1000,
+                          detectorName='S00',
+                          raftName="R071",
+                          detector=71,
+                          dayObs='2016-07-21',
+                          filter='550CutOn',
+                          visit=201607220607067,
+                          testSeqNum=67,
+                      )),
+                     ("raw/2018-11-15/201811151255111-R433-S00-det433.fits",
+                      dict(
+                          expTime=44.631,
+                          object='UNKNOWN',
+                          imageType='FLAT',
+                          testType='LAMBDA',
+                          lsstSerial='E2V-CCD250-411',
+                          date='2018-11-15T12:55:11.149',
+                          dateObs='2018-11-15T12:55:11.149',
+                          run='2018-11-15',
+                          wavelength=1000,
+                          detectorName='S00',
+                          raftName="R433",
+                          detector=433,
+                          dayObs='2018-11-15',
+                          filter='550CutOn',
+                          visit=201811151255111,
+                          testSeqNum=25,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "ts3", Ts3ParseTask, test_data)
+
+        # Need to test some code paths for translations where we don't have
+        # example headers.
+        parseTask = self._constructParseTask(CONFIGDIR, "ts3", Ts8ParseTask)
 
         md = lsst.daf.base.PropertyList()
         wl = parseTask.translate_testSeqNum(md)
