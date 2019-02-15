@@ -77,7 +77,6 @@ exposures:
   dcrDiff_matchedExp:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
-
 calibrations:
   defects:
     columns:
@@ -434,6 +433,82 @@ datasets:
     template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/ossThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
   flattenedThumb:
     template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/flattenedThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
+  # Difference image products
+  deepDiff_diaObject:
+    description: "Catalog of combined diaSrc objects."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/diaObject/%(tract)d/%(patch)s/diaObject-%(tract)d-%(patch)s.fits
+  deepDiff_diaObject_schema:
+    description: "Catalog of diaObjects"
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_diaObject.fits
+  deepDiff_forced_diaSrc:
+    description: "Catalog of forced measurements (shape and position parameters held fixed) on the difference images."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    tables: 'raw'
+  deepDiff_forced_diaSrc_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_forced_dia_src.fits
+  deepDiff_forced_diaObject:
+    description: "Catalog of forced measurements (shape and position parameters held fixed) on the templates."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/%(filter)s/%(tract)d/%(patch)s/diaObject-%(filter)s-%(tract)d-%(patch)s.fits
+  deepDiff_forced_diaObject_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_forced_dia_object.fits
+  imageDifferenceDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.imageDifferenceDriver.ImageDifferenceDriverConfig
+    template: config/imageDifferenceDriver.py
+  imageDifferenceDriver_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables:
+    - raw
+    - raw_visit
+    template: '%(pointing)05d/%(filter)s/imageDifferenceDriver_metadata/%(visit)07d.boost'
+  associationDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.associationDriver.associationDriverConfig
+    template: config/associationDriver.py
+  forcedPhotCcdDiaDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotCcdDiaDriver.ForcedPhotCcdDiaDriverConfig
+    template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCoaddDiaDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotCoaddDiaDriver.ForcedPhotCoaddDiaDriverConfig
+    template: config/forcedPhotCoaddDiaDriver.py
+  forcedPhotCcdDia_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCcdDiaDriverConfig
+    template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCoaddDia_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCoaddDiaConfig
+    template: config/forcedPhotCoaddDia.py
+  forcedPhotCcd_metadata:
+    template: '%(pointing)05d/%(filter)s/tract%(tract)d/forcedPhotCcd_metadata/%(visit)07d-%(ccd)03d.yaml'
 
   # Focal plane summary plots
   focal_plane_fits:
