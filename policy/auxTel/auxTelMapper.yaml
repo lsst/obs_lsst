@@ -24,6 +24,10 @@ calibrations:
 datasets:
   raw_hdu:
     template: raw/%(dayObs)s/%(visit)08d-det%(detector)03d.fits[0]
+  apPipe_metadata:
+    template: apPipe_metadata/%(visit)08d-%(filter)s/apPipeMetadata_%(visit)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
+  runIsr_metadata:
+    template: runIsr_metadata/%(visit)08d-%(filter)s/runIsrMetadata_%(visit)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
 
 exposures:
   _raw:

@@ -142,3 +142,10 @@ class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
 
     def testDcrMergedCoaddId(self):
         self._testCoaddId("dcrMergedCoaddId")
+
+    def testCcdExposureIdBits(self):
+        """Check that we have enough bits for the exposure ID"""
+        bits = self.butler.get('ccdExposureId_bits')
+        ccdExposureId = self.butler_get_data.exposureIds["raw"]
+        self.assertLessEqual(ccdExposureId.bit_length(), bits,
+                             f"Can detector_exposure_id {ccdExposureId} fit in {bits} bits")

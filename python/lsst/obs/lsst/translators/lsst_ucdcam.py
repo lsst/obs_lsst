@@ -345,7 +345,7 @@ class LsstUCDCamTranslator(StubTranslator):
         as the run in YYYY-MM-DD format.
 
         Returns
-        ------
+        -------
         run : `str`
             YYYY-MM-DD string corresponding to the date of observation.
         """

@@ -54,6 +54,10 @@ class Ts8Mapper(LsstCamMapper):
 
         return super()._computeCcdExposureId(dataId)
 
+    def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
+        """How many bits are required for the maximum exposure ID"""
+        return 58  # max detector_exposure_id ~ 203012122359599500
+
 
 class Ts8ParseTask(LsstCamParseTask):
     """Parser suitable for ts8 data.

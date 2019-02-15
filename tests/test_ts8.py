@@ -42,7 +42,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 36
+        ccdExposureId_bits = 58
         exposureIds = {'raw': 201807241028453067, 'bias': 201807241028453067}
         filters = {'raw': 'z', 'bias': '_unknown_'}
         exptimes = {'raw': 21.913, 'bias': 0}
