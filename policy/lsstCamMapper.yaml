@@ -74,7 +74,52 @@ exposures:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_matchedExp:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-
+  deepDiff_diaObject:
+    description: "Catalog of combined diaSrc objects."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/%(tract)d/%(patch)s/diaObject-%(tract)d-%(patch)s.fits
+  deepDiff_diaObject_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_diaObject.fits
+  deepDiff_forced_dia_src:
+    description: "Catalog of forced measurements from the diaObject catalog on the difference images."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    tables: raw
+  deepDiff_forced_dia_src_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_forced_dia_src.fits
+  imageDifferenceDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.imageDifferenceDriver.ImageDifferenceDriverConfig
+    template: config/imageDifferenceDriver.py
+  imageDifferenceDriver_metadata:
+    persistable: PropertySet
+    python: lsst.daf.base.PropertySet
+    storage: BoostStorage
+    tables:
+    - raw
+    - raw_visit
+    template: '%(pointing)05d/%(filter)s/imageDifferenceDriver_metadata/%(visit)07d.boost'
+  associationDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.associationDriver.associationDriverConfig
+    template: config/associationDriver.py
+  forcedPhotCcdDiaDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.associationDriver.forcedPhotCcdDiaDriverConfig
+    template: config/forcedPhotCcdDiaDriver.py
 
 calibrations:
   bias:
