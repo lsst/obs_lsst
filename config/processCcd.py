@@ -61,14 +61,12 @@ for refObjLoader in (config.charImage.refObjLoader,
                      config.calibrate.astromRefObjLoader,
                      config.calibrate.photoRefObjLoader):
     refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+    refObjLoader.load(os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py'))
     refObjLoader.ref_dataset_name='cal_ref_cat'
 
 # Better astrometry matching
 # commented out for now
 #config.calibrate.astrometry.matcher.numBrightStars = 150
-
-# set SIP order fitting to 2 to avoid bad astrometric solutions
-config.calibrate.astrometry.wcsFitter.order=2
 
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.charImage.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
@@ -81,7 +79,7 @@ config.calibrate.photoCal.applyColorTerms = False
 #colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.0)
 #colors["r-i"] = ColorLimit(primary="r_flux", secondary="i_flux", maximum=0.5)
 config.calibrate.photoCal.match.referenceSelection.doMagLimit = True
-config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
+config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
 config.calibrate.photoCal.match.referenceSelection.magLimit.maximum = 22.0
 # select only stars for photometry calibration
 config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=0.5

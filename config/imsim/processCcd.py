@@ -21,3 +21,8 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 config.isr.doCrosstalk=True
+
+# set SIP order fitting to 2 to avoid bad astrometric solutions
+config.calibrate.astrometry.wcsFitter.order=2
+
+config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
