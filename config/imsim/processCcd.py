@@ -21,5 +21,3 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 config.isr.doCrosstalk=True
-
-config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
