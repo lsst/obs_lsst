@@ -24,7 +24,6 @@
 
 import os.path
 from lsst.utils import getPackageDir
-from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
 
 config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "apertures.py"))
 config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "kron.py"))
@@ -32,7 +31,6 @@ config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "convo
 config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "hsm.py"))
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
 
-config.match.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.match.refObjLoader.ref_dataset_name = "cal_ref_cat"
 config.match.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filterMap.py"))
 
