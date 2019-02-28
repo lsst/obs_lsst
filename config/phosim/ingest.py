@@ -23,3 +23,5 @@
 from lsst.obs.lsst.phosim import PhosimParseTask
 
 config.parse.retarget(PhosimParseTask)
+config.register.visit = list(config.register.columns.keys())
+config.register.unique = ["visit", "detector","snap"]
