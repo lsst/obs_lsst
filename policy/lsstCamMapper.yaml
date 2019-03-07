@@ -332,6 +332,10 @@ datasets:
     storage: FitsCatalogStorage
     tables: raw
     template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  jointcal_wcs:  # astrometric calibration produced by jointcal
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_wcs-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  jointcal_photoCalib:  # photometric calibration produced by jointcal
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_photoCalib-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
