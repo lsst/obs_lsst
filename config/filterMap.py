@@ -20,4 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.filterMap = {band: 'lsst_%s_smeared' % (band) for band in 'ugrizy'}
+config.filterMap = {band: '%s_smeared' % (band) for band in 'ugrizy'}
