@@ -27,7 +27,6 @@ from pstats import Stats
 
 import numpy as np
 
-import lsst.utils.tests
 from lsst.obs.lsst.gen3 import (LsstCamInstrument, ImsimInstrument, PhosimInstrument,
                                 Ts8Instrument, AuxTelInstrument)
 
@@ -45,7 +44,7 @@ PRINT_PROFILE = False
 
 
 @unittest.skipUnless(haveGen3, "daf_butler not setup")
-class TestInstruments(lsst.utils.tests.TestCase):
+class TestInstruments(unittest.TestCase):
 
     def setUp(self):
         self.rng = np.random.RandomState(50)  # arbitrary deterministic seed
@@ -72,19 +71,20 @@ class TestInstruments(lsst.utils.tests.TestCase):
             # Butler Registry.
             instrument.register(butler.registry)
 
-            # Define a DatasetType for the cameraGeom.Camera, which can be accessed
-            # just by identifying its Instrument.
-            # A real-world Camera DatasetType should be identified by a validity
-            # range as well.
+            # Define a DatasetType for the cameraGeom.Camera, which can be
+            # accessed just by identifying its Instrument.
+            # A real-world Camera DatasetType should be identified by a
+            # validity range as well.
             cameraDatasetType = DatasetType("camera", dataUnits=["Instrument"],
                                             storageClass=scFactory.getStorageClass("Camera"))
             butler.registry.registerDatasetType(cameraDatasetType)
 
-            # Define a DatasetType for cameraGeom.Detectors, which can be accessed
-            # by identifying its Instrument and (Butler) Detector.
-            # A real-world Detector DatasetType probably doesn't need to exist, as
-            # it would just duplicate information in the Camera, and reading a full
-            # Camera just to get a single Detector should be plenty efficient.
+            # Define a DatasetType for cameraGeom.Detectors, which can be
+            # accessed by identifying its Instrument and (Butler) Detector.
+            # A real-world Detector DatasetType probably doesn't need to exist,
+            # as  it would just duplicate information in the Camera, and
+            # reading a full Camera just to get a single Detector should be
+            # plenty efficient.
             detectorDatasetType = DatasetType("detector", dataUnits=["Instrument", "Detector"],
                                               storageClass=scFactory.getStorageClass("Detector"))
             butler.registry.registerDatasetType(detectorDatasetType)
@@ -103,12 +103,13 @@ class TestInstruments(lsst.utils.tests.TestCase):
                                                                       size=numDetectors, replace=False)]
             for cameraGeomDetector in someDetectors:
                 # Right now we only support integer detector IDs in data IDs;
-                # support for detector names and groups (i.e. rafts) is definitely
-                # planned but not yet implemented.
+                # support for detector names and groups (i.e. rafts) is
+                # definitely planned but not yet implemented.
                 dataId = dict(instrument=instrument.instrument, detector=cameraGeomDetector.getId())
                 butler.put(cameraGeomDetector, "detector", dataId=dataId)
                 cameraGeomDetector2 = butler.get("detector", dataId=dataId)
-                # Full detector comparisons are *slow*; just compare names and serials.
+                # Full detector comparisons are *slow*; just compare names and
+                # serials.
                 self.assertEqual(cameraGeomDetector.getName(), cameraGeomDetector2.getName())
                 self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
 

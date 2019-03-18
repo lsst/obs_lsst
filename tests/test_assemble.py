@@ -41,10 +41,11 @@ LOCAL_DATA_ROOT = os.path.join(os.path.dirname(__file__), "data")
 class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 
     def setUp(self):
-        # A snapshot of AuxTelCam that has incorrect overscan regions for this data ID
+        # A snapshot of AuxTelCam that has incorrect overscan regions for this
+        # data ID
         self.cameraBroken = Camera.readFits(os.path.join(LOCAL_DATA_ROOT, "camera-bad-overscan.fits"))
-        # A snapshot of the Detector for this file after we've read it in with code that fixes
-        # the overscans.
+        # A snapshot of the Detector for this file after we've read it in with
+        # code that fixes the overscans.
         self.detectorFixed = Detector.readFits(os.path.join(LOCAL_DATA_ROOT, "detector-fixed.fits"))
         self.assertEqual(self.cameraBroken[0].getName(), self.detectorFixed.getName())
 
@@ -89,7 +90,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
                 self.assertNotEqual(ampBad.getRawBBox(), image.getBBox())
                 modified = fixAmpGeometry(ampBad, image.getBBox(), metadata)
                 self.assertTrue(modified)
-                #self.assertAmpRawBBoxesEqual(ampBad, ampGood)
+                # self.assertAmpRawBBoxesEqual(ampBad, ampGood)
 
 
 if __name__ == "__main__":
