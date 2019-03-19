@@ -18,8 +18,9 @@ import astropy.units as u
 from astropy.time import Time
 from astropy.coordinates import EarthLocation
 
-from astro_metadata_translator import cache_translation, StubTranslator
+from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
+from .lsst import LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ def is_non_science_or_lab(self):
     raise KeyError("Required key is missing and this is a mountain science observation")
 
 
-class LsstAuxTelTranslator(StubTranslator):
+class LsstAuxTelTranslator(LsstBaseTranslator):
     """Metadata translator for LSST AuxTel data.
 
     For lab measurements many values are masked out.
@@ -161,95 +162,12 @@ class LsstAuxTelTranslator(StubTranslator):
             log.warning("Unexpected non-zero detector number for AuxTel")
         return exposure_id
 
-    @staticmethod
-    def compute_exposure_id(dayobs, seqnum):
-        """Helper method to calculate the AuxTel exposure_id.
-
-        Parameters
-        ----------
-        dayobs : `str`
-            Day of observation in either YYYYMMDD or YYYY-MM-DD format.
-        seqnum : `int` or `str`
-            Sequence number.
-
-        Returns
-        -------
-        exposure_id : `int`
-            Exposure ID in form YYYYMMDDnnnnn form.
-        """
-        dayobs = dayobs.replace("-", "")
-
-        if len(dayobs) != 8:
-            raise ValueError(f"Malformed dayobs: {dayobs}")
-
-        # Expect no more than 99,999 exposures in a day
-        maxdigits = 5
-        if seqnum >= 10**maxdigits:
-            raise ValueError(f"Sequence number ({seqnum}) exceeds limit")
-
-        # Form the number as a string zero padding the sequence number
-        idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
-        return int(idstr)
-
     @cache_translation
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
         if self._is_on_mountain():
             return AUXTEL_LOCATION
         return None
-
-    @cache_translation
-    def to_datetime_begin(self):
-        # Docstring will be inherited. Property defined in properties.py
-        if "MJD-OBS" in self._header:
-            self._used_these_cards("MJD-OBS")
-            return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
-        if "CALIB_ID" in self._header:
-            # Calibration files hide the date information
-            calib_id = self._header["CALIB_ID"]
-            self._used_these_cards("CALIB_ID")
-            parts = calib_id.split()
-            for p in parts:
-                if p.startswith("calibDate"):
-                    ymd = p[10:]
-                    return Time(ymd, scale="utc", format="isot")
-        return None
-
-    @cache_translation
-    def to_datetime_end(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return self.to_datetime_begin() + self.to_exposure_time()
-
-    @cache_translation
-    def to_detector_exposure_id(self):
-        # Docstring will be inherited. Property defined in properties.py
-        exposure_id = self.to_exposure_id()
-        detector_num = self.to_detector_num()
-        return self.compute_detector_exposure_id(exposure_id, detector_num)
-
-    @cache_translation
-    def to_exposure_id(self):
-        """Generate a unique exposure ID number
-
-        This is a combination of DAYOBS and SEQNUM.
-
-        Returns
-        -------
-        exposure_id : `int`
-            Unique exposure number.
-        """
-        if "CALIB_ID" in self._header:
-            self._used_these_cards("CALIB_ID")
-            return None
-
-        dayobs = self._header["DAYOBS"]
-        seqnum = self._header["SEQNUM"]
-        self._used_these_cards("DAYOBS", "SEQNUM")
-
-        return self.compute_exposure_id(dayobs, seqnum)
-
-    # For now "visits" are defined to be identical to exposures.
-    to_visit_id = to_exposure_id
 
     @cache_translation
     def to_observation_type(self):

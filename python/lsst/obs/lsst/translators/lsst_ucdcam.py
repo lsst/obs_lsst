@@ -19,9 +19,9 @@ import os.path
 import astropy.units as u
 from astropy.time import Time
 
-from astro_metadata_translator import cache_translation, StubTranslator
+from astro_metadata_translator import cache_translation
 
-from .lsst import compute_detector_exposure_id_generic
+from .lsst import compute_detector_exposure_id_generic, LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ log = logging.getLogger(__name__)
 _DETECTOR_NAME = "S00"
 
 
-class LsstUCDCamTranslator(StubTranslator):
+class LsstUCDCamTranslator(LsstBaseTranslator):
     """Metadata translator for LSST UC Davis test camera data.
 
     This instrument is a test system for individual LSST CCDs.
@@ -59,6 +59,7 @@ class LsstUCDCamTranslator(StubTranslator):
 
     _trivial_map = {
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
+        "detector_serial": "LSST_NUM",
     }
 
     DETECTOR_NAME = _DETECTOR_NAME
@@ -213,11 +214,6 @@ class LsstUCDCamTranslator(StubTranslator):
         return Time(mjd, scale="utc", format="mjd")
 
     @cache_translation
-    def to_datetime_end(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return self.to_datetime_begin() + self.to_exposure_time()
-
-    @cache_translation
     def to_detector_num(self):
         """Determine the number associated with this detector.
 
@@ -241,50 +237,6 @@ class LsstUCDCamTranslator(StubTranslator):
         """
         serial = self.to_detector_serial()
         return self._detector_map[serial][1]
-
-    @cache_translation
-    def to_dark_time(self):
-        """Calculate the dark time.
-
-        If a DARKTIME header is not found, the value is assumed to be
-        identical to the exposure time.
-
-        Returns
-        -------
-        dark : `astropy.units.Quantity`
-            The dark time in seconds.
-        """
-        if "DARKTIME" in self._header:
-            darktime = self._header("DARKTIME")*u.s
-        else:
-            log.warning("Unable to determine dark time. Setting from exposure time.")
-            darktime = self.to_exposure_time()
-        return darktime
-
-    @cache_translation
-    def to_detector_serial(self):
-        """Returns the serial number of the detector.
-
-        Returns
-        -------
-        serial : `str`
-            LSST assigned serial number.
-
-        Notes
-        -----
-        This is the LSST assigned serial number (``LSST_NUM``), and not
-        necessarily the manufacturer's serial number (``CCD_SERN``).
-        """
-        serial = self._header["LSST_NUM"]
-        self._used_these_cards("LSST_NUM")
-        return serial
-
-    @cache_translation
-    def to_detector_exposure_id(self):
-        # Docstring will be inherited. Property defined in properties.py
-        exposure_id = self.to_exposure_id()
-        num = self.to_detector_num()
-        return self.compute_detector_exposure_id(exposure_id, num)
 
     @cache_translation
     def to_physical_filter(self):
@@ -329,13 +281,6 @@ class LsstUCDCamTranslator(StubTranslator):
         filename = self._header["FILENAME"]
         self._used_these_cards("FILENAME")
         return os.path.splitext(os.path.basename(filename))[0]
-
-    @cache_translation
-    def to_observation_type(self):
-        # Docstring will be inherited. Property defined in properties.py
-        obstype = self._header["IMGTYPE"]
-        self._used_these_cards("IMGTYPE")
-        return obstype.lower()
 
     @cache_translation
     def to_science_program(self):
