@@ -61,7 +61,7 @@ def read_detector_ids(policyFile):
     try:
         with open(file) as fh:
             # Use the fast parser since these files are large
-            camera = yaml.load(fh, Loader=yaml.CLoader)
+            camera = yaml.load(fh, Loader=yaml.CSafeLoader)
     except OSError as e:
         raise ValueError(f"Could not load camera policy file {file}") from e
 
