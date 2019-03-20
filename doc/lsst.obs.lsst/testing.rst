@@ -23,7 +23,7 @@ New data can be added as follow:
    compress with gzip.  The following code shows one method of zeroing out all
    the amplifiers:
 
-   ..code-block:: python
+   .. code-block:: python
 
       from astropy.io import fits
       import numpy
