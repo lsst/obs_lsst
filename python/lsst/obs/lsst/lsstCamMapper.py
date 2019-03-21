@@ -35,12 +35,17 @@ from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
 import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 import lsst.afw.cameraGeom as cameraGeom
+from .translators import LsstCamTranslator
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
 
 class LsstCamMakeRawVisitInfo(MakeRawVisitInfoViaObsInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
+
+
+class LsstCamRawVisitInfo(LsstCamMakeRawVisitInfo):
+    metadataTranslator = LsstCamTranslator
 
 
 def assemble_raw(dataId, componentInfo, cls):
@@ -202,8 +207,8 @@ def getWcsFromDetector(detector, boresight, rotation=0*geom.degrees, flipX=False
     return wcs
 
 
-class LsstCamMapper(CameraMapper):
-    """The Mapper for LsstCam.
+class LsstCamBaseMapper(CameraMapper):
+    """The Base Mapper for all LSST-style instruments.
     """
 
     packageName = 'obs_lsst'
@@ -537,3 +542,10 @@ class LsstCamMapper(CameraMapper):
         return self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
                                          setVisitInfo=False,  # it's already set, and the metadata's stripped
                                          filter=filter)
+
+
+class LsstCamMapper(LsstCamBaseMapper):
+    """The mapper for lsstCam."""
+    translatorClass = LsstCamTranslator
+    MakeRawVisitInfoClass = LsstCamRawVisitInfo
+    _cameraName = "lsstCam"
