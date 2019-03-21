@@ -20,13 +20,12 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation
 
-from .lsst import compute_detector_exposure_id_generic
-from .lsstsim import LsstSimTranslator
+from .lsst import compute_detector_exposure_id_generic, LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
 
-class LsstTS8Translator(LsstSimTranslator):
+class LsstTS8Translator(LsstBaseTranslator):
     """Metadata translator for LSST Test Stand 8 data.
     """
 
@@ -160,30 +159,6 @@ class LsstTS8Translator(LsstSimTranslator):
         return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
 
     @cache_translation
-    def to_datetime_end(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return self.to_datetime_begin() + self.to_exposure_time()
-
-    @cache_translation
-    def to_dark_time(self):
-        """Calculate the dark time.
-
-        If a DARKTIME header is not found, the value is assumed to be
-        identical to the exposure time.
-
-        Returns
-        -------
-        dark : `astropy.units.Quantity`
-            The dark time in seconds.
-        """
-        if "DARKTIME" in self._header:
-            darktime = self._header("DARKTIME")*u.s
-        else:
-            log.warning("Unable to determine dark time. Setting from exposure time.")
-            darktime = self.to_exposure_time()
-        return darktime
-
-    @cache_translation
     def to_detector_name(self):
         # Docstring will be inherited. Property defined in properties.py
         serial = self.to_detector_serial()
@@ -295,10 +270,3 @@ class LsstTS8Translator(LsstSimTranslator):
         filename = self._header["FILENAME"]
         self._used_these_cards("FILENAME")
         return filename[:filename.rfind(".")]
-
-    @cache_translation
-    def to_observation_type(self):
-        # Docstring will be inherited. Property defined in properties.py
-        obstype = self._header["IMGTYPE"]
-        self._used_these_cards("IMGTYPE")
-        return obstype.lower()

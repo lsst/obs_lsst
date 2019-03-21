@@ -21,8 +21,7 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation
 
-from .lsst import compute_detector_exposure_id_generic
-from .lsstsim import LsstSimTranslator
+from .lsst import compute_detector_exposure_id_generic, LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ log = logging.getLogger(__name__)
 _DETECTOR_NAME = "S00"
 
 
-class LsstTS3Translator(LsstSimTranslator):
+class LsstTS3Translator(LsstBaseTranslator):
     """Metadata translator for LSST BNL Test Stand 3 data.
     """
 
@@ -151,37 +150,6 @@ class LsstTS3Translator(LsstSimTranslator):
         self._used_these_cards("MJD-OBS")
         return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
 
-    @cache_translation
-    def to_datetime_end(self):
-        # Docstring will be inherited. Property defined in properties.py
-        return self.to_datetime_begin() + self.to_exposure_time()
-
-    @cache_translation
-    def to_dark_time(self):
-        """Calculate the dark time.
-
-        If a DARKTIME header is not found, the value is assumed to be
-        identical to the exposure time.
-
-        Returns
-        -------
-        dark : `astropy.units.Quantity`
-            The dark time in seconds.
-        """
-        if "DARKTIME" in self._header:
-            darktime = self._header("DARKTIME")*u.s
-        else:
-            log.warning("Unable to determine dark time. Setting from exposure time.")
-            darktime = self.to_exposure_time()
-        return darktime
-
-    @cache_translation
-    def to_detector_exposure_id(self):
-        # Docstring will be inherited. Property defined in properties.py
-        exposure_id = self.to_exposure_id()
-        num = self.to_detector_num()
-        return self.compute_detector_exposure_id(exposure_id, num)
-
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
@@ -226,13 +194,6 @@ class LsstTS3Translator(LsstSimTranslator):
         filename = self._header["FILENAME"]
         self._used_these_cards("FILENAME")
         return os.path.splitext(filename)[0]
-
-    @cache_translation
-    def to_observation_type(self):
-        # Docstring will be inherited. Property defined in properties.py
-        obstype = self._header["IMGTYPE"]
-        self._used_these_cards("IMGTYPE")
-        return obstype.lower()
 
     @cache_translation
     def to_detector_group(self):

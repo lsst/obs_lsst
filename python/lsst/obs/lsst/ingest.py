@@ -25,6 +25,8 @@ from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
 from .translators.lsst import ROLLOVERTIME
+from .translators import LsstCamTranslator
+from .lsstCamMapper import LsstCamMapper
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
@@ -38,7 +40,8 @@ class LsstCamParseTask(ParseTask):
     `LSE-400 <https://ls.st/LSE-400>`_.
     """
 
-    _translatorClass = None
+    _mapperClass = LsstCamMapper
+    _translatorClass = LsstCamTranslator
 
     def __init__(self, config, *args, **kwargs):
         super().__init__(config, *args, **kwargs)

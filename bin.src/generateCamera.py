@@ -38,6 +38,15 @@ def findYamlOnPath(fileName, searchPath):
     raise FileNotFoundError("Unable to find %s on path %s" % (fileName, ":".join(searchPath)))
 
 
+def parseYamlOnPath(fileName, searchPath):
+    """Find the named file in search path, parse the YAML, and return contents.
+    """
+    yamlFile = findYamlOnPath(fileName, searchPath)
+    with open(yamlFile) as fd:
+        content = yaml.load(fd, Loader=yaml.CSafeLoader)
+    return content
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="""
@@ -63,21 +72,12 @@ if __name__ == "__main__":
     for d in args.path.split(":"):
         searchPath.append(os.path.join(cameraFileDir, d))
 
-    cameraSklFile = findYamlOnPath("cameraHeader.yaml", searchPath)
-    with open(cameraSklFile) as fd:
-        cameraSkl = yaml.load(fd, Loader=yaml.CLoader)
+    cameraSkl = parseYamlOnPath("cameraHeader.yaml", searchPath)
+    cameraTransforms = parseYamlOnPath("cameraTransforms.yaml", searchPath)
+    raftData = parseYamlOnPath("rafts.yaml", searchPath)
+    ccdData = parseYamlOnPath("ccdData.yaml", searchPath)
 
-    cameraTransformsFile = findYamlOnPath("cameraTransforms.yaml", searchPath)
-    with open(cameraTransformsFile) as fd:
-        cameraTransforms = yaml.load(fd, Loader=yaml.CLoader)
-
-    with open(findYamlOnPath("rafts.yaml", searchPath)) as fd:
-        raftData = yaml.load(fd, Loader=yaml.CLoader)
-
-    with open(findYamlOnPath("ccdData.yaml", searchPath)) as fd:
-        ccdData = yaml.load(fd, Loader=yaml.CLoader)
-
-    shutil.copyfile(cameraSklFile, cameraFile)
+    shutil.copyfile(findYamlOnPath("cameraHeader.yaml", searchPath), cameraFile)
 
     nindent = 0        # current number of indents
 
@@ -106,8 +106,7 @@ CCDs :\
 
         for raftName, perRaftData in raftData["rafts"].items():
             try:
-                with open(findYamlOnPath("%s.yaml" % raftName, searchPath)) as yfd:
-                    raftCcdData = yaml.load(yfd, Loader=yaml.CLoader)[raftName]
+                raftCcdData = parseYamlOnPath(f"{raftName}.yaml", searchPath)[raftName]
             except FileNotFoundError:
                 print("Unable to load CCD descriptions for raft %s" % raftName, file=sys.stderr)
                 continue

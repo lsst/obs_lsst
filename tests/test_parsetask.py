@@ -33,6 +33,7 @@ from lsst.obs.lsst.ts3 import Ts3ParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
+from lsst.obs.lsst.ingest import LsstCamParseTask
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 ROOTDIR = os.path.normpath(os.path.join(TESTDIR, os.path.pardir))
@@ -62,7 +63,9 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
         """
         ingestConfig = IngestConfig()
         ingestConfig.load(os.path.join(configdir, "ingest.py"))
-        ingestConfig.load(os.path.join(configdir, name, "ingest.py"))
+        specificPath = os.path.join(configdir, name, "ingest.py")
+        if os.path.exists(specificPath):
+            ingestConfig.load(specificPath)
         parser = parseTaskClass(ingestConfig.parse, name=name)
         return parser
 
@@ -339,6 +342,30 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
         md["SEQNUM"] = 5
         wl = parseTask.translate_testSeqNum(md)
         self.assertEqual(wl, 5)
+
+    def test_parsetask_lsstCam_translator(self):
+        """Run the gen 2 metadata extraction code for lsstCam"""
+        test_data = (("raw/20190319/R10/2019031900001-R10-S02-det029-000.fits",
+                      dict(
+                          expTime=0.0,
+                          object='UNKNOWN',
+                          imageType='BIAS',
+                          seqNum=1,
+                          dayObs="2019-03-19",
+                          filter='NONE',
+                          lsstSerial='ITL-3800C-041',
+                          date='2019-03-19T15:50:28.145',
+                          dateObs='2019-03-19T15:50:28.145',
+                          run='unknown',
+                          visit=2019031900001,
+                          wavelength=-666,
+                          raftName='R10',
+                          detectorName='S02',
+                          detector=29,
+                          snap=0,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "lsstCam", LsstCamParseTask, test_data)
 
 
 if __name__ == "__main__":

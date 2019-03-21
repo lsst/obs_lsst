@@ -32,7 +32,59 @@ TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
+    """Each test reads in raw headers from YAML files, constructs an
+    `ObservationInfo`, and compares the properties with the expected values
+    defined in the corresponding `dict`."""
+
     datadir = os.path.join(TESTDIR, "headers")
+
+    def test_lsstCam_translator(self):
+        test_data = (("lsstCam-MC_C_20190319_000001_R10_S02.yaml",
+                      dict(telescope="LSST",
+                           instrument="lsstCam",
+                           boresight_rotation_coord="unknown",
+                           dark_time=0.0*u.s,
+                           detector_exposure_id=2019031900001029,
+                           detector_group="R10",
+                           detector_name="S02",
+                           detector_num=29,
+                           detector_serial="ITL-3800C-041",
+                           exposure_id=2019031900001,
+                           exposure_time=0.0*u.s,
+                           object="UNKNOWN",
+                           observation_id="MC_C_20190319_000001",
+                           observation_type="bias",
+                           physical_filter="NONE",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=2019031900001)),
+                     ("lsstCam-MC_C_20190319_000001_R22_S21.yaml",
+                      dict(telescope="LSST",
+                           instrument="lsstCam",
+                           boresight_rotation_coord="unknown",
+                           dark_time=0.0*u.s,
+                           detector_exposure_id=2019031900001097,
+                           detector_group="R22",
+                           detector_name="S21",
+                           detector_num=97,
+                           detector_serial="ITL-3800C-139",
+                           exposure_id=2019031900001,
+                           exposure_time=0.0*u.s,
+                           object="UNKNOWN",
+                           observation_id="MC_C_20190319_000001",
+                           observation_type="bias",
+                           physical_filter="NONE",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=2019031900001)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_phosim_translator(self):
         test_data = (("phosim-lsst_a_204595_f3_R11_S02_E000.yaml",

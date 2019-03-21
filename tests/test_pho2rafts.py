@@ -44,10 +44,10 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
                               msg="phosimToRafts.py failed")
         # Read file produced by script above
         with open(os.path.join(TESTDIR, 'R11.yaml')) as fh:
-            doc = yaml.load(fh)
+            doc = yaml.load(fh, Loader=yaml.CSafeLoader)
         # Read file with expected outputs
         with open(os.path.join(EXPYAMLDIR, 'R11.yaml')) as fh:
-            exp_doc = yaml.load(fh)
+            exp_doc = yaml.load(fh, Loader=yaml.CSafeLoader)
         # The test data only have the S20 chip
         # Note: as of python 3 the iterator on dicts is not a list, so we need
         # to manually create one since we are deleting entries from the dict.
