@@ -22,3 +22,10 @@
 #
 
 config.isr.doCrosstalk=True
+
+# Additional configs for star+galaxy ref cats now that DM-17917 is merged
+config.calibrate.astrometry.referenceSelection.doUnresolved = True
+config.calibrate.astrometry.referenceSelection.unresolved.name = 'isresolved'
+config.calibrate.astrometry.referenceSelection.unresolved.minimum = None
+config.calibrate.astrometry.referenceSelection.unresolved.maximum = 0.5
+
