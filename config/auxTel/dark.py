@@ -25,4 +25,4 @@ from lsst.utils import getPackageDir
 
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "auxTel", "auxTel.py"))
 
-config.repair.cosmicray.nCrPixelMax = 500000
+config.repair.cosmicray.nCrPixelMax = 100000
