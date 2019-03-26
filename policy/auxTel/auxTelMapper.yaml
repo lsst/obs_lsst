@@ -1,3 +1,5 @@
+defects: ../auxTel/defects
+
 calibrations:
   bias:
     obsTimeName: dayObs
