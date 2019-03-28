@@ -36,14 +36,14 @@ conn = sqlite.connect(registryName)
 
 if makeTables:
     cmd = "create table defect (id integer primary key autoincrement"
-    cmd += ", path text, version text, ccd int"
+    cmd += ", path text, version text, detector int, detectorName text"
     cmd += ", validStart text, validEnd text)"
     conn.execute(cmd)
     conn.commit()
 
-cmd = "INSERT INTO defect VALUES (NULL, ?, ?, ?, ?, ?)"
+cmd = "INSERT INTO defect VALUES (NULL, ?, ?, ?, ?, ?, ?)"
 
-rowsPerCcd = {}
+rowsPerDetector = {}
 for f in glob.glob(os.path.join(args.root, "*", "defects*.fits")):
     m = re.search(r'(\S+)/defects_(\d+)\.fits', f)
     if not m:
@@ -56,16 +56,16 @@ for f in glob.glob(os.path.join(args.root, "*", "defects*.fits")):
 
     startDate = m.group(1).split('/')[-1]
     version = m.group(1)
-    ccd = m.group(2)
-    if ccd not in rowsPerCcd:
-        rowsPerCcd[ccd] = []
-    rowsPerCcd[ccd].append(Row(f, version, startDate))
+    det = m.group(2)
+    if det not in rowsPerDetector:
+        rowsPerDetector[det] = []
+    rowsPerDetector[det].append(Row(f, version, startDate))
 
 # Fix up end dates so there are no collisions.
-# Defects files for a CCD are valid from the date they are registered until
-# the next date. This means that any defects file should carry ALL the defects
-# that are present at that time.
-for ccd, rowList in rowsPerCcd.items():
+# Defects files for a detector are valid from the date they are registered
+# until the next date. This means that any defects file should carry ALL
+# the defects that are present at that time.
+for det, rowList in rowsPerDetector.items():
     # ISO-8601 will sort just fine without conversion from str
     rowList.sort(key=lambda row: row.validStart)
     for thisRow, nextRow in zip(rowList[:-1], rowList[1:]):
@@ -76,7 +76,7 @@ for ccd, rowList in rowsPerCcd.items():
     for row in rowList:
         if args.verbose:
             print("Registering %s" % row.path)
-        conn.execute(cmd, (row.path, row.version, ccd, row.validStart, row.validEnd))
+        conn.execute(cmd, (row.path, row.version, det, "RXX_S00", row.validStart, row.validEnd))
 
 conn.commit()
 conn.close()

@@ -21,6 +21,7 @@ def genDefectFits(cameraName, source, targetDir):
     ccds = dict()
     for ccd in camera:
         ccdNum = ccd.getId()
+        ccdName = mapper._extractDetectorName(None)
         ccds[ccdNum] = ccd.getName()
 
     defects = dict()
@@ -52,7 +53,8 @@ def genDefectFits(cameraName, source, targetDir):
         cols = fits.ColDefs(columns)
         table = fits.BinTableHDU.from_columns(cols)
 
-        table.header['NAME'] = ccd
+        table.header['DETNUM'] = ccd
+        table.header['NAME'] = ccdName
 
         name = os.path.join(targetDir, "defects_%d.fits" % ccd)
         print("Writing %d defects from CCD %d (%s) to %s" % (table.header['NAXIS2'], ccd, ccds[ccd], name))

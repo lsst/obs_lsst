@@ -339,6 +339,14 @@ class LsstCamBaseMapper(CameraMapper):
 
         return "%s_%s" % (raftName, detectorName)
 
+    def _defectLookup(self, dataId):
+        """Find the defects for a given CCD.
+
+        This method just exists to supplement the dateKey, as we don't have
+        the default, taiObs, in the obs_lsst registry.
+        """
+        return super()._defectLookup(dataId, dateKey='dayObs')
+
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
 
