@@ -68,7 +68,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         "detector_group": "RAFTBAY",
         "detector_name": "CCDSLOT",
         "observation_id": "OBSID",
-        "physical_filter": ("FILTER", dict(default="NONE")),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
     }
