@@ -61,7 +61,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
-        "science_program": "unknown",
     }
 
     _trivial_map = {
@@ -70,6 +69,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         "observation_id": "OBSID",
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
+        "science_program": ("RUNNUM", dict(default="unknown"))
     }
 
     # Use Imsim raft definitions until a true lsstCam definition exists
