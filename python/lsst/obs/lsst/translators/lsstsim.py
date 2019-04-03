@@ -36,7 +36,7 @@ class LsstSimTranslator(LsstBaseTranslator):
     def to_telescope(self):
         # Docstring will be inherited. Property defined in properties.py
         telescope = None
-        if "OUTFILE" in self._header and self._header["OUTFILE"].startswith("lsst"):
+        if self.is_key_ok("OUTFILE") and self._header["OUTFILE"].startswith("lsst"):
             telescope = "LSST"
             self._used_these_cards("OUTFILE")
         elif "LSST_NUM" in self._header:

@@ -379,7 +379,7 @@ class LsstBaseTranslator(FitsTranslator):
         dark : `astropy.units.Quantity`
             The dark time in seconds.
         """
-        if "DARKTIME" in self._header:
+        if self.is_key_ok("DARKTIME"):
             darktime = self._header("DARKTIME")*u.s
         else:
             log.warning("Unable to determine dark time. Setting from exposure time.")
