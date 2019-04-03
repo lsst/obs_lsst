@@ -21,8 +21,8 @@ def genDefectFits(cameraName, source, targetDir):
     ccds = dict()
     for ccd in camera:
         ccdNum = ccd.getId()
-        ccdName = mapper._extractDetectorName(None)
-        ccds[ccdNum] = ccd.getName()
+        ccdName = ccd.getName()
+        ccds[ccdNum] = ccdName
 
     defects = dict()
 
