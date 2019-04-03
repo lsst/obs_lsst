@@ -181,7 +181,7 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         obstype : `str`
             Observation type.
         """
-        if self._is_on_mountain():
+        if self._is_on_mountain() or "IMGTYPE" in self._header:
             obstype = self._header["IMGTYPE"]
             self._used_these_cards("IMGTYPE")
             return obstype.lower()

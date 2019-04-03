@@ -1,0 +1,12 @@
+# Defects file
+#
+# Convert to a fits table using genDefectFits.py;  this is done for you by running scons
+#
+# Columns are:
+#  CCD     x0     y0  width height
+#
+# We keep to this format so that it's the same as in other cameras
+# despite only having one CCD
+#
+# Mask for C17 - the bad amp in the lower right
+     0    3563      0     509     2000

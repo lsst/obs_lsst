@@ -1,5 +1,3 @@
-# Configuration for auxTel
-
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -21,11 +19,10 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
-#
 
-if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['detector', 'detectorName']
+import os.path
+from lsst.utils import getPackageDir
 
-config.isr.doLinearize = False
-config.isr.doCrosstalk = False
-config.isr.doAddDistortionModel = False
+config.load(os.path.join(getPackageDir("obs_lsst"), "config", "auxTel", "auxTel.py"))
+
+config.repair.cosmicray.nCrPixelMax = 100000
