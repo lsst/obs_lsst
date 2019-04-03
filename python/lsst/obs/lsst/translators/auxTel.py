@@ -88,8 +88,6 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
 
     _trivial_map = {
         "observation_id": ("OBSID", dict(default=None, checker=is_non_science)),
-        "exposure_time": ("EXPTIME", dict(unit=u.s)),
-        "dark_time": (["DARKTIME", "EXPTIME"], dict(unit=u.s)),
         "detector_serial": ["LSST_NUM", "DETSER"],
         "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
         "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
@@ -170,6 +168,34 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         return None
 
     @cache_translation
+    def to_dark_time(self):
+        # Docstring will be inherited. Property defined in properties.py
+        if self.is_key_ok("DARKTIME"):
+            return self.quantity_from_card("DARKTIME", u.s)
+
+        return self.to_exposure_time()
+
+    @cache_translation
+    def to_exposure_time(self):
+        # Docstring will be inherited. Property defined in properties.py
+        # Some data is missing a value for EXPTIME.
+        # Have to be careful we do not have circular logic when trying to
+        # guess
+        if self.is_key_ok("EXPTIME"):
+            return self.quantity_from_card("EXPTIME", u.s)
+
+        # Guess from start end times (and hope that end time is not derived
+        # from exposure time)
+        try:
+            delta = self.to_datetime_end() - self.to_datetime_begin()
+        except RecursionError:
+            log.warning("Insufficient information to derive exposure time. Setting to 0.0s")
+            return 0.0 * u.s
+
+        log.warning("Deriving exposure time from observation end time.")
+        return delta.to(u.s)
+
+    @cache_translation
     def to_observation_type(self):
         """Determine the observation type.
 
@@ -181,10 +207,20 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         obstype : `str`
             Observation type.
         """
-        if self._is_on_mountain() or "IMGTYPE" in self._header:
-            obstype = self._header["IMGTYPE"]
-            self._used_these_cards("IMGTYPE")
-            return obstype.lower()
+
+        # AuxTel observation type is documented to appear in OBSTYPE
+        # but for historical reasons prefers IMGTYPE.  Some data puts
+        # it in GROUPID (which is meant to be for something else).
+        test_keys = ["OBSTYPE", "IMGTYPE"]
+
+        if not self._is_on_mountain():
+            test_keys.append("GROUPID")
+
+        for k in test_keys:
+            if self.is_key_ok(k):
+                obstype = self._header[k]
+                self._used_these_cards(k)
+                return obstype.lower()
 
         exptime = self.to_exposure_time()
         if exptime == 0.0:
