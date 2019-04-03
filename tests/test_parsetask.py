@@ -345,11 +345,12 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_lsstCam_translator(self):
         """Run the gen 2 metadata extraction code for lsstCam"""
-        test_data = (("raw/20190319/R10/2019031900001-R10-S02-det029-000.fits",
+        test_data = (("raw/unknown/R10/2019031900001-R10-S02-det029-000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
                           imageType='BIAS',
+                          testType='BIAS',
                           seqNum=1,
                           dayObs="2019-03-19",
                           filter='NONE',
@@ -362,6 +363,26 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           raftName='R10',
                           detectorName='S02',
                           detector=29,
+                          snap=0,
+                      )),
+                     ("raw/6489D/R10/2019032200002-R10-S22-det035-000.fits",
+                      dict(
+                          expTime=1.0,
+                          object='UNKNOWN',
+                          imageType='FLAT',
+                          testType='FLAT',
+                          seqNum=2,
+                          dayObs="2019-03-22",
+                          filter='SDSSi+ND_OD0.5',
+                          lsstSerial='ITL-3800C-103',
+                          date='2019-03-22T15:31:01.904',
+                          dateObs='2019-03-22T15:31:01.904',
+                          run='6489D',
+                          visit=2019032200002,
+                          wavelength=-666,
+                          raftName='R10',
+                          detectorName='S22',
+                          detector=35,
                           snap=0,
                       )),
                      )

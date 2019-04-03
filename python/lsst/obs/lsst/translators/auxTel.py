@@ -193,19 +193,3 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
             obstype = "unknown"
         log.warning("Unable to determine observation type. Guessing '%s'", obstype)
         return obstype
-
-    @cache_translation
-    def to_physical_filter(self):
-        # Docstring will be inherited. Property defined in properties.py
-        filters = []
-        for k in ("FILTER1", "FILTER2"):
-            if k in self._header:
-                filters.append(self._header[k])
-                self._used_these_cards(k)
-
-        if filters:
-            filterName = "|".join(filters)
-        else:
-            filterName = "NONE"
-
-        return filterName

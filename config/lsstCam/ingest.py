@@ -24,11 +24,8 @@ from lsst.obs.lsst.ingest import LsstCamParseTask
 
 config.parse.retarget(LsstCamParseTask)
 
-del config.parse.translation['testType']
-
 config.parse.translation["seqNum"] = "SEQNUM"
 config.parse.translators['dayObs'] = 'translate_dayObs'
 
 config.register.columns['dayObs'] = 'text'
 config.register.columns['seqNum'] = 'int'
-del config.register.columns['testType']

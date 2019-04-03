@@ -406,3 +406,19 @@ class LsstBaseTranslator(FitsTranslator):
 
     # For now "visits" are defined to be identical to exposures.
     to_visit_id = to_exposure_id
+
+    @cache_translation
+    def to_physical_filter(self):
+        """Calculate the physical filter name.
+
+        Returns
+        -------
+        filter : `str`
+            Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
+            headers joined by a "+".  Returns "NONE" if no filter is declared.
+        """
+        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim="+")
+        if not joined:
+            joined = "NONE"
+
+        return joined
