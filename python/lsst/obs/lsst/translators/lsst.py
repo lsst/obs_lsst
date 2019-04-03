@@ -415,17 +415,10 @@ class LsstBaseTranslator(FitsTranslator):
         -------
         filter : `str`
             Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
-            headers.  Returns "NONE" if no filter is declared.
+            headers joined by a "+".  Returns "NONE" if no filter is declared.
         """
-        filterNames = []
-        for k in ("FILTER", "FILTER1", "FILTER2"):
-            if k in self._header:
-                filterNames.append(self._header[k])
-                self._used_these_cards(k)
+        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim="+")
+        if not joined:
+            joined = "NONE"
 
-        if filterNames:
-            filterName = "+".join(filterNames)
-        else:
-            filterName = "NONE"
-
-        return filterName
+        return joined
