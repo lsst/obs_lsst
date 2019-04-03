@@ -338,6 +338,9 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_datetime_end(self):
         # Docstring will be inherited. Property defined in properties.py
+        if self.is_key_ok("DATE-END"):
+            return super().to_datetime_end()
+
         return self.to_datetime_begin() + self.to_exposure_time()
 
     @cache_translation
