@@ -173,6 +173,7 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         if self.is_key_ok("DARKTIME"):
             return self.quantity_from_card("DARKTIME", u.s)
 
+        log.warning("Explicit dark time not found, setting dark time to the exposure time.")
         return self.to_exposure_time()
 
     @cache_translation
@@ -184,16 +185,10 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         if self.is_key_ok("EXPTIME"):
             return self.quantity_from_card("EXPTIME", u.s)
 
-        # Guess from start end times (and hope that end time is not derived
-        # from exposure time)
-        try:
-            delta = self.to_datetime_end() - self.to_datetime_begin()
-        except RecursionError:
-            log.warning("Insufficient information to derive exposure time. Setting to 0.0s")
-            return 0.0 * u.s
-
-        log.warning("Deriving exposure time from observation end time.")
-        return delta.to(u.s)
+        # A missing or undefined EXPTIME is problematic. Set to -1
+        # to indicate that none was found.
+        log.warning("Insufficient information to derive exposure time. Setting to -1.0s")
+        return -1.0 * u.s
 
     @cache_translation
     def to_observation_type(self):
