@@ -206,17 +206,23 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
         # AuxTel observation type is documented to appear in OBSTYPE
         # but for historical reasons prefers IMGTYPE.  Some data puts
         # it in GROUPID (which is meant to be for something else).
-        test_keys = ["OBSTYPE", "IMGTYPE"]
+        # Test the keys in order until we find one that contains a
+        # defined value.
+        obstype_keys = ["OBSTYPE", "IMGTYPE"]
 
+        # For now, hope that GROUPID does not contain an obs type value
+        # when on the mountain.
         if not self._is_on_mountain():
-            test_keys.append("GROUPID")
+            obstype_keys.append("GROUPID")
 
-        for k in test_keys:
+        for k in obstype_keys:
             if self.is_key_ok(k):
                 obstype = self._header[k]
                 self._used_these_cards(k)
                 return obstype.lower()
 
+        # In the absence of any observation type information, return
+        # unknown unless we think it might be a bias.
         exptime = self.to_exposure_time()
         if exptime == 0.0:
             obstype = "bias"
