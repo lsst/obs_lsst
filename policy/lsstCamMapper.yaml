@@ -179,9 +179,10 @@ calibrations:
     level: Ccd
     tables: sky
     columns:
-    - ccd
+    - dateObs
     - filter
-    - taiObs
+    - raftName
+    - detectorName
     reference: raw_visit
     refCols:
     - visit
