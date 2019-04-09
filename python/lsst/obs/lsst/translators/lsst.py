@@ -338,6 +338,9 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_datetime_end(self):
         # Docstring will be inherited. Property defined in properties.py
+        if self.is_key_ok("DATE-END"):
+            return super().to_datetime_end()
+
         return self.to_datetime_begin() + self.to_exposure_time()
 
     @cache_translation
@@ -376,7 +379,7 @@ class LsstBaseTranslator(FitsTranslator):
         dark : `astropy.units.Quantity`
             The dark time in seconds.
         """
-        if "DARKTIME" in self._header:
+        if self.is_key_ok("DARKTIME"):
             darktime = self._header("DARKTIME")*u.s
         else:
             log.warning("Unable to determine dark time. Setting from exposure time.")

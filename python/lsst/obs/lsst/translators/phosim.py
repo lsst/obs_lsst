@@ -95,7 +95,7 @@ class PhosimTranslator(LsstSimTranslator):
     def to_altaz_begin(self):
         # Docstring will be inherited. Property defined in properties.py
         # Fallback to the "derive from ra/dec" if keys are missing
-        if "ZENITH" in self._header and "AZIMUTH" in self._header:
+        if self.are_keys_ok(["ZENITH", "AZIMUTH"]):
             return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
                                              self.to_datetime_begin(), is_zd=set(["ZENITH"]))
         else:
