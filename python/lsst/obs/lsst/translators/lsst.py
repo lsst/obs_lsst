@@ -138,6 +138,18 @@ class LsstBaseTranslator(FitsTranslator):
     detectorSerials = None
     """Mapping of detector serial number to raft, number, and name."""
 
+    def search_paths(self):
+        """Search paths to use for LSST data when looking for header correction
+        files.
+
+        Returns
+        -------
+        path : `list`
+            List with a single element containing the full path to the
+            ``corrections`` directory within the ``obs_lsst`` package.
+        """
+        return [os.path.join(obs_lsst_packageDir, "corrections")]
+
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
         """Compute the detector exposure ID from detector number and
