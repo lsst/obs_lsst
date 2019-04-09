@@ -108,6 +108,6 @@ a pull request.
 
 We would ideally like to be able to run the integration tests to include
 the new camera.  To enable this please also add some test data to the
-`testdata_obs_lsst <https://github.com/lsst-dm/testdata_obs_lsst>`_ repository,
+`testdata_lsst <https://github.com/lsst/testdata_lsst>`_ repository,
 and update the `ci_lsst <https://github.com/lsst-dm/ci_lsst>`_ package so that
 the new instrument is included in the integration test.
