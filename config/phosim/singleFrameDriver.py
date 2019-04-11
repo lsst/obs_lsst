@@ -21,11 +21,9 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
-config.processCcd.isr.doCrosstalk=True
+import os.path
 
-# Additional configs for star+galaxy ref cats now that DM-17917 is merged
-config.processCcd.calibrate.astrometry.referenceSelector.doUnresolved = True
-config.processCcd.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
-config.processCcd.calibrate.astrometry.referenceSelector.unresolved.minimum = None
-config.processCcd.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
+from lsst.utils import getPackageDir
 
+config.processCcd.load(os.path.join(getPackageDir("obs_lsst"), "config",
+                                    "phosim", "processCcd.py"))
