@@ -148,6 +148,7 @@ CCDs :\
                     print(indent(), "detectorType : %i" % (sensorTypes[ccdName]), file=fd)
                 print(indent(), "id : %s" % (id0 + ccdLayout['id']), file=fd)
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
+                print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
                 print(indent(), "offset : [%g, %g]" % (ccdLayout['offset'][0] + raftOffset[0],
                                                        ccdLayout['offset'][1] + raftOffset[1]), file=fd)
