@@ -13,6 +13,44 @@ R30 :
     S21 : ITL-3800C-146-Dev
     S22 : ITL-3800C-103-Dev
 
+  geometryWithinRaft:
+    S00 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S01 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S02 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S10 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S11 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S12 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S20 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S21 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+    S22 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+
   amplifiers :
     S00 :
       C00 : { gain : 1.700, readNoise : 7.00 }
