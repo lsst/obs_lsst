@@ -140,7 +140,17 @@ CCDs :\
 
             raftOffset = perRaftData["offset"]
             id0 = perRaftData['id0']
+            geometryWithinRaft = raftCcdData['geometryWithinRaft'] \
+                                 if 'geometryWithinRaft' in raftCcdData else {} # noqa E127
+
             for ccdName, ccdLayout in ccds.items():
+                if ccdName in geometryWithinRaft:
+                    doffset = geometryWithinRaft[ccdName]['offset']
+                    yaw = geometryWithinRaft[ccdName]['yaw']
+                else:
+                    doffset = (0.0, 0.0,)
+                    yaw = None
+
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
@@ -150,8 +160,11 @@ CCDs :\
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
-                print(indent(), "offset : [%g, %g]" % (ccdLayout['offset'][0] + raftOffset[0],
-                                                       ccdLayout['offset'][1] + raftOffset[1]), file=fd)
+                print(indent(), "offset : [%g, %g]" % (ccdLayout['offset'][0] + raftOffset[0] + doffset[0],
+                                                       ccdLayout['offset'][1] + raftOffset[1] + doffset[1]),
+                      file=fd)
+                if yaw is not None:
+                    print(indent(), "yaw : %g" % (yaw), file=fd)
 
                 if crosstalkCoeffs is not None:
                     namp = len(amps)
