@@ -29,6 +29,17 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    device. Note that you must provide a serial number for each CCD in
    the raft as that’s how I know how many CCDs there are in the “raft”
    (e.g. auxTel has only one)
+
+   The geometryWithinRaft field may be omitted, in which case offsets
+   default to 0.0 and the yaw entry is not generated.  These offsets
+   are interpreted relative to the nominal positions given in cameraHeader.yaml
+   for each type of raft, as adjusted for the centre of the raft; these
+   values are therefore reasonable.
+
+   The yaw (rotation in the plane of the detector) is measured in degrees,
+   anticlockwise as shown in cameraGeomUtils.plotFocalPlane (i.e. with ``R00`` in
+   the bottom left, and ``R04`` in the bottom right)
+
 -  If you want to add a camera-specific set of transformations, put a
    file ``cameraTransforms.yaml`` in ``policy/fooCam``. Look at the one
    in ``policy/cameraTransforms.yaml`` for inspiration.
