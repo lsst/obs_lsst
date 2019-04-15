@@ -27,6 +27,7 @@ LSST Cam-specific overrides for IsrTask
 config.doLinearize = False
 config.doDefect = False
 config.doCrosstalk=True
+config.doCrosstalkBeforeAssemble = False
 config.doAddDistortionModel = False
 config.qa.doThumbnailOss = False
 config.qa.doThumbnailFlattened = False
