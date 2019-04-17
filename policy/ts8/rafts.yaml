@@ -35,3 +35,36 @@ rafts :
   RTM-014 :
     offset : [0.0, 0.0]                 # offset of centre of raft, mm
     id0 : 90                            # id for S00, incrementing uniformly
+  RTM-023 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 99   
+  RTM-013 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 108                           # id for S00, incrementing uniformly
+  RTM-015 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 117                           # id for S00, incrementing uniformly
+  RTM-016 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 126                           # id for S00, incrementing uniformly
+  RTM-019 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 135                           # id for S00, incrementing uniformly
+  RTM-020 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 144                           # id for S00, incrementing uniformly
+  RTM-021 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 153                           # id for S00, incrementing uniformly
+  RTM-022 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 162                           # id for S00, incrementing uniformly
+  RTM-024 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 171                           # id for S00, incrementing uniformly
+  RTM-025 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 180                           # id for S00, incrementing uniformly
+  RTM-031 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 189                           # id for S00, incrementing uniformly
