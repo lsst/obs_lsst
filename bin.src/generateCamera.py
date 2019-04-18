@@ -25,6 +25,7 @@ import os
 import sys
 import shutil
 import yaml
+from lsst.afw.cameraGeom import DetectorType
 
 
 def findYamlOnPath(fileName, searchPath):
@@ -85,6 +86,14 @@ if __name__ == "__main__":
         """Return the current indent string"""
         dindent = 2    # number of spaces per indent
         return(nindent*dindent - 1)*" "   # print will add the extra " "
+    #
+    # Lookup mapping from "SCIENCE" to 0
+    #
+    sensorTypeMapping = {}
+    for t in dir(DetectorType):
+        if t.startswith("__"):
+            continue
+        sensorTypeMapping[t] = int(eval("DetectorType.%s" % t))
 
     with open(cameraFile, "a") as fd:
         print("""
@@ -154,8 +163,15 @@ CCDs :\
                 print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
-                if sensorTypes is not None:
-                    print(indent(), "detectorType : %i" % (sensorTypes[ccdName]), file=fd)
+                if sensorTypes is not None and ccdName in sensorTypes:
+                    sensorType = sensorTypes[ccdName]
+                    if isinstance(sensorType, str):
+                        if sensorType in sensorTypeMapping:
+                            sensorType = sensorTypeMapping[sensorType]
+                        else:
+                            print('Unknown DetectorType "%s"; setting to "SCIENCE"' % sensorType)
+                            sensorType = sensorTypeMapping["SCIENCE"]
+                    print(indent(), "detectorType : %d" % (sensorType), file=fd)
                 print(indent(), "id : %s" % (id0 + ccdLayout['id']), file=fd)
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
