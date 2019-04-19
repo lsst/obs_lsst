@@ -393,6 +393,7 @@ class LsstBaseTranslator(FitsTranslator):
         """
         if self.is_key_ok("DARKTIME"):
             darktime = self._header["DARKTIME"]*u.s
+            self._used_these_cards("DARKTIME")
         else:
             log.warning("Unable to determine dark time. Setting from exposure time.")
             darktime = self.to_exposure_time()
