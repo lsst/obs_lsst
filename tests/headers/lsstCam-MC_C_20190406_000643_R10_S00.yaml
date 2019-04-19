@@ -1,0 +1,306 @@
+!!python/object/apply:collections.OrderedDict
+- - - SIMPLE
+    - true
+  - - BITPIX
+    - 32
+  - - NAXIS
+    - 2
+  - - EXTEND
+    - true
+  - - DATE
+    - '2019-04-07T05:58:45.970'
+  - - DATE-OBS
+    - '2019-04-07T05:58:40.715'
+  - - MJD
+    - 58580.249143171124
+  - - MJD-OBS
+    - 58580.24908234971
+  - - RUNNUM
+    - 6549D
+  - - IMAGETAG
+    - '1554616720715'
+  - - TSTAND
+    - BOT
+  - - INSTRUME
+    - lsstCam
+  - - CONTNUM
+    - 0000189126e1
+  - - SEQFILE
+    - FP_ITL_4s_ir2_v1.seq
+  - - CCD_MANU
+    - ITL
+  - - CCD_TYPE
+    - 3800C
+  - - CCDSLOT
+    - S00
+  - - RAFTBAY
+    - R10
+  - - LSST_NUM
+    - ITL-3800C-145
+  - - RAFTNAME
+    - LCA-11021_RTM-003_ETU2
+  - - TESTTYPE
+    - LAMBDA
+  - - IMGTYPE
+    - FLAT
+  - - SEQNUM
+    - 643
+  - - DETSIZE
+    - '[1:4072,1:4000]'
+  - - CCDTEMP
+    - -98.29282760620117
+  - - FILTER
+    - 950nm
+  - - EXPTIME
+    - 999.99
+  - - FILENAME
+    - MC_C_20190406_000643_R10_S00.fits
+  - - BINX
+    - 1
+  - - BINY
+    - 1
+  - - HEADVER
+    - 1
+  - - CCDGAIN
+    - 1.0
+  - - CCDNOISE
+    - 10.0
+  - - TELESCOP
+    - LSST
+  - - SEQCKSUM
+    - '1368257655'
+  - - DARKTIME
+    - 1007.422
+  - - OBSID
+    - MC_C_20190406_000643
+  - - TELCODE
+    - MC
+  - - CONTRLLR
+    - C
+  - - DAYOBS
+    - '20190406'
+  - - TSEQNUM
+    - 4
+  - - TEMPLED1
+    - 20.841502833081698
+  - - TEMPLED2
+    - 20.439252920357035
+  - - TEMPSPH
+    - 24.551095013899783
+  - - TEMPBRD
+    - 29.80000805774544
+  - - BOTXCAM
+    - -431.8235162384034
+  - - BOTYCAM
+    - -413.0999907417297
+  - - BOTX
+    - 800.0235162384033
+  - - BOTY
+    - 799.9999907417298
+  - - FILTER2
+    - empty
+  - - CHECKSUM
+    - nIVQoIVNnIVNnIVN
+  - - DATASUM
+    - '763031198'
+  - - XTENSION
+    - IMAGE
+  - - NAXIS1
+    - 576
+  - - NAXIS2
+    - 2048
+  - - PCOUNT
+    - 0
+  - - GCOUNT
+    - 1
+  - - CHANNEL
+    - 1
+  - - EXTNAME
+    - Segment10
+  - - CCDSUM
+    - 1 1
+  - - AVERAGE
+    - 26133.9746889965
+  - - AVGBIAS
+    - 26133.96110534668
+  - - STDVBIAS
+    - 4.879725366861398
+  - - STDEV
+    - 4.88485958065441
+  - - DATASEC
+    - '[4:512,1:2000]'
+  - - DETSEC
+    - '[509:1,1:2000]'
+  - - DTV1
+    - 513
+  - - DTV2
+    - 0
+  - - DTM1_1
+    - -1.0
+  - - DTM2_2
+    - 1.0
+  - - DTM1_2
+    - 0.0
+  - - DTM2_1
+    - 0.0
+  - - WCSNAMEA
+    - AMPLIFIER
+  - - CTYPE1A
+    - Seg_X
+  - - CTYPE2A
+    - Seg_Y
+  - - PC1_1A
+    - 0.0
+  - - PC1_2A
+    - -1.0
+  - - PC2_1A
+    - -1.0
+  - - PC2_2A
+    - 0.0
+  - - CDELT1A
+    - 1.0
+  - - CDELT2A
+    - 1.0
+  - - CRPIX1A
+    - 0.0
+  - - CRPIX2A
+    - 0.0
+  - - CRVAL1A
+    - 2001.0
+  - - CRVAL2A
+    - 507.0
+  - - WCSNAMEC
+    - CCD
+  - - CTYPE1C
+    - CCD_X
+  - - CTYPE2C
+    - CCD_Y
+  - - PC1_1C
+    - 0.0
+  - - PC1_2C
+    - -1.0
+  - - PC2_1C
+    - -1.0
+  - - PC2_2C
+    - 0.0
+  - - CDELT1C
+    - 1.0
+  - - CDELT2C
+    - 1.0
+  - - CRPIX1C
+    - 0.0
+  - - CRPIX2C
+    - 0.0
+  - - CRVAL1C
+    - 4001.0
+  - - CRVAL2C
+    - 507.0
+  - - WCSNAMER
+    - RAFT
+  - - CTYPE1R
+    - RAFT_X
+  - - CTYPE2R
+    - RAFT_Y
+  - - PC1_1R
+    - 0.0
+  - - PC1_2R
+    - -1.0
+  - - PC2_1R
+    - -1.0
+  - - PC2_2R
+    - 0.0
+  - - CDELT1R
+    - 1.0
+  - - CDELT2R
+    - 1.0
+  - - CRPIX1R
+    - 0.0
+  - - CRPIX2R
+    - 0.0
+  - - CRVAL1R
+    - 4126.0
+  - - CRVAL2R
+    - 596.0
+  - - WCSNAMEF
+    - FOCAL_PLANE
+  - - CTYPE1F
+    - FP_X
+  - - CTYPE2F
+    - FP_Y
+  - - PC1_1F
+    - 0.0
+  - - PC1_2F
+    - -1.0
+  - - PC2_1F
+    - -1.0
+  - - PC2_2F
+    - 0.0
+  - - CDELT1F
+    - 1.0
+  - - CDELT2F
+    - 1.0
+  - - CRPIX1F
+    - 0.0
+  - - CRPIX2F
+    - 0.0
+  - - CRVAL1F
+    - 16826.0
+  - - CRVAL2F
+    - 596.0
+  - - WCSNAMEB
+    - CCD_SERPAR
+  - - CTYPE1B
+    - CCD_S
+  - - CTYPE2B
+    - CCD_P
+  - - PC1_1B
+    - -1.0
+  - - PC1_2B
+    - 0.0
+  - - PC2_1B
+    - 0.0
+  - - PC2_2B
+    - -1.0
+  - - CDELT1B
+    - 1.0
+  - - CDELT2B
+    - 1.0
+  - - CRPIX1B
+    - 0.0
+  - - CRPIX2B
+    - 0.0
+  - - CRVAL1B
+    - 507.0
+  - - CRVAL2B
+    - 4001.0
+  - - WCSNAMEQ
+    - RAFT_SERPAR
+  - - CTYPE1Q
+    - RAFT_S
+  - - CTYPE2Q
+    - RAFT_P
+  - - PC1_1Q
+    - -1.0
+  - - PC1_2Q
+    - 0.0
+  - - PC2_1Q
+    - 0.0
+  - - PC2_2Q
+    - -1.0
+  - - CDELT1Q
+    - 1.0
+  - - CDELT2Q
+    - 1.0
+  - - CRPIX1Q
+    - 0.0
+  - - CRPIX2Q
+    - 0.0
+  - - CRVAL1Q
+    - 596.0
+  - - CRVAL2Q
+    - 4126.0
+  - - BSCALE
+    - 1.0
+  - - BZERO
+    - 0.0
+
