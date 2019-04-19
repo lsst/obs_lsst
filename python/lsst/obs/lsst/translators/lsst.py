@@ -392,7 +392,7 @@ class LsstBaseTranslator(FitsTranslator):
             The dark time in seconds.
         """
         if self.is_key_ok("DARKTIME"):
-            darktime = self._header("DARKTIME")*u.s
+            darktime = self._header["DARKTIME"]*u.s
         else:
             log.warning("Unable to determine dark time. Setting from exposure time.")
             darktime = self.to_exposure_time()
