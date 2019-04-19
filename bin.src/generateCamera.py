@@ -23,6 +23,7 @@
 #
 import os
 import sys
+import numpy as np
 import shutil
 import yaml
 from lsst.afw.cameraGeom import DetectorType
@@ -148,19 +149,30 @@ CCDs :\
             nindent += 1
 
             raftOffset = perRaftData["offset"]
-            id0 = perRaftData['id0']
+            raftYaw = perRaftData["yaw"] if "yaw" in perRaftData else 0.0
+
+            if "id0" in perRaftData:
+                if "detectorIds" in perRaftData:
+                    raise RuntimeError("You may not specify both id0 and detectorIds for raft %s" % raftName)
+                id0 = perRaftData['id0']
+            elif "detectorIds" in perRaftData:
+                id0 = None
+                detectorIds = perRaftData["detectorIds"]
+            else:
+                raise RuntimeError("You must specify either id0 or detectorIds for raft %s" % raftName)
+
             geometryWithinRaft = raftCcdData['geometryWithinRaft'] \
                                  if 'geometryWithinRaft' in raftCcdData else {} # noqa E127
 
             for ccdName, ccdLayout in ccds.items():
                 if ccdName in geometryWithinRaft:
                     doffset = geometryWithinRaft[ccdName]['offset']
-                    yaw = geometryWithinRaft[ccdName]['yaw']
+                    dyaw = geometryWithinRaft[ccdName]['yaw']
                 else:
                     doffset = (0.0, 0.0,)
-                    yaw = None
+                    dyaw = None
 
-                print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
+                print(indent(), "'%s_%s' : " % (raftName, ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
                 if sensorTypes is not None and ccdName in sensorTypes:
@@ -172,15 +184,27 @@ CCDs :\
                             print('Unknown DetectorType "%s"; setting to "SCIENCE"' % sensorType)
                             sensorType = sensorTypeMapping["SCIENCE"]
                     print(indent(), "detectorType : %d" % (sensorType), file=fd)
-                print(indent(), "id : %s" % (id0 + ccdLayout['id']), file=fd)
-                print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
+
+                if id0 is None:
+                    detectorId = detectorIds[ccdName]
+                    if 'id' in ccdLayout:
+                        print("Warning: '%s_%s' has an id '%s' which is ignored as detectorId is set to '%s'"
+                              % (raftName, ccdName, ccdLayout['id'], detectorId), file=sys.stderr)
+                else:
+                    detectorId = id0 + ccdLayout['id']
+                print(indent(), "id : %s" % (detectorId), file=fd)
+                print(indent(), "serial : '%s'" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
-                print(indent(), "offset : [%g, %g]" % (ccdLayout['offset'][0] + raftOffset[0] + doffset[0],
-                                                       ccdLayout['offset'][1] + raftOffset[1] + doffset[1]),
-                      file=fd)
-                if yaw is not None:
-                    print(indent(), "yaw : %g" % (yaw), file=fd)
+
+                cy, sy = np.cos(np.deg2rad(raftYaw)), np.sin(np.deg2rad(raftYaw))
+                offset = (cy*ccdLayout['offset'][0] - sy*ccdLayout['offset'][1] + raftOffset[0] + doffset[0],
+                          sy*ccdLayout['offset'][0] + cy*ccdLayout['offset'][1] + raftOffset[1] + doffset[1])
+                print(indent(), "offset : [%g, %g]" % offset, file=fd)
+                yaw = raftYaw + ccdLayout['yaw']
+                if dyaw is not None:
+                    yaw += dyaw
+                print(indent(), "yaw : %g" % (np.fmod(yaw, 360)), file=fd)
 
                 if crosstalkCoeffs is not None:
                     namp = len(amps)
@@ -205,6 +229,7 @@ CCDs :\
                     print(indent(), "<< : *%s_%s" % (ampName, detectorType), file=fd)
                     print(indent(), "gain : %g" % (amplifierData[ampName]['gain']), file=fd)
                     print(indent(), "readNoise : %g" % (amplifierData[ampName]['readNoise']), file=fd)
+                    print(indent(), "saturation : %g" % (amplifierData[ampName]['saturation']), file=fd)
                     nindent -= 1
                 nindent -= 1
 
