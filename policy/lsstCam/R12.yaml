@@ -15,8 +15,8 @@ R12 :
 
   geometryWithinRaft:
     S00 : {
-      offset : [10000, 8888], # XXXXX RHL [0.0, 0.0],
-      yaw : 666.0, # XXXXX RHL 0.0,
+      offset : [0.0, 0.0],
+      yaw : 0.0,
     }
     S01 : {
       offset : [0.0, 0.0],
