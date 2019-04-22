@@ -35,6 +35,8 @@ exposures:
     template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[%(channel)d]
   postISRCCD:
     template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  postISRCCD_uninterpolated:
+    template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
   calexp:
     template: calexp/%(visit)08d-%(filter)s/%(raftName)s/calexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icExp:
