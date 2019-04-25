@@ -22,5 +22,11 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.xSize = 1024
-config.ySize = 1024
+# These are the dimensions in millimeters of the "superpixels" in
+# focalplane coordinates over which the sky background is computed.
+# See the comments in the
+# `lsst.pipe.drivers.background.FocalPlaneBackgroundConfig` class.
+# Note that the diameter of the LSST focalplane is ~630 mm and each
+# CCD is ~40 mm on a side.
+config.xSize = 10.
+config.ySize = 10.
