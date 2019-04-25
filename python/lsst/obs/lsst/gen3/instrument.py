@@ -22,11 +22,13 @@
 from lsst.daf.butler.instrument import Instrument
 
 from ..filters import getFilterDefinitions
-from ..lsstCam import LsstCam
-from ..phosim import PhosimCam
-from ..imsim import ImsimCam
-from ..auxTel import AuxTelCam
-from ..ts8 import Ts8
+from ..lsstCamMapper import LsstCamMapper
+from ..phosim import PhosimMapper
+from ..imsim import ImsimMapper
+from ..auxTel import AuxTelMapper
+from ..ts8 import Ts8Mapper
+from ..ts3 import Ts3Mapper
+from ..ucd import UcdMapper
 
 
 __all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
@@ -74,7 +76,7 @@ class LsstCamInstrument(Instrument):
 
     def __init__(self, camera=None, filters=None):
         if camera is None:
-            camera = LsstCam()
+            camera = LsstCamMapper().camera
         self.camera = camera
         if filters is None:
             filters = getFilterDefinitions()
@@ -92,6 +94,19 @@ class LsstCamInstrument(Instrument):
                     abstract_filter=filterDef.name if filterDef.name in "ugrizy" else None
                 )
             )
+
+    @classmethod
+    def getName(cls):
+        # Docstring inherited from Instrument.getName
+        return cls.instrument
+
+    def getRawFormatter(self, dataId):
+        # Docstring inherited from Instrument.getRawFormatter
+        raise NotImplementedError()
+
+    def register(self, registry):
+        # Docstring inherited from Instrument.register
+        raise NotImplementedError()
 
     def extractDetectorEntry(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
@@ -123,7 +138,7 @@ class ImsimInstrument(LsstCamInstrument):
     instrument = "LSST-ImSim"
 
     def __init__(self):
-        super().__init__(camera=ImsimCam())
+        super().__init__(camera=ImsimMapper().camera)
 
 
 class PhosimInstrument(LsstCamInstrument):
@@ -133,7 +148,7 @@ class PhosimInstrument(LsstCamInstrument):
     instrument = "LSST-PhoSim"
 
     def __init__(self):
-        super().__init__(camera=PhosimCam())
+        super().__init__(camera=PhosimMapper().camera)
 
 
 class Ts8Instrument(LsstCamInstrument):
@@ -143,7 +158,27 @@ class Ts8Instrument(LsstCamInstrument):
     instrument = "LSST-TS8"
 
     def __init__(self):
-        super().__init__(camera=Ts8())
+        super().__init__(camera=Ts8Mapper().camera)
+
+
+class UcdCamInstrument(LsstCamInstrument):
+    """Gen3 Butler specialization for UCDCam test stand data.
+    """
+
+    instrument = "UCDCam"
+
+    def __init__(self):
+        super().__init__(camera=UcdMapper().camera)
+
+
+class Ts3Instrument(LsstCamInstrument):
+    """Gen3 Butler specialization for TS3 test stand data.
+    """
+
+    instrument = "LSST-TS3"
+
+    def __init__(self):
+        super().__init__(camera=Ts3Mapper().camera)
 
     def extractDetectorEntry(self, camGeomDetector):
         # Override to remove group (raft) name, because we want to use this
@@ -156,13 +191,13 @@ class Ts8Instrument(LsstCamInstrument):
 
 
 class AuxTelInstrument(LsstCamInstrument):
-    """Gen3 Butler specialization for raft test stand data.
+    """Gen3 Butler specialization for AuxTel data.
     """
 
     instrument = "LSST-AuxTel"
 
     def __init__(self):
-        super().__init__(camera=AuxTelCam())
+        super().__init__(camera=AuxTelMapper().camera)
 
     def extractDetectorEntry(self, camGeomDetector):
         # Override to remove group (raft) name, because AuxTel only has one
