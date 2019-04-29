@@ -32,7 +32,7 @@ from ..ucd import UcdMapper
 
 
 __all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
-           "AuxTelInstrument")
+           "AuxTelInstrument", "Ts3Instrument", "UcdCamInstrument")
 
 
 class LsstCamInstrument(Instrument):
@@ -106,7 +106,28 @@ class LsstCamInstrument(Instrument):
 
     def register(self, registry):
         # Docstring inherited from Instrument.register
-        raise NotImplementedError()
+        dataId = {"instrument": self.getName()}
+        # The maximum values below make Gen3's ObservationDataIdPacker produce
+        # outputs that match Gen2's ccdExposureId.
+        obsMax = 2050121299999250
+        registry.addDimensionEntry("Instrument", dataId,
+                                   entries={"detector_max": 200,
+                                            "visit_max": obsMax,
+                                            "exposure_max": obsMax})
+
+        for detector in self.camera:
+            detInfo = self.extractDetectorEntry(detector)
+            registry.addDimensionEntry(
+                "Detector", dataId, **detInfo
+            )
+
+        for physical in self.physicalFilters:
+            registry.addDimensionEntry(
+                "PhysicalFilter",
+                dataId,
+                physical_filter=physical["physical_filter"],
+                abstract_filter=physical["abstract_filter"]
+            )
 
     def extractDetectorEntry(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
@@ -116,6 +137,7 @@ class LsstCamInstrument(Instrument):
         # to change the group to something else if desired.
         # Long-term, we should get these fields into cameraGeom separately
         # so there's no need to specialize at this stage.
+        print(f"Name: {camGeomDetector.getName()}")
         group, name = camGeomDetector.getName().split("_")
 
         # getType() returns a pybind11-wrapped enum, which unfortunately
@@ -127,7 +149,7 @@ class LsstCamInstrument(Instrument):
             detector=camGeomDetector.getId(),
             name=name,
             purpose=purpose,
-            group=group,
+            raft=group,
         )
 
 
@@ -180,15 +202,6 @@ class Ts3Instrument(LsstCamInstrument):
     def __init__(self):
         super().__init__(camera=Ts3Mapper().camera)
 
-    def extractDetectorEntry(self, camGeomDetector):
-        # Override to remove group (raft) name, because we want to use this
-        # same instrument regardless of what raft is on the test stand. Note
-        # that the detector name is already just the name of the slot, not
-        # something tied to the physical detector.
-        entry = super().extractDetectorEntry(camGeomDetector)
-        entry["group"] = None
-        return entry
-
 
 class AuxTelInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for AuxTel data.
@@ -203,5 +216,5 @@ class AuxTelInstrument(LsstCamInstrument):
         # Override to remove group (raft) name, because AuxTel only has one
         # detector.
         entry = super().extractDetectorEntry(camGeomDetector)
-        entry["group"] = None
+        entry["raft"] = None
         return entry

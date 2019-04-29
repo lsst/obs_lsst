@@ -28,7 +28,7 @@ from pstats import Stats
 import numpy as np
 
 from lsst.obs.lsst.gen3 import (LsstCamInstrument, ImsimInstrument, PhosimInstrument,
-                                Ts8Instrument, AuxTelInstrument)
+                                Ts8Instrument, Ts3Instrument, UcdCamInstrument, AuxTelInstrument)
 
 try:
     from lsst.daf.butler import Butler, DatasetType, StorageClassFactory
@@ -75,7 +75,7 @@ class TestInstruments(unittest.TestCase):
             # accessed just by identifying its Instrument.
             # A real-world Camera DatasetType should be identified by a
             # validity range as well.
-            cameraDatasetType = DatasetType("camera", dataUnits=["Instrument"],
+            cameraDatasetType = DatasetType("camera", dimensions=["Instrument"],
                                             storageClass=scFactory.getStorageClass("Camera"))
             butler.registry.registerDatasetType(cameraDatasetType)
 
@@ -85,7 +85,7 @@ class TestInstruments(unittest.TestCase):
             # as  it would just duplicate information in the Camera, and
             # reading a full Camera just to get a single Detector should be
             # plenty efficient.
-            detectorDatasetType = DatasetType("detector", dataUnits=["Instrument", "Detector"],
+            detectorDatasetType = DatasetType("detector", dimensions=["Instrument", "Detector"],
                                               storageClass=scFactory.getStorageClass("Detector"))
             butler.registry.registerDatasetType(detectorDatasetType)
 
@@ -124,6 +124,12 @@ class TestInstruments(unittest.TestCase):
 
     def testTs8(self):
         self.checkInstrumentWithRegistry(Ts8Instrument)
+
+    def testTs3(self):
+        self.checkInstrumentWithRegistry(Ts3Instrument)
+
+    def testUcdCam(self):
+        self.checkInstrumentWithRegistry(UcdCamInstrument)
 
     def testAuxTel(self):
         self.checkInstrumentWithRegistry(AuxTelInstrument)
