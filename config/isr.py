@@ -30,3 +30,4 @@ config.doCrosstalk=True
 config.doAddDistortionModel = False
 config.qa.doThumbnailOss = False
 config.qa.doThumbnailFlattened = False
+config.doCrosstalkBeforeAssemble = False
