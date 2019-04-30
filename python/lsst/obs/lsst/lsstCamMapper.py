@@ -26,7 +26,6 @@ import os
 import re
 import lsst.log
 import lsst.geom
-import lsst.afw.geom as afwGeom
 import lsst.utils as utils
 import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.image as afwImage
