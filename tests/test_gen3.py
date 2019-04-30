@@ -75,7 +75,7 @@ class TestInstruments(unittest.TestCase):
             # accessed just by identifying its Instrument.
             # A real-world Camera DatasetType should be identified by a
             # validity range as well.
-            cameraDatasetType = DatasetType("camera", dimensions=["Instrument"],
+            cameraDatasetType = DatasetType("camera", dimensions=["instrument"],
                                             storageClass=scFactory.getStorageClass("Camera"))
             butler.registry.registerDatasetType(cameraDatasetType)
 
@@ -85,7 +85,7 @@ class TestInstruments(unittest.TestCase):
             # as  it would just duplicate information in the Camera, and
             # reading a full Camera just to get a single Detector should be
             # plenty efficient.
-            detectorDatasetType = DatasetType("detector", dimensions=["Instrument", "Detector"],
+            detectorDatasetType = DatasetType("detector", dimensions=["instrument", "detector"],
                                               storageClass=scFactory.getStorageClass("Detector"))
             butler.registry.registerDatasetType(detectorDatasetType)
 

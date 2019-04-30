@@ -54,21 +54,21 @@ class LsstCamInstrument(Instrument):
        camera, which should be static information that actually reflects
        detector "slots" rather than the physical sensors themselves.  Because
        the distinction between physical sensors and slots is unimportant in
-       the vast majority of Butler use cases, we just use "Detector" even
-       though the concept really maps better to "Detector slot".  Ideally in
+       the vast majority of Butler use cases, we just use "detector" even
+       though the concept really maps better to "detector slot".  Ideally in
        the future this distinction between static and time-dependent
        information would be encoded in cameraGeom itself (e.g. by making the
        time-dependent Detector class inherit from a related class that only
        carries static content).
 
-     - The Butler Registry is expected to contain PhysicalFilter entries for
+     - The Butler Registry is expected to contain physical_filter entries for
        all filters an instrument has ever had, because we really only care
        about which filters were used for particular observations, not which
        filters were *available* at some point in the past.  And changes in
        individual filters over time will be captured as changes in their
        TransmissionCurve datasets, not changes in the registry content (which
        is really just a label).  While at present Instrument and Registry
-       do not provide a way to add new PhysicalFilters, they will in the
+       do not provide a way to add new physical_filters, they will in the
        future.
     """
 
@@ -110,7 +110,7 @@ class LsstCamInstrument(Instrument):
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
         obsMax = 2050121299999250
-        registry.addDimensionEntry("Instrument", dataId,
+        registry.addDimensionEntry("instrument", dataId,
                                    entries={"detector_max": 200,
                                             "visit_max": obsMax,
                                             "exposure_max": obsMax})
@@ -118,12 +118,12 @@ class LsstCamInstrument(Instrument):
         for detector in self.camera:
             detInfo = self.extractDetectorEntry(detector)
             registry.addDimensionEntry(
-                "Detector", dataId, **detInfo
+                "detector", dataId, **detInfo
             )
 
         for physical in self.physicalFilters:
             registry.addDimensionEntry(
-                "PhysicalFilter",
+                "physical_filter",
                 dataId,
                 physical_filter=physical["physical_filter"],
                 abstract_filter=physical["abstract_filter"]
