@@ -31,9 +31,9 @@ from lsst.obs.lsst.assembly import fixAmpGeometry
 
 # This should obviously be replaced by something like
 # getPackageDir("testdata_auxTel") once we actually have such a package.
-AUXTEL_DATA_ROOT = "/project/rhl/Data/ci_lsst/auxTel"
-BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 49, 'detector': 0}
-BAD_OVERSCAN_FILENAME = "raw/2018-09-20/05700049-det000.fits"
+AUXTEL_DATA_ROOT = os.path.join(os.path.dirname(__file__), os.path.pardir, "data", "input", "auxTel")
+BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 65, 'detector': 0}
+BAD_OVERSCAN_FILENAME = "raw/2018-09-20/2018092000065-det000.fits"
 LOCAL_DATA_ROOT = os.path.join(os.path.dirname(__file__), "data")
 
 
@@ -46,7 +46,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.cameraBroken = Camera.readFits(os.path.join(LOCAL_DATA_ROOT, "camera-bad-overscan.fits"))
         # A snapshot of the Detector for this file after we've read it in with
         # code that fixes the overscans.
-        self.detectorFixed = Detector.readFits(os.path.join(LOCAL_DATA_ROOT, "detector-fixed.fits"))
+        self.detectorFixed = Detector.readFits(os.path.join(LOCAL_DATA_ROOT, "detector-fixed-assembled.fits"))
         self.assertEqual(self.cameraBroken[0].getName(), self.detectorFixed.getName())
 
     def assertAmpRawBBoxesEqual(self, amp1, amp2):
@@ -55,7 +55,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(amp1.getRawVerticalOverscanBBox(), amp2.getRawVerticalOverscanBBox())
 
     def testGen2GetBadOverscan(self):
-        """Test that we can use the Gen2 Butler to rea a file with overscan
+        """Test that we can use the Gen2 Butler to read a file with overscan
         regions that disagree with cameraGeom, and that the detector attached
         to it has its overscan regions corrected.
 
@@ -78,12 +78,13 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         """Test the low-level code for repairing cameraGeom overscan regions
         that disagree with raw files.
         """
+        testFile = os.path.join(AUXTEL_DATA_ROOT, BAD_OVERSCAN_FILENAME)
         for i, (ampBad, ampGood) in enumerate(zip(self.cameraBroken[0], self.detectorFixed)):
             with self.subTest(amp=ampBad.getName()):
                 self.assertEqual(ampBad.getName(), ampGood.getName())
                 hdu = i + 1
                 self.assertEqual(ampBad.get("hdu"), hdu)
-                reader = ImageFitsReader(os.path.join(AUXTEL_DATA_ROOT, BAD_OVERSCAN_FILENAME), hdu=hdu)
+                reader = ImageFitsReader(testFile, hdu=hdu)
                 metadata = reader.readMetadata()
                 image = reader.read()
                 self.assertEqual(ampGood.getRawBBox(), image.getBBox())
