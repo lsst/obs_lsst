@@ -91,20 +91,14 @@ def assemble_raw(dataId, componentInfo, cls):
             logger.warn("{}: {}".format(dataId, s), *args)
             warned = True
 
-    import pdb; pdb.set_trace()  # noqa: E702
-
     for amp, ampExp in zip(ccd, ampExps):
         fixAmpGeometry(amp, bbox=ampExp.getBBox(), metadata=ampExp.getMetadata(), logCmd=logCmd)
 
     exposure = assembleUntrimmedCcd(ccd, ampExps)
 
-    import pdb; pdb.set_trace()  # noqa: E702
-
     md = componentInfo['raw_hdu'].obj
     fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
-
-    import pdb; pdb.set_trace()  # noqa: E702
 
     if not attachRawWcsFromBoresight(exposure):
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
