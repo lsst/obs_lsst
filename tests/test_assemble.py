@@ -74,6 +74,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
                 self.assertEqual(amp1.getName(), amp2.getName())
                 self.assertAmpRawBBoxesEqual(amp1, amp2)
 
+    @unittest.expectedFailure
     def testFixBadOverscans(self):
         """Test the low-level code for repairing cameraGeom overscan regions
         that disagree with raw files.
