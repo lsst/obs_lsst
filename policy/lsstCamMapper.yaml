@@ -179,9 +179,11 @@ calibrations:
     level: Ccd
     tables: sky
     columns:
-    - ccd
+    - dateObs
     - filter
-    - taiObs
+    - raftName
+    - detectorName
+    obsTimeName: dateObs
     reference: raw_visit
     refCols:
     - visit
@@ -235,6 +237,10 @@ datasets:
     storage: ignored:ccdExposureId
     tables: raw
     template: ignored
+  calexp_camera:
+    template: calexp_camera/%(visit)08d-%(filter)s/%(raftName)s/calexp_camera_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  skyCorr:
+    template: skyCorr/%(visit)08d-%(filter)s/%(raftName)s/skyCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   ccdExposureId_bits:
     persistable: ignored
     python: lsst.daf.base.PropertySet

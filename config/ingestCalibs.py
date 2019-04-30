@@ -42,5 +42,4 @@ config.parse.translators = {'detector': 'translate_detector',
                             }
 
 config.register.unique = ['filter', 'detector', 'calibDate']
-config.register.tables = ['bias', 'dark', 'flat', 'fringe']
 config.register.visit = ['calibDate', 'filter']
