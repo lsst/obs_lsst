@@ -19,11 +19,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+__all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd")
+
 import lsst.log
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
-import lsst.afw.cameraGeom as cameraGeom  # noqa F811
 
 logger = lsst.log.Log.getLogger("LsstCamAssembler")
 
@@ -44,6 +45,8 @@ def attachRawWcsFromBoresight(exposure):
         ``exposure``.
     """
     md = exposure.getMetadata()
+    # Use the generic version since we do not have a mapper available to
+    # tell us a specific translator to use.
     visitInfo = MakeRawVisitInfoViaObsInfo(logger)(md)
     exposure.getInfo().setVisitInfo(visitInfo)
 
@@ -69,6 +72,9 @@ def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
         The on-disk bounding box of the amplifer image.
     metadata : `lsst.daf.base.PropertyList`
         FITS header metadata from the amplifier HDU.
+    logCmd : `function`, optional
+        Call back to use to issue log messages.  Arguments to this function
+        should match arguments to be accepted by normal logging functions.
 
     Return
     ------
