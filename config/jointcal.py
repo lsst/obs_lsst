@@ -27,6 +27,8 @@ if hasattr(config.astrometryRefObjLoader, "ref_dataset_name"):
     config.astrometryRefObjLoader.ref_dataset_name = 'cal_ref_cat'
 if hasattr(config.photometryRefObjLoader, "ref_dataset_name"):
     config.photometryRefObjLoader.ref_dataset_name = 'cal_ref_cat'
+# existing synthetic refcat does not have coordinate errors
+config.astrometryReferenceErr = 1
 
 filterMapFile = os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py')
 config.astrometryRefObjLoader.load(filterMapFile)
