@@ -171,6 +171,15 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. ``1958-02-05``.
         """
+        # Trust DAYOBS if it is there
+        if "DAYOBS" in md:
+            dayObs = str(md.getScalar("DAYOBS"))
+
+            if re.match(r"^\d{8}$", dayObs):
+                dateObs = f"{dayObs[:4]}-{dayObs[4:6]}-{dayObs[6:8]}"
+                return dateObs
+
+        # Try to work it out from date of observation
         dateObs = self.observationInfo.datetime_begin
         dateObs -= ROLLOVERTIME
         dateObs.format = "iso"
