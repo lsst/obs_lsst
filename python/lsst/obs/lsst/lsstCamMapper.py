@@ -153,6 +153,7 @@ def assemble_raw(dataId, componentInfo, cls):
     exposure = assembleTask.assembleCcd(ampDict)
 
     md = componentInfo['raw_hdu'].obj
+    fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
     visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
     exposure.getInfo().setVisitInfo(visitInfo)
