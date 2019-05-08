@@ -66,7 +66,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     Returns
     -------
-    exposure : `lsst.afw.image.exposure.exposure`
+    exposure : `lsst.afw.image.Exposure`
         The assembled exposure.
     """
     from lsst.ip.isr import AssembleCcdTask
