@@ -36,6 +36,7 @@ import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 import lsst.afw.cameraGeom as cameraGeom
 from .translators import LsstCamTranslator
+from astro_metadata_translator import fix_header
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
@@ -537,6 +538,7 @@ class LsstCamBaseMapper(CameraMapper):
             md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
 
         makeVisitInfo = self.MakeRawVisitInfoClass(log=self.log)
+        fix_header(md, translator_class=self.translatorClass)
         return makeVisitInfo(md)
 
     def std_raw_amp(self, item, dataId):
