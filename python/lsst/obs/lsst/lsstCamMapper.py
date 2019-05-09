@@ -36,6 +36,7 @@ import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 import lsst.afw.cameraGeom as cameraGeom
 from .translators import LsstCamTranslator
+from astro_metadata_translator import fix_header
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
@@ -65,7 +66,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     Returns
     -------
-    exposure : `lsst.afw.image.exposure.exposure`
+    exposure : `lsst.afw.image.Exposure`
         The assembled exposure.
     """
     from lsst.ip.isr import AssembleCcdTask
@@ -152,6 +153,7 @@ def assemble_raw(dataId, componentInfo, cls):
     exposure = assembleTask.assembleCcd(ampDict)
 
     md = componentInfo['raw_hdu'].obj
+    fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
     visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
     exposure.getInfo().setVisitInfo(visitInfo)
@@ -537,6 +539,7 @@ class LsstCamBaseMapper(CameraMapper):
             md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
 
         makeVisitInfo = self.MakeRawVisitInfoClass(log=self.log)
+        fix_header(md, translator_class=self.translatorClass)
         return makeVisitInfo(md)
 
     def std_raw_amp(self, item, dataId):
