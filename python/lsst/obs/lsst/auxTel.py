@@ -24,8 +24,9 @@ import os.path
 import re
 import lsst.log
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .ingest import LsstCamParseTask
+from .ingest import LsstCamParseTask, LsstCamCalibsParseTask
 from .translators import LsstAuxTelTranslator
+
 
 __all__ = ["AuxTelMapper", "AuxTelParseTask"]
 
@@ -90,6 +91,23 @@ class AuxTelParseTask(LsstCamParseTask):
 
     _mapperClass = AuxTelMapper
     _translatorClass = LsstAuxTelTranslator
+    _raftName = "RXX"
+
+    def set_raftName_to_RXX(self, md):
+        """Return the sequence number.
+
+        Parameters
+        ----------
+        md : `~lsst.daf.base.PropertyList` or `~lsst.daf.base.PropertySet`
+            Image metadata (ignored)
+
+        Returns
+        -------
+        raftName : `str`
+            The raftName; always "RXX" for auxTel
+        """
+
+        return self._raftName
 
     def translate_seqNum(self, md):
         """Return the sequence number.
@@ -130,3 +148,13 @@ class AuxTelParseTask(LsstCamParseTask):
                 'Could not determine sequence number. Assuming %d ', seqNum)
 
         return seqNum
+
+
+class AuxTelCalibsParseTask(LsstCamCalibsParseTask):
+    """Parser for calibs."""
+
+    def translate_raftName(self, md):
+        """Parser suitable for auxTel data.
+        """
+
+        return AuxTelParseTask._raftName

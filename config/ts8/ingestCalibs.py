@@ -20,8 +20,8 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-from lsst.obs.lsst.auxTel import AuxTelCalibsParseTask
-config.parse.retarget(AuxTelCalibsParseTask)
+from lsst.obs.lsst.ingest import LsstCamCalibsParseTask
+config.parse.retarget(LsstCamCalibsParseTask)
 
 config.register.columns = {'filter': 'text',
                            'raftName': 'text',
@@ -42,4 +42,5 @@ config.parse.translators = {'detector': 'translate_detector',
                             }
 
 config.register.unique = ['filter', 'detector', 'calibDate']
+config.register.tables = ['bias', 'dark', 'flat', 'fringe']
 config.register.visit = ['calibDate', 'filter']

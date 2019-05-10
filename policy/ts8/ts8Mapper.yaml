@@ -1,4 +1,4 @@
-calibrations:
+__calibrations:
   bias:
     template: bias/%(calibDate)s/bias-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
 
@@ -6,6 +6,46 @@ calibrations:
     template: dark/%(calibDate)s/dark-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
 
   flat:
+    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+
+calibrations:
+  bias:
+    columns:
+      - dateObs
+      - detectorName
+      - raftName
+    refCols:
+      - dateObs
+      - detector
+      - detectorName
+      - visit
+    obsTimeName: dateObs
+    template: bias/%(calibDate)s/bias-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+
+  dark:
+    columns:
+      - dateObs
+      - detectorName
+      - raftName
+    refCols:
+      - dateObs
+      - detector
+      - detectorName
+      - visit
+    obsTimeName: dateObs
+    template: dark/%(calibDate)s/dark-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+
+  flat:
+    columns:
+      - dateObs
+      - detectorName
+      - raftName
+    refCols:
+      - dateObs
+      - detector
+      - detectorName
+      - visit
+    obsTimeName: dateObs
     template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
 
 exposures:

@@ -282,6 +282,8 @@ class LsstCamCalibsParseTask(CalibsParseTask):
         """Get a value from the CALIB_ID written by ``constructCalibs``."""
         data = md.getScalar("CALIB_ID")
         match = re.search(r".*%s=(\S+)" % field, data)
+        if not match:
+            raise RuntimeError("field '%s' is not found in CALIB_ID '%s" % (field, data))
         return match.groups()[0]
 
     def translate_raftName(self, md):

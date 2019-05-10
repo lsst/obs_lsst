@@ -6,6 +6,9 @@ calibrations:
     columns:
     - dayObs
     - detector
+    refCols:
+      - raftName
+      - detectorName
     template: bias/%(calibDate)s/bias-det%(detector)03d_%(calibDate)s.fits
 
   dark:
@@ -13,6 +16,9 @@ calibrations:
     columns:
     - dayObs
     - detector
+    refCols:
+      - raftName
+      - detectorName
     template: dark/%(calibDate)s/dark-det%(detector)03d_%(calibDate)s.fits
 
   flat:
@@ -21,6 +27,9 @@ calibrations:
     - dayObs
     - detector
     - filter
+    refCols:
+      - raftName
+      - detectorName
     template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-det%(detector)03d_%(calibDate)s.fits
 
 datasets:

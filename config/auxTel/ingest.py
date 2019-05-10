@@ -27,10 +27,10 @@ config.parse.retarget(AuxTelParseTask)
 del config.parse.translation['testType']
 
 del config.parse.translators['run']
-del config.parse.translators['raftName']
 del config.parse.translators['lsstSerial']
 del config.parse.translators['snap']
 
+config.parse.translators['raftName'] = "set_raftName_to_RXX"
 config.parse.translators['dayObs'] = 'translate_dayObs'
 config.parse.translators['seqNum'] = 'translate_seqNum'
 
@@ -42,6 +42,7 @@ config.register.columns = {
     'seqNum': 'int',
     'visit': 'int',
     'detector': 'int',
+    'raftName': 'text',
     'detectorName': 'text',
     'filter': 'text',
     'dateObs': 'text',
