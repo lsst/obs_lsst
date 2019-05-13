@@ -256,17 +256,17 @@ RAFT_ITL:
   ccds :
     S00: &S00_ITL                       # Sensor (0, 0)
       << : *CCD_ITL
-      id : 0
+      id : 6
       offset : [-42.37, -42.19]
 
     S01: &S01_ITL                       # Sensor (0, 1)
       << : *S00_ITL
-      id : 1
+      id : 7
       offset : [ -0.09, -42.32]
 
     S02: &S02_ITL                       # Sensor (0, 2)
       << : *S00_ITL
-      id : 2
+      id : 8
       offset : [ 42.18, -42.37]
 
     S10: &S10_ITL                       # Sensor (1, 0)
@@ -286,16 +286,16 @@ RAFT_ITL:
 
     S20: &S20_ITL                       # Sensor (2, 0)
       << : *S00_ITL
-      id : 6
+      id : 0
       offset : [-42.19,  42.36]
 
     S21: &S21_ITL                       # Sensor (2, 1)
       << : *S00_ITL
-      id : 7
+      id : 1
       offset : [  0.10,  42.28]
     S22: &S22_ITL                       # Sensor (2, 2)
       << : *S00_ITL
-      id : 8
+      id : 2
       offset : [ 42.36,  42.20]
 #
 # Layout of CCDs within an E2V raft
