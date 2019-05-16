@@ -28,3 +28,7 @@ config.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
 config.calibrate.astrometry.referenceSelector.unresolved.minimum = None
 config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
 
+# DM-17043 and DM-16785
+config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
+config.charImage.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
+config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMin = 20
