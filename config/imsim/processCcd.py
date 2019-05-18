@@ -33,3 +33,6 @@ config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
 config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
 config.charImage.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
 config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMin = 20
+
+# Discussed on Slack #desc-dm-dc2 with Lauren
+config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMax = 200
