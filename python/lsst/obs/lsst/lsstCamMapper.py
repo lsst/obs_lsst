@@ -544,9 +544,9 @@ class LsstCamBaseMapper(CameraMapper):
 
     def std_raw_amp(self, item, dataId):
         return self._standardizeExposure(self.exposures['raw_amp'], item, dataId,
-                                         trimmed=False, setVisitInfo=False)
+                                         trimmed=False, setVisitInfo=False, filter=False)
 
-    def std_raw(self, item, dataId, filter=True):
+    def std_raw(self, item, dataId, filter=False):
         """Standardize a raw dataset by converting it to an
         `~lsst.afw.image.Exposure` instead of an `~lsst.afw.image.Image`."""
 
