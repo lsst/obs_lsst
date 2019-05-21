@@ -124,7 +124,7 @@ class LsstCamParseTask(ParseTask):
         if "MONOWL" not in md:
             return bad_wl
 
-        raw_wl = md.getScalar("MONOWL")
+        raw_wl = float(md.getScalar("MONOWL"))
 
         # Negative wavelengths are bad so normalize the bad value
         if raw_wl < 0:
