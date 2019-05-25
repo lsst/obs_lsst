@@ -123,9 +123,9 @@ if __name__ == "__main__":
         for i, ampName in enumerate(ampNames, 1):
             md = butler.get("raw_amp_md", dataId,
                             raftName=raftName, detectorName=detectorName, channel=i)
-            gain = md.get("GAIN")
-            readNoise = md.get("RDNOISE")
-            assert(ampName[-2:] == md.get("EXTNAME")[-2:])
+            gain = md.getScalar("GAIN")
+            readNoise = md.getScalar("RDNOISE")
+            assert(ampName[-2:] == md.getScalar("EXTNAME")[-2:])
 
             raftData[raftName][detectorName][ampName] = (gain, readNoise)
 
