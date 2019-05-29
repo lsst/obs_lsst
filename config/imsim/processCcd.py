@@ -22,6 +22,7 @@
 
 config.isr.doCrosstalk=True
 config.isr.doBrighterFatter = True
+config.isr.doWrite = False
 
 # Additional configs for star+galaxy ref cats now that DM-17917 is merged
 config.calibrate.astrometry.referenceSelector.doUnresolved = True
