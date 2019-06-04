@@ -32,7 +32,7 @@ AUXTEL_LOCATION = EarthLocation.from_geodetic(-30.244728, -70.747698, 2663.0)
 # Date instrument is taking data at telescope
 # Prior to this date many parameters are automatically nulled out
 # since the headers have not historically been reliable
-TSTART = Time("2019-06-01T00:00", format="isot", scale="utc")
+TSTART = Time("2019-10-01T00:00", format="isot", scale="utc")
 
 # Define the sensor and group name for AuxTel globally so that it can be used
 # in multiple places. There is no raft but for consistency with other LSST
