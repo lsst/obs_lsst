@@ -48,8 +48,8 @@ exposures:
     template: wcs/%(visit)08d-%(filter)s/%(raftName)s/wcs_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   eimage:
     level: Ccd
-    persistable: DecoratedImageU
-    python: lsst.afw.image.DecoratedImageU
+    persistable: DecoratedImageF
+    python: lsst.afw.image.DecoratedImageF
     storage: FitsStorage
     tables: raw
     template: eimage/%(visit)d/E%(snap)03d/%(raftName)s/eimage_%(visit)08d_%(raftName)s_%(detectorName)s_E%(snap)03d.fits.gz

@@ -30,7 +30,7 @@ import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from lsst.obs.lsst.auxTel import AuxTelParseTask
 from lsst.obs.lsst.ts8 import Ts8ParseTask
 from lsst.obs.lsst.ts3 import Ts3ParseTask
-from lsst.obs.lsst.phosim import PhosimParseTask
+from lsst.obs.lsst.phosim import PhosimParseTask, PhosimEimgParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
 from lsst.obs.lsst.ingest import LsstCamParseTask
@@ -287,6 +287,29 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimParseTask, test_data)
+
+    def test_parsetask_phosim_eimg_translator(self):
+        """Run the gen 2 metadata extraction code for Phosim"""
+        test_data = (("eimage/9006002/E000/R22/eimage_09006002_R22_S00_E000.fits.gz",
+                      dict(
+                          expTime=15.0,
+                          object='UNKNOWN',
+                          imageType='SKYEXP',
+                          testType='PHOSIM',
+                          lsstSerial='R22_S00',
+                          date='2021-12-31T23:59:52.500',
+                          dateObs='2021-12-31T23:59:52.500',
+                          run='9006002',
+                          wavelength=-666,
+                          raftName='R22',
+                          detectorName='S00',
+                          detector=90,
+                          snap=0,
+                          filter='g',
+                          visit=9006002,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimEimgParseTask, test_data)
 
     def test_parsetask_ucd_translator(self):
         """Run the gen 2 metadata extraction code for UCDCam"""

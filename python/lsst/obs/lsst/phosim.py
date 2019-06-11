@@ -24,7 +24,7 @@ from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import PhosimTranslator
 
-__all__ = ["PhosimMapper", "PhosimParseTask"]
+__all__ = ["PhosimMapper", "PhosimParseTask", "PhosimEimgParseTask"]
 
 
 class PhosimRawVisitInfo(LsstCamMakeRawVisitInfo):
@@ -50,3 +50,33 @@ class PhosimParseTask(LsstCamParseTask):
 
     _mapperClass = PhosimMapper
     _translatorClass = PhosimTranslator
+
+
+class PhosimEimgParseTask(PhosimParseTask):
+    """Parser suitable for phosim eimage data.
+    """
+
+    def getDestination(self, butler, info, filename):
+        """Get destination for the file.
+
+        Parameters
+        ----------
+        butler : `lsst.daf.persistence.Butler`
+            Data butler
+        info : data ID
+            File properties, used as dataId for the butler.
+        filename : `str`
+            Input filename.
+
+        Returns
+        -------
+        `str`
+            Destination filename.
+        """
+
+        eimage = butler.get("eimage_filename", info)[0]
+        # Ensure filename is devoid of cfitsio directions about HDUs
+        c = eimage.find("[")
+        if c > 0:
+            eimage = eimage[:c]
+        return eimage
