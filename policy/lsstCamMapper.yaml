@@ -399,6 +399,12 @@ datasets:
     template: calibrations/bfGain-%(detector)03d.pkl
   plotBrighterFatterPtc:
     template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
+  measurePhotonTransferCurve_metadata:
+    template: measurePhotonTransferCurves_metadata/%(detector)03d.yaml
+  measurePhotonTransferCurveGainAndNoise:
+    template: calibrations/ptc/ptcDataGainAndNoise-det%(detector)03d.pkl
+  measurePhotonTransferCurveDatasetAll:
+    template: calibrations/ptc/ptcDataAll-det%(detector)03d.pkl      
   plotCoadd:
     persistable: None
     python: builtins.str
