@@ -79,6 +79,22 @@ exposures:
 
 
 calibrations:
+  defects:
+    columns:
+    - ccd
+    - taiObs
+    level: Ccd
+    persistable: BaseCatalog
+    python: lsst.meas.algorithms.Defects
+    refCols:
+    - visit
+    reference: raw_visit
+    storage: FitsCatalogStorage
+    tables: defects
+    template: defects/%(calibDate)s/defects-%(calibDate)s-%(detectorName)s.fits
+    validEndName: validEnd
+    validRange: true
+    validStartName: validStart
   bias:
     columns:
     - dateObs

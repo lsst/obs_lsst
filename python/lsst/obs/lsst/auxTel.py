@@ -77,12 +77,6 @@ class AuxTelMapper(LsstCamMapper):
 
         return LsstAuxTelTranslator.compute_detector_exposure_id(visit, detector)
 
-    def _getCcdKeyVal(self, dataId):
-        """Return CCD key and value used to look up a defect in the defect
-        registry.
-        """
-        return ("detector", 0)
-
 
 class AuxTelParseTask(LsstCamParseTask):
     """Parser suitable for auxTel data.
