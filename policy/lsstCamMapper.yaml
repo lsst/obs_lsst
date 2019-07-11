@@ -477,11 +477,11 @@ datasets:
   imageDifferenceDriver_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
-    storage: BoostStorage
+    storage: YamlStorage
     tables:
     - raw
     - raw_visit
-    template: '%(pointing)05d/%(filter)s/imageDifferenceDriver_metadata/%(visit)07d.boost'
+    template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)-%(detectorName)s-det%(detector)03d.yaml
   associationDriver_config:
     persistable: Config
     storage: ConfigStorage
@@ -507,8 +507,6 @@ datasets:
     storage: ConfigStorage
     python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCoaddDiaConfig
     template: config/forcedPhotCoaddDia.py
-  forcedPhotCcd_metadata:
-    template: '%(pointing)05d/%(filter)s/tract%(tract)d/forcedPhotCcd_metadata/%(visit)07d-%(ccd)03d.yaml'
 
   # Focal plane summary plots
   focal_plane_fits:
