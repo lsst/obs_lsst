@@ -187,9 +187,9 @@ def getWcsFromDetector(detector, boresight, rotation=0*geom.degrees, flipX=False
         The camera containing the detector.
     detector : `lsst.afw.cameraGeom.Detector`
         A detector in a camera.
-    boresight : `lsst.afw.geom.SpherePoint`
+    boresight : `lsst.geom.SpherePoint`
        The boresight of the observation.
-    rotation : `lsst.afw.geom.Angle`, optional
+    rotation : `lsst.geom.Angle`, optional
         The rotation angle of the camera.
         The rotation is "rotskypos", the angle of sky relative to camera
         coordinates (from North over East).

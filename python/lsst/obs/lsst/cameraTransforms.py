@@ -22,7 +22,7 @@
 Mostly support mapping between amp/ccd/focal plane coordinates, but
 also the odd utility function
 """
-import lsst.afw.geom as afwGeom
+import lsst.geom as geom
 import lsst.afw.cameraGeom as cameraGeom
 
 __all__ = ["LsstCameraTransforms", "getAmpImage", "channelToAmp"]
@@ -136,7 +136,7 @@ class LsstCameraTransforms():
             If the requested pixel doesn't lie on the detector
         """
 
-        amp, ampXY = ccdPixelToAmpPixel(afwGeom.PointD(ccdX, ccdY), self.getDetector(detectorName))
+        amp, ampXY = ccdPixelToAmpPixel(geom.PointD(ccdX, ccdY), self.getDetector(detectorName))
 
         ampX, ampY = ampXY
         return ampToChannel(amp), ampX, ampY
@@ -166,7 +166,7 @@ class LsstCameraTransforms():
         """
         detector = self.getDetector(detectorName)
 
-        return detector.transform(afwGeom.Point2D(ccdX, ccdY), cameraGeom.PIXELS, cameraGeom.FOCAL_PLANE)
+        return detector.transform(geom.Point2D(ccdX, ccdY), cameraGeom.PIXELS, cameraGeom.FOCAL_PLANE)
 
     def ampPixelToFocalMm(self, ampX, ampY, channel, detectorName=None):
         r"""Given position within an amplifier return the focal plane position
@@ -201,7 +201,7 @@ class LsstCameraTransforms():
 
         ccdX, ccdY = ampPixelToCcdPixel(ampX, ampY, detector, channel)
 
-        return detector.transform(afwGeom.Point2D(ccdX, ccdY), cameraGeom.PIXELS, cameraGeom.FOCAL_PLANE)
+        return detector.transform(geom.Point2D(ccdX, ccdY), cameraGeom.PIXELS, cameraGeom.FOCAL_PLANE)
 
     def focalMmToCcdPixel(self, focalPlaneX, focalPlaneY):
         r"""Given focal plane position return the detector position
@@ -231,7 +231,7 @@ class LsstCameraTransforms():
         RuntimeError
             If the requested position doesn't lie on a detector
         """
-        detector, ccdXY = focalMmToCcdPixel(self.camera, afwGeom.PointD(focalPlaneX, focalPlaneY))
+        detector, ccdXY = focalMmToCcdPixel(self.camera, geom.PointD(focalPlaneX, focalPlaneY))
         ccdX, ccdY = ccdXY
 
         return detector.getName(), ccdX, ccdY
@@ -267,7 +267,7 @@ class LsstCameraTransforms():
             If the requested position doesn't lie on a detector
         """
 
-        detector, ccdXY = focalMmToCcdPixel(self.camera, afwGeom.PointD(focalPlaneX, focalPlaneY))
+        detector, ccdXY = focalMmToCcdPixel(self.camera, geom.PointD(focalPlaneX, focalPlaneY))
         amp, ampXY = ccdPixelToAmpPixel(ccdXY, detector)
 
         ampX, ampY = ampXY
@@ -383,7 +383,7 @@ def ampPixelToCcdPixel(x, y, detector, channel):
 
     dxy = rawBBox.getBegin() - rawDataBBox.getBegin()   # correction for overscan etc.
 
-    return amp.getBBox().getBegin() + dxy + afwGeom.ExtentI(x, y)
+    return amp.getBBox().getBegin() + dxy + geom.ExtentI(x, y)
 
 
 def ccdPixelToAmpPixel(xy, detector):
@@ -391,7 +391,7 @@ def ccdPixelToAmpPixel(xy, detector):
 
     Parameters
     ----------
-    xy : `lsst.afw.geom.PointD`
+    xy : `lsst.geom.PointD`
        pixel position within detector
     detector : `lsst.afw.cameraGeom.Detector`
         The requested detector
@@ -403,7 +403,7 @@ def ccdPixelToAmpPixel(xy, detector):
     -------
     amp : `lsst.afw.table.AmpInfoRecord`
        The amplifier that the pixel lies in
-    ampXY : `lsst.afw.geom.PointI`
+    ampXY : `lsst.geom.PointI`
        The pixel coordinate relative to the corner of the single-amp image
 
     Raises
@@ -414,9 +414,9 @@ def ccdPixelToAmpPixel(xy, detector):
 
     found = False
     for amp in detector:
-        if afwGeom.BoxD(amp.getBBox()).contains(xy):
+        if geom.BoxD(amp.getBBox()).contains(xy):
             found = True
-            xy = afwGeom.PointI(xy)     # pixel coordinates as ints
+            xy = geom.PointI(xy)     # pixel coordinates as ints
             break
 
     if not found:
@@ -433,7 +433,7 @@ def ccdPixelToAmpPixel(xy, detector):
         y = h - y - 1
 
     dxy = amp.getRawBBox().getBegin() - amp.getRawDataBBox().getBegin()   # correction for overscan etc.
-    xy = afwGeom.ExtentI(x, y) - dxy
+    xy = geom.ExtentI(x, y) - dxy
 
     return amp, xy
 
@@ -445,7 +445,7 @@ def focalMmToCcdPixel(camera, focalPlaneXY):
     ----------
     camera : `lsst.afw.cameraGeom.Camera`
        The object describing a/the LSST Camera
-    focalPlaneXY : `lsst.afw.geom.PointD`
+    focalPlaneXY : `lsst.geom.PointD`
        The focal plane position (mm) relative to the centre of the camera
 
     N.b. all pixel coordinates have the centre of the bottom-left pixel
@@ -456,7 +456,7 @@ def focalMmToCcdPixel(camera, focalPlaneXY):
     -------
     detector : `lsst.afw.cameraGeom.Detector`
        The requested detector
-    ccdPos : `lsst.afw.geom.Point2D`
+    ccdPos : `lsst.geom.Point2D`
        The pixel position relative to the corner of the detector
 
     Raises
@@ -467,7 +467,7 @@ def focalMmToCcdPixel(camera, focalPlaneXY):
 
     for detector in camera:
         ccdXY = detector.transform(focalPlaneXY, cameraGeom.FOCAL_PLANE, cameraGeom.PIXELS)
-        if afwGeom.BoxD(detector.getBBox()).contains(ccdXY):
+        if geom.BoxD(detector.getBBox()).contains(ccdXY):
             return detector, ccdXY
 
     raise RuntimeError("Failed to map focal plane position (%.3f, %.3f) to a detector" % (focalPlaneXY))
