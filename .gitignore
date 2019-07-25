@@ -11,5 +11,5 @@ python/lsst/obs/lsst/version.py
 .pytest_cache
 tests/.tests
 pytest_session.txt
-*.fits
-*.sqlite3
+auxTel/CALIB/calibRegistry.sqlite3
+auxTel/CALIB/defects/

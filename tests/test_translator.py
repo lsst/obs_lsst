@@ -128,6 +128,33 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_comCam_translator(self):
+        test_data = (("comCam-CC_C_20190530_000001_R22_S00.yaml",
+                      dict(telescope="LSST",
+                           instrument="comCam",
+                           boresight_rotation_coord="unknown",
+                           dark_time=0.398*u.s,
+                           detector_exposure_id=2019053000001000,
+                           detector_group="R22",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-229",
+                           exposure_id=2019053000001,
+                           exposure_time=0.0*u.s,
+                           object="UNKNOWN",
+                           observation_id="CC_C_20190530_000001",
+                           observation_type="bias",
+                           physical_filter="NONE",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=2019053000001)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
     def test_phosim_translator(self):
         test_data = (("phosim-lsst_a_204595_f3_R11_S02_E000.yaml",
                       dict(telescope="LSST",

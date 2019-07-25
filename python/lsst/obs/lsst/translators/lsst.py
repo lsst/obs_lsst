@@ -138,6 +138,17 @@ class LsstBaseTranslator(FitsTranslator):
     detectorSerials = None
     """Mapping of detector serial number to raft, number, and name."""
 
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        """Ensure that subclasses clear their own detector mapping entries
+        such that subclasses of translators that use detector mappings
+        do not pick up the incorrect values from a parent."""
+
+        cls.detectorMapping = None
+        cls.detectorSerials = None
+
+        super().__init_subclass__(**kwargs)
+
     def search_paths(self):
         """Search paths to use for LSST data when looking for header correction
         files.
