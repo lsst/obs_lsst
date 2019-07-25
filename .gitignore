@@ -11,5 +11,3 @@ python/lsst/obs/lsst/version.py
 .pytest_cache
 tests/.tests
 pytest_session.txt
-*.fits
-*.sqlite3
