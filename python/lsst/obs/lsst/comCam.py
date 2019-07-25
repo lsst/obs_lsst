@@ -34,7 +34,7 @@ class LsstComCamMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
 
 
 class LsstComCamMapper(LsstCamMapper):
-    """The Mapper for the ts8 camera."""
+    """The Mapper for the LSST ComCam camera."""
     translatorClass = LsstComCamTranslator
     MakeRawVisitInfoClass = LsstComCamMakeRawVisitInfo
     _cameraName = "comCam"
@@ -43,7 +43,7 @@ class LsstComCamMapper(LsstCamMapper):
 
 
 class LsstComCamParseTask(LsstCamParseTask):
-    """Parser suitable for ts8 data.
+    """Parser suitable for LSST ComCam data.
     """
 
     _mapperClass = LsstComCamMapper
