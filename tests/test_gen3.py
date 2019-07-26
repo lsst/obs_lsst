@@ -21,7 +21,8 @@
 
 import os
 import unittest
-from tempfile import TemporaryDirectory
+import shutil
+import tempfile
 from cProfile import Profile
 from pstats import Stats
 
@@ -36,6 +37,7 @@ try:
 except ImportError:
     haveGen3 = False
 
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 # This test is unfortunately slow; leave a profiling option in in case we want
 # to improve it later.  Initial version is about 60% YamlCamera construction
@@ -47,12 +49,16 @@ PRINT_PROFILE = False
 class TestInstruments(unittest.TestCase):
 
     def setUp(self):
+        self.root = tempfile.mkdtemp(dir=TESTDIR)
         self.rng = np.random.RandomState(50)  # arbitrary deterministic seed
         if PRINT_PROFILE:
             self.profile = Profile()
             self.profile.enable()
 
     def tearDown(self):
+        if self.root is not None and os.path.exists(self.root):
+            shutil.rmtree(self.root, ignore_errors=True)
+
         if PRINT_PROFILE:
             stats = Stats(self.profile)
             stats.strip_dirs()
@@ -60,60 +66,59 @@ class TestInstruments(unittest.TestCase):
             stats.print_stats()
 
     def checkInstrumentWithRegistry(self, cls):
-        base = os.path.dirname(__file__)
-        with TemporaryDirectory(prefix=cls.__name__, dir=base) as root:
-            Butler.makeRepo(root)
-            butler = Butler(root, run="tests")
-            instrument = cls()
-            scFactory = StorageClassFactory()
 
-            # Add Instrument, Detector, and PhysicalFilter entries to the
-            # Butler Registry.
-            instrument.register(butler.registry)
+        Butler.makeRepo(self.root)
+        butler = Butler(self.root, run="tests")
+        instrument = cls()
+        scFactory = StorageClassFactory()
 
-            # Define a DatasetType for the cameraGeom.Camera, which can be
-            # accessed just by identifying its Instrument.
-            # A real-world Camera DatasetType should be identified by a
-            # validity range as well.
-            cameraDatasetType = DatasetType("camera", dimensions=["instrument"],
-                                            storageClass=scFactory.getStorageClass("Camera"),
-                                            universe=butler.registry.dimensions)
-            butler.registry.registerDatasetType(cameraDatasetType)
+        # Add Instrument, Detector, and PhysicalFilter entries to the
+        # Butler Registry.
+        instrument.register(butler.registry)
 
-            # Define a DatasetType for cameraGeom.Detectors, which can be
-            # accessed by identifying its Instrument and (Butler) Detector.
-            # A real-world Detector DatasetType probably doesn't need to exist,
-            # as  it would just duplicate information in the Camera, and
-            # reading a full Camera just to get a single Detector should be
-            # plenty efficient.
-            detectorDatasetType = DatasetType("detector", dimensions=["instrument", "detector"],
-                                              storageClass=scFactory.getStorageClass("Detector"),
-                                              universe=butler.registry.dimensions)
-            butler.registry.registerDatasetType(detectorDatasetType)
+        # Define a DatasetType for the cameraGeom.Camera, which can be
+        # accessed just by identifying its Instrument.
+        # A real-world Camera DatasetType should be identified by a
+        # validity range as well.
+        cameraDatasetType = DatasetType("camera", dimensions=["instrument"],
+                                        storageClass=scFactory.getStorageClass("Camera"),
+                                        universe=butler.registry.dimensions)
+        butler.registry.registerDatasetType(cameraDatasetType)
 
-            # Put and get the Camera.
-            dataId = dict(instrument=instrument.instrument)
-            butler.put(instrument.camera, "camera", dataId=dataId)
-            camera = butler.get("camera", dataId)
-            # Full camera comparisons are *slow*; just compare names.
-            self.assertEqual(instrument.camera.getName(), camera.getName())
+        # Define a DatasetType for cameraGeom.Detectors, which can be
+        # accessed by identifying its Instrument and (Butler) Detector.
+        # A real-world Detector DatasetType probably doesn't need to exist,
+        # as  it would just duplicate information in the Camera, and
+        # reading a full Camera just to get a single Detector should be
+        # plenty efficient.
+        detectorDatasetType = DatasetType("detector", dimensions=["instrument", "detector"],
+                                          storageClass=scFactory.getStorageClass("Detector"),
+                                          universe=butler.registry.dimensions)
+        butler.registry.registerDatasetType(detectorDatasetType)
 
-            # Put and get a random subset of the Detectors.
-            allDetectors = list(instrument.camera)
-            numDetectors = min(3, len(allDetectors))
-            someDetectors = [allDetectors[i] for i in self.rng.choice(len(allDetectors),
-                                                                      size=numDetectors, replace=False)]
-            for cameraGeomDetector in someDetectors:
-                # Right now we only support integer detector IDs in data IDs;
-                # support for detector names and groups (i.e. rafts) is
-                # definitely planned but not yet implemented.
-                dataId = dict(instrument=instrument.instrument, detector=cameraGeomDetector.getId())
-                butler.put(cameraGeomDetector, "detector", dataId=dataId)
-                cameraGeomDetector2 = butler.get("detector", dataId=dataId)
-                # Full detector comparisons are *slow*; just compare names and
-                # serials.
-                self.assertEqual(cameraGeomDetector.getName(), cameraGeomDetector2.getName())
-                self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
+        # Put and get the Camera.
+        dataId = dict(instrument=instrument.instrument)
+        butler.put(instrument.camera, "camera", dataId=dataId)
+        camera = butler.get("camera", dataId)
+        # Full camera comparisons are *slow*; just compare names.
+        self.assertEqual(instrument.camera.getName(), camera.getName())
+
+        # Put and get a random subset of the Detectors.
+        allDetectors = list(instrument.camera)
+        numDetectors = min(3, len(allDetectors))
+        someDetectors = [allDetectors[i] for i in self.rng.choice(len(allDetectors),
+                                                                  size=numDetectors, replace=False)]
+        for cameraGeomDetector in someDetectors:
+            # Right now we only support integer detector IDs in data IDs;
+            # support for detector names and groups (i.e. rafts) is
+            # definitely planned but not yet implemented.
+            dataId = dict(instrument=instrument.instrument, detector=cameraGeomDetector.getId())
+            butler.put(cameraGeomDetector, "detector", dataId=dataId)
+            cameraGeomDetector2 = butler.get("detector", dataId=dataId)
+            # Full detector comparisons are *slow*; just compare names and
+            # serials.
+            self.assertEqual(cameraGeomDetector.getName(), cameraGeomDetector2.getName())
+            self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
 
     def testLsstCam(self):
         self.checkInstrumentWithRegistry(LsstCamInstrument)
