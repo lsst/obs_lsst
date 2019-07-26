@@ -27,7 +27,7 @@ from pstats import Stats
 
 import numpy as np
 
-from lsst.obs.lsst.gen3 import (LsstCamInstrument, ImsimInstrument, PhosimInstrument,
+from lsst.obs.lsst.gen3 import (LsstCamInstrument, LsstComCamInstrument, ImsimInstrument, PhosimInstrument,
                                 Ts8Instrument, Ts3Instrument, UcdCamInstrument, AuxTelInstrument)
 
 try:
@@ -115,6 +115,9 @@ class TestInstruments(unittest.TestCase):
 
     def testLsstCam(self):
         self.checkInstrumentWithRegistry(LsstCamInstrument)
+
+    def testComCam(self):
+        self.checkInstrumentWithRegistry(LsstComCamInstrument)
 
     def testImsimCam(self):
         self.checkInstrumentWithRegistry(ImsimInstrument)

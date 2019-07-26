@@ -23,6 +23,7 @@ from lsst.daf.butler.instrument import Instrument
 
 from ..filters import getFilterDefinitions
 from ..lsstCamMapper import LsstCamMapper
+from ..comCam import LsstComCamMapper
 from ..phosim import PhosimMapper
 from ..imsim import ImsimMapper
 from ..auxTel import AuxTelMapper
@@ -32,7 +33,7 @@ from ..ucd import UcdMapper
 
 
 __all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
-           "AuxTelInstrument", "Ts3Instrument", "UcdCamInstrument")
+           "AuxTelInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
 
 
 class LsstCamInstrument(Instrument):
@@ -151,6 +152,16 @@ class LsstCamInstrument(Instrument):
             purpose=purpose,
             raft=group,
         )
+
+
+class LsstComCamInstrument(LsstCamInstrument):
+    """Gen3 Butler specialization for ComCam data.
+    """
+
+    instrument = "LSST-ComCam"
+
+    def __init__(self):
+        super().__init__(camera=LsstComCamMapper().camera)
 
 
 class ImsimInstrument(LsstCamInstrument):
