@@ -19,7 +19,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from lsst.daf.butler.instrument import Instrument
+import os.path
+from dateutil import parser
+
+from lsst.utils import getPackageDir
+from lsst.daf.butler.instrument import Instrument, addUnboundedCalibrationLabel
+from lsst.daf.butler import DatasetType, DataId
+from lsst.pipe.tasks.read_defects import read_all_defects
 
 from ..filters import getFilterDefinitions
 from ..lsstCamMapper import LsstCamMapper
@@ -74,6 +80,7 @@ class LsstCamInstrument(Instrument):
     """
 
     instrument = "LSST"
+    policyName = None
 
     def __init__(self, camera=None, filters=None):
         if camera is None:
@@ -153,12 +160,65 @@ class LsstCamInstrument(Instrument):
             raft=group,
         )
 
+    def applyConfigOverrides(self, name, config):
+        # Docstring inherited from Instrument.applyConfigOverrides
+        packageDir = getPackageDir("obs_lsst")
+        roots = [os.path.join(packageDir, "config"), os.path.join(packageDir, "config", self.policyName)]
+        for root in roots:
+            path = os.path.join(root, f"{name}.py")
+            if os.path.exists(path):
+                config.load(path)
+
+    def writeCuratedCalibrations(self, butler):
+        """Write human-curated calibration Datasets to the given Butler with
+        the appropriate validity ranges.
+
+        This is a temporary API that should go away once obs_ packages have
+        a standardized approach to this problem.
+        """
+
+        # Write cameraGeom.Camera, with an infinite validity range.
+        datasetType = DatasetType("camera", ("instrument", "calibration_label"), "Camera",
+                                  universe=butler.registry.dimensions)
+        butler.registry.registerDatasetType(datasetType)
+        unboundedDataId = addUnboundedCalibrationLabel(butler.registry, self.getName())
+        camera = self.getCamera()
+        butler.put(camera, datasetType, unboundedDataId)
+
+        # Write defects with validity ranges taken from
+        # obs_lsst_data/{name}/defects (along with the defects themselves).
+        datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "DefectsList",
+                                  universe=butler.registry.dimensions)
+        butler.registry.registerDatasetType(datasetType)
+        defectPath = os.path.join(getPackageDir("obs_lsst"), self.policyName, "defects")
+
+        if os.path.exists(defectPath):
+            camera = self.getCamera()
+            defectsDict = read_all_defects(defectPath, camera)
+            endOfTime = '20380119T031407'
+            with butler.transaction():
+                for det in defectsDict:
+                    detector = camera[det]
+                    times = sorted([k for k in defectsDict[det]])
+                    defects = [defectsDict[det][time] for time in times]
+                    times = times + [parser.parse(endOfTime), ]
+                    for defect, beginTime, endTime in zip(defects, times[:-1], times[1:]):
+                        md = defect.getMetadata()
+                        dataId = DataId(universe=butler.registry.dimensions,
+                                        instrument=self.getName(),
+                                        calibration_label=f"defect/{md['CALIBDATE']}/{md['DETECTOR']}")
+                        dataId.entries["calibration_label"]["valid_first"] = beginTime
+                        dataId.entries["calibration_label"]["valid_last"] = endTime
+                        butler.registry.addDimensionEntry("calibration_label", dataId)
+                        butler.put(defect, datasetType, dataId, detector=detector.getId())
+
 
 class LsstComCamInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for ComCam data.
     """
 
     instrument = "LSST-ComCam"
+    policyName = "comCam"
 
     def __init__(self):
         super().__init__(camera=LsstComCamMapper().camera)
@@ -169,6 +229,7 @@ class ImsimInstrument(LsstCamInstrument):
     """
 
     instrument = "LSST-ImSim"
+    policyName = "imsim"
 
     def __init__(self):
         super().__init__(camera=ImsimMapper().camera)
@@ -179,6 +240,7 @@ class PhosimInstrument(LsstCamInstrument):
     """
 
     instrument = "LSST-PhoSim"
+    policyName = "phosim"
 
     def __init__(self):
         super().__init__(camera=PhosimMapper().camera)
@@ -189,6 +251,7 @@ class Ts8Instrument(LsstCamInstrument):
     """
 
     instrument = "LSST-TS8"
+    policyName = "ts8"
 
     def __init__(self):
         super().__init__(camera=Ts8Mapper().camera)
@@ -199,6 +262,7 @@ class UcdCamInstrument(LsstCamInstrument):
     """
 
     instrument = "UCDCam"
+    policyName = "ucd"
 
     def __init__(self):
         super().__init__(camera=UcdMapper().camera)
@@ -209,6 +273,7 @@ class Ts3Instrument(LsstCamInstrument):
     """
 
     instrument = "LSST-TS3"
+    policyName = "ts3"
 
     def __init__(self):
         super().__init__(camera=Ts3Mapper().camera)
@@ -219,6 +284,7 @@ class AuxTelInstrument(LsstCamInstrument):
     """
 
     instrument = "LSST-AuxTel"
+    policyName = "auxTel"
 
     def __init__(self):
         super().__init__(camera=AuxTelMapper().camera)
