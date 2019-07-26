@@ -76,7 +76,8 @@ class TestInstruments(unittest.TestCase):
             # A real-world Camera DatasetType should be identified by a
             # validity range as well.
             cameraDatasetType = DatasetType("camera", dimensions=["instrument"],
-                                            storageClass=scFactory.getStorageClass("Camera"))
+                                            storageClass=scFactory.getStorageClass("Camera"),
+                                            universe=butler.registry.dimensions)
             butler.registry.registerDatasetType(cameraDatasetType)
 
             # Define a DatasetType for cameraGeom.Detectors, which can be
@@ -86,7 +87,8 @@ class TestInstruments(unittest.TestCase):
             # reading a full Camera just to get a single Detector should be
             # plenty efficient.
             detectorDatasetType = DatasetType("detector", dimensions=["instrument", "detector"],
-                                              storageClass=scFactory.getStorageClass("Detector"))
+                                              storageClass=scFactory.getStorageClass("Detector"),
+                                              universe=butler.registry.dimensions)
             butler.registry.registerDatasetType(detectorDatasetType)
 
             # Put and get the Camera.
