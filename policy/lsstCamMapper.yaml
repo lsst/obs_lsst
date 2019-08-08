@@ -463,11 +463,3 @@ datasets:
     storage: FitsStorage
     tables: raw
     template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s_%(half)s.fits
-  newDefects:
-    level: Ccd
-    persistable: lsst.meas.algorithms.Defects
-    python: lsst.meas.algorithms.Defects
-    storage: FitsStorage
-    tables:
-    - raw
-    template: calibrations/defects/defects-det%(detector)03d.fits
