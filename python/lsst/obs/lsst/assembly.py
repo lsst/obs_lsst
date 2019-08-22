@@ -24,6 +24,7 @@ __all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd"
 
 import lsst.log
 import lsst.afw.image as afwImage
+import lsst.afw.cameraGeom as cameraGeom
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
@@ -59,7 +60,7 @@ def attachRawWcsFromBoresight(exposure):
     return False
 
 
-def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
+def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
     """Make sure a camera geometry amplifier matches an on-disk bounding box.
 
     Bounding box differences that are consistent with differences in overscan
@@ -68,8 +69,8 @@ def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
 
     Parameters
     ----------
-    amp : `lsst.afw.table.AmpInfoRecord`
-        Amplifier description from camera gemoetry. Will be modified in-place.
+    inAmp : `lsst.afw.cameraGeom.Amplifier`
+        Amplifier description from camera geometry.
     bbox : `lsst.geom.Box2I`
         The on-disk bounding box of the amplifer image.
     metadata : `lsst.daf.base.PropertyList`
@@ -80,6 +81,7 @@ def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
 
     Return
     ------
+    outAmp : `~lsst.afw.cameraGeom.Amplifier.Builder`
     modified : `bool`
         `True` if ``amp`` was modified; `False` otherwise.
 
@@ -92,42 +94,44 @@ def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
     if logCmd is None:
         logCmd = lambda x, *args: None  # noqa
     modified = False
-    if amp.getRawBBox() != bbox:  # Oh dear. cameraGeom is wrong -- probably overscan
-        if amp.getRawDataBBox().getDimensions() != amp.getBBox().getDimensions():
-            raise RuntimeError("Active area is the wrong size: %s v. %s" %
-                               (amp.getRawDataBBox().getDimensions(), amp.getBBox().getDimensions()))
 
-        logCmd("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)", amp.getRawBBox(), bbox)
+    outAmp = inAmp.rebuild()
+    if outAmp.getRawBBox() != bbox:  # Oh dear. cameraGeom is wrong -- probably overscan
+        if outAmp.getRawDataBBox().getDimensions() != outAmp.getBBox().getDimensions():
+            raise RuntimeError("Active area is the wrong size: %s v. %s" %
+                               (outAmp.getRawDataBBox().getDimensions(), outAmp.getBBox().getDimensions()))
+
+        logCmd("outAmp.getRawBBox() != data.getBBox(); patching. (%s v. %s)", outAmp.getRawBBox(), bbox)
 
         w, h = bbox.getDimensions()
-        ow, oh = amp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
+        ow, oh = outAmp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
         #
         # We could trust the BIASSEC keyword, or we can just assume that
         # they've changed the number of overscan pixels (serial and/or
         # parallel).  As Jim Chiang points out, the latter is safer
         #
-        fromCamGeom = amp.getRawHorizontalOverscanBBox()
+        fromCamGeom = outAmp.getRawHorizontalOverscanBBox()
         hOverscanBBox = Box2I(fromCamGeom.getBegin(),
                               Extent2I(w - fromCamGeom.getBeginX(), fromCamGeom.getHeight()))
-        fromCamGeom = amp.getRawVerticalOverscanBBox()
+        fromCamGeom = outAmp.getRawVerticalOverscanBBox()
         vOverscanBBox = Box2I(fromCamGeom.getBegin(),
                               Extent2I(fromCamGeom.getWidth(), h - fromCamGeom.getBeginY()))
-        amp.setRawBBox(bbox)
-        amp.setRawHorizontalOverscanBBox(hOverscanBBox)
-        amp.setRawVerticalOverscanBBox(vOverscanBBox)
+        outAmp.setRawBBox(bbox)
+        outAmp.setRawHorizontalOverscanBBox(hOverscanBBox)
+        outAmp.setRawVerticalOverscanBBox(vOverscanBBox)
         #
         # This gets all the geometry right for the amplifier, but the size
         # of the untrimmed image will be wrong and we'll put the amp sections
         # in the wrong places, i.e.
-        #   amp.getRawXYOffset()
+        #   outAmp.getRawXYOffset()
         # will be wrong.  So we need to recalculate the offsets.
         #
-        xRawExtent, yRawExtent = amp.getRawBBox().getDimensions()
+        xRawExtent, yRawExtent = outAmp.getRawBBox().getDimensions()
 
-        x0, y0 = amp.getRawXYOffset()
+        x0, y0 = outAmp.getRawXYOffset()
         ix, iy = x0//ow, y0/oh
         x0, y0 = ix*xRawExtent, iy*yRawExtent
-        amp.setRawXYOffset(Extent2I(ix*xRawExtent, iy*yRawExtent))
+        outAmp.setRawXYOffset(Extent2I(ix*xRawExtent, iy*yRawExtent))
 
         modified = True
 
@@ -141,25 +145,24 @@ def fixAmpGeometry(amp, bbox, metadata, logCmd=None):
     datasec = bboxFromIraf(d["DATASEC"]) if "DATASEC" in d else None
     biassec = bboxFromIraf(d["BIASSEC"]) if "BIASSEC" in d else None
 
-    if detsec and amp.getBBox() != detsec:
-        logCmd("DETSEC doesn't match (%s != %s)", amp.getBBox(), detsec)
-    if datasec and amp.getRawDataBBox() != datasec:
-        logCmd("DATASEC doesn't match for (%s != %s)", amp.getRawDataBBox(), detsec)
-    if biassec and amp.getRawHorizontalOverscanBBox() != biassec:
-        logCmd("BIASSEC doesn't match for (%s != %s)", amp.getRawHorizontalOverscanBBox(), detsec)
+    if detsec and outAmp.getBBox() != detsec:
+        logCmd("DETSEC doesn't match (%s != %s)", outAmp.getBBox(), detsec)
+    if datasec and outAmp.getRawDataBBox() != datasec:
+        logCmd("DATASEC doesn't match for (%s != %s)", outAmp.getRawDataBBox(), detsec)
+    if biassec and outAmp.getRawHorizontalOverscanBBox() != biassec:
+        logCmd("BIASSEC doesn't match for (%s != %s)", outAmp.getRawHorizontalOverscanBBox(), detsec)
 
-    return modified
+    return outAmp, modified
 
 
-def assembleUntrimmedCcd(amps, exposures):
+def assembleUntrimmedCcd(ccd, exposures):
     """Assemble an untrimmmed CCD from per-amp Exposure objects.
 
     Parameters
     ----------
-    amps : sequence of `lsst.afw.table.AmpInfoRecord`.
-        A deterministically-ordered container of camera geometry amplifier
-        information.  May be a `~lsst.afw.cameraGeom.Detector`, a
-        `~lsst.afw.table.AmpInfoCatalog`, a `list`, or any other sequence.
+    ccd : `~lsst.afw.cameraGeom.Detector`
+        The detector geometry for this ccd that will be used as the
+        framework for the assembly of the input amplifier exposures.
     exposures : sequence of `lsst.afw.image.Exposure`
         Per-amplifier images, in the same order as ``amps``.
 
@@ -169,7 +172,7 @@ def assembleUntrimmedCcd(amps, exposures):
         Assembled CCD image.
     """
     ampDict = {}
-    for amp, exposure in zip(amps, exposures):
+    for amp, exposure in zip(ccd, exposures):
         ampDict[amp.getName()] = exposure
     config = AssembleCcdTask.ConfigClass()
     config.doTrim = False
@@ -214,8 +217,23 @@ def fixAmpsAndAssemble(ampExps, msg):
             logger.warn(f"{msg}: {s}", *args)
             warned = True
 
+    # Rebuild the detector and the amplifiers to use their corrected geometry.
+    tempCcd = ccd.rebuild()
+    tempCcd.clear()
     for amp, ampExp in zip(ccd, ampExps):
-        fixAmpGeometry(amp, bbox=ampExp.getBBox(), metadata=ampExp.getMetadata(), logCmd=logCmd)
+        outAmp, modified = fixAmpGeometry(amp,
+                                          bbox=ampExp.getBBox(),
+                                          metadata=ampExp.getMetadata(),
+                                          logCmd=logCmd)
+        tempCcd.append(outAmp)
+
+    newBBox = cameraGeom.utils.calcRawCcdBBox(tempCcd)
+    tempCcd.setBBox(newBBox)
+    ccd = tempCcd.finish()
+
+    # Update the data to be combined to point to the newly rebuilt detector.
+    for ampExp in ampExps:
+        ampExp.setDetector(ccd)
 
     exposure = assembleUntrimmedCcd(ccd, ampExps)
     return exposure
