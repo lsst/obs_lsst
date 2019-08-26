@@ -229,7 +229,8 @@ CCDs :\
                     print(indent(), "<< : *%s_%s" % (ampName, detectorType), file=fd)
                     print(indent(), "gain : %g" % (amplifierData[ampName]['gain']), file=fd)
                     print(indent(), "readNoise : %g" % (amplifierData[ampName]['readNoise']), file=fd)
-                    print(indent(), "saturation : %g" % (amplifierData[ampName]['saturation']), file=fd)
+                    if 'saturation' in amplifierData[ampName]:
+                        print(indent(), "saturation : %g" % (amplifierData[ampName]['saturation']), file=fd)
                     nindent -= 1
                 nindent -= 1
 
