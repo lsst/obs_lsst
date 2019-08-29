@@ -69,7 +69,7 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
         "E2V-CCD250-112-04": (0, "R00"),
         "ITL-3800C-029": (1, "R01"),
         "ITL-3800C-002": (2, "R02"),
-        "E2V-CCD250-112-09": (0, "R03"),         
+        "E2V-CCD250-112-09": (0, "R03"),
     }
     """Map detector serial to raft and detector number.  Eventually the
     detector number will come out of the policy camera definition."""
