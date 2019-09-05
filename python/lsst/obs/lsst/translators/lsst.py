@@ -299,7 +299,7 @@ class LsstBaseTranslator(FitsTranslator):
 
     @staticmethod
     def compute_exposure_id(dayobs, seqnum):
-        """Helper method to calculate the AuxTel exposure_id.
+        """Helper method to calculate the exposure_id.
 
         Parameters
         ----------

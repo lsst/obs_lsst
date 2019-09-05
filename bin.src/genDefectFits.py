@@ -8,10 +8,10 @@ import numpy
 from astropy.io import fits
 import collections
 
-from lsst.obs.lsst.auxTel import AuxTelMapper
+from lsst.obs.lsst.latiss import LatissMapper
 
 Defect = collections.namedtuple('Defect', ['x0', 'y0', 'width', 'height'])
-mapperMap = {'auxTel': AuxTelMapper}
+mapperMap = {'latiss': LatissMapper}
 
 
 def genDefectFits(cameraName, source, targetDir):
@@ -72,8 +72,8 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("cameraName", type=str, choices=['auxTel'],
-                        help="Camera name: auxTel only at present")
+    parser.add_argument("cameraName", type=str, choices=['latiss'],
+                        help="Camera name: LATISS only at present")
     parser.add_argument("defectsFile", type=str, help="Text file containing list of defects")
     parser.add_argument("targetDir", type=str, nargs="?", help="Directory for generated fits files")
     parser.add_argument("-f", "--force", action="store_true", help="Force operations")

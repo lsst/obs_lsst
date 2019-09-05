@@ -21,7 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .auxTel import AuxTelMapper
+from .latiss import LatissMapper
 from .ingest import LsstCamParseTask
 from .translators import LsstTS8Translator
 
@@ -39,7 +39,7 @@ class Ts8Mapper(LsstCamMapper):
     MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
     _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + \
-        list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
+        list(LatissMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.

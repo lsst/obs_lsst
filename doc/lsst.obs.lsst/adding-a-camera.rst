@@ -6,7 +6,7 @@ Adding a new camera
 The ``policy`` directory in the ``obs_lsst`` package contains the files
 needed to describe cameras made up of LSST chips. The eventual goal is
 to describe the real camera, but for now we also have variants to handle
-AuxTel data, phosim and imsim simulations (they differ in e.g., the gain and
+LATISS data, phosim and imsim simulations (they differ in e.g., the gain and
 crosstalk values) and data from various test stands.
 
 Once Butler Gen3 is ready this configuration data will be moved out of
@@ -28,7 +28,7 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    ``policy/lsstCam/R11.yaml``). Note that you can choose an ITL or E2V
    device. Note that you must provide a serial number for each CCD in
    the raft as that’s how I know how many CCDs there are in the “raft”
-   (e.g. auxTel has only one)
+   (e.g. LATISS has only one)
 
    The geometryWithinRaft field may be omitted, in which case offsets
    default to 0.0 and the yaw entry is not generated.  These offsets
@@ -60,20 +60,20 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    policy)
 -  add ``fooCam.yaml`` to ``policy/.gitignore``
 -  Create a new file ``python/lsst/obs/lsst/fooCam.py`` (see
-   ``auxTel.py`` for an example)
+   ``latiss.py`` for an example)
 
    Add a class ``FooCamMapper`` to the same file, setting a class-level
    string ``_cameraName`` to “fooCam”. You also need to specify the metadata
    translation class to use such as ``LsstFooCamTranslator``. Look at the example in
-   ``python/lsst/obs/lsst/auxTel/auxTel.py`` – you’ll see that this
+   ``python/lsst/obs/lsst/latiss.py`` – you’ll see that this
    overrides some entries in ``lsstCamMapper.yaml`` (in the class data
-   member ``yamlFileList``) with ``auxTelMapper.yaml``. If you want to
+   member ``yamlFileList``) with ``latissMapper.yaml``. If you want to
    provide your own templates you’ll need to do the same thing, adding a
    file ``policy/fooCam/fooCamMapper.yaml``
 
    The name you provided as ``_cameraName`` is also used to e.g.,
    provide per-camera configuration files (for example
-   ``config/auxTel/ingest.py``)
+   ``config/latiss/ingest.py``)
 
    Don’t forget to add ``FooCamMapper`` to ``__all__``
 -  Write a header translator for your instrument. This should be placed in
@@ -105,9 +105,9 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    ``lsst.obs.lsstCam.fooCam.FooCamMapper``
 -  Retarget ``config.parse`` in ``config/fooCam/ingest.py`` to
    ``FooCamParseTask``
--  You will probably also want to copy e.g., ``config/auxTel/auxTel.py``
+-  You will probably also want to copy e.g., ``config/latiss/latiss.py``
    to ``config/fooCam/fooCam.py`` and also files such as
-   ``config/auxTel/bias.py`` – don’t forget to modify them to import
+   ``config/latiss/bias.py`` – don’t forget to modify them to import
    ``fooCam.py``!
 -  Add ``FooCam.yaml`` to ``policy/.gitignore``
 -  Add test data and associated unit tests following the instructions in

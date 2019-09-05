@@ -31,8 +31,8 @@ import lsst.afw.image
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 
 
-class TestAuxTel(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
-    instrumentDir = "auxTel"
+class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
+    instrumentDir = "latiss"
 
     def setUp(self):
         dataIds = {'raw': {'visit': 2018092000065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},

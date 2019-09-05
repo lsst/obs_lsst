@@ -20,9 +20,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-from lsst.obs.lsst.auxTel import AuxTelParseTask
+from lsst.obs.lsst.latiss import LatissParseTask
 
-config.parse.retarget(AuxTelParseTask)
+config.parse.retarget(LatissParseTask)
 
 del config.parse.translation['testType']
 
