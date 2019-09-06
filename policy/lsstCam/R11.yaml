@@ -1,17 +1,16 @@
 R11 :
-  detectorType : ITL
-  raftSerial : LCA-11021_RTM-006
-
+  detectorType : E2V
+  raftSerial : LCA-11021_RTM-020
   ccdSerials :
-    S00 : ITL-3800C-145-Dev
-    S01 : ITL-3800C-022-Dev
-    S02 : ITL-3800C-041-Dev
-    S10 : ITL-3800C-100-Dev
-    S11 : ITL-3800C-017-Dev
-    S12 : ITL-3800C-018-Dev
-    S20 : ITL-3800C-102-Dev
-    S21 : ITL-3800C-146-Dev
-    S22 : ITL-3800C-103-Dev
+    S00 : E2V-CCD250-319
+    S01 : E2V-CCD250-321
+    S02 : E2V-CCD250-359
+    S10 : E2V-CCD250-364
+    S11 : E2V-CCD250-357
+    S12 : E2V-CCD250-363
+    S20 : E2V-CCD250-350
+    S21 : E2V-CCD250-365
+    S22 : E2V-CCD250-361
 
   geometryWithinRaft:
     S00 : {
