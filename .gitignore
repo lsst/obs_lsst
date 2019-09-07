@@ -3,7 +3,7 @@
 .scon*
 _build.*
 config.log
-bin
+/bin/
 tests/R11.yaml
 ups/*.cfgc
 python/lsst/obs/lsst/version.py

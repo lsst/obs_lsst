@@ -24,6 +24,7 @@ for camera in ["latiss", "lsstCam", "imsim", "phosim", "ts8", "ucd", "ts3", "com
     commandInst = env.Command(f"{camera}.yaml", "",
                               f"{python} bin.src/generateCamera.py --path {camera}:lsstCam:. $TARGET")
 
+    env.Depends(commandInst, lsst.sconsUtils.targets["version"])
     env.Depends(commandInst, lsst.sconsUtils.targets["python"])
     dirList = ["lsstCam"]
     if os.path.isdir(camera):
