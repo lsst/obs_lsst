@@ -91,6 +91,10 @@ def generateCamera(cameraFile, path):
         with  directory specified with the output ``cameraFile``.
     """
     cameraFileDir = os.path.dirname(cameraFile)
+
+    if not cameraFile.endswith(".yaml"):
+        raise RuntimeError(f"Output file name ({cameraFile}) does not end with .yaml")
+
     searchPath = []
     for d in path.split(":"):
         searchPath.append(os.path.join(cameraFileDir, d))
