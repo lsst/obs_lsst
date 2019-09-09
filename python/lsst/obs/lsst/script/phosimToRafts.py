@@ -33,7 +33,10 @@ import re
 import sys
 import os
 
+import lsst.log
 import lsst.daf.persistence as dafPersist
+
+logger = lsst.log.getLogger(__name__)
 
 
 def writeRaftFile(fd, raftName, detectorType, raftSerial, ccdData):
@@ -76,7 +79,7 @@ def build_argparser():
     parser.add_argument('input', type=str, help="Path to input data repository")
     parser.add_argument('--id', type=str, help="ID for data (visit=XXX)", default=None)
     parser.add_argument('--visit', type=int, help="visit to read", default=None)
-    parser.add_argument('-v', '--verbose', action="store_true", help="How chatty should I be?", default=False)
+    parser.add_argument('--log', type=str, help="Specify logging level to use", default="WARN")
     parser.add_argument('--output_dir', type=str,
                         help="Path to output data directory (must exist)", default=None)
 
@@ -86,8 +89,10 @@ def build_argparser():
 def main():
     args = build_argparser().parse_args()
     ids = args.id
-    verbose = args.verbose
+    logLevel = args.log.upper()
     visit = args.visit
+
+    logger.setLevel(getattr(logger, logLevel))
 
     if ids is not None:
         mat = re.search(r"visit=(\d+)", ids)
@@ -118,8 +123,7 @@ def main():
     #
     dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
 
-    if verbose:
-        print(f"DataId = {dataId}")
+    logger.info("DataId = %s", dataId)
 
     raftData = {}
     for raftName, detectorName, detector in \
@@ -127,7 +131,7 @@ def main():
 
         dataId["detector"] = detector   # more of the butler stupidity
 
-        print(raftName, detectorName)
+        logger.warn("Processing data from raft %s_%s", raftName, detectorName)
 
         if raftName not in raftData:
             raftData[raftName] = {}
