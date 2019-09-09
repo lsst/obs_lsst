@@ -94,13 +94,20 @@ def processPhosimData(ids, visit, inputDir, outputDir):
     ----------
     ids : `str`
         DataId to be used to access the data. Can only be given as
-        ``visit=NNN`` form.
+        ``visit=NNN`` form. ``visit`` is used if this is `None`
     visit : `int`
-        Explicit visit number to read from repository.
+        Explicit visit number to read from repository. Only used if
+        ``ids`` is `None` or to check that it is consistent with the value
+        in ``ids``.
     inputDir : `str`
         Location of input butler repository.
     outputDir : `str`
-        Location to write raft files.
+        Location to write raft files. Will use current directory if `None`.
+
+    Notes
+    -----
+    If no visit is specified in the ``ids`` or ``visit`` arguments the
+    repository is queried and the first visit found is used.
 
     Raises
     ------
@@ -129,14 +136,21 @@ def processPhosimData(ids, visit, inputDir, outputDir):
     ampNames = [a.getName() for a in det]
 
     if visit is None:
-        visit = butler.queryMetadata("raw", ["visit"])[0]
+        rawData = butler.queryMetadata("raw", ["visit"])
+        if not rawData:
+            raise RuntimeError(f"No raw data found in butler repository at {inputDir}")
+        visit = rawData[0]
 
     dataId = dict(visit=visit)
     #
     # Due to butler stupidity it can't/won't lookup things when you also
     # specify a channel.  Sigh
     #
-    dataId["run"], dataId["snap"] = butler.queryMetadata("raw", ["run", "snap"], dataId)[0]
+    queryResults = butler.queryMetadata("raw", ["run", "snap"], dataId)
+    if not queryResults:
+        raise RuntimeError(f"Unable to find any data to match dataId {dataId}")
+
+    dataId["run"], dataId["snap"] = queryResults[0]
 
     logger.info("DataId = %s", dataId)
 
