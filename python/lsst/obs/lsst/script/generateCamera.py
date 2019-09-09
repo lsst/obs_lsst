@@ -78,13 +78,21 @@ def build_argparser():
     return parser
 
 
-def main():
-    args = build_argparser().parse_args()
-    cameraFile = args.outputFile
-    cameraFileDir = os.path.dirname(cameraFile)
+def generateCamera(cameraFile, path):
+    """Generate a combined camera YAML definition from component parts.
 
+    Parameters
+    ----------
+    cameraFile : `str`
+        Path to output YAML file.
+    path : `str`
+        Colon-separated path to search for component YAML files.  If relative
+        paths are given they will be converted to absolute path by combining
+        with  directory specified with the output ``cameraFile``.
+    """
+    cameraFileDir = os.path.dirname(cameraFile)
     searchPath = []
-    for d in args.path.split(":"):
+    for d in path.split(":"):
         searchPath.append(os.path.join(cameraFileDir, d))
 
     cameraSkl = parseYamlOnPath("cameraHeader.yaml", searchPath)
@@ -210,4 +218,13 @@ CCDs :\
 
             nindent -= 1
 
+
+def main():
+    args = build_argparser().parse_args()
+
+    try:
+        generateCamera(args.outputFile, args.path)
+    except Exception as e:
+        print(f"{e}", file=sys.stderr)
+        return 1
     return 0
