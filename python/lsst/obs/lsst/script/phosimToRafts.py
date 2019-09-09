@@ -87,26 +87,40 @@ def build_argparser():
     return parser
 
 
-def main():
-    args = build_argparser().parse_args()
-    ids = args.id
-    logLevel = args.log.upper()
-    visit = args.visit
+def processPhosimData(ids, visit, inputDir, outputDir):
+    """Process the specified data.
 
-    logger.setLevel(getattr(logger, logLevel))
+    Parameters
+    ----------
+    ids : `str`
+        DataId to be used to access the data. Can only be given as
+        ``visit=NNN`` form.
+    visit : `int`
+        Explicit visit number to read from repository.
+    inputDir : `str`
+        Location of input butler repository.
+    outputDir : `str`
+        Location to write raft files.
 
+    Raises
+    ------
+    RuntimeError:
+        Raised if there is an inconsistency with the visit specification.
+        Other exceptions may be raised by butler usage.
+    """
     if ids is not None:
         mat = re.search(r"visit=(\d+)", ids)
         if not mat:
-            print("Please specify a visit", file=sys.stderr)
-            return 1
-        visit = int(mat.group(1))
+            raise RuntimeError("Please specify an integer visit in the id string")
+        idvisit = int(mat.group(1))
 
-        if args.visit is not None and visit != args.visit:
-            print("Please specify either --id or --visit (or be consistent)", file=sys.stderr)
-            return 1
+        # Only allowed to specify a visit and id if they happen to be the same
+        if visit is None:
+            visit = idvisit
+        elif idvisit != visit:
+            raise RuntimeError("Please specify either --id or --visit (or be consistent)")
 
-    butler = dafPersist.Butler(args.input)
+    butler = dafPersist.Butler(inputDir)
     #
     # Lookup the amp names
     #
@@ -155,11 +169,27 @@ def main():
 
         if raftName in ("R00", "R40", "R04", "R44"):
             continue
-        if args.output_dir:
-            prefix = args.output_dir
+        if outputDir:
+            prefix = outputDir
         else:
             prefix = os.path.curdir
-        with open(os.path.join(prefix, f"{raftName}.yaml"), "w") as fd:
+        outfile = os.path.join(prefix, f"{raftName}.yaml")
+        logger.debug("Writing raft information to %s", outfile)
+        with open(outfile, "w") as fd:
             writeRaftFile(fd, raftName, "ITL", raftSerial, raftData[raftName])
 
+    return
+
+
+def main():
+    args = build_argparser().parse_args()
+
+    logLevel = args.log.upper()
+    logger.setLevel(getattr(logger, logLevel))
+
+    try:
+        processPhosimData(args.id, args.visit, args.input, args.output_dir)
+    except Exception as e:
+        print(f"{e}", file=sys.stderr)
+        return 1
     return 0
