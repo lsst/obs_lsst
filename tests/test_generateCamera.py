@@ -49,12 +49,13 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         camera = "testCamera"
         cameraYamlFile = f"{camera}.yaml"
         outfile = os.path.join(self.testdir, cameraYamlFile)
-        searchPath = ":".join(os.path.join(POLICYDIR, f) for f in ("latiss", "lsstCam", os.path.curdir))
+        searchPath = ":".join(os.path.normpath(os.path.join(POLICYDIR, f))
+                              for f in ("latiss", "lsstCam", os.path.curdir))
         generateCamera(outfile, searchPath)
         self.assertTrue(os.path.exists(outfile))
 
         content = parseYamlOnPath(cameraYamlFile, [self.testdir])
-        self.assertEqual(content["name"], "lsstCam")
+        self.assertEqual(content["name"], "LATISS")
         self.assertEqual(content["plateScale"], 20.0)
 
         # Check that some top level keys exist

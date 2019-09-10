@@ -104,7 +104,32 @@ def generateCamera(cameraFile, path):
     raftData = parseYamlOnPath("rafts.yaml", searchPath)
     ccdData = parseYamlOnPath("ccdData.yaml", searchPath)
 
-    shutil.copyfile(findYamlOnPath("cameraHeader.yaml", searchPath), cameraFile)
+    # See if we have an override of the name
+    try:
+        nameYaml = parseYamlOnPath("name.yaml", searchPath)
+    except FileNotFoundError:
+        nameOverride = None
+    else:
+        nameOverride = nameYaml["name"]
+
+    # Copy the camera header, replacing the name if needed.  We can not
+    # write out the cameraSkl dataset because that will expand all the
+    # YAML references.  We must edit the file itself.
+    inputHeader = findYamlOnPath("cameraHeader.yaml", searchPath)
+    if nameOverride:
+        with open(inputHeader) as infd:
+            with open(cameraFile, "w") as outfd:
+                replaced = False
+                for line in infd:
+                    if not replaced and line.startswith("name :") or line.startswith("name:"):
+                        line = f"name : {nameOverride}\n"
+                        replaced = True
+                    print(line, file=outfd, end="")
+                if not replaced:
+                    raise RuntimeError(f"Override name {nameOverride} specified but no name"
+                                       f" to replace in {inputHeader}")
+    else:
+        shutil.copyfile(inputHeader, cameraFile)
 
     nindent = 0        # current number of indents
 
