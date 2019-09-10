@@ -1,4 +1,4 @@
-# Configuration for auxTel
+# Configuration for latiss
 
 # This file is part of obs_lsst.
 #
