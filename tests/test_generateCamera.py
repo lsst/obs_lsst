@@ -44,29 +44,54 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
     def tearDown(self):
         shutil.rmtree(self.testdir, ignore_errors=True)
 
-    def testGenerateCamera(self):
-        """Test with LATISS in a test directory."""
+    def runGenerateCamera(self, searchPath):
+        """Run generateCamera with the provided path.
+
+        Parameters
+        ----------
+        searchPath : `list`
+            Directories to search relative to the policy directory.
+
+        Returns
+        -------
+        content : `dict`
+            The content from the generated camera.
+        """
         camera = "testCamera"
         cameraYamlFile = f"{camera}.yaml"
         outfile = os.path.join(self.testdir, cameraYamlFile)
-        searchPath = ":".join(os.path.normpath(os.path.join(POLICYDIR, f))
-                              for f in ("latiss", "lsstCam", os.path.curdir))
+        searchPath = (os.path.normpath(os.path.join(POLICYDIR, f)) for f in searchPath)
         generateCamera(outfile, searchPath)
         self.assertTrue(os.path.exists(outfile))
 
         content = parseYamlOnPath(cameraYamlFile, [self.testdir])
-        self.assertEqual(content["name"], "LATISS")
-        self.assertEqual(content["plateScale"], 20.0)
 
         # Check that some top level keys exist
         for k in ("CCDs", "AMP_E2V", "AMP_ITL", "CCD_ITL", "CCD_E2V", "RAFT_ITL", "RAFT_E2V",
                   "transforms"):
             self.assertIn(k, content)
 
+        return content
+
+    def testGenerateCameraLatiss(self):
+        """Test with LATISS in a test directory."""
+        content = self.runGenerateCamera(["latiss", "lsstCam", os.path.curdir])
+        self.assertEqual(content["name"], "LATISS")
+        self.assertEqual(content["plateScale"], 20.0)
+
+    def testGenerateCameraTs8(self):
+        """Test with LATISS in a test directory."""
+        content = self.runGenerateCamera(["ts8", "lsstCam", os.path.curdir])
+        self.assertEqual(content["name"], "lsstCam")
+        self.assertEqual(content["plateScale"], 20.0)
+
+    def testFailures(self):
         with self.assertRaises(RuntimeError):
-            generateCamera("test", searchPath)
+            # Test that we must include a file extension
+            generateCamera("test", ".")
 
         with self.assertRaises(FileNotFoundError):
+            # Test that files will be missing if we do not include a full path
             generateCamera("test.yaml", "latiss:lsstCam:.")
 
 
