@@ -29,7 +29,7 @@ from pstats import Stats
 import numpy as np
 
 from lsst.obs.lsst.gen3 import (LsstCamInstrument, LsstComCamInstrument, ImsimInstrument, PhosimInstrument,
-                                Ts8Instrument, Ts3Instrument, UcdCamInstrument, AuxTelInstrument)
+                                Ts8Instrument, Ts3Instrument, UcdCamInstrument, LatissInstrument)
 
 try:
     from lsst.daf.butler import Butler, DatasetType, StorageClassFactory
@@ -141,8 +141,8 @@ class TestInstruments(unittest.TestCase):
     def testUcdCam(self):
         self.checkInstrumentWithRegistry(UcdCamInstrument)
 
-    def testAuxTel(self):
-        self.checkInstrumentWithRegistry(AuxTelInstrument)
+    def testLatiss(self):
+        self.checkInstrumentWithRegistry(LatissInstrument)
 
 
 if __name__ == "__main__":

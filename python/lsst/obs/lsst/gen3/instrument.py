@@ -32,14 +32,14 @@ from ..lsstCamMapper import LsstCamMapper
 from ..comCam import LsstComCamMapper
 from ..phosim import PhosimMapper
 from ..imsim import ImsimMapper
-from ..auxTel import AuxTelMapper
+from ..latiss import LatissMapper
 from ..ts8 import Ts8Mapper
 from ..ts3 import Ts3Mapper
 from ..ucd import UcdMapper
 
 
 __all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
-           "AuxTelInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
+           "LatissInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
 
 
 class LsstCamInstrument(Instrument):
@@ -279,18 +279,18 @@ class Ts3Instrument(LsstCamInstrument):
         super().__init__(camera=Ts3Mapper().camera)
 
 
-class AuxTelInstrument(LsstCamInstrument):
-    """Gen3 Butler specialization for AuxTel data.
+class LatissInstrument(LsstCamInstrument):
+    """Gen3 Butler specialization for AuxTel LATISS data.
     """
 
-    instrument = "LSST-AuxTel"
-    policyName = "auxTel"
+    instrument = "LATISS"
+    policyName = "latiss"
 
     def __init__(self):
-        super().__init__(camera=AuxTelMapper().camera)
+        super().__init__(camera=LatissMapper().camera)
 
     def extractDetectorEntry(self, camGeomDetector):
-        # Override to remove group (raft) name, because AuxTel only has one
+        # Override to remove group (raft) name, because LATISS only has one
         # detector.
         entry = super().extractDetectorEntry(camGeomDetector)
         entry["raft"] = None

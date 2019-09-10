@@ -29,19 +29,19 @@ from lsst.afw.image import ImageFitsReader
 
 from lsst.obs.lsst.assembly import fixAmpGeometry
 
-# This should obviously be replaced by something like
-# getPackageDir("testdata_auxTel") once we actually have such a package.
-AUXTEL_DATA_ROOT = os.path.join(os.path.dirname(__file__), os.path.pardir, "data", "input", "auxTel")
+# This could obviously be replaced by something like
+# getPackageDir("testdata_lsst")
+LATISS_DATA_ROOT = os.path.join(os.path.dirname(__file__), os.path.pardir, "data", "input", "latiss")
 BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 65, 'detector': 0}
 BAD_OVERSCAN_FILENAME = "raw/2018-09-20/2018092000065-det000.fits"
 LOCAL_DATA_ROOT = os.path.join(os.path.dirname(__file__), "data")
 
 
-@unittest.skipUnless(os.path.exists(AUXTEL_DATA_ROOT), "{} does not exist".format(AUXTEL_DATA_ROOT))
+@unittest.skipUnless(os.path.exists(LATISS_DATA_ROOT), f"{LATISS_DATA_ROOT} does not exist")
 class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 
     def setUp(self):
-        # A snapshot of AuxTelCam that has incorrect overscan regions for this
+        # A snapshot of LATISS that has incorrect overscan regions for this
         # data ID
         self.cameraBroken = Camera.readFits(os.path.join(LOCAL_DATA_ROOT, "camera-bad-overscan.fits"))
         # A snapshot of the Detector for this file after we've read it in with
@@ -61,13 +61,13 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 
         This is essentially just a regression test, and an incomplete one at
         that: the fixed Detector snapshot that we're comparing to was generated
-        by the same code we're calling here.  And because the AuxTelCam
+        by the same code we're calling here.  And because the LATISS
         associated by the Butler we use in this test may in the future be
         corrected to have the right overscan regions, we may end up just
         testing a simpler case than we intended.  We'll use a snapshot of
         the incorrect Camera in other tests to get coverage of that case.
         """
-        butler = Butler(AUXTEL_DATA_ROOT)
+        butler = Butler(LATISS_DATA_ROOT)
         raw = butler.get("raw", dataId=BAD_OVERSCAN_GEN2_DATA_ID)
         for amp1, amp2 in zip(self.detectorFixed, raw.getDetector()):
             with self.subTest(amp=amp1.getName()):
@@ -79,7 +79,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         """Test the low-level code for repairing cameraGeom overscan regions
         that disagree with raw files.
         """
-        testFile = os.path.join(AUXTEL_DATA_ROOT, BAD_OVERSCAN_FILENAME)
+        testFile = os.path.join(LATISS_DATA_ROOT, BAD_OVERSCAN_FILENAME)
         for i, (ampBad, ampGood) in enumerate(zip(self.cameraBroken[0], self.detectorFixed)):
             with self.subTest(amp=ampBad.getName()):
                 self.assertEqual(ampBad.getName(), ampGood.getName())
