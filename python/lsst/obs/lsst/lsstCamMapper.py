@@ -159,11 +159,10 @@ def assemble_raw(dataId, componentInfo, cls):
     exposure.getInfo().setVisitInfo(visitInfo)
 
     boresight = visitInfo.getBoresightRaDec()
-    rotangle = visitInfo.getBoresightRotAngle()
+    boresightRotAngle = visitInfo.getBoresightRotAngle()
 
     if boresight.isFinite():
-        exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight,
-                                           90*geom.degrees - rotangle))
+        exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight, boresightRotAngle))
     else:
         # Should only warn for science observations but VisitInfo does not know
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
