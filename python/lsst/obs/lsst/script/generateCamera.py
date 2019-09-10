@@ -85,19 +85,20 @@ def generateCamera(cameraFile, path):
     ----------
     cameraFile : `str`
         Path to output YAML file.
-    path : `str`
-        Colon-separated path to search for component YAML files.  If relative
-        paths are given they will be converted to absolute path by combining
-        with  directory specified with the output ``cameraFile``.
+    path : `str` or `list` of `str`
+        List of directories to search for component YAML files or a
+        colon-separated path string.  If relative paths are given they will be
+        converted to absolute path by combining with  directory specified with
+        the output ``cameraFile``.
     """
     cameraFileDir = os.path.dirname(cameraFile)
 
     if not cameraFile.endswith(".yaml"):
         raise RuntimeError(f"Output file name ({cameraFile}) does not end with .yaml")
 
-    searchPath = []
-    for d in path.split(":"):
-        searchPath.append(os.path.join(cameraFileDir, d))
+    if isinstance(path, str):
+        path = path.split(":")
+    searchPath = [os.path.join(cameraFileDir, d) for d in path]
 
     cameraSkl = parseYamlOnPath("cameraHeader.yaml", searchPath)
     cameraTransforms = parseYamlOnPath("cameraTransforms.yaml", searchPath)
