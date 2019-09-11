@@ -108,7 +108,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           test_config_metadata=False,
                           )
 
-        self.setUp_camera(camera_name='lsstCam',
+        self.setUp_camera(camera_name='LATISS',
                           n_detectors=1,
                           first_detector_name='RXX_S00',
                           plate_scale=20.0 * arcseconds,

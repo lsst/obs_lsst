@@ -3,8 +3,8 @@
 .scon*
 _build.*
 config.log
-bin
-tests/R11.yaml
+/bin/
+tests/tmp*
 ups/*.cfgc
 python/lsst/obs/lsst/version.py
 .coverage
