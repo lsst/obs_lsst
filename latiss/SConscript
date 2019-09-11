@@ -23,3 +23,4 @@ command = (f"{python} {pipe_tasks_dir}/bin/ingestDefects.py latiss/CALIB/ {data_
            "--calib latiss/CALIB --config clobber=True")
 commandInst = env.Command('CALIB/calibRegistry.sqlite3', [], command)
 env.Depends(commandInst, lsst.sconsUtils.targets["python"])
+env.Depends(commandInst, "../policy/latiss.yaml")
