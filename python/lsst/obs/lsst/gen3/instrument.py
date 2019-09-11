@@ -19,6 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+__all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
+           "LatissInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
+
 import os.path
 from dateutil import parser
 
@@ -26,8 +29,7 @@ from lsst.utils import getPackageDir
 from lsst.daf.butler.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType, DataId
 from lsst.pipe.tasks.read_defects import read_all_defects
-
-from ..filters import getFilterDefinitions
+from ..filters import LSSTCAM_FILTER_DEFINITIONS
 from ..lsstCamMapper import LsstCamMapper
 from ..comCam import LsstComCamMapper
 from ..phosim import PhosimMapper
@@ -37,9 +39,7 @@ from ..ts8 import Ts8Mapper
 from ..ts3 import Ts3Mapper
 from ..ucd import UcdMapper
 
-
-__all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
-           "LatissInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
+PACKAGE_DIR = getPackageDir("obs_lsst")
 
 
 class LsstCamInstrument(Instrument):
@@ -78,35 +78,28 @@ class LsstCamInstrument(Instrument):
        do not provide a way to add new physical_filters, they will in the
        future.
     """
+    filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
+    instrument = "lsstCam"
+    policyName = "lsstCam"
+    _mapperClass = LsstCamMapper
+    _camera = None
 
-    instrument = "LSST"
-    policyName = None
-
-    def __init__(self, camera=None, filters=None):
-        if camera is None:
-            camera = LsstCamMapper().camera
-        self.camera = camera
-        if filters is None:
-            filters = getFilterDefinitions()
-        self.detectors = [self.extractDetectorEntry(camGeomDetector)
-                          for camGeomDetector in camera]
-        self.physicalFilters = []
-        for filterDef in filters:
-            # For the standard broadband filters, we use the smae
-            # single-letter name for both the PhysicalFilter and the
-            # associated AbstractFilter.  For other filters we don't
-            # assign an abstract_filter.
-            self.physicalFilters.append(
-                dict(
-                    physical_filter=filterDef.name,
-                    abstract_filter=filterDef.name if filterDef.name in "ugrizy" else None
-                )
-            )
+    @property
+    def configPaths(self):
+        return [os.path.join(PACKAGE_DIR, "config"),
+                os.path.join(PACKAGE_DIR, "config", self.policyName)]
 
     @classmethod
     def getName(cls):
         # Docstring inherited from Instrument.getName
         return cls.instrument
+
+    @classmethod
+    def getCamera(cls):
+        # Constructing a YAML camera takes a long time so cache the result
+        if cls._camera is None:
+            cls._camera = cls._mapperClass().camera
+        return cls._camera
 
     def getRawFormatter(self, dataId):
         # Docstring inherited from Instrument.getRawFormatter
@@ -123,19 +116,13 @@ class LsstCamInstrument(Instrument):
                                             "visit_max": obsMax,
                                             "exposure_max": obsMax})
 
-        for detector in self.camera:
+        for detector in self.getCamera():
             detInfo = self.extractDetectorEntry(detector)
             registry.addDimensionEntry(
                 "detector", dataId, **detInfo
             )
 
-        for physical in self.physicalFilters:
-            registry.addDimensionEntry(
-                "physical_filter",
-                dataId,
-                physical_filter=physical["physical_filter"],
-                abstract_filter=physical["abstract_filter"]
-            )
+        self._registerFilters(registry)
 
     def extractDetectorEntry(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
@@ -159,15 +146,6 @@ class LsstCamInstrument(Instrument):
             purpose=purpose,
             raft=group,
         )
-
-    def applyConfigOverrides(self, name, config):
-        # Docstring inherited from Instrument.applyConfigOverrides
-        packageDir = getPackageDir("obs_lsst")
-        roots = [os.path.join(packageDir, "config"), os.path.join(packageDir, "config", self.policyName)]
-        for root in roots:
-            path = os.path.join(root, f"{name}.py")
-            if os.path.exists(path):
-                config.load(path)
 
     def writeCuratedCalibrations(self, butler):
         """Write human-curated calibration Datasets to the given Butler with
@@ -219,9 +197,7 @@ class LsstComCamInstrument(LsstCamInstrument):
 
     instrument = "LSST-ComCam"
     policyName = "comCam"
-
-    def __init__(self):
-        super().__init__(camera=LsstComCamMapper().camera)
+    _mapperClass = LsstComCamMapper
 
 
 class ImsimInstrument(LsstCamInstrument):
@@ -230,9 +206,7 @@ class ImsimInstrument(LsstCamInstrument):
 
     instrument = "LSST-ImSim"
     policyName = "imsim"
-
-    def __init__(self):
-        super().__init__(camera=ImsimMapper().camera)
+    _mapperClass = ImsimMapper
 
 
 class PhosimInstrument(LsstCamInstrument):
@@ -241,9 +215,7 @@ class PhosimInstrument(LsstCamInstrument):
 
     instrument = "LSST-PhoSim"
     policyName = "phosim"
-
-    def __init__(self):
-        super().__init__(camera=PhosimMapper().camera)
+    _mapperClass = PhosimMapper
 
 
 class Ts8Instrument(LsstCamInstrument):
@@ -252,9 +224,7 @@ class Ts8Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS8"
     policyName = "ts8"
-
-    def __init__(self):
-        super().__init__(camera=Ts8Mapper().camera)
+    _mapperClass = Ts8Mapper
 
 
 class UcdCamInstrument(LsstCamInstrument):
@@ -263,9 +233,7 @@ class UcdCamInstrument(LsstCamInstrument):
 
     instrument = "UCDCam"
     policyName = "ucd"
-
-    def __init__(self):
-        super().__init__(camera=UcdMapper().camera)
+    _mapperClass = UcdMapper
 
 
 class Ts3Instrument(LsstCamInstrument):
@@ -274,9 +242,7 @@ class Ts3Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS3"
     policyName = "ts3"
-
-    def __init__(self):
-        super().__init__(camera=Ts3Mapper().camera)
+    _mapperClass = Ts3Mapper
 
 
 class LatissInstrument(LsstCamInstrument):
@@ -285,9 +251,7 @@ class LatissInstrument(LsstCamInstrument):
 
     instrument = "LATISS"
     policyName = "latiss"
-
-    def __init__(self):
-        super().__init__(camera=LatissMapper().camera)
+    _mapperClass = LatissMapper
 
     def extractDetectorEntry(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one

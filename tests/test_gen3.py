@@ -98,13 +98,13 @@ class TestInstruments(unittest.TestCase):
 
         # Put and get the Camera.
         dataId = dict(instrument=instrument.instrument)
-        butler.put(instrument.camera, "camera", dataId=dataId)
+        butler.put(instrument.getCamera(), "camera", dataId=dataId)
         camera = butler.get("camera", dataId)
         # Full camera comparisons are *slow*; just compare names.
-        self.assertEqual(instrument.camera.getName(), camera.getName())
+        self.assertEqual(instrument.getCamera().getName(), camera.getName())
 
         # Put and get a random subset of the Detectors.
-        allDetectors = list(instrument.camera)
+        allDetectors = list(instrument.getCamera())
         numDetectors = min(3, len(allDetectors))
         someDetectors = [allDetectors[i] for i in self.rng.choice(len(allDetectors),
                                                                   size=numDetectors, replace=False)]

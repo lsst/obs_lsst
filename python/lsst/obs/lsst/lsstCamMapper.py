@@ -27,7 +27,6 @@ import re
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
-import lsst.afw.image.utils as afwImageUtils
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo
@@ -36,7 +35,7 @@ import lsst.daf.persistence as dafPersist
 from .translators import LsstCamTranslator
 from astro_metadata_translator import fix_header
 
-from .filters import getFilterDefinitions
+from .filters import LSSTCAM_FILTER_DEFINITIONS
 from .assembly import attachRawWcsFromBoresight, fixAmpGeometry, assembleUntrimmedCcd
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
@@ -159,7 +158,7 @@ class LsstCamBaseMapper(CameraMapper):
         for d in (self.mappings, self.exposures):
             d['raw'] = d['_raw']
 
-        self.defineFilters()
+        LSSTCAM_FILTER_DEFINITIONS.defineFilters()
 
         LsstCamMapper._nbit_tract = 16
         LsstCamMapper._nbit_patch = 5
@@ -196,12 +195,6 @@ class LsstCamBaseMapper(CameraMapper):
                                           ("%s.yaml" % cls.getCameraName()))
 
         return yamlCamera.makeCamera(cameraYamlFile)
-
-    @classmethod
-    def defineFilters(cls):
-        afwImageUtils.resetFilters()
-        for filterDef in getFilterDefinitions():
-            filterDef.declare()
 
     def _getRegistryValue(self, dataId, k):
         """Return a value from a dataId, or look it up in the registry if it
