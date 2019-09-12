@@ -132,7 +132,7 @@ class LsstCamInstrument(Instrument):
         # to change the group to something else if desired.
         # Long-term, we should get these fields into cameraGeom separately
         # so there's no need to specialize at this stage.
-        print(f"Name: {camGeomDetector.getName()}")
+        # They are separate in ObservationInfo
         group, name = camGeomDetector.getName().split("_")
 
         # getType() returns a pybind11-wrapped enum, which unfortunately
@@ -199,6 +199,11 @@ class LsstComCamInstrument(LsstCamInstrument):
     policyName = "comCam"
     _mapperClass = LsstComCamMapper
 
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstComCamRawFormatter
+        return LsstComCamRawFormatter
+
 
 class ImsimInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for ImSim simulations.
@@ -207,6 +212,11 @@ class ImsimInstrument(LsstCamInstrument):
     instrument = "LSST-ImSim"
     policyName = "imsim"
     _mapperClass = ImsimMapper
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import ImsimRawFormatter
+        return ImsimRawFormatter
 
 
 class PhosimInstrument(LsstCamInstrument):
@@ -217,6 +227,11 @@ class PhosimInstrument(LsstCamInstrument):
     policyName = "phosim"
     _mapperClass = PhosimMapper
 
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import PhosimRawFormatter
+        return PhosimRawFormatter
+
 
 class Ts8Instrument(LsstCamInstrument):
     """Gen3 Butler specialization for raft test stand data.
@@ -225,6 +240,11 @@ class Ts8Instrument(LsstCamInstrument):
     instrument = "LSST-TS8"
     policyName = "ts8"
     _mapperClass = Ts8Mapper
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import Ts8RawFormatter
+        return Ts8RawFormatter
 
 
 class UcdCamInstrument(LsstCamInstrument):
@@ -235,6 +255,11 @@ class UcdCamInstrument(LsstCamInstrument):
     policyName = "ucd"
     _mapperClass = UcdMapper
 
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import UcdCamRawFormatter
+        return UcdCamRawFormatter
+
 
 class Ts3Instrument(LsstCamInstrument):
     """Gen3 Butler specialization for TS3 test stand data.
@@ -243,6 +268,11 @@ class Ts3Instrument(LsstCamInstrument):
     instrument = "LSST-TS3"
     policyName = "ts3"
     _mapperClass = Ts3Mapper
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import Ts3RawFormatter
+        return Ts3RawFormatter
 
 
 class LatissInstrument(LsstCamInstrument):
@@ -259,3 +289,8 @@ class LatissInstrument(LsstCamInstrument):
         entry = super().extractDetectorEntry(camGeomDetector)
         entry["raft"] = None
         return entry
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LatissRawFormatter
+        return LatissRawFormatter

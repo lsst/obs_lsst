@@ -23,3 +23,4 @@
 from .version import *
 from .lsstCamMapper import *
 from .filters import *
+from .gen3 import *
