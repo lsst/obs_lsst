@@ -25,19 +25,12 @@ __all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instr
 import os.path
 from dateutil import parser
 
+import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.daf.butler.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType, DataId
 from lsst.pipe.tasks.read_defects import read_all_defects
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
-from ..lsstCamMapper import LsstCamMapper
-from ..comCam import LsstComCamMapper
-from ..phosim import PhosimMapper
-from ..imsim import ImsimMapper
-from ..latiss import LatissMapper
-from ..ts8 import Ts8Mapper
-from ..ts3 import Ts3Mapper
-from ..ucd import UcdMapper
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -81,7 +74,6 @@ class LsstCamInstrument(Instrument):
     filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
     instrument = "lsstCam"
     policyName = "lsstCam"
-    _mapperClass = LsstCamMapper
     _camera = None
 
     @property
@@ -98,7 +90,8 @@ class LsstCamInstrument(Instrument):
     def getCamera(cls):
         # Constructing a YAML camera takes a long time so cache the result
         if cls._camera is None:
-            cls._camera = cls._mapperClass().camera
+            cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
+            cls._camera = yamlCamera.makeCamera(cameraYamlFile)
         return cls._camera
 
     def getRawFormatter(self, dataId):
@@ -197,7 +190,6 @@ class LsstComCamInstrument(LsstCamInstrument):
 
     instrument = "LSST-ComCam"
     policyName = "comCam"
-    _mapperClass = LsstComCamMapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -211,7 +203,6 @@ class ImsimInstrument(LsstCamInstrument):
 
     instrument = "LSST-ImSim"
     policyName = "imsim"
-    _mapperClass = ImsimMapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -225,7 +216,6 @@ class PhosimInstrument(LsstCamInstrument):
 
     instrument = "LSST-PhoSim"
     policyName = "phosim"
-    _mapperClass = PhosimMapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -239,7 +229,6 @@ class Ts8Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS8"
     policyName = "ts8"
-    _mapperClass = Ts8Mapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -253,7 +242,6 @@ class UcdCamInstrument(LsstCamInstrument):
 
     instrument = "UCDCam"
     policyName = "ucd"
-    _mapperClass = UcdMapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -267,7 +255,6 @@ class Ts3Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS3"
     policyName = "ts3"
-    _mapperClass = Ts3Mapper
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -281,7 +268,6 @@ class LatissInstrument(LsstCamInstrument):
 
     instrument = "LATISS"
     policyName = "latiss"
-    _mapperClass = LatissMapper
 
     def extractDetectorEntry(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one
