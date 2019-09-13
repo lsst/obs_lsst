@@ -96,7 +96,9 @@ class LsstCamInstrument(Instrument):
 
     def getRawFormatter(self, dataId):
         # Docstring inherited from Instrument.getRawFormatter
-        raise NotImplementedError()
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstCamRawFormatter
+        return LsstCamRawFormatter
 
     def register(self, registry):
         # Docstring inherited from Instrument.register
