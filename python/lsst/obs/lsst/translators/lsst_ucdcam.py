@@ -21,7 +21,7 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation
 
-from .lsst import compute_detector_exposure_id_generic, LsstBaseTranslator
+from .lsst import LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
@@ -73,6 +73,10 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
     }
     """Map detector serial to raft and detector number.  Eventually the
     detector number will come out of the policy camera definition."""
+
+    DETECTOR_MAX = 3
+    """Maximum number of detectors to use when calculating the
+    detector_exposure_id."""
 
     @classmethod
     def can_translate(cls, header, filename=None):
@@ -151,29 +155,6 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             if num == detector_num:
                 return group
         raise ValueError(f"Detector {detector_num} is not known for UCDCam")
-
-    @staticmethod
-    def compute_detector_exposure_id(exposure_id, detector_num):
-        """Compute the detector exposure ID from detector number and
-        exposure ID.
-
-        This is a helper method to allow code working outside the translator
-        infrastructure to use the same algorithm.
-
-        Parameters
-        ----------
-        exposure_id : `int`
-            Unique exposure ID.
-        detector_num : `int`
-            Detector number.
-
-        Returns
-        -------
-        detector_exposure_id : `int`
-            The calculated ID.
-        """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=3,
-                                                    mode="concat")
 
     @staticmethod
     def compute_exposure_id(dateobs, seqnum=0):

@@ -138,6 +138,10 @@ class LsstBaseTranslator(FitsTranslator):
     detectorSerials = None
     """Mapping of detector serial number to raft, number, and name."""
 
+    DETECTOR_MAX = 999
+    """Maximum number of detectors to use when calculating the
+    detector_exposure_id."""
+
     @classmethod
     def __init_subclass__(cls, **kwargs):
         """Ensure that subclasses clear their own detector mapping entries
@@ -161,8 +165,8 @@ class LsstBaseTranslator(FitsTranslator):
         """
         return [os.path.join(obs_lsst_packageDir, "corrections")]
 
-    @staticmethod
-    def compute_detector_exposure_id(exposure_id, detector_num):
+    @classmethod
+    def compute_detector_exposure_id(cls, exposure_id, detector_num):
         """Compute the detector exposure ID from detector number and
         exposure ID.
 
@@ -181,7 +185,8 @@ class LsstBaseTranslator(FitsTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=999,
+        return compute_detector_exposure_id_generic(exposure_id, detector_num,
+                                                    max_num=cls.DETECTOR_MAX,
                                                     mode="concat")
 
     @classmethod
