@@ -51,16 +51,21 @@ class TestInstruments(unittest.TestCase):
     def setUp(self):
         self.root = tempfile.mkdtemp(dir=TESTDIR)
         self.rng = np.random.RandomState(50)  # arbitrary deterministic seed
+
+    @classmethod
+    def setUpClass(cls):
         if PRINT_PROFILE:
-            self.profile = Profile()
-            self.profile.enable()
+            cls.profile = Profile()
+            cls.profile.enable()
 
     def tearDown(self):
         if self.root is not None and os.path.exists(self.root):
             shutil.rmtree(self.root, ignore_errors=True)
 
+    @classmethod
+    def tearDownClass(cls):
         if PRINT_PROFILE:
-            stats = Stats(self.profile)
+            stats = Stats(cls.profile)
             stats.strip_dirs()
             stats.sort_stats("cumtime")
             stats.print_stats()
