@@ -75,6 +75,7 @@ class LsstCamInstrument(Instrument):
     instrument = "lsstCam"
     policyName = "lsstCam"
     _camera = None
+    _cameraCachedClass = None
 
     @property
     def configPaths(self):
@@ -89,9 +90,12 @@ class LsstCamInstrument(Instrument):
     @classmethod
     def getCamera(cls):
         # Constructing a YAML camera takes a long time so cache the result
-        if cls._camera is None:
+        # We have to be careful to ensure we cache at the subclass level
+        # since LsstCam base class will look like a cache to the subclasses
+        if cls._camera is None or cls._cameraCachedClass != cls:
             cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
             cls._camera = yamlCamera.makeCamera(cameraYamlFile)
+            cls._cameraCachedClass = cls
         return cls._camera
 
     def getRawFormatter(self, dataId):
