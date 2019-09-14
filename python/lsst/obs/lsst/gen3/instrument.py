@@ -32,6 +32,10 @@ from lsst.daf.butler import DatasetType, DataId
 from lsst.pipe.tasks.read_defects import read_all_defects
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
 
+from ..translators import LsstLatissTranslator, LsstCamTranslator, \
+    LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
+    PhosimTranslator, LsstTS8Translator, ImsimTranslator
+
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
 
@@ -76,6 +80,7 @@ class LsstCamInstrument(Instrument):
     policyName = "lsstCam"
     _camera = None
     _cameraCachedClass = None
+    translatorClass = LsstCamTranslator
 
     @property
     def configPaths(self):
@@ -109,9 +114,9 @@ class LsstCamInstrument(Instrument):
         dataId = {"instrument": self.getName()}
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
-        obsMax = 2050121299999250
+        obsMax = self.translatorClass.max_detector_exposure_id()
         registry.addDimensionEntry("instrument", dataId,
-                                   entries={"detector_max": 200,
+                                   entries={"detector_max": self.translatorClass.DETECTOR_MAX,
                                             "visit_max": obsMax,
                                             "exposure_max": obsMax})
 
@@ -196,6 +201,7 @@ class LsstComCamInstrument(LsstCamInstrument):
 
     instrument = "LSST-ComCam"
     policyName = "comCam"
+    translatorClass = LsstComCamTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -209,6 +215,7 @@ class ImsimInstrument(LsstCamInstrument):
 
     instrument = "LSST-ImSim"
     policyName = "imsim"
+    translatorClass = ImsimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -222,6 +229,7 @@ class PhosimInstrument(LsstCamInstrument):
 
     instrument = "LSST-PhoSim"
     policyName = "phosim"
+    translatorClass = PhosimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -235,6 +243,7 @@ class Ts8Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS8"
     policyName = "ts8"
+    translatorClass = LsstTS8Translator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -248,6 +257,7 @@ class UcdCamInstrument(LsstCamInstrument):
 
     instrument = "UCDCam"
     policyName = "ucd"
+    translatorClass = LsstUCDCamTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -261,6 +271,7 @@ class Ts3Instrument(LsstCamInstrument):
 
     instrument = "LSST-TS3"
     policyName = "ts3"
+    translatorClass = LsstTS3Translator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -274,6 +285,7 @@ class LatissInstrument(LsstCamInstrument):
 
     instrument = "LATISS"
     policyName = "latiss"
+    translatorClass = LsstLatissTranslator
 
     def extractDetectorEntry(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one
