@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd")
+__all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd", "fixAmpsAndAssemble")
 
 import lsst.log
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
@@ -173,3 +173,42 @@ def assembleUntrimmedCcd(amps, exposures):
     config.doTrim = False
     assembleTask = AssembleCcdTask(config=config)
     return assembleTask.assembleCcd(ampDict)
+
+
+def fixAmpsAndAssemble(ampExps, msg):
+    """Fix amp geometry and assemble into exposure.
+
+    Parameters
+    ----------
+    ampExps : sequence of `lsst.afw.image.Exposure`
+        Per-amplifier images.
+    msg : `str`
+        Message to add to log and exception output.
+
+    Notes
+    -----
+    The returned exposure does not have any metadata or WCS attached.
+
+    """
+    if not len(ampExps):
+        raise RuntimeError(f"Unable to read raw_amps for {msg}")
+
+    ccd = ampExps[0].getDetector()      # the same (full, CCD-level) Detector is attached to all ampExps
+    #
+    # Check that the geometry in the metadata matches cameraGeom
+    #
+    warned = False
+
+    def logCmd(s, *args):
+        nonlocal warned
+        if warned:
+            logger.debug(f"{msg}: {s}", *args)
+        else:
+            logger.warn(f"{msg}: {s}", *args)
+            warned = True
+
+    for amp, ampExp in zip(ccd, ampExps):
+        fixAmpGeometry(amp, bbox=ampExp.getBBox(), metadata=ampExp.getMetadata(), logCmd=logCmd)
+
+    exposure = assembleUntrimmedCcd(ccd, ampExps)
+    return exposure

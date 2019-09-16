@@ -36,7 +36,7 @@ from .translators import LsstCamTranslator
 from astro_metadata_translator import fix_header
 
 from .filters import LSSTCAM_FILTER_DEFINITIONS
-from .assembly import attachRawWcsFromBoresight, fixAmpGeometry, assembleUntrimmedCcd
+from .assembly import attachRawWcsFromBoresight, fixAmpsAndAssemble
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
@@ -71,34 +71,13 @@ def assemble_raw(dataId, componentInfo, cls):
     """
 
     ampExps = componentInfo['raw_amp'].obj
-    if len(ampExps) == 0:
-        raise RuntimeError("Unable to read raw_amps for %s" % dataId)
-
-    ccd = ampExps[0].getDetector()      # the same (full, CCD-level) Detector is attached to all ampExps
-    #
-    # Check that the geometry in the metadata matches cameraGeom
-    #
-    logger = lsst.log.Log.getLogger("LsstCamMapper")
-    warned = False
-
-    def logCmd(s, *args):
-        nonlocal warned
-        if warned:
-            logger.debug("{}: {}".format(dataId, s), *args)
-        else:
-            logger.warn("{}: {}".format(dataId, s), *args)
-            warned = True
-
-    for amp, ampExp in zip(ccd, ampExps):
-        fixAmpGeometry(amp, bbox=ampExp.getBBox(), metadata=ampExp.getMetadata(), logCmd=logCmd)
-
-    exposure = assembleUntrimmedCcd(ccd, ampExps)
-
+    exposure = fixAmpsAndAssemble(ampExps, str(dataId))
     md = componentInfo['raw_hdu'].obj
     fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
 
     if not attachRawWcsFromBoresight(exposure):
+        logger = lsst.log.Log.getLogger("LsstCamMapper")
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
                     (dataId,))
 

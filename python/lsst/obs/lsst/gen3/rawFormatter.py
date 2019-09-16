@@ -27,8 +27,6 @@ __all__ = ("LsstCamRawFormatter", "LatissRawFormatter")
 from astro_metadata_translator import fix_header, merge_headers
 
 import lsst.afw.image as afwImage
-import lsst.afw.fits
-import lsst.log
 from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 
 from .instrument import LsstCamInstrument, LatissInstrument, \
@@ -37,7 +35,7 @@ from .instrument import LsstCamInstrument, LatissInstrument, \
 from ..translators import LsstLatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     PhosimTranslator, LsstTS8Translator, ImsimTranslator
-from ..assembly import fixAmpGeometry, assembleUntrimmedCcd
+from ..assembly import fixAmpsAndAssemble
 
 
 class LsstCamRawFormatter(FitsRawFormatterBase):
@@ -90,21 +88,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         for a in ampExps:
             a.setDetector(ccd)
 
-        logger = lsst.log.Log.getLogger("LsstCamFormatter")
-        warned = False
-
-        def logCmd(s, *args):
-            nonlocal warned
-            if warned:
-                logger.debug(f"{rawFile}: {s}", *args)
-            else:
-                logger.warn(f"{rawFile}: {s}", *args)
-                warned = True
-
-        for amp, ampExp in zip(ccd, ampExps):
-            fixAmpGeometry(amp, bbox=ampExp.getBBox(), metadata=ampExp.getMetadata(), logCmd=logCmd)
-
-        exposure = assembleUntrimmedCcd(ccd, ampExps)
+        exposure = fixAmpsAndAssemble(ampExps, rawFile)
         return exposure.getImage()
 
 
