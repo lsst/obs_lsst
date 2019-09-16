@@ -26,7 +26,7 @@ __all__ = ("LsstCamRawFormatter", "LatissRawFormatter")
 
 from astro_metadata_translator import fix_header, merge_headers
 
-import lsst.afw.image as afwImage
+import lsst.afw.fits
 from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 
 from .instrument import LsstCamInstrument, LatissInstrument, \
@@ -55,13 +55,13 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
             Header metadata.
         """
         file = self.fileDescriptor.location.path
-        phdu = afwImage.readMetadata(file, 0)
+        phdu = lsst.afw.fits.readMetadata(file, 0)
         if "INHERIT" in phdu:
             # Trust the inheritance flag
             return super().readMetadata()
 
         # Merge ourselves
-        md = merge_headers([phdu, afwImage.readMetadata(file)],
+        md = merge_headers([phdu, lsst.afw.fits.readMetadata(file)],
                            mode="overwrite")
         fix_header(md)
         return md

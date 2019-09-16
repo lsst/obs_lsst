@@ -27,7 +27,7 @@ Miscellaneous utilities related to lsst cameras
 
 __all__ = ("readRawFile",)
 
-import lsst.afw.image as afwImage
+import lsst.afw.fits
 from .lsstCamMapper import assemble_raw
 from .assembly import readRawAmps
 
@@ -59,7 +59,7 @@ def readRawFile(fileName, detector, dataId=None):
     amps = readRawAmps(fileName, detector=detector)
 
     component_info = {}
-    component_info["raw_hdu"] = Info(afwImage.readMetadata(fileName, hdu=0))
+    component_info["raw_hdu"] = Info(lsst.afw.fits.readMetadata(fileName, hdu=0))
     component_info["raw_amp"] = Info(amps)
 
     exp = assemble_raw(dataId, component_info, None)
