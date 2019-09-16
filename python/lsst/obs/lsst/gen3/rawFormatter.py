@@ -35,7 +35,7 @@ from .instrument import LsstCamInstrument, LatissInstrument, \
 from ..translators import LsstLatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     PhosimTranslator, LsstTS8Translator, ImsimTranslator
-from ..assembly import fixAmpsAndAssemble
+from ..assembly import fixAmpsAndAssemble, readRawAmps
 
 
 class LsstCamRawFormatter(FitsRawFormatterBase):
@@ -77,17 +77,9 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         image : `~lsst.afw.image.Image`
             In-memory image component.
         """
-        nChannels = 16
-
         rawFile = self.fileDescriptor.location.path
-        ampExps = [afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(rawFile, hdu=i+1)))
-                   for i in range(nChannels)]
-
         ccd = self.getDetector(self.observationInfo.detector_num)
-
-        for a in ampExps:
-            a.setDetector(ccd)
-
+        ampExps = readRawAmps(rawFile, detector=ccd)
         exposure = fixAmpsAndAssemble(ampExps, rawFile)
         return exposure.getImage()
 

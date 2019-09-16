@@ -19,9 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd", "fixAmpsAndAssemble")
+__all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd",
+           "fixAmpsAndAssemble", "readRawAmps")
 
 import lsst.log
+import lsst.afw.image as afwImage
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
@@ -185,6 +187,11 @@ def fixAmpsAndAssemble(ampExps, msg):
     msg : `str`
         Message to add to log and exception output.
 
+    Returns
+    -------
+    exposure : `lsst.afw.image.Exposure`
+        Exposure with the amps combined into a single image.
+
     Notes
     -----
     The returned exposure does not have any metadata or WCS attached.
@@ -212,3 +219,26 @@ def fixAmpsAndAssemble(ampExps, msg):
 
     exposure = assembleUntrimmedCcd(ccd, ampExps)
     return exposure
+
+
+def readRawAmps(fileName, detector=None):
+    """Given a file name read the amps and attach the detector.
+
+    Parameters
+    ----------
+    fileName : `str`
+        The full path to a file containing data from a single CCD.
+    detector : `lsst.afw.cameraGeom.Detector`
+        If provided, add this detector to the returned amps.
+
+    Returns
+    -------
+    ampExps : `list` of `lsst.afw.image.Exposure`
+       All the individual amps read from the file.
+    """
+    amps = []
+    for hdu in range(1, 16+1):
+        exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
+        exp.setDetector(detector)
+        amps.append(exp)
+    return amps
