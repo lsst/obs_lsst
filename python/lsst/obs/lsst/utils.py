@@ -32,23 +32,25 @@ from .lsstCamMapper import assemble_raw
 from .assembly import readRawAmps
 
 
-def readRawFile(fileName, dataId={}, detector=None):
+def readRawFile(fileName, detector, dataId=None):
     """Read a raw file from fileName, assembling it nicely.
 
     Parameters
     ----------
     filename : `str`
         The fully-qualified filename.
-    dataId : `lsst.daf.persistence.DataId`
-        If provided, used to look up e.g. the filter.
     detector : `lsst.afw.cameraGeom.Detector`
-        If provided, add this detector to the returned Exposure
+        Detector to associate with the returned Exposure.
+    dataId : `lsst.daf.persistence.DataId` or `dict`
+        DataId to use in log message output.
 
     Returns
     -------
     exposure : `lsst.afw.image.Exposure`
         The assembled exposure from the supplied filename.
     """
+    if dataId is None:
+        dataId = {}
 
     class Info():
         def __init__(self, obj):

@@ -79,7 +79,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         """
         rawFile = self.fileDescriptor.location.path
         ccd = self.getDetector(self.observationInfo.detector_num)
-        ampExps = readRawAmps(rawFile, detector=ccd)
+        ampExps = readRawAmps(rawFile, ccd)
         exposure = fixAmpsAndAssemble(ampExps, rawFile)
         return exposure.getImage()
 

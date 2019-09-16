@@ -221,7 +221,7 @@ def fixAmpsAndAssemble(ampExps, msg):
     return exposure
 
 
-def readRawAmps(fileName, detector=None):
+def readRawAmps(fileName, detector):
     """Given a file name read the amps and attach the detector.
 
     Parameters
@@ -229,7 +229,7 @@ def readRawAmps(fileName, detector=None):
     fileName : `str`
         The full path to a file containing data from a single CCD.
     detector : `lsst.afw.cameraGeom.Detector`
-        If provided, add this detector to the returned amps.
+        Detector to associate with the amps.
 
     Returns
     -------

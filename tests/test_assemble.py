@@ -20,24 +20,27 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import unittest
 
 import lsst.utils.tests
+from lsst.utils import getPackageDir
 from lsst.daf.persistence import Butler
 from lsst.afw.cameraGeom import Camera, Detector
 from lsst.afw.image import ImageFitsReader
+import lsst.obs.base.yamlCamera as yamlCamera
 
 from lsst.obs.lsst.assembly import fixAmpGeometry
+from lsst.obs.lsst.utils import readRawFile
 
-# This could obviously be replaced by something like
-# getPackageDir("testdata_lsst")
-LATISS_DATA_ROOT = os.path.join(os.path.dirname(__file__), os.path.pardir, "data", "input", "latiss")
+PACKAGE_DIR = getPackageDir("obs_lsst")
+TESTDIR = os.path.dirname(__file__)
+LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, "data", "input", "latiss")
 BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 65, 'detector': 0}
 BAD_OVERSCAN_FILENAME = "raw/2018-09-20/2018092000065-det000.fits"
-LOCAL_DATA_ROOT = os.path.join(os.path.dirname(__file__), "data")
+LOCAL_DATA_ROOT = os.path.join(TESTDIR, "data")
 
 
-@unittest.skipUnless(os.path.exists(LATISS_DATA_ROOT), f"{LATISS_DATA_ROOT} does not exist")
 class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 
     def setUp(self):
@@ -95,5 +98,21 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
                 # self.assertAmpRawBBoxesEqual(ampBad, ampGood)
 
 
+class ReadRawFileTestCase(lsst.utils.tests.TestCase):
+    def testReadRawLatissFile(self):
+        fileName = os.path.join(LATISS_DATA_ROOT, BAD_OVERSCAN_FILENAME)
+        policy = os.path.join(PACKAGE_DIR, "policy", "latiss.yaml")
+        camera = yamlCamera.makeCamera(policy)
+        exposure = readRawFile(fileName, camera[0], dataId={"file": fileName})
+        self.assertIsInstance(exposure, lsst.afw.image.Exposure)
+        md = exposure.getMetadata()
+        self.assertIn("INSTRUME", md)
+
+
+def setup_module(module):
+    lsst.utils.tests.init()
+
+
 if __name__ == "__main__":
+    setup_module(sys.modules[__name__])
     unittest.main()

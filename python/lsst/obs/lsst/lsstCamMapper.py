@@ -78,8 +78,7 @@ def assemble_raw(dataId, componentInfo, cls):
 
     if not attachRawWcsFromBoresight(exposure):
         logger = lsst.log.Log.getLogger("LsstCamMapper")
-        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
-                    (dataId,))
+        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable", dataId)
 
     return exposure
 
