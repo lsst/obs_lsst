@@ -9,6 +9,7 @@ setupRequired(ip_isr)
 setupRequired(pipe_tasks)
 setupRequired(astro_metadata_translator)
 setupRequired(obs_lsst_data)
+setupRequired(daf_butler)
 
 envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)

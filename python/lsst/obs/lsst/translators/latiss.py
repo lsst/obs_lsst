@@ -101,6 +101,10 @@ class LsstLatissTranslator(LsstBaseTranslator):
     DETECTOR_NAME = _DETECTOR_NAME
     """Fixed name of single sensor."""
 
+    DETECTOR_MAX = 0
+    """Maximum number of detectors to use when calculating the
+    detector_exposure_id."""
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the

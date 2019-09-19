@@ -25,16 +25,18 @@
 import os
 import re
 import lsst.log
+import lsst.geom
 import lsst.utils as utils
-import lsst.afw.image.utils as afwImageUtils
-import lsst.geom as geom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
-from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf, createInitialSkyWcs
+from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo
 import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 from .translators import LsstCamTranslator
 from astro_metadata_translator import fix_header
+
+from .filters import LSSTCAM_FILTER_DEFINITIONS
+from .assembly import attachRawWcsFromBoresight, fixAmpsAndAssemble
 
 __all__ = ["LsstCamMapper", "LsstCamMakeRawVisitInfo"]
 
@@ -67,101 +69,16 @@ def assemble_raw(dataId, componentInfo, cls):
     exposure : `lsst.afw.image.Exposure`
         The assembled exposure.
     """
-    from lsst.ip.isr import AssembleCcdTask
-
-    config = AssembleCcdTask.ConfigClass()
-    config.doTrim = False
-
-    assembleTask = AssembleCcdTask(config=config)
 
     ampExps = componentInfo['raw_amp'].obj
-    if len(ampExps) == 0:
-        raise RuntimeError("Unable to read raw_amps for %s" % dataId)
-
-    ccd = ampExps[0].getDetector()      # the same (full, CCD-level) Detector is attached to all ampExps
-    #
-    # Check that the geometry in the metadata matches cameraGeom
-    #
-    logger = lsst.log.Log.getLogger("LsstCamMapper")
-    warned = False
-    for i, (amp, ampExp) in enumerate(zip(ccd, ampExps)):
-        ampMd = ampExp.getMetadata().toDict()
-
-        if amp.getRawBBox() != ampExp.getBBox():  # Oh dear. cameraGeom is wrong -- probably overscan
-            if amp.getRawDataBBox().getDimensions() != amp.getBBox().getDimensions():
-                raise RuntimeError("Active area is the wrong size: %s v. %s" %
-                                   (amp.getRawDataBBox().getDimensions(), amp.getBBox().getDimensions()))
-            if not warned:
-                logger.warn("amp.getRawBBox() != data.getBBox(); patching. (%s v. %s)",
-                            amp.getRawBBox(), ampExp.getBBox())
-                warned = True
-
-            w, h = ampExp.getBBox().getDimensions()
-            ow, oh = amp.getRawBBox().getDimensions()  # "old" (cameraGeom) dimensions
-            #
-            # We could trust the BIASSEC keyword, or we can just assume that
-            # they've changed the number of overscan pixels (serial and/or
-            # parallel).  As Jim Chiang points out, the latter is safer
-            #
-            bbox = amp.getRawHorizontalOverscanBBox()
-            hOverscanBBox = geom.BoxI(bbox.getBegin(),
-                                      geom.ExtentI(w - bbox.getBeginX(), bbox.getHeight()))
-            bbox = amp.getRawVerticalOverscanBBox()
-            vOverscanBBox = geom.BoxI(bbox.getBegin(),
-                                      geom.ExtentI(bbox.getWidth(), h - bbox.getBeginY()))
-
-            amp.setRawBBox(ampExp.getBBox())
-            amp.setRawHorizontalOverscanBBox(hOverscanBBox)
-            amp.setRawVerticalOverscanBBox(vOverscanBBox)
-            #
-            # This gets all the geometry right for the amplifier, but the size
-            # of the untrimmed image will be wrong and we'll put the amp
-            # sections in the wrong places, i.e.
-            #   amp.getRawXYOffset()
-            # will be wrong.  So we need to recalculate the offsets.
-            #
-            xRawExtent, yRawExtent = amp.getRawBBox().getDimensions()
-
-            x0, y0 = amp.getRawXYOffset()
-            ix, iy = x0//ow, y0/oh
-            x0, y0 = ix*xRawExtent, iy*yRawExtent
-            amp.setRawXYOffset(geom.ExtentI(ix*xRawExtent, iy*yRawExtent))
-        #
-        # Check the "IRAF" keywords, but don't abort if they're wrong
-        #
-        # Only warn about the first amp, use debug for the others
-        #
-        detsec = bboxFromIraf(ampMd["DETSEC"]) if "DETSEC" in ampMd else None
-        datasec = bboxFromIraf(ampMd["DATASEC"]) if "DATASEC" in ampMd else None
-        biassec = bboxFromIraf(ampMd["BIASSEC"]) if "BIASSEC" in ampMd else None
-
-        logCmd = logger.warn if i == 0 else logger.debug
-        if detsec and amp.getBBox() != detsec:
-            logCmd("DETSEC doesn't match for %s (%s != %s)", dataId, amp.getBBox(), detsec)
-        if datasec and amp.getRawDataBBox() != datasec:
-            logCmd("DATASEC doesn't match for %s (%s != %s)", dataId, amp.getRawDataBBox(), detsec)
-        if biassec and amp.getRawHorizontalOverscanBBox() != biassec:
-            logCmd("BIASSEC doesn't match for %s (%s != %s)",
-                   dataId, amp.getRawHorizontalOverscanBBox(), detsec)
-
-    ampDict = {}
-    for amp, ampExp in zip(ccd, ampExps):
-        ampDict[amp.getName()] = ampExp
-
-    exposure = assembleTask.assembleCcd(ampDict)
-
+    exposure = fixAmpsAndAssemble(ampExps, str(dataId))
     md = componentInfo['raw_hdu'].obj
     fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
-    visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
-    exposure.getInfo().setVisitInfo(visitInfo)
 
-    if visitInfo.getBoresightRaDec().isFinite():
-        exposure.setWcs(createInitialSkyWcs(visitInfo, exposure.getDetector()))
-    else:
-        # Should only warn for science observations but VisitInfo does not know
-        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
-                    (dataId,))
+    if not attachRawWcsFromBoresight(exposure):
+        logger = lsst.log.Log.getLogger("LsstCamMapper")
+        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable", dataId)
 
     return exposure
 
@@ -219,7 +136,7 @@ class LsstCamBaseMapper(CameraMapper):
         for d in (self.mappings, self.exposures):
             d['raw'] = d['_raw']
 
-        self.defineFilters()
+        LSSTCAM_FILTER_DEFINITIONS.defineFilters()
 
         LsstCamMapper._nbit_tract = 16
         LsstCamMapper._nbit_patch = 5
@@ -256,24 +173,6 @@ class LsstCamBaseMapper(CameraMapper):
                                           ("%s.yaml" % cls.getCameraName()))
 
         return yamlCamera.makeCamera(cameraYamlFile)
-
-    @classmethod
-    def defineFilters(cls):
-        # The order of these defineFilter commands matters as their IDs are
-        # used to generate at least some object IDs (e.g. on coadds) and
-        # changing the order will invalidate old objIDs
-        afwImageUtils.resetFilters()
-        afwImageUtils.defineFilter('NONE', 0.0, alias=['no_filter', "OPEN"])
-        afwImageUtils.defineFilter('275CutOn', 0.0, alias=[])
-        afwImageUtils.defineFilter('550CutOn', 0.0, alias=[])
-        # The LSST Filters from L. Jones 04/07/10
-        afwImageUtils.defineFilter('u', lambdaEff=364.59, lambdaMin=324.0, lambdaMax=395.0)
-        afwImageUtils.defineFilter('g', lambdaEff=476.31, lambdaMin=405.0, lambdaMax=552.0)
-        afwImageUtils.defineFilter('r', lambdaEff=619.42, lambdaMin=552.0, lambdaMax=691.0)
-        afwImageUtils.defineFilter('i', lambdaEff=752.06, lambdaMin=818.0, lambdaMax=921.0)
-        afwImageUtils.defineFilter('z', lambdaEff=866.85, lambdaMin=922.0, lambdaMax=997.0)
-        # official y filter
-        afwImageUtils.defineFilter('y', lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4'])
 
     def _getRegistryValue(self, dataId, k):
         """Return a value from a dataId, or look it up in the registry if it
