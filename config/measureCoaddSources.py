@@ -33,6 +33,7 @@ config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
 
 config.match.refObjLoader.ref_dataset_name = "cal_ref_cat"
 config.match.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filterMap.py"))
+config.connections.refCat = "cal_ref_cat"
 
 config.doWriteMatchesDenormalized = True
 
