@@ -106,7 +106,7 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         self.setUp_camera(camera_name='lsstCam',
-                          n_detectors=3,
+                          n_detectors=4,
                           first_detector_name='R00_S00',
                           plate_scale=20.0 * arcseconds,
                           )
