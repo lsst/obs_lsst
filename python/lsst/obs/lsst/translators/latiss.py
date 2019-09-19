@@ -8,9 +8,9 @@
 # Use of this source code is governed by a 3-clause BSD-style
 # license that can be found in the LICENSE file.
 
-"""Metadata translation code for LSST TestStand 8 headers"""
+"""Metadata translation code for LSST LATISS headers"""
 
-__all__ = ("LsstAuxTelTranslator", )
+__all__ = ("LsstLatissTranslator", )
 
 import logging
 
@@ -57,20 +57,20 @@ def is_non_science_or_lab(self):
     raise KeyError("Required key is missing and this is a mountain science observation")
 
 
-class LsstAuxTelTranslator(LsstBaseTranslator):
-    """Metadata translator for LSST AuxTel data.
+class LsstLatissTranslator(LsstBaseTranslator):
+    """Metadata translator for LSST LATISS data from AuxTel.
 
     For lab measurements many values are masked out.
     """
 
-    name = "LSSTAuxTel"
+    name = "LSST_LATISS"
     """Name of this translation class"""
 
     supported_instrument = "LATISS"
     """Supports the LATISS instrument."""
 
     _const_map = {
-        # AuxTel is not yet attached to a telescope so many translations
+        # LATISS is not yet attached to a telescope so many translations
         # are null.
         "instrument": "LATISS",
         "telescope": "LSSTAuxTel",
@@ -157,7 +157,7 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
             The calculated ID.
         """
         if detector_num != 0:
-            log.warning("Unexpected non-zero detector number for AuxTel")
+            log.warning("Unexpected non-zero detector number for LATISS")
         return exposure_id
 
     @cache_translation
@@ -203,7 +203,7 @@ class LsstAuxTelTranslator(LsstBaseTranslator):
             Observation type.
         """
 
-        # AuxTel observation type is documented to appear in OBSTYPE
+        # LATISS observation type is documented to appear in OBSTYPE
         # but for historical reasons prefers IMGTYPE.  Some data puts
         # it in GROUPID (which is meant to be for something else).
         # Test the keys in order until we find one that contains a

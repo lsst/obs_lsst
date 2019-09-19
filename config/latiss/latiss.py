@@ -1,3 +1,5 @@
+# Configuration for latiss
+
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -19,37 +21,11 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
+#
 
-from lsst.obs.lsst.auxTel import AuxTelParseTask
+if hasattr(config, 'ccdKeys'):
+    config.ccdKeys = ['detector', 'detectorName']
 
-config.parse.retarget(AuxTelParseTask)
-
-del config.parse.translation['testType']
-
-del config.parse.translators['run']
-del config.parse.translators['raftName']
-del config.parse.translators['lsstSerial']
-del config.parse.translators['snap']
-
-config.parse.translators['dayObs'] = 'translate_dayObs'
-config.parse.translators['seqNum'] = 'translate_seqNum'
-
-config.parse.hdu = 0
-
-config.register.columns = {
-    #'run': 'text',
-    'dayObs': 'text',
-    'seqNum': 'int',
-    'visit': 'int',
-    'detector': 'int',
-    'detectorName': 'text',
-    'filter': 'text',
-    'dateObs': 'text',
-    'date': 'text',
-    'expTime': 'double',
-    'object': 'text',
-    'imageType': 'text',
-    'wavelength': 'int',
-}
-config.register.unique = ["visit", "detector"]
-config.register.visit = list(config.register.columns.keys())
+config.isr.doLinearize = False
+config.isr.doCrosstalk = False
+config.isr.doAddDistortionModel = False

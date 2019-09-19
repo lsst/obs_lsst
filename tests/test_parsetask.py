@@ -27,7 +27,7 @@ import lsst.daf.base
 import lsst.log
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
-from lsst.obs.lsst.auxTel import AuxTelParseTask
+from lsst.obs.lsst.latiss import LatissParseTask
 from lsst.obs.lsst.ts8 import Ts8ParseTask
 from lsst.obs.lsst.ts3 import Ts3ParseTask
 from lsst.obs.lsst.phosim import PhosimParseTask, PhosimEimgParseTask
@@ -107,8 +107,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                     print(f"{k}: {v!r}")
                 self.assertEqual(phuInfo, expected)
 
-    def test_parsetask_auxtel_translator(self):
-        """Run the gen 2 metadata extraction code for AuxTel"""
+    def test_parsetask_latiss_translator(self):
+        """Run the gen 2 metadata extraction code for LATISS"""
         test_data = (("raw/2018-09-20/2018092000065-det000.fits",
                       dict(
                           expTime=27.0,
@@ -125,11 +125,11 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           wavelength=-666,
                       )),
                      )
-        self.assertParseCompare(DATADIR, CONFIGDIR, "auxTel", AuxTelParseTask, test_data)
+        self.assertParseCompare(DATADIR, CONFIGDIR, "latiss", LatissParseTask, test_data)
 
         # Need to test some code paths for translations where we don't have
         # example headers.
-        parseTask = self._constructParseTask(CONFIGDIR, "auxTel", AuxTelParseTask)
+        parseTask = self._constructParseTask(CONFIGDIR, "latiss", LatissParseTask)
 
         md = lsst.daf.base.PropertyList()
         md["IMGNAME"] = "AT-O-20180816-00008"

@@ -186,8 +186,8 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
                     self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
-    def test_auxtel_translator(self):
-        test_data = (("auxTel-2018-09-20-05700065-det000.yaml",
+    def test_latiss_translator(self):
+        test_data = (("latiss-2018-09-20-05700065-det000.yaml",
                       dict(telescope="LSSTAuxTel",
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
@@ -209,7 +209,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            temperature=None,
                            visit_id=2018092000065,
                            )),
-                     ("auxTel-AT_O_20190329_000022-ats-wfs_ccd.yaml",
+                     ("latiss-AT_O_20190329_000022-ats-wfs_ccd.yaml",
                       dict(telescope="LSSTAuxTel",
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",

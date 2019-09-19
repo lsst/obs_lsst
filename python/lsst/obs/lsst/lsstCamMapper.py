@@ -27,14 +27,12 @@ import re
 import lsst.log
 import lsst.utils as utils
 import lsst.afw.image.utils as afwImageUtils
-import lsst.afw.geom as afwGeom
 import lsst.geom as geom
 import lsst.afw.image as afwImage
 from lsst.afw.fits import readMetadata
-from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf
+from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo, bboxFromIraf, createInitialSkyWcs
 import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
-import lsst.afw.cameraGeom as cameraGeom
 from .translators import LsstCamTranslator
 from astro_metadata_translator import fix_header
 
@@ -158,55 +156,14 @@ def assemble_raw(dataId, componentInfo, cls):
     visitInfo = LsstCamMakeRawVisitInfo(logger)(md)
     exposure.getInfo().setVisitInfo(visitInfo)
 
-    boresight = visitInfo.getBoresightRaDec()
-    rotangle = visitInfo.getBoresightRotAngle()
-
-    if boresight.isFinite():
-        exposure.setWcs(getWcsFromDetector(exposure.getDetector(), boresight,
-                                           90*geom.degrees - rotangle))
+    if visitInfo.getBoresightRaDec().isFinite():
+        exposure.setWcs(createInitialSkyWcs(visitInfo, exposure.getDetector()))
     else:
         # Should only warn for science observations but VisitInfo does not know
         logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable" %
                     (dataId,))
 
     return exposure
-
-
-#
-# This code will be replaced by functionality in afw;
-# DM-14932 (done), DM-14980
-#
-
-
-def getWcsFromDetector(detector, boresight, rotation=0*geom.degrees, flipX=False):
-    """Given a detector and (boresight, rotation), return that detector's WCS
-
-    Parameters
-    ----------
-    camera : `lsst.afw.cameraGeom.Camera`
-        The camera containing the detector.
-    detector : `lsst.afw.cameraGeom.Detector`
-        A detector in a camera.
-    boresight : `lsst.geom.SpherePoint`
-       The boresight of the observation.
-    rotation : `lsst.geom.Angle`, optional
-        The rotation angle of the camera.
-        The rotation is "rotskypos", the angle of sky relative to camera
-        coordinates (from North over East).
-    flipX : `bool`, optional
-        Flip the X axis?
-
-    Returns
-    -------
-    wcs : `lsst::afw::geom::SkyWcs`
-        The calculated WCS.
-    """
-    trans = detector.getTransform(detector.makeCameraSys(cameraGeom.PIXELS),
-                                  detector.makeCameraSys(cameraGeom.FIELD_ANGLE))
-
-    wcs = afwGeom.makeSkyWcs(trans, rotation, flipX, boresight)
-
-    return wcs
 
 
 class LsstCamBaseMapper(CameraMapper):
