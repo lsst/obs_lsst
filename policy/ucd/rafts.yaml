@@ -11,3 +11,6 @@ rafts :
   R02 :
     offset : [0.0, 0.0]                 # offset of centre of raft, mm
     id0 : 2                             # id for S00, incrementing uniformly
+  R03 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 3                             # id for S00, incrementing uniformly
