@@ -24,10 +24,10 @@ from astropy.io import fits
 from astropy.table import Table
 import numpy
 
+
 def convert_qe_curve(filename):
     hdu_list = fits.open(filename)
     # qe data is in first extension
-    hdr = hdu_list[1].header
     data = hdu_list[1].data
     wlength = []
     eff = dict()
@@ -38,7 +38,7 @@ def convert_qe_curve(filename):
             if col_name in eff:
                 eff[col_name].append(row[col_name])
             else:
-                eff[col_name] = [row[col_name],]
+                eff[col_name] = [row[col_name], ]
     out_data = {'amp_name': [], 'wavelength': [], 'efficiency': []}
     for k in eff:
         amp_names = numpy.fill(wlength.shape, k)
@@ -49,4 +49,4 @@ def convert_qe_curve(filename):
     out_data['wavelength'] = out_data['wavelength']*u.nanometer
     out_data['efficiency'] = out_data['efficiency']*u.percent
     metadata = {'detector_id': hdu_list[0].header['LSST_NUM']}
-    return Table(out_data, meta: metadata)
+    return Table(out_data, meta = metadata)
