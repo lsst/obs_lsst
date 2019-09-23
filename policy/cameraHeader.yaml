@@ -506,12 +506,12 @@ RAFT_ITL_WF:
   ccds :
     SW0: &SW0_ITL_WF               # corresponds to lower half of SR slot 00
       << : *CCD_ITL_WF
-      id : 2
+      id : 0
       offset : [-42.37, -52.19]
 
     SW1: &SW1_ITL_WF               # corresponds to upper half of SR slot 00
       << : *SW0_ITL_WF
-      id : 3
+      id : 1
       offset : [-42.37, -32.19]
 
 #

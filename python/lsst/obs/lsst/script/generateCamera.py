@@ -233,7 +233,7 @@ CCDs :\
                     doffset = (0.0, 0.0,)
                     yaw = None
 
-                print(indent(), "%s_%s : " % (raftName[:3], ccdName), file=fd)
+                print(indent(), "%s_%s : " % (raftName.split('_')[0], ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
                 if sensorTypes is not None:

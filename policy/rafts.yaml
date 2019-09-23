@@ -6,32 +6,32 @@ rafts :
     offset : [-254., -254.0]
     id0 : 189
     yaw : 180.
-  R00W :
+  R00_W :
     offset : [-254., -254.0]
     id0 : 191
     yaw : 180.
   R04 :
     offset : [254.0, -254.0]
-    id0 : 198
+    id0 : 193
     yaw : 270.
-  R04W :
+  R04_W :
     offset : [254.0, -254.0]
-    id0 : 198
+    id0 : 195
     yaw : 270.
   R40 :
     offset : [-254.0, 254.0]
-    id0 : 207
+    id0 : 197
     yaw : 90.
-  R40W :
+  R40_W :
     offset : [-254.0, 254.0]
-    id0 : 207
+    id0 : 199
     yaw : 90.
   R44 :
     offset : [254.0, 254.0]
-    id0 : 216
-  R44W :
+    id0 : 201
+  R44_W :
     offset : [254.0, 254.0]
-    id0 : 216
+    id0 : 203
   R01 :
     offset : [-127.6, -253.8]           # offset of centre of raft, mm
     id0 : 0                             # id for S00, incrementing uniformly

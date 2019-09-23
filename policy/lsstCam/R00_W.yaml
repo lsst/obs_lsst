@@ -1,10 +1,10 @@
-R04W :
+R00_W :
   detectorType : ITL_WF
-  raftSerial : LCA-10692_CRTM-0004
+  raftSerial : LCA-10692_CRTM-0002
 
   ccdSerials :
-    SW0 : ITL-4400B-030
-    SW1 : ITL-4400B-031
+    SW0 : ITL-4400B-023
+    SW1 : ITL-4400B-029
 
   geometryWithinRaft:
     SW0 : {
