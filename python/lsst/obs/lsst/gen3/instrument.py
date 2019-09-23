@@ -28,7 +28,7 @@ from dateutil import parser
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.daf.butler.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType, DataId
+from lsst.daf.butler import DatasetType
 from lsst.pipe.tasks.read_defects import read_all_defects
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
 
@@ -111,24 +111,21 @@ class LsstCamInstrument(Instrument):
 
     def register(self, registry):
         # Docstring inherited from Instrument.register
-        dataId = {"instrument": self.getName()}
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
         obsMax = self.translatorClass.max_detector_exposure_id()
-        registry.addDimensionEntry("instrument", dataId,
-                                   entries={"detector_max": self.translatorClass.DETECTOR_MAX,
-                                            "visit_max": obsMax,
-                                            "exposure_max": obsMax})
+        registry.insertDimensionData("instrument",
+                                     {"name": self.getName(),
+                                      "detector_max": self.translatorClass.DETECTOR_MAX,
+                                      "visit_max": obsMax,
+                                      "exposure_max": obsMax})
 
-        for detector in self.getCamera():
-            detInfo = self.extractDetectorEntry(detector)
-            registry.addDimensionEntry(
-                "detector", dataId, **detInfo
-            )
+        records = [self.extractDetectorRecord(detector) for detector in self.getCamera()]
+        registry.insertDimensionData("detector", *records)
 
         self._registerFilters(registry)
 
-    def extractDetectorEntry(self, camGeomDetector):
+    def extractDetectorRecord(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
         """
         # All of the LSST instruments have detector names like R??_S??; we'll
@@ -145,8 +142,10 @@ class LsstCamInstrument(Instrument):
         purpose = str(camGeomDetector.getType()).split(".")[-1]
 
         return dict(
-            detector=camGeomDetector.getId(),
-            name=name,
+            instrument=self.getName(),
+            id=camGeomDetector.getId(),
+            full_name=camGeomDetector.getName(),
+            name_in_raft=name,
             purpose=purpose,
             raft=group,
         )
@@ -186,13 +185,18 @@ class LsstCamInstrument(Instrument):
                     times = times + [parser.parse(endOfTime), ]
                     for defect, beginTime, endTime in zip(defects, times[:-1], times[1:]):
                         md = defect.getMetadata()
-                        dataId = DataId(universe=butler.registry.dimensions,
-                                        instrument=self.getName(),
-                                        calibration_label=f"defect/{md['CALIBDATE']}/{md['DETECTOR']}")
-                        dataId.entries["calibration_label"]["valid_first"] = beginTime
-                        dataId.entries["calibration_label"]["valid_last"] = endTime
-                        butler.registry.addDimensionEntry("calibration_label", dataId)
-                        butler.put(defect, datasetType, dataId, detector=detector.getId())
+                        calibrationLabelName = f"defect/{md['CALIBDATE']}/{md['DETECTOR']}"
+                        butler.registry.insertDimensionData(
+                            "calibration_label",
+                            {
+                                "instrument": self.getName(),
+                                "name": calibrationLabelName,
+                                "datetime_begin": beginTime,
+                                "datetime_end": endTime,
+                            }
+                        )
+                        butler.put(defect, datasetType, instrument=self.getName(),
+                                   calibration_label=calibrationLabelName, detector=detector.getId())
 
 
 class LsstComCamInstrument(LsstCamInstrument):
@@ -287,12 +291,13 @@ class LatissInstrument(LsstCamInstrument):
     policyName = "latiss"
     translatorClass = LsstLatissTranslator
 
-    def extractDetectorEntry(self, camGeomDetector):
+    def extractDetectorRecord(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one
         # detector.
-        entry = super().extractDetectorEntry(camGeomDetector)
-        entry["raft"] = None
-        return entry
+        record = super().extractDetectorRecord(camGeomDetector)
+        record["raft"] = None
+        record["name_in_raft"] = record["full_name"]
+        return record
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
