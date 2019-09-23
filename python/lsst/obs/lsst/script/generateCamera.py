@@ -102,6 +102,7 @@ def applyRaftYaw(ccdLayout, raftYaw):
     new_offset[1] = sinTheta*ccdLayout['offset'][0] + cosTheta*ccdLayout['offset'][1]
     return new_offset
 
+
 def generateCamera(cameraFile, path):
     """Generate a combined camera YAML definition from component parts.
 
