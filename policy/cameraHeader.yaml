@@ -348,6 +348,172 @@ RAFT_E2V:
       id : 8
       offset : [ 42.36,  42.20]
 
+
+#
+# Guide sensors. These are ITL-3800C devices just as for CCD_ITL.
+#
+CCD_ITL_G : &CCD_ITL_G
+    detectorType : 0
+    refpos : [2036.5, 2000.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4071, 3999]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C10: &C10_ITL_G
+        <<: *AMP_ITL
+        hdu : 1
+        flipXY : [True, False]
+        ixy : [0, 0]
+      C11: &C11_ITL_G
+        <<: *C10_ITL_G
+        hdu : 2
+        ixy : [1, 0]
+      C12: &C12_ITL_G
+        <<: *C10_ITL_G
+        hdu : 3
+        ixy : [2, 0]
+      C13: &C13_ITL_G
+        <<: *C10_ITL_G
+        hdu : 4
+        ixy : [3, 0]
+      C14: &C14_ITL_G
+        <<: *C10_ITL_G
+        hdu : 5
+        ixy : [4, 0]
+      C15: &C15_ITL_G
+        <<: *C10_ITL_G
+        hdu : 6
+        ixy : [5, 0]
+      C16: &C16_ITL_G
+        <<: *C10_ITL_G
+        hdu : 7
+        ixy : [6, 0]
+      C17: &C17_ITL_G
+        <<: *C10_ITL_G
+        hdu : 8
+        ixy : [7, 0]
+      C07: &C07_ITL_G
+        <<: *AMP_ITL
+        hdu : 9
+        flipXY : [True, True]
+        ixy : [7, 1]
+      C06: &C06_ITL_G
+        <<: *C07_ITL_G
+        hdu : 10
+        ixy : [6, 1]
+      C05: &C05_ITL_G
+        <<: *C07_ITL_G
+        hdu : 11
+        ixy : [5, 1]
+      C04: &C04_ITL_G
+        <<: *C07_ITL_G
+        hdu : 12
+        ixy : [4, 1]
+      C03: &C03_ITL_G
+        <<: *C07_ITL_G
+        hdu : 13
+        ixy : [3, 1]
+      C02: &C02_ITL_G
+        <<: *C07_ITL_G
+        hdu : 14
+        ixy : [2, 1]
+      C01: &C01_ITL_G
+        <<: *C07_ITL_G
+        hdu : 15
+        ixy : [1, 1]
+      C00: &C00_ITL_G
+        <<: *C07_ITL
+        hdu : 16
+        ixy : [0, 1]
+
+#
+# Wavefront sensors.
+#
+CCD_ITL_WF : &CCD_ITL_WF
+    detectorType : 0
+    refpos : [2036.5, 1000.5]
+    offset : [.nan, .nan]
+    # This is the orientation we need to put the serial direction along the x-axis
+    bbox : [[0, 0], [4071, 1999]]
+    pixelSize : [0.010, 0.010]          # in mm
+    transformDict : {nativeSys : 'Pixels', transforms : None}
+    transposeDetector : False
+    pitch : 0.0                         # (degrees)
+    yaw : 0.0                           # rotation in plane of camera (degrees)
+    roll : 0.0                          # (degrees)
+
+    amplifiers:
+      C07: &C07_ITL_WF
+        <<: *AMP_ITL
+        hdu : 1
+        flipXY : [True, True]
+        ixy : [7, 1]
+      C06: &C06_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 2
+        ixy : [6, 1]
+      C05: &C05_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 3
+        ixy : [5, 1]
+      C04: &C04_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 4
+        ixy : [4, 1]
+      C03: &C03_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 4
+        ixy : [3, 1]
+      C02: &C02_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 6
+        ixy : [2, 1]
+      C01: &C01_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 7
+        ixy : [1, 1]
+      C00: &C00_ITL_WF
+        <<: *C07_ITL_WF
+        hdu : 8
+        ixy : [0, 1]
+
+#
+# Layout of guide sensors in a corner raft.
+#
+RAFT_ITL_G:
+  ccds :
+    SG0: &SG0_ITL_G                     # corresponds to SR slot 10
+      << : *CCD_ITL_G
+      id : 0
+      offset : [-42.32, 0.08]
+
+    SG1: &SG1_ITL_G                     # corresponds to SR slot 01
+      << : *SG0_ITL_G
+      id : 1
+      offset : [ -0.09, -42.32]
+
+#
+# Layout of wavefront sensors in a corner raft.
+#
+RAFT_ITL_WF:
+  ccds :
+    SW0: &SW0_ITL_WF               # corresponds to lower half of SR slot 00
+      << : *CCD_ITL_WF
+      id : 2
+      offset : [-42.37, -52.19]
+
+    SW1: &SW1_ITL_WF               # corresponds to upper half of SR slot 00
+      << : *SW0_ITL_WF
+      id : 3
+      offset : [-42.37, -32.19]
+
 #
 # The following support the UC Davis camera, with a different amplifier read order
 #

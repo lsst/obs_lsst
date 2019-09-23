@@ -2,6 +2,36 @@
 # A list of all the rafts in the camera
 #
 rafts :
+  R00 :
+    offset : [-254., -254.0]
+    id0 : 189
+    yaw : 180.
+  R00W :
+    offset : [-254., -254.0]
+    id0 : 191
+    yaw : 180.
+  R04 :
+    offset : [254.0, -254.0]
+    id0 : 198
+    yaw : 270.
+  R04W :
+    offset : [254.0, -254.0]
+    id0 : 198
+    yaw : 270.
+  R40 :
+    offset : [-254.0, 254.0]
+    id0 : 207
+    yaw : 90.
+  R40W :
+    offset : [-254.0, 254.0]
+    id0 : 207
+    yaw : 90.
+  R44 :
+    offset : [254.0, 254.0]
+    id0 : 216
+  R44W :
+    offset : [254.0, 254.0]
+    id0 : 216
   R01 :
     offset : [-127.6, -253.8]           # offset of centre of raft, mm
     id0 : 0                             # id for S00, incrementing uniformly

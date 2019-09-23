@@ -1,0 +1,41 @@
+R40W :
+  detectorType : ITL_WF
+  raftSerial : LCA-10692_CRTM-0003
+
+  ccdSerials :
+    SW0 : ITL-4400B-027
+    SW1 : ITL-4400B-028
+
+  geometryWithinRaft:
+    SW0 : {
+      offset : [0.0, 0.0],
+      yaw : 180.0,
+    }
+    SW1 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+
+  sensorTypes :
+    SW0 : 3
+    SW1 : 3
+
+  amplifiers :
+    SW0 :
+      C07 : { gain : 1.679, readNoise : 4.28 }
+      C06 : { gain : 1.738, readNoise : 4.19 }
+      C05 : { gain : 1.584, readNoise : 4.28 }
+      C04 : { gain : 1.689, readNoise : 4.12 }
+      C03 : { gain : 1.782, readNoise : 4.09 }
+      C02 : { gain : 1.788, readNoise : 3.87 }
+      C01 : { gain : 1.596, readNoise : 4.46 }
+      C00 : { gain : 1.725, readNoise : 4.13 }
+    SW1 :
+      C07 : { gain : 1.679, readNoise : 4.28 }
+      C06 : { gain : 1.738, readNoise : 4.19 }
+      C05 : { gain : 1.584, readNoise : 4.28 }
+      C04 : { gain : 1.689, readNoise : 4.12 }
+      C03 : { gain : 1.782, readNoise : 4.09 }
+      C02 : { gain : 1.788, readNoise : 3.87 }
+      C01 : { gain : 1.596, readNoise : 4.46 }
+      C00 : { gain : 1.725, readNoise : 4.13 }

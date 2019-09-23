@@ -1,0 +1,57 @@
+R04 :
+  detectorType : ITL_G
+  raftSerial : LCA-10692_CRTM-0004
+
+  ccdSerials :
+    SG0 : ITL-3800C-351
+    SG1 : ITL-3800C-366
+
+  geometryWithinRaft:
+    SG0 : {
+      offset : [0.0, 0.0],
+      yaw : 90.0,
+    }
+    SG1 : {
+      offset : [0.0, 0.0],
+      yaw : 0.0,
+    }
+
+  sensorTypes :
+    SG0 : 2
+    SG1 : 2
+
+  amplifiers :
+    SG0 :
+      C10 : { gain : 1.629, readNoise : 4.21 }
+      C11 : { gain : 1.796, readNoise : 3.86 }
+      C12 : { gain : 1.623, readNoise : 4.27 }
+      C13 : { gain : 1.751, readNoise : 3.90 }
+      C14 : { gain : 1.665, readNoise : 4.23 }
+      C15 : { gain : 1.659, readNoise : 4.18 }
+      C16 : { gain : 1.644, readNoise : 4.34 }
+      C17 : { gain : 1.697, readNoise : 4.07 }
+      C07 : { gain : 1.722, readNoise : 3.95 }
+      C06 : { gain : 1.645, readNoise : 4.35 }
+      C05 : { gain : 1.621, readNoise : 4.13 }
+      C04 : { gain : 1.619, readNoise : 4.24 }
+      C03 : { gain : 1.690, readNoise : 4.26 }
+      C02 : { gain : 1.739, readNoise : 3.78 }
+      C01 : { gain : 1.742, readNoise : 4.16 }
+      C00 : { gain : 1.711, readNoise : 4.13 }
+    SG1 :
+      C10 : { gain : 1.668, readNoise : 4.22 }
+      C11 : { gain : 1.699, readNoise : 4.01 }
+      C12 : { gain : 1.667, readNoise : 4.43 }
+      C13 : { gain : 1.711, readNoise : 4.15 }
+      C14 : { gain : 1.786, readNoise : 3.88 }
+      C15 : { gain : 1.713, readNoise : 4.12 }
+      C16 : { gain : 1.727, readNoise : 4.29 }
+      C17 : { gain : 1.700, readNoise : 4.12 }
+      C07 : { gain : 1.683, readNoise : 4.13 }
+      C06 : { gain : 1.726, readNoise : 4.12 }
+      C05 : { gain : 1.753, readNoise : 4.04 }
+      C04 : { gain : 1.713, readNoise : 4.17 }
+      C03 : { gain : 1.716, readNoise : 3.95 }
+      C02 : { gain : 1.671, readNoise : 4.16 }
+      C01 : { gain : 1.654, readNoise : 4.31 }
+      C00 : { gain : 1.702, readNoise : 4.28 }
