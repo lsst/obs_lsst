@@ -24,6 +24,13 @@ from astropy.io import fits
 from astropy.table import Table
 import numpy
 
+from lsst.meas.algorithms.simple_curve import AmpCurve
+
+amp_name_map = {'AMP01': 'C00', 'AMP02': 'C01', 'AMP03': 'C02', 'AMP04': 'C03', 'AMP05': 'C04',
+                'AMP06': 'C05', 'AMP07': 'C06', 'AMP08': 'C07', 'AMP09': 'C10', 'AMP10': 'C11',
+                'AMP11': 'C12', 'AMP12': 'C13', 'AMP13': 'C14', 'AMP14': 'C15', 'AMP15': 'C16',
+                'AMP16': 'C17'}
+
 
 def convert_qe_curve(filename):
     hdu_list = fits.open(filename)
@@ -32,21 +39,22 @@ def convert_qe_curve(filename):
     wlength = []
     eff = dict()
     for row in data:
-        for i in range(18):  # There are 16 amps
-            wlength.append(row['WAVELENGTH'])
-            col_name = 'AMP%2i'%(i)
-            if col_name in eff:
-                eff[col_name].append(row[col_name])
+        wlength.append(row['WAVELENGTH'])
+        for i in range(16):  # There are 16 amps
+            col_name = 'AMP%02d'%(i+1)
+            if amp_name_map[col_name] in eff:
+                eff[amp_name_map[col_name]].append(row[col_name])
             else:
-                eff[col_name] = [row[col_name], ]
+                eff[amp_name_map[col_name]] = [row[col_name], ]
     out_data = {'amp_name': [], 'wavelength': [], 'efficiency': []}
     for k in eff:
-        amp_names = numpy.fill(wlength.shape, k)
-        out_data['amp_name'] = numpy.concatenate(out_data['amp_name'], amp_names)
-        out_data['wavelength'] = numpy.concatenate(out_data['wavelength'], wlength)
-        out_data['efficiency'] = numpy.concatenate(out_data['efficiency'], eff[k])
+        amp_names = [k for el in range(len(wlength))]
+        out_data['amp_name'] += amp_names
+        out_data['wavelength'] += wlength
+        out_data['efficiency'] += eff[k]
 
-    out_data['wavelength'] = out_data['wavelength']*u.nanometer
-    out_data['efficiency'] = out_data['efficiency']*u.percent
-    metadata = {'detector_id': hdu_list[0].header['LSST_NUM']}
-    return Table(out_data, meta = metadata)
+    out_data['amp_name'] = numpy.array(out_data['amp_name'])
+    out_data['wavelength'] = numpy.array(out_data['wavelength'])*u.nanometer
+    out_data['efficiency'] = numpy.array(out_data['efficiency'])*u.percent
+    return Table(out_data)
+    #return AmpCurve(out_data['amp_name'], out_data['wavelength'], out_data['efficiency'], metadata={})

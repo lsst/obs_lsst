@@ -26,36 +26,33 @@ import os
 import dateutil.parser
 import pickle
 
-amp_name_map = {'AMP01': 'C00', 'AMP02': 'C01', 'AMP03': 'C02', 'AMP04': 'C03', 'AMP05': 'C04',
-                'AMP06': 'C05', 'AMP07': 'C06', 'AMP08': 'C07', 'AMP09': 'C10', 'AMP10': 'C11',
-                'AMP11': 'C12', 'AMP12': 'C13', 'AMP13': 'C14', 'AMP14': 'C15', 'AMP15': 'C16',
-                'AMP16': 'C17'}
+from lsst.meas.algorithms.simple_curve import AmpCurve
 
-
-def rewrite_ts8_files(self, picklefile, out_root='.', valid_start='1970-01-01T00:00:00'):
+def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00'):
     file_root = os.path.split(picklefile)[0]
 
-    valid_date = dateutil.parser(valid_start)
+    valid_date = dateutil.parser.parse(valid_start)
     datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
 
     if not file_root:  # no path given
         file_root = '.'
     with open(picklefile, 'rb') as fh:
-        raft_name = pickle.load(fh)
+        full_raft_name = pickle.load(fh)
         res = pickle.load(fh)  # noqa F841
         detector_list = pickle.load(fh)
         file_list = pickle.load(fh)
         fw = pickle.load(fh)  # noqa F841
         gains = pickle.load(fh)  # noqa F841
 
-    for f in file_list:
+    for k, f in file_list.items():
+        # for some reason the path to the file is in 
+        f = os.path.split(f[0])[1]  # The path is absolute, so grab file name only
         curve_table = convert_qe_curve(os.path.join(file_root, f))
-        detector_id = curve_table.meta['detector_id']
-        detector_name = None
-        for detector_tuple in detector_list:
-            if detector_id == detector_tuple[1]:
-                detector_name = detector_tuple[2]
-        if detector_name is None:
-            raise ValueError(f'Could not find detector name for detector id: {detector_id}.')
-        outfile = os.path.join(out_root, '_'.join(raft_name, detector_name), datestr+'.ecxv')
-        curve_table.writeText(outfile)
+        curve_table.meta['CALIBDATE'] = valid_start
+        curve = AmpCurve.fromTable(curve_table)
+        detector_name = k
+        raft_name = full_raft_name.split('_')[1]  # Select just the RTM part.
+        outpath = os.path.join(out_root, '_'.join([raft_name, detector_name]).lower())
+        outfile = os.path.join(outpath, datestr+'.ecxv')
+        os.makedirs(outpath, exist_ok=True)
+        curve.writeText(outfile)
