@@ -20,6 +20,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from .convert_qe_curve import convert_qe_curve
+from .ts8 import Ts8Mapper
 
 import re
 import os
@@ -29,6 +30,7 @@ import pickle
 from lsst.meas.algorithms.simple_curve import AmpCurve
 
 def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00'):
+    cam = Ts8Mapper().camera
     file_root = os.path.split(picklefile)[0]
 
     valid_date = dateutil.parser.parse(valid_start)
@@ -45,14 +47,21 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
         gains = pickle.load(fh)  # noqa F841
 
     for k, f in file_list.items():
+        detector_name = k
         # for some reason the path to the file is in 
         f = os.path.split(f[0])[1]  # The path is absolute, so grab file name only
         curve_table = convert_qe_curve(os.path.join(file_root, f))
-        curve_table.meta['CALIBDATE'] = valid_start
         curve = AmpCurve.fromTable(curve_table)
-        detector_name = k
         raft_name = full_raft_name.split('_')[1]  # Select just the RTM part.
         outpath = os.path.join(out_root, '_'.join([raft_name, detector_name]).lower())
         outfile = os.path.join(outpath, datestr+'.ecxv')
         os.makedirs(outpath, exist_ok=True)
+        full_detector_name = '_'.join([raft_name, detector_name])
+        detector_id = cam[full_detector_name].getId()
+        curve_table.meta.update({'CALIBDATE': valid_start, 'INSTRUME': 'ts8', 'OBSTYPE': 'qe_curve',
+                                 'DETECTOR': cam['_'.join([raft_name, detector_name])].getId(),
+                                 'PICKLEFILE': os.path.split(picklefile)[1]})
+        curve_table.meta['CALIB_ID'] = (f'raftName={raft_name} detectorName={full_detector_name} ' +
+                                        f'detector={detector_id} calibDate={valid_start} ' +
+                                        f'ccd={detector_id} ccdnum={detector_id} filter=None')
         curve.writeText(outfile)
