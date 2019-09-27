@@ -30,6 +30,20 @@ import pickle
 from lsst.meas.algorithms.simple_curve import AmpCurve
 
 def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00'):
+    """Write the QE curves out to the specified location.
+
+    Parameters
+    ----------
+    picklefile : `str`
+        Path to the pickle file that describes a set of QE curves.
+    out_root : `str`, optional
+        Path to the output location.  If the path doesn't exist,
+        it will be created.
+    valid_start : `str`, optional
+        A string indicating the valid start time for these QE curves.
+        Any ISO compliant string will work.
+    """
+
     cam = Ts8Mapper().camera
     file_root = os.path.split(picklefile)[0]
 

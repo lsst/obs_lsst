@@ -33,6 +33,26 @@ amp_name_map = {'AMP01': 'C00', 'AMP02': 'C01', 'AMP03': 'C02', 'AMP04': 'C03', 
 
 
 def convert_qe_curve(filename):
+    """Convert a single QE curve from its native FITS format to an
+    an `astropy.table.Table` representation.
+
+    Parameters
+    ----------
+    filename : `str`
+        Full path, including filename for the file to be converted.
+
+    Returns
+    -------
+    table : `astropy.table.Table`
+        A Table object containing the columns that describe this
+        QE curve.
+
+    Notes
+    -----
+    This function is specific to how the ts8 data are formatted
+    with a curve per amp.  If ther are other formats, a different
+    converter will be necessary.
+    """
     hdu_list = fits.open(filename)
     # qe data is in first extension
     data = hdu_list[1].data
@@ -57,4 +77,3 @@ def convert_qe_curve(filename):
     out_data['wavelength'] = numpy.array(out_data['wavelength'])*u.nanometer
     out_data['efficiency'] = numpy.array(out_data['efficiency'])*u.percent
     return Table(out_data)
-    #return AmpCurve(out_data['amp_name'], out_data['wavelength'], out_data['efficiency'], metadata={})
