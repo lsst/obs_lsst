@@ -8,12 +8,12 @@ R44_W :
 
   geometryWithinRaft:
     SW0 : {
-      offset : [0.0, 0.0],
-      yaw : 180.0,
+      offset : [3.40, 2.88],
+      yaw : 180.0
     }
     SW1 : {
-      offset : [0.0, 0.0],
-      yaw : 0.0,
+      offset : [3.40, 7.46],
+      yaw : 0.0
     }
 
   sensorTypes :
