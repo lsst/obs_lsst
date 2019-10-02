@@ -30,6 +30,8 @@ datasets:
     template: apPipe_metadata/%(visit)08d-%(filter)s/apPipeMetadata_%(visit)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
   runIsr_metadata:
     template: runIsr_metadata/%(visit)08d-%(filter)s/runIsrMetadata_%(visit)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
+  brighterFatterKernel:
+    template: calibrations/bfKernel-%(detectorName)s-det%(detector)03d.pkl
 
 exposures:
   _raw:
