@@ -9,7 +9,7 @@ R04 :
   geometryWithinRaft:
     SG0 : {
       offset : [8.61, -0.66],
-      yaw : 90.0
+      yaw : 270.0
     }
     SG1 : {
       offset : [1.94, -5.64],
