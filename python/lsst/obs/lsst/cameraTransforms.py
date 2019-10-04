@@ -410,7 +410,7 @@ def ccdPixelToAmpPixel(xy, detector):
     found = False
     for amp in detector:
         if amp.getBBox().contains(xy):
-            x, y = xy - amp.getBBox().getBegin()  # coordinates within amp
+            x, y = xy - amp.getBBox().getBegin()  # coordinates within data segment
             found = True
             break
 
@@ -426,10 +426,7 @@ def ccdPixelToAmpPixel(xy, detector):
     if amp.getRawFlipY():
         y = h - y - 1
 
-    dxy = amp.getRawBBox().getBegin() - amp.getRawDataBBox().getBegin()   # correction for overscan etc.
-    xy = geom.ExtentI(x, y) - dxy
-
-    return amp, xy
+    return amp, geom.PointI(x, y)
 
 
 def focalMmToCcdPixel(camera, focalPlaneXY):
