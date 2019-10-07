@@ -20,20 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.isr.doCrosstalk=True
-config.isr.doBrighterFatter = True
-config.isr.doWrite = False
-
-# Additional configs for star+galaxy ref cats now that DM-17917 is merged
-config.calibrate.astrometry.referenceSelector.doUnresolved = True
-config.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
-config.calibrate.astrometry.referenceSelector.unresolved.minimum = None
-config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
-
-# DM-17043 and DM-16785
-config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
-config.charImage.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
-config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMin = 20
-
-# Discussed on Slack #desc-dm-dc2 with Lauren
-config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMax = 200
+config.makeCoaddTempExp.doApplySkyCorr = True
