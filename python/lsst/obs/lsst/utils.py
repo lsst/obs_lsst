@@ -27,40 +27,39 @@ Miscellaneous utilities related to lsst cameras
 
 __all__ = ("readRawFile",)
 
-import lsst.afw.image as afwImage
-from lsst.obs.lsst.lsstCamMapper import assemble_raw
+import lsst.afw.fits
+from .lsstCamMapper import assemble_raw
+from .assembly import readRawAmps
 
 
-def readRawFile(fileName, dataId={}, detector=None):
+def readRawFile(fileName, detector, dataId=None):
     """Read a raw file from fileName, assembling it nicely.
 
     Parameters
     ----------
     filename : `str`
         The fully-qualified filename.
-    dataId : `lsst.daf.persistence.DataId`
-        If provided, used to look up e.g. the filter.
     detector : `lsst.afw.cameraGeom.Detector`
-        If provided, add this detector to the returned Exposure
+        Detector to associate with the returned Exposure.
+    dataId : `lsst.daf.persistence.DataId` or `dict`
+        DataId to use in log message output.
 
     Returns
     -------
     exposure : `lsst.afw.image.Exposure`
         The assembled exposure from the supplied filename.
     """
+    if dataId is None:
+        dataId = {}
 
     class Info():
         def __init__(self, obj):
             self.obj = obj
 
-    amps = []
-    for hdu in range(1, 16+1):
-        exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
-        exp.setDetector(detector)
-        amps.append(exp)
+    amps = readRawAmps(fileName, detector=detector)
 
     component_info = {}
-    component_info["raw_hdu"] = Info(afwImage.readMetadata(fileName, hdu=0))
+    component_info["raw_hdu"] = Info(lsst.afw.fits.readMetadata(fileName, hdu=0))
     component_info["raw_amp"] = Info(amps)
 
     exp = assemble_raw(dataId, component_info, None)

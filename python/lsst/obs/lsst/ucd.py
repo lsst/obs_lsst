@@ -21,7 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .auxTel import AuxTelMapper
+from .latiss import LatissMapper
 from .ingest import LsstCamParseTask
 from .translators import LsstUCDCamTranslator
 
@@ -40,7 +40,7 @@ class UcdMapper(LsstCamMapper):
 
     _cameraName = "ucd"
     yamlFileList = ["ucd/ucdMapper.yaml"] + \
-        list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
+        list(LatissMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
     def _extractDetectorName(self, dataId):
         if 'detectorName' in dataId:

@@ -1,4 +1,4 @@
-defects: ../auxTel/defects
+defects: ../latiss/defects
 
 calibrations:
   bias:

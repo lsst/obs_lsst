@@ -21,7 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
-from .auxTel import AuxTelMapper
+from .latiss import LatissMapper
 from .ingest import LsstCamParseTask
 from .translators import LsstComCamTranslator
 
@@ -39,7 +39,7 @@ class LsstComCamMapper(LsstCamMapper):
     MakeRawVisitInfoClass = LsstComCamMakeRawVisitInfo
     _cameraName = "comCam"
     yamlFileList = ["comCam/comCamMapper.yaml"] + \
-        list(AuxTelMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
+        list(LatissMapper.yamlFileList) + list(LsstCamMapper.yamlFileList)
 
 
 class LsstComCamParseTask(LsstCamParseTask):

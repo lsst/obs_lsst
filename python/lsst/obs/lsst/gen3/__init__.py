@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-#
-# A python script to read phoSim's headers and write the per-raft datafiles
-# used by generateCamera.py
-#
-# This is not really part of obs_lsst, but it's useful to keep it here
-#
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -26,9 +19,4 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
-from lsst.obs.lsst.script.phosimToRafts import main
-
-
-if __name__ == '__main__':
-    sys.exit(main())
+from .instrument import *  # noqa
