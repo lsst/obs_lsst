@@ -8,11 +8,11 @@ R00_W :
 
   geometryWithinRaft:
     SW0 : {
-      offset : [-3.40, -2.88],
+      offset : [2.5, 1.4375],
       yaw : 180.0
     }
     SW1 : {
-      offset : [-3.40, -7.46],
+      offset : [2.5, 3.5625],
       yaw : 0.0
     }
 

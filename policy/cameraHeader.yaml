@@ -454,35 +454,35 @@ CCD_ITL_WF : &CCD_ITL_WF
         <<: *AMP_ITL
         hdu : 1
         flipXY : [True, True]
-        ixy : [7, 1]
+        ixy : [7, 0]
       C06: &C06_ITL_WF
         <<: *C07_ITL_WF
         hdu : 2
-        ixy : [6, 1]
+        ixy : [6, 0]
       C05: &C05_ITL_WF
         <<: *C07_ITL_WF
         hdu : 3
-        ixy : [5, 1]
+        ixy : [5, 0]
       C04: &C04_ITL_WF
         <<: *C07_ITL_WF
         hdu : 4
-        ixy : [4, 1]
+        ixy : [4, 0]
       C03: &C03_ITL_WF
         <<: *C07_ITL_WF
         hdu : 4
-        ixy : [3, 1]
+        ixy : [3, 0]
       C02: &C02_ITL_WF
         <<: *C07_ITL_WF
         hdu : 6
-        ixy : [2, 1]
+        ixy : [2, 0]
       C01: &C01_ITL_WF
         <<: *C07_ITL_WF
         hdu : 7
-        ixy : [1, 1]
+        ixy : [1, 0]
       C00: &C00_ITL_WF
         <<: *C07_ITL_WF
         hdu : 8
-        ixy : [0, 1]
+        ixy : [0, 0]
 
 #
 # Layout of guide sensors in a corner raft.
@@ -492,12 +492,12 @@ RAFT_ITL_G:
     SG0: &SG0_ITL_G                     # corresponds to SR slot 10
       << : *CCD_ITL_G
       id : 0
-      offset : [-42.32, 0.08]
+      offset : [-42.25, 0.0]
 
     SG1: &SG1_ITL_G                     # corresponds to SR slot 01
       << : *SG0_ITL_G
       id : 1
-      offset : [ -0.09, -42.32]
+      offset : [ -0.0, -42.25]
 
 #
 # Layout of wavefront sensors in a corner raft.
@@ -507,12 +507,12 @@ RAFT_ITL_WF:
     SW0: &SW0_ITL_WF               # corresponds to lower half of SR slot 00
       << : *CCD_ITL_WF
       id : 0
-      offset : [-42.37, -52.19]
+      offset : [-42.25, -52.8125]
 
     SW1: &SW1_ITL_WF               # corresponds to upper half of SR slot 00
       << : *SW0_ITL_WF
       id : 1
-      offset : [-42.37, -32.19]
+      offset : [-42.25, -31.6875]
 
 #
 # The following support the UC Davis camera, with a different amplifier read order
