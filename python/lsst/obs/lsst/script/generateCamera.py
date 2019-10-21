@@ -79,13 +79,13 @@ def build_argparser():
     return parser
 
 
-def applyRaftYaw(ccdLayout, raftYaw):
+def applyRaftYaw(offset, raftYaw):
     """Apply raft yaw angle to internal offsets of the CCDs.
 
     Parameters
     ----------
-    ccdLayout : `dict`
-        Dictionary containing CCD layout information.
+    ccdLayout : `list`
+        A list of the offsets to rotate: [x, y]
     raftYaw : `float`
         Raft yaw angle in degrees.
 
@@ -94,12 +94,12 @@ def applyRaftYaw(ccdLayout, raftYaw):
     2-item sequence of floats containing the rotated offsets.
     """
     if raftYaw == 0.:
-        return ccdLayout['offset']
+        return offset
     new_offset = np.zeros(2, dtype=np.float)
     sinTheta = np.sin(np.radians(raftYaw))
     cosTheta = np.cos(np.radians(raftYaw))
-    new_offset[0] = cosTheta*ccdLayout['offset'][0] - sinTheta*ccdLayout['offset'][1]
-    new_offset[1] = sinTheta*ccdLayout['offset'][0] + cosTheta*ccdLayout['offset'][1]
+    new_offset[0] = cosTheta*offset[0] - sinTheta*offset[1]
+    new_offset[1] = sinTheta*offset[0] + cosTheta*offset[1]
     return new_offset
 
 
@@ -242,9 +242,10 @@ CCDs :\
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
-                ccdLayoutOffset = applyRaftYaw(ccdLayout, raftYaw)
-                print(indent(), "offset : [%g, %g]" % (ccdLayoutOffset[0] + raftOffset[0] + doffset[0],
-                                                       ccdLayoutOffset[1] + raftOffset[1] + doffset[1]),
+                ccdLayoutOffset = applyRaftYaw([el1+el2 for el1, el2 in zip(ccdLayout['offset'], doffset)],
+                                               raftYaw)
+                print(indent(), "offset : [%g, %g]" % (ccdLayoutOffset[0] + raftOffset[0],
+                                                       ccdLayoutOffset[1] + raftOffset[1]),
                       file=fd)
                 if yaw is not None:
                     print(indent(), "yaw : %g" % (yaw), file=fd)
