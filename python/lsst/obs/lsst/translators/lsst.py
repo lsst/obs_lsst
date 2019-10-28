@@ -30,7 +30,7 @@ ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
 TZERO = Time("2010-01-01T00:00", format="isot", scale="utc")
 
 # LSST Default location in the absence of headers
-LSST_LOCATION = EarthLocation.from_geodetic(-30.244639, -70.749417, 2663.0)
+LSST_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
 
 obs_lsst_packageDir = getPackageDir("obs_lsst")
 
