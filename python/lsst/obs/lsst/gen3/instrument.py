@@ -29,7 +29,7 @@ import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType
-from lsst.pipe.tasks.read_defects import read_all_defects
+from lsst.pipe.tasks.read_stdText_calibs import read_all
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
 
 from ..translators import LsstLatissTranslator, LsstCamTranslator, \
@@ -175,7 +175,7 @@ class LsstCamInstrument(Instrument):
 
         if os.path.exists(defectPath):
             camera = self.getCamera()
-            defectsDict = read_all_defects(defectPath, camera)
+            defectsDict = read_all(defectPath, camera)
             endOfTime = '20380119T031407'
             with butler.transaction():
                 for det in defectsDict:
