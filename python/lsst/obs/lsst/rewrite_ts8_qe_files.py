@@ -29,6 +29,7 @@ import pickle
 
 from lsst.meas.algorithms.simple_curve import AmpCurve
 
+
 def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00'):
     """Write the QE curves out to the specified location.
 
@@ -55,14 +56,13 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
     with open(picklefile, 'rb') as fh:
         full_raft_name = pickle.load(fh)
         res = pickle.load(fh)  # noqa F841
-        detector_list = pickle.load(fh)
+        detector_list = pickle.load(fh)  # noqa F841
         file_list = pickle.load(fh)
         fw = pickle.load(fh)  # noqa F841
         gains = pickle.load(fh)  # noqa F841
 
     for k, f in file_list.items():
         detector_name = k
-        # for some reason the path to the file is in 
         f = os.path.split(f[0])[1]  # The path is absolute, so grab file name only
         curve_table = convert_qe_curve(os.path.join(file_root, f))
         curve = AmpCurve.fromTable(curve_table)
