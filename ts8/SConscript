@@ -19,8 +19,8 @@ python = "{} python".format(libpathstr)
 
 pipe_tasks_dir = lsst.sconsUtils.env.ProductDir('pipe_tasks')
 data_dir = lsst.sconsUtils.env.ProductDir('obs_lsst_data')
-command = (f"{python} {pipe_tasks_dir}/bin/ingestStdTextCalibs.py latiss/CALIB/ {data_dir}/latiss/defects "
-           "--calib latiss/CALIB --config clobber=True")
+command = (f"{python} {pipe_tasks_dir}/bin/ingestStdTextCalibs.py ts8/CALIB/ {data_dir}/ts8/qe_curves "
+           "--calib ts8/CALIB --config clobber=True")
 commandInst = env.Command('CALIB/calibRegistry.sqlite3', [], command)
 env.Depends(commandInst, lsst.sconsUtils.targets["python"])
-env.Depends(commandInst, "../policy/latiss.yaml")
+env.Depends(commandInst, "../policy/ts8.yaml")

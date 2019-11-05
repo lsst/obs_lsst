@@ -96,8 +96,8 @@ calibrations:
     validStartName: validStart
   defects:
     columns:
-    - ccd
-    - taiObs
+    - detector
+    - calibDate
     level: Ccd
     persistable: BaseCatalog
     python: lsst.meas.algorithms.Defects
