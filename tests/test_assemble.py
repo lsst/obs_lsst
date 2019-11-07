@@ -57,6 +57,34 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(amp1.getRawHorizontalOverscanBBox(), amp2.getRawHorizontalOverscanBBox())
         self.assertEqual(amp1.getRawVerticalOverscanBBox(), amp2.getRawVerticalOverscanBBox())
 
+    def assertAmpRawBBoxesFlippablyEqual(self, amp1, amp2):
+        xFlip = amp1.getRawFlipX() ^ amp2.getRawFlipX()
+        yFlip = amp1.getRawFlipY() ^ amp2.getRawFlipY()
+        XYOffset = amp1.getRawXYOffset() - amp2.getRawXYOffset()
+
+        testRawBox = amp1.getRawBBox()
+        testHOSBox = amp1.getRawHorizontalOverscanBBox()
+        testVOSBox = amp1.getRawVerticalOverscanBBox()
+
+        if xFlip:
+            size = amp1.getRawBBox().getWidth()
+            testRawBox.flipLR(size)
+            testHOSBox.flipLR(size)
+            testVOSBox.flipLR(size)
+        if yFlip:
+            size = amp1.getRawBBox().getHeight()
+            testRawBox.flipTB(size)
+            testHOSBox.flipTB(size)
+            testVOSBox.flipTB(size)
+
+        testRawBox.shift(XYOffset)
+        testHOSBox.shift(XYOffset)
+        testVOSBox.shift(XYOffset)
+
+        self.assertEqual(testRawBox, amp2.getRawBBox())
+        self.assertEqual(testHOSBox, amp2.getRawHorizontalOverscanBBox())
+        self.assertEqual(testVOSBox, amp2.getRawVerticalOverscanBBox())
+
     def testGen2GetBadOverscan(self):
         """Test that we can use the Gen2 Butler to read a file with overscan
         regions that disagree with cameraGeom, and that the detector attached
@@ -77,25 +105,25 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
                 self.assertEqual(amp1.getName(), amp2.getName())
                 self.assertAmpRawBBoxesEqual(amp1, amp2)
 
-    @unittest.expectedFailure
     def testFixBadOverscans(self):
         """Test the low-level code for repairing cameraGeom overscan regions
         that disagree with raw files.
         """
         testFile = os.path.join(LATISS_DATA_ROOT, BAD_OVERSCAN_FILENAME)
+
         for i, (ampBad, ampGood) in enumerate(zip(self.cameraBroken[0], self.detectorFixed)):
             with self.subTest(amp=ampBad.getName()):
                 self.assertEqual(ampBad.getName(), ampGood.getName())
                 hdu = i + 1
-                self.assertEqual(ampBad.get("hdu"), hdu)
                 reader = ImageFitsReader(testFile, hdu=hdu)
                 metadata = reader.readMetadata()
                 image = reader.read()
-                self.assertEqual(ampGood.getRawBBox(), image.getBBox())
-                self.assertNotEqual(ampBad.getRawBBox(), image.getBBox())
-                modified = fixAmpGeometry(ampBad, image.getBBox(), metadata)
+                self.assertEqual(ampGood.getRawBBox().getDimensions(), image.getBBox().getDimensions())
+                self.assertNotEqual(ampBad.getRawBBox().getDimensions(), image.getBBox().getDimensions())
+                newAmp, modified = fixAmpGeometry(ampBad, image.getBBox(), metadata)
                 self.assertTrue(modified)
-                # self.assertAmpRawBBoxesEqual(ampBad, ampGood)
+                self.assertNotEqual(newAmp.getRawBBox().getDimensions(), ampBad.getRawBBox().getDimensions())
+                self.assertAmpRawBBoxesFlippablyEqual(newAmp, ampGood)
 
 
 class ReadRawFileTestCase(lsst.utils.tests.TestCase):
