@@ -27,7 +27,7 @@ from dateutil import parser
 
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
-from lsst.daf.butler.instrument import Instrument, addUnboundedCalibrationLabel
+from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType
 from lsst.pipe.tasks.read_defects import read_all_defects
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
