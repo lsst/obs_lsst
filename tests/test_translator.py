@@ -231,10 +231,37 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            temperature=None,
                            visit_id=2019032900022,
                            )),
+                     ("latiss-future.yaml",
+                      dict(telescope="LSSTAuxTel",
+                           instrument="LATISS",
+                           boresight_rotation_coord="unknown",
+                           dark_time=0.0*u.s,
+                           detector_exposure_id=2020032900022,
+                           detector_group="RXX",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-098",
+                           exposure_id=2020032900022,
+                           exposure_time=0.0*u.s,
+                           object="UNKNOWN",
+                           observation_id="AT_X_20200329_000022",
+                           observation_type="bias",
+                           physical_filter="NONE",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=2020032900022,
+                           )),
                      )
+        self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
+        # This translation should fail
+        with self.assertRaises(KeyError):
+            self.assertObservationInfoFromYaml("latiss-future-bad.yaml", dir=self.datadir)
 
     def test_imsim_translator(self):
         test_data = (("imsim-bias-lsst_a_3010002_R11_S00.yaml",
@@ -469,6 +496,14 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
+    def test_checker(self):
+        filename = "latiss-future.yaml"
+        from astro_metadata_translator.tests import read_test_file
+        from astro_metadata_translator import ObservationInfo
+        header = read_test_file(filename, self.datadir)
+        obsInfo = ObservationInfo(header, pedantic=True)
+        self.assertTrue(obsInfo)
 
 
 if __name__ == "__main__":

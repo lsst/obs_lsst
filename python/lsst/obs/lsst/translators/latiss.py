@@ -50,10 +50,21 @@ def is_non_science_or_lab(self):
     KeyError
         If this is a science observation and on the mountain.
     """
-    if is_non_science(self):
+    # Return without raising if this is not a science observation
+    # since the defaults are fine.
+    try:
+        # This will raise if it is a science observation
+        is_non_science(self)
         return
+    except KeyError:
+        pass
+
+    # We are still in the lab, return and use the default
     if not self._is_on_mountain():
         return
+
+    # This is a science observation on the mountain so we should not
+    # use defaults
     raise KeyError("Required key is missing and this is a mountain science observation")
 
 
