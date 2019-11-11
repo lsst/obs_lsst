@@ -53,11 +53,36 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(self.cameraBroken[0].getName(), self.detectorFixed.getName())
 
     def assertAmpRawBBoxesEqual(self, amp1, amp2):
+        """Check that Raw bounding boxes match between amps.
+
+        Parameters
+        ----------
+        amp1 : `~lsst.afw.cameraGeom.Amplifier`
+            First amplifier.
+        amp2 : `~lsst.afw.cameraGeom.Amplifier`
+            Second amplifier.
+        """
         self.assertEqual(amp1.getRawBBox(), amp2.getRawBBox())
         self.assertEqual(amp1.getRawHorizontalOverscanBBox(), amp2.getRawHorizontalOverscanBBox())
         self.assertEqual(amp1.getRawVerticalOverscanBBox(), amp2.getRawVerticalOverscanBBox())
 
     def assertAmpRawBBoxesFlippablyEqual(self, amp1, amp2):
+        """Check that amp1 can be self-consistently transformed to match amp2.
+
+        This method compares amplifier bounding boxes by confirming
+        that they represent the same segment of the detector image.
+        If the offsets or amplifier flips differ between the
+        amplifiers, this method will pass even if the raw bounding
+        boxes returned by the amplifier accessors are not equal.
+
+        Parameters
+        ----------
+        amp1 : `~lsst.afw.cameraGeom.Amplifier`
+            Amplifier to transform.
+        amp2 : `~lsst.afw.cameraGeom.Amplifier`
+            Reference amplifier.
+
+        """
         xFlip = amp1.getRawFlipX() ^ amp2.getRawFlipX()
         yFlip = amp1.getRawFlipY() ^ amp2.getRawFlipY()
         XYOffset = amp1.getRawXYOffset() - amp2.getRawXYOffset()

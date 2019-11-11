@@ -86,6 +86,11 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         the camera definitions, and so should provide the safest
         interface to the data.
 
+        Parameters
+        ----------
+        parameters : `dict`, optional
+            No parameters are currently used.
+
         Returns
         -------
         exposure : `~lsst.afw.image.Exposure`
