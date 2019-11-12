@@ -77,11 +77,46 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         image : `~lsst.afw.image.Image`
             In-memory image component.
         """
+        return self.readFull().getImage()
+
+    def readFull(self, parameters=None):
+        """Read the complete exposure.
+
+        This correctly fixes amplifier bounding box deviations from
+        the camera definitions, and so should provide the safest
+        interface to the data.
+
+        Parameters
+        ----------
+        parameters : `dict`, optional
+            No parameters are currently used.
+
+        Returns
+        -------
+        exposure : `~lsst.afw.image.Exposure`
+            Complete in-memory exposure representation.
+
+        """
         rawFile = self.fileDescriptor.location.path
         ccd = self.getDetector(self.observationInfo.detector_num)
         ampExps = readRawAmps(rawFile, ccd)
         exposure = fixAmpsAndAssemble(ampExps, rawFile)
-        return exposure.getImage()
+
+        mask = self.readMask()
+        if mask is not None:
+            exposure.setMask(mask)
+        variance = self.readVariance()
+        if variance is not None:
+            exposure.setVariance(variance)
+
+        info = exposure.getInfo()
+        info.setFilter(self.makeFilter())
+        info.setVisitInfo(self.makeVisitInfo())
+        info.setWcs(self.makeWcs(info.getVisitInfo(), info.getDetector()))
+
+        exposure.setMetadata(self.metadata)
+
+        return exposure
 
 
 class LatissRawFormatter(LsstCamRawFormatter):
