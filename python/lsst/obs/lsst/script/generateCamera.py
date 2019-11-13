@@ -84,14 +84,15 @@ def applyRaftYaw(offset, raftYaw):
 
     Parameters
     ----------
-    ccdLayout : `list`
+    offset : `list` of `float`
         A list of the offsets to rotate: [x, y]
     raftYaw : `float`
         Raft yaw angle in degrees.
 
     Returns
     -------
-    2-item sequence of floats containing the rotated offsets.
+    offsets : `list` of `float
+        2-item sequence of floats containing the rotated offsets.
     """
     if raftYaw == 0.:
         return offset
