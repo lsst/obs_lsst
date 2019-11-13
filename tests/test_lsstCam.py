@@ -115,7 +115,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         self.setUp_camera(camera_name='lsstCam',
-                          n_detectors=189,
+                          n_detectors=205,
                           first_detector_name='R01_S00',
                           plate_scale=20.0 * arcseconds,
                           )

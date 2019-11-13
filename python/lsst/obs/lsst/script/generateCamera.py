@@ -29,6 +29,7 @@ import os
 import sys
 import shutil
 import yaml
+import numpy as np
 
 
 def findYamlOnPath(fileName, searchPath):
@@ -76,6 +77,31 @@ def build_argparser():
     parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
 
     return parser
+
+
+def applyRaftYaw(offset, raftYaw):
+    """Apply raft yaw angle to internal offsets of the CCDs.
+
+    Parameters
+    ----------
+    offset : `list` of `float`
+        A list of the offsets to rotate: [x, y]
+    raftYaw : `float`
+        Raft yaw angle in degrees.
+
+    Returns
+    -------
+    offsets : `list` of `float
+        2-item sequence of floats containing the rotated offsets.
+    """
+    if raftYaw == 0.:
+        return offset
+    new_offset = np.zeros(2, dtype=np.float)
+    sinTheta = np.sin(np.radians(raftYaw))
+    cosTheta = np.cos(np.radians(raftYaw))
+    new_offset[0] = cosTheta*offset[0] - sinTheta*offset[1]
+    new_offset[1] = sinTheta*offset[0] + cosTheta*offset[1]
+    return new_offset
 
 
 def generateCamera(cameraFile, path):
@@ -193,18 +219,22 @@ CCDs :\
 
             raftOffset = perRaftData["offset"]
             id0 = perRaftData['id0']
+            try:
+                raftYaw = perRaftData['yaw']
+            except KeyError:
+                raftYaw = 0.
             geometryWithinRaft = raftCcdData['geometryWithinRaft'] \
                                  if 'geometryWithinRaft' in raftCcdData else {} # noqa E127
 
             for ccdName, ccdLayout in ccds.items():
                 if ccdName in geometryWithinRaft:
                     doffset = geometryWithinRaft[ccdName]['offset']
-                    yaw = geometryWithinRaft[ccdName]['yaw']
+                    yaw = geometryWithinRaft[ccdName]['yaw'] + raftYaw
                 else:
                     doffset = (0.0, 0.0,)
                     yaw = None
 
-                print(indent(), "%s_%s : " % (raftName, ccdName), file=fd)
+                print(indent(), "%s_%s : " % (raftName.split('_')[0], ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
                 if sensorTypes is not None:
@@ -213,8 +243,10 @@ CCDs :\
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
-                print(indent(), "offset : [%g, %g]" % (ccdLayout['offset'][0] + raftOffset[0] + doffset[0],
-                                                       ccdLayout['offset'][1] + raftOffset[1] + doffset[1]),
+                ccdLayoutOffset = applyRaftYaw([el1+el2 for el1, el2 in zip(ccdLayout['offset'], doffset)],
+                                               raftYaw)
+                print(indent(), "offset : [%g, %g]" % (ccdLayoutOffset[0] + raftOffset[0],
+                                                       ccdLayoutOffset[1] + raftOffset[1]),
                       file=fd)
                 if yaw is not None:
                     print(indent(), "yaw : %g" % (yaw), file=fd)
