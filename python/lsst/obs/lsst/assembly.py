@@ -24,7 +24,6 @@ __all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd"
 
 import lsst.log
 import lsst.afw.image as afwImage
-import lsst.afw.cameraGeom as cameraGeom
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
@@ -227,8 +226,6 @@ def fixAmpsAndAssemble(ampExps, msg):
                                           logCmd=logCmd)
         tempCcd.append(outAmp)
 
-    newBBox = cameraGeom.utils.calcRawCcdBBox(tempCcd)
-    tempCcd.setBBox(newBBox)
     ccd = tempCcd.finish()
 
     # Update the data to be combined to point to the newly rebuilt detector.
