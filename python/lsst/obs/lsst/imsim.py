@@ -50,3 +50,7 @@ class ImsimParseTask(LsstCamParseTask):
 
     _mapperClass = ImsimMapper
     _translatorClass = ImsimTranslator
+
+    def translate_controller(self, md):
+        """Always return OCS as controller for imsim data."""
+        return "O"

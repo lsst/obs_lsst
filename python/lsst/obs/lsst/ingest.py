@@ -274,6 +274,26 @@ class LsstCamParseTask(ParseTask):
     def translate_visit(self, md):
         return self.observationInfo.visit_id
 
+    def translate_obsid(self, md):
+        return self.observationInfo.observation_id
+
+    def translate_controller(self, md):
+        if "CONTRLLR" in md:
+            if md["CONTRLLR"]:
+                return md["CONTRLLR"]
+            else:
+                # Was undefined, sometimes it is in fact in the OBSID
+                obsid = self.translate_obsid(md)
+                components = obsid.split("_")
+                if len(components) >= 2 and len(components[1]) == 1:
+                    # AT_C_20190319_00001
+                    return components[1]
+                # Assume OCS control
+                return "O"
+        else:
+            # Assume it is under camera control
+            return "C"
+
 
 class LsstCamCalibsParseTask(CalibsParseTask):
     """Parser for calibs."""
