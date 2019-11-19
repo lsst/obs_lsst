@@ -199,10 +199,21 @@ class LsstBaseTranslator(FitsTranslator):
         max_id : `int`
             The maximum value.
         """
+        max_exposure_id = cls.max_exposure_id()
+        return cls.compute_detector_exposure_id(max_exposure_id, cls.DETECTOR_MAX)
+
+    @classmethod
+    def max_exposure_id(cls):
+        """The maximum exposure ID expected from this instrument.
+
+        Returns
+        -------
+        max_exposure_id : `int`
+            The maximum value.
+        """
         max_date = "2050-12-31T23:59.999"
         max_seqnum = 99_999
-        max_exposure_id = cls.compute_exposure_id(max_date, max_seqnum)
-        return cls.compute_detector_exposure_id(max_exposure_id, cls.DETECTOR_MAX)
+        return cls.compute_exposure_id(max_date, max_seqnum)
 
     @classmethod
     def detector_mapping(cls):
