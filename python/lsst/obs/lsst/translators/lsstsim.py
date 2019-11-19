@@ -32,6 +32,17 @@ class LsstSimTranslator(LsstBaseTranslator):
     _const_map = {}
     _trivial_map = {}
 
+    @classmethod
+    def max_exposure_id(cls):
+        """The maximum exposure ID expected from this instrument.
+
+        Returns
+        -------
+        max_exposure_id : `int`
+            The maximum value.
+        """
+        return 9_999_999
+
     @cache_translation
     def to_telescope(self):
         # Docstring will be inherited. Property defined in properties.py

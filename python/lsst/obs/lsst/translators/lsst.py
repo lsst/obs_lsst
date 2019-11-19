@@ -213,7 +213,8 @@ class LsstBaseTranslator(FitsTranslator):
         """
         max_date = "2050-12-31T23:59.999"
         max_seqnum = 99_999
-        return cls.compute_exposure_id(max_date, max_seqnum)
+        max_controller = "C"  # This controller triggers the largest numbers
+        return cls.compute_exposure_id(max_date, max_seqnum, max_controller)
 
     @classmethod
     def detector_mapping(cls):
@@ -329,7 +330,7 @@ class LsstBaseTranslator(FitsTranslator):
         return info
 
     @staticmethod
-    def compute_exposure_id(dayobs, seqnum):
+    def compute_exposure_id(dayobs, seqnum, controller=None):
         """Helper method to calculate the exposure_id.
 
         Parameters
@@ -340,6 +341,12 @@ class LsstBaseTranslator(FitsTranslator):
             ``T`` before being handled.
         seqnum : `int` or `str`
             Sequence number.
+        controller : `str`, optional
+            Controller to use. If this is "O", no change is made to the
+            exposure ID. If it is "C" a "1" is prefixed to the exposure ID.
+            `None` indicates that the controller is not relevant to the
+            exposure ID calculation (generally this is the case for test
+            stand data).
 
         Returns
         -------
@@ -361,6 +368,17 @@ class LsstBaseTranslator(FitsTranslator):
 
         # Form the number as a string zero padding the sequence number
         idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
+
+        # Camera control changes the exposure ID
+        if controller is not None:
+            if controller == "O":
+                pass
+            elif controller == "C":
+                idstr = "1" + idstr
+            else:
+                raise ValueError(f"Supplied controller, '{controller}' is neither 'O' nor 'C'")
+
+        # Exposure ID has to be an integer
         return int(idstr)
 
     def _is_on_mountain(self):
@@ -450,7 +468,8 @@ class LsstBaseTranslator(FitsTranslator):
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
-        This is a combination of DAYOBS and SEQNUM.
+        This is a combination of DAYOBS and SEQNUM, and optionally
+        CONTRLLR.
 
         Returns
         -------
@@ -465,7 +484,13 @@ class LsstBaseTranslator(FitsTranslator):
         seqnum = self._header["SEQNUM"]
         self._used_these_cards("DAYOBS", "SEQNUM")
 
-        return self.compute_exposure_id(dayobs, seqnum)
+        if self.is_key_ok("CONTRLLR"):
+            controller = self._header["CONTRLLR"]
+            self._used_these_cards("CONTRLLR")
+        else:
+            controller = None
+
+        return self.compute_exposure_id(dayobs, seqnum, controller=controller)
 
     # For now "visits" are defined to be identical to exposures.
     to_visit_id = to_exposure_id

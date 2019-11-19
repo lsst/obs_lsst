@@ -157,7 +157,7 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
         raise ValueError(f"Detector {detector_num} is not known for UCDCam")
 
     @staticmethod
-    def compute_exposure_id(dateobs, seqnum=0):
+    def compute_exposure_id(dateobs, seqnum=0, controller=None):
         """Helper method to calculate the exposure_id.
 
         Parameters
@@ -166,6 +166,8 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             Date of observation in FITS ISO format.
         seqnum : `int`, unused
             Sequence number. Ignored.
+        controller : `str`, unused
+            Controller type. Ignored.
 
         Returns
         -------
