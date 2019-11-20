@@ -122,6 +122,12 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         super().setUp()
 
+    def testObsid(self):
+        """Check that we can retrieve data using the obsid."""
+        raw = self.butler.get('raw', {'obsid': "MC_C_20190319_000001", 'detectorName': 'S02',
+                                      'raftName': 'R10'})
+        self.assertIsNotNone(raw)
+
     def testCcdExposureId(self):
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={})
