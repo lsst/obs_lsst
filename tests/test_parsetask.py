@@ -109,7 +109,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_latiss_translator(self):
         """Run the gen 2 metadata extraction code for LATISS"""
-        test_data = (("raw/2018-09-20/2018092000065-det000.fits",
+        test_data = (("raw/2018-09-20/12018092000065-det000.fits",
                       dict(
                           expTime=27.0,
                           object='UNKNOWN',
@@ -388,7 +388,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_lsstCam_translator(self):
         """Run the gen 2 metadata extraction code for lsstCam"""
-        test_data = (("raw/unknown/R10/2019031900001-R10-S02-det029-000.fits",
+        test_data = (("raw/unknown/R10/12019031900001-R10-S02-det029-000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -410,7 +410,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           controller="C",
                           obsid="MC_C_20190319_000001",
                       )),
-                     ("raw/6489D/R10/2019032200002-R10-S22-det035-000.fits",
+                     ("raw/6489D/R10/12019032200002-R10-S22-det035-000.fits",
                       dict(
                           expTime=1.0,
                           object='UNKNOWN',
@@ -437,7 +437,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_comCam_translator(self):
         """Run the gen 2 metadata extraction code for comCam"""
-        test_data = (("raw/unknown/R22/2019053000001-R22-S00-det000-000.fits",
+        test_data = (("raw/unknown/R22/12019053000001-R22-S00-det000-000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',

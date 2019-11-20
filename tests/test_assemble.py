@@ -37,7 +37,7 @@ PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
 LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, "data", "input", "latiss")
 BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 65, 'detector': 0}
-BAD_OVERSCAN_FILENAME = "raw/2018-09-20/2018092000065-det000.fits"
+BAD_OVERSCAN_FILENAME = "raw/2018-09-20/12018092000065-det000.fits"
 LOCAL_DATA_ROOT = os.path.join(TESTDIR, "data")
 
 

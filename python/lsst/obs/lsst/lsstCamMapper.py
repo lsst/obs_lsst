@@ -228,7 +228,8 @@ class LsstCamBaseMapper(CameraMapper):
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
-        return 51  # max detector_exposure_id ~ 2050121299999250
+        # 54 for CCS controller, 51 for OCS
+        return 54  # max detector_exposure_id ~ 12050121299999250
 
     def _computeCoaddExposureId(self, dataId, singleFilter):
         """Compute the 64-bit (long) identifier for a coadd.

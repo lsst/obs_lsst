@@ -7,7 +7,7 @@ _parents:
   _mapperArgs: {}
   _parents: []
   _policy: null
-  _root: /project/krughoff/hack/WORK/imsim
+  _root: /Users/timj/work/lsstsw3/build/obs_lsst/data/input/imsim
   dirty: true
 _policy: null
 _root: null
