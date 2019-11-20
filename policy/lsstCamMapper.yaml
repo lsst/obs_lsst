@@ -87,7 +87,6 @@ calibrations:
     python: lsst.meas.algorithms.simple_curve.Curve
     refCols:
     - visit
-    reference: raw_visit
     storage: FitsCatalogStorage
     tables: qe_curve
     template: qe_curve/%(calibDate)s/qe_curve-%(calibDate)s-%(detectorName)s.fits
