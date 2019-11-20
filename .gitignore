@@ -13,3 +13,5 @@ tests/.tests
 pytest_session.txt
 latiss/CALIB/calibRegistry.sqlite3
 latiss/CALIB/defects/
+ts8/CALIB/calibRegistry.sqlite3
+ts8/CALIB/qe_curve/
