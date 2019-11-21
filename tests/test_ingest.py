@@ -38,8 +38,8 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
         self.ingestDir = TESTDIR
         self.instrument = lsst.obs.lsst.LatissInstrument()
         self.file = os.path.join(DATAROOT, "latiss", "raw", "2018-09-20",
-                                 "12018092000065-det000.fits")
-        self.dataId = dict(instrument="LATISS", exposure=12018092000065, detector=0)
+                                 "3018092000065-det000.fits")
+        self.dataId = dict(instrument="LATISS", exposure=3018092000065, detector=0)
 
         super().setUp()
 

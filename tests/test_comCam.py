@@ -34,15 +34,15 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "comCam"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 12019053000001, 'detectorName': 'S00', 'raftName': 'R22'},
+        dataIds = {'raw': {'visit': 3019053000001, 'detectorName': 'S00', 'raftName': 'R22'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 54
-        exposureIds = {'raw': 12019053000001000,
+        ccdExposureId_bits = 52
+        exposureIds = {'raw': 3019053000001000,
                        }
         filters = {'raw': 'NONE',
                    }
@@ -59,8 +59,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       }
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor', 'filter': 'NONE'}, 1),
-                       ({'level': 'sensor', 'visit': 12019053000001}, 1),
-                       ({'level': 'filter', 'visit': 12019053000001}, 1),
+                       ({'level': 'sensor', 'visit': 3019053000001}, 1),
+                       ({'level': 'filter', 'visit': 3019053000001}, 1),
                        ({'level': 'visit', 'filter': 'NONE'}, 1)
                        )
         linearizer_type = unittest.SkipTest
@@ -83,16 +83,16 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
         query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 12019053000001}, [(12019053000001, 'NONE')]),
-                         ({'filter': 'NONE'}, [(12019053000001, 'NONE')]),
+        queryMetadata = (({'visit': 3019053000001}, [(3019053000001, 'NONE')]),
+                         ({'filter': 'NONE'}, [(3019053000001, 'NONE')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
         map_cpp_type = 'DecoratedImageF'
         map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join("processCcd_metadata/12019053000001-NONE/R22",
-                                            "processCcdMetadata_12019053000001-NONE-R22-S00-det000.yaml")
-        raw_filename = '12019053000001-R22-S00-det000-000.fits'
+        metadata_output_path = os.path.join("processCcd_metadata/3019053000001-NONE/R22",
+                                            "processCcdMetadata_3019053000001-NONE-R22-S00-det000.yaml")
+        raw_filename = '3019053000001-R22-S00-det000-000.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
                       ('filter', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
@@ -147,16 +147,16 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
         self.assertEqual(name, "R00_S00")
 
-        name = self.mapper._extractDetectorName({'visit': 12019053000001, 'detectorName': 'S00'})
+        name = self.mapper._extractDetectorName({'visit': 3019053000001, 'detectorName': 'S00'})
         self.assertEqual(name, "R22_S00")
 
-        name = self.mapper._extractDetectorName({'visit': 12019053000001, 'detector': 0})
+        name = self.mapper._extractDetectorName({'visit': 3019053000001, 'detector': 0})
         self.assertEqual(name, "R22_S00")
 
         name = self.mapper._extractDetectorName({'detector': 0})
         self.assertEqual(name, "R22_S00")
 
-        name = self.mapper._extractDetectorName({'visit': 12019053000001})
+        name = self.mapper._extractDetectorName({'visit': 3019053000001})
         self.assertEqual(name, "R22_S00")
 
         with self.assertRaises(RuntimeError):
