@@ -343,7 +343,8 @@ class LsstBaseTranslator(FitsTranslator):
             Sequence number.
         controller : `str`, optional
             Controller to use. If this is "O", no change is made to the
-            exposure ID. If it is "C" a "1" is prefixed to the exposure ID.
+            exposure ID. If it is "C" a 1000 is added to the year component
+            of the exposure ID.
             `None` indicates that the controller is not relevant to the
             exposure ID calculation (generally this is the case for test
             stand data).
@@ -366,17 +367,19 @@ class LsstBaseTranslator(FitsTranslator):
         if seqnum >= 10**maxdigits:
             raise ValueError(f"Sequence number ({seqnum}) exceeds limit")
 
-        # Form the number as a string zero padding the sequence number
-        idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
-
         # Camera control changes the exposure ID
         if controller is not None:
             if controller == "O":
                 pass
             elif controller == "C":
-                idstr = "1" + idstr
+                # Add 1000 to the year component
+                dayobs = int(dayobs)
+                dayobs += 1000_00_00
             else:
                 raise ValueError(f"Supplied controller, '{controller}' is neither 'O' nor 'C'")
+
+        # Form the number as a string zero padding the sequence number
+        idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
 
         # Exposure ID has to be an integer
         return int(idstr)
