@@ -175,7 +175,7 @@ class LsstCamInstrument(Instrument):
 
         if os.path.exists(defectPath):
             camera = self.getCamera()
-            defectsDict = read_all(defectPath, camera)
+            defectsDict = read_all(defectPath, camera)[0]  # second return is calib type
             endOfTime = '20380119T031407'
             with butler.transaction():
                 for det in defectsDict:
