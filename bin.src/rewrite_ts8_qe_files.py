@@ -21,21 +21,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import argparse
 import sys
 
-from lsst.obs.lsst.rewrite_ts8_qe_files import rewrite_ts8_files
+from lsst.obs.lsst.script.rewrite_ts8_qe_files import main
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(description = 'Rewrite native FITS files from the test ' +
-                                                   'stand to a standard format')
-    parser.add_argument('picklefile', help = "Pickle file to read.")
-    parser.add_argument('--out_root', type = str,
-                        help = "Root directory to which to write outputs", default = '.')
-    parser.add_argument('--valid_start', type = str,
-                        help = "ISO format date string stating the stgart of the validity range.",
-                        default = '1970-01-01T00:00:00')
-
-    args = parser.parse_args()
-    sys.exit(rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start))
+    sys.exit(main())
