@@ -431,7 +431,7 @@ datasets:
     template: deepDiff/diaObject/%(tract)d/%(patch)s/diaObjectId-%(tract)d-%(patch)s.parq
     persistable: ignored
     storage: ParquetStorage
-    python: lsst.dia.pipe.parqueTable.ParquetTable
+    python: lsst.dia.pipe.parquetTable.ParquetTable
     tables: 'raw'
   deepDiff_forced_diaSrc:
     description: "Catalog of forced measurements (shape and position parameters held fixed) on the difference images."
