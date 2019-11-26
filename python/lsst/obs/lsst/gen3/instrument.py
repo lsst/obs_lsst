@@ -29,7 +29,7 @@ import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType
-from lsst.pipe.tasks.read_stdText_calibs import read_all
+from lsst.pipe.tasks.read_curated_calibs import read_all
 from ..filters import LSSTCAM_FILTER_DEFINITIONS
 
 from ..translators import LsstLatissTranslator, LsstCamTranslator, \
