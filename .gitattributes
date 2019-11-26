@@ -1,2 +1,3 @@
 *.fits binary
 *.sqlite3 binary
+*.p binary
