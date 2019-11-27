@@ -42,6 +42,8 @@ config.parse.translators = {
     'detectorName': 'translate_detectorName',
     'detector': 'translate_detector',
     'snap': 'translate_snap',
+    'controller': 'translate_controller',
+    'obsid': 'translate_obsid',
 }
 config.parse.defaults = {
 }
@@ -63,6 +65,8 @@ config.register.columns = {
     'testType': 'text',
     'lsstSerial': 'text',
     'wavelength': 'int',
+    'controller': 'text',
+    'obsid': 'text',
 }
 config.register.unique = ["visit", "detector"]
 config.register.visit = ['visit', 'filter', 'dateObs', 'expTime']

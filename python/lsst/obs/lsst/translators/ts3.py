@@ -92,7 +92,7 @@ class LsstTS3Translator(LsstBaseTranslator):
         return cls.can_translate_with_options(header, {"TSTAND": "BNL-TS3-2-Janeway"}, filename=filename)
 
     @staticmethod
-    def compute_exposure_id(dateobs, seqnum=0):
+    def compute_exposure_id(dateobs, seqnum=0, controller=None):
         """Helper method to calculate the TS3 exposure_id.
 
         Parameters
@@ -101,6 +101,8 @@ class LsstTS3Translator(LsstBaseTranslator):
             Date of observation in FITS ISO format.
         seqnum : `int`, unused
             Sequence number. Ignored.
+        controller : `str`, unused
+            Controller type. Ignored.
 
         Returns
         -------

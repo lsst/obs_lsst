@@ -34,15 +34,15 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "lsstCam"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 2019031900001, 'detectorName': 'S02', 'raftName': 'R10'},
+        dataIds = {'raw': {'visit': 3019031900001, 'detectorName': 'S02', 'raftName': 'R10'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
-        ccdExposureId_bits = 51
-        exposureIds = {'raw': 2019031900001029,
+        ccdExposureId_bits = 52
+        exposureIds = {'raw': 3019031900001029,
                        }
         filters = {'raw': 'NONE',
                    }
@@ -59,8 +59,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       }
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor', 'filter': 'NONE'}, 2),
-                       ({'level': 'sensor', 'visit': 2019031900001}, 2),
-                       ({'level': 'filter', 'visit': 2019031900001}, 2),
+                       ({'level': 'sensor', 'visit': 3019031900001}, 2),
+                       ({'level': 'filter', 'visit': 3019031900001}, 2),
                        ({'level': 'visit', 'filter': 'NONE'}, 2)
                        )
         linearizer_type = unittest.SkipTest
@@ -77,22 +77,22 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "20190319", "R10",
-                                   "2019031900001-R10-S02-det029-000.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "30190319", "R10",
+                                   "3019031900001-R10-S02-det029-000.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
         query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 2019031900001}, [(2019031900001, 'NONE')]),
-                         ({'filter': 'NONE'}, [(2019031900001, 'NONE')]),
+        queryMetadata = (({'visit': 3019031900001}, [(3019031900001, 'NONE')]),
+                         ({'filter': 'NONE'}, [(3019031900001, 'NONE')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
         map_cpp_type = 'DecoratedImageF'
         map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join("processCcd_metadata/2019031900001-NONE/R10",
-                                            "processCcdMetadata_2019031900001-NONE-R10-S02-det029.yaml")
-        raw_filename = '2019031900001-R10-S02-det029-000.fits'
+        metadata_output_path = os.path.join("processCcd_metadata/3019031900001-NONE/R10",
+                                            "processCcdMetadata_3019031900001-NONE-R10-S02-det029.yaml")
+        raw_filename = '3019031900001-R10-S02-det029-000.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
                       ('filter', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
@@ -122,6 +122,12 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         super().setUp()
 
+    def testObsid(self):
+        """Check that we can retrieve data using the obsid."""
+        raw = self.butler.get('raw', {'obsid': "MC_C_20190319_000001", 'detectorName': 'S02',
+                                      'raftName': 'R10'})
+        self.assertIsNotNone(raw)
+
     def testCcdExposureId(self):
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={})
@@ -147,16 +153,16 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
         self.assertEqual(name, "R00_S00")
 
-        name = self.mapper._extractDetectorName({'visit': 2019031900001, 'detectorName': 'S02'})
+        name = self.mapper._extractDetectorName({'visit': 3019031900001, 'detectorName': 'S02'})
         self.assertEqual(name, "R10_S02")
 
-        name = self.mapper._extractDetectorName({'visit': 2019031900001, 'detector': 29})
+        name = self.mapper._extractDetectorName({'visit': 3019031900001, 'detector': 29})
         self.assertEqual(name, "R10_S02")
 
         name = self.mapper._extractDetectorName({'detector': 29})
         self.assertEqual(name, "R10_S02")
 
-        name = self.mapper._extractDetectorName({'visit': 2019031900001})
+        name = self.mapper._extractDetectorName({'visit': 3019031900001})
         self.assertEqual(name, "R10_S02")
 
         with self.assertRaises(RuntimeError):

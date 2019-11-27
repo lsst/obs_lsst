@@ -102,7 +102,7 @@ class LsstTS8Translator(LsstBaseTranslator):
         return False
 
     @staticmethod
-    def compute_exposure_id(dateobs, seqnum=0):
+    def compute_exposure_id(dateobs, seqnum=0, controller=None):
         """Helper method to calculate the TS8 exposure_id.
 
         Parameters
@@ -111,6 +111,8 @@ class LsstTS8Translator(LsstBaseTranslator):
             Date of observation in FITS ISO format.
         seqnum : `int`, unused
             Sequence number. Ignored.
+        controller : `str`, unused
+            Controller type. Ignored.
 
         Returns
         -------

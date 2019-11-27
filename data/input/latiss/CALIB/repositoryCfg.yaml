@@ -1,5 +1,5 @@
 !RepositoryCfg_v1
-_mapper: &id001 !!python/name:lsst.obs.lsst.auxTel.AuxTelMapper ''
+_mapper: &id001 !!python/name:lsst.obs.lsst.latiss.LatissMapper ''
 _mapperArgs: {}
 _parents:
 - !RepositoryCfg_v1
@@ -7,7 +7,7 @@ _parents:
   _mapperArgs: {}
   _parents: []
   _policy: null
-  _root: /project/krughoff/hack/WORK/auxTel
+  _root: /Users/timj/work/lsstsw3/build/obs_lsst/data/input/latiss
   dirty: true
 _policy: null
 _root: null

@@ -65,7 +65,13 @@ class LatissMapper(LsstCamMapper):
         if 'visit' in dataId:
             visit = dataId['visit']
         else:
-            visit = LsstLatissTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"])
+            if "controller" in dataId:
+                controller = dataId["controller"]
+            else:
+                lsst.log.Log.getLogger("LsstLatissMapper").warn("Controller unknown, using 'C'")
+                controller = "C"
+            visit = LsstLatissTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"],
+                                                             controller)
 
         if "detector" in dataId:
             detector = dataId["detector"]

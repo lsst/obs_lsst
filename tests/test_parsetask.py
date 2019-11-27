@@ -109,7 +109,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_latiss_translator(self):
         """Run the gen 2 metadata extraction code for LATISS"""
-        test_data = (("raw/2018-09-20/2018092000065-det000.fits",
+        test_data = (("raw/2018-09-20/3018092000065-det000.fits",
                       dict(
                           expTime=27.0,
                           object='UNKNOWN',
@@ -121,8 +121,10 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           detector=0,
                           filter='NONE',
                           seqNum=65,
-                          visit=2018092000065,
+                          visit=3018092000065,
                           wavelength=-666,
+                          controller="C",
+                          obsid="AT_C_20180920_000065",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "latiss", LatissParseTask, test_data)
@@ -175,6 +177,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='z',
                           visit=201807241028453,
                           testSeqNum=17,
+                          controller="C",
+                          obsid="E2V-CCD250-179_lambda_flat_0700_6006D_20180724102845",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts8", Ts8ParseTask, test_data)
@@ -210,6 +214,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='550CutOn',
                           visit=201607220607067,
                           testSeqNum=67,
+                          controller="C",
+                          obsid="ITL-3800C-098_lambda_flat_1000_067_20160722020740",
                       )),
                      ("raw/2018-11-15/201811151255111-R433-S00-det433.fits",
                       dict(
@@ -229,6 +235,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='550CutOn',
                           visit=201811151255111,
                           testSeqNum=25,
+                          controller="C",
+                          obsid="E2V-CCD250-411_lambda_flat_1000_025_20181115075559",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts3", Ts3ParseTask, test_data)
@@ -263,6 +271,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           detectorName='S20',
                           detector=42,
                           snap=0,
+                          controller="O",
+                          obsid="204595",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "imsim", ImsimParseTask, test_data)
@@ -286,6 +296,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           filter='i',
                           visit=204595,
+                          controller="O",
+                          obsid="204595",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimParseTask, test_data)
@@ -309,6 +321,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           filter='g',
                           visit=9006002,
+                          controller="O",
+                          obsid="9006002",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimEimgParseTask, test_data)
@@ -334,6 +348,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='r',
                           visit=20181205233148,
                           testSeqNum=100,
+                          controller="C",
+                          obsid="E2V-CCD250-112-04_flat_flat_100_20181205153143",
                       )),
                      ("raw/2018-05-30/20180530150355-S00-det002.fits",
                       dict(
@@ -353,6 +369,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='r',
                           visit=20180530150355,
                           testSeqNum=100,
+                          controller="C",
+                          obsid="ITL-3800C-002_flat_flat_100_20180530080354",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)
@@ -370,7 +388,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_lsstCam_translator(self):
         """Run the gen 2 metadata extraction code for lsstCam"""
-        test_data = (("raw/unknown/R10/2019031900001-R10-S02-det029-000.fits",
+        test_data = (("raw/unknown/R10/3019031900001-R10-S02-det029-000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -383,14 +401,16 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           date='2019-03-19T15:50:28.145',
                           dateObs='2019-03-19T15:50:28.145',
                           run='unknown',
-                          visit=2019031900001,
+                          visit=3019031900001,
                           wavelength=-666,
                           raftName='R10',
                           detectorName='S02',
                           detector=29,
                           snap=0,
+                          controller="C",
+                          obsid="MC_C_20190319_000001",
                       )),
-                     ("raw/6489D/R10/2019032200002-R10-S22-det035-000.fits",
+                     ("raw/6489D/R10/3019032200002-R10-S22-det035-000.fits",
                       dict(
                           expTime=1.0,
                           object='UNKNOWN',
@@ -403,19 +423,21 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           date='2019-03-22T15:31:01.904',
                           dateObs='2019-03-22T15:31:01.904',
                           run='6489D',
-                          visit=2019032200002,
+                          visit=3019032200002,
                           wavelength=-666,
                           raftName='R10',
                           detectorName='S22',
                           detector=35,
                           snap=0,
+                          controller="C",
+                          obsid="MC_C_20190322_000002",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "lsstCam", LsstCamParseTask, test_data)
 
     def test_parsetask_comCam_translator(self):
         """Run the gen 2 metadata extraction code for comCam"""
-        test_data = (("raw/unknown/R22/2019053000001-R22-S00-det000-000.fits",
+        test_data = (("raw/unknown/R22/3019053000001-R22-S00-det000-000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -428,12 +450,14 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           date='2019-05-31T02:38:37.384',
                           dateObs='2019-05-31T02:38:37.384',
                           run='unknown',
-                          visit=2019053000001,
+                          visit=3019053000001,
                           wavelength=-666,
                           raftName='R22',
                           detectorName='S00',
                           detector=0,
                           snap=0,
+                          controller="C",
+                          obsid="CC_C_20190530_000001",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "comCam", LsstComCamParseTask, test_data)
