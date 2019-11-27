@@ -78,10 +78,25 @@ exposures:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 calibrations:
+  qe_curve:
+    columns:
+    - detector
+    - calibDate
+    level: Ccd
+    persistable: BaseCatalog
+    python: lsst.meas.algorithms.simple_curve.Curve
+    refCols:
+    - visit
+    storage: FitsCatalogStorage
+    tables: qe_curve
+    template: qe_curve/%(calibDate)s/qe_curve-%(calibDate)s-%(raftName)s-%(detectorName)s.fits
+    validEndName: validEnd
+    validRange: true
+    validStartName: validStart
   defects:
     columns:
-    - ccd
-    - taiObs
+    - detector
+    - calibDate
     level: Ccd
     persistable: BaseCatalog
     python: lsst.meas.algorithms.Defects
