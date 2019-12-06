@@ -26,7 +26,7 @@ import unittest
 import os
 import lsst.utils.tests
 
-from lsst.obs.base.ingest_tests import IngestTestBase
+from lsst.obs.base.ingest_tests import IngestTestBase, InstrumentSignatureDataIds
 import lsst.obs.lsst
 
 TESTDIR = os.path.dirname(__file__)
@@ -41,6 +41,12 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
                                  "3018092000065-det000.fits")
         self.dataId = dict(instrument="LATISS", exposure=3018092000065, detector=0)
 
+        self.instrumentSignatureDataIds = InstrumentSignatureDataIds(
+            camera={'calibration_label': 'unbounded'},
+            defects={'detector': 0, 'calibration_label': 'defect/1970-01-01T00:00:00/0'},
+            instrument=self.instrument.getName()
+        )
+
         super().setUp()
 
 
@@ -51,6 +57,11 @@ class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
         self.file = os.path.join(DATAROOT, "ts3", "raw", "2018-11-15",
                                  "201811151255111-R433-S00-det433.fits")
         self.dataId = dict(instrument="LSST-TS3", exposure=201811151255111, detector=433)
+
+        self.instrumentSignatureDataIds = InstrumentSignatureDataIds(
+            camera={'calibration_label': 'unbounded'},
+            instrument=self.instrument.getName()
+        )
 
         super().setUp()
 

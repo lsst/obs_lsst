@@ -82,6 +82,10 @@ class LsstCamInstrument(Instrument):
     _cameraCachedClass = None
     translatorClass = LsstCamTranslator
 
+    def __init__(self, *args, **kwargs):
+        self.dataPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName)
+        super().__init__(*args, **kwargs)
+
     @property
     def configPaths(self):
         return [os.path.join(PACKAGE_DIR, "config"),
