@@ -28,8 +28,8 @@ from pstats import Stats
 
 import numpy as np
 
-from lsst.obs.lsst.gen3 import (LsstCamInstrument, LsstComCamInstrument, ImsimInstrument, PhosimInstrument,
-                                Ts8Instrument, Ts3Instrument, UcdCamInstrument, LatissInstrument)
+from lsst.obs.lsst import (LsstCamInstrument, LsstComCamInstrument, ImsimInstrument, PhosimInstrument,
+                           Ts8Instrument, Ts3Instrument, UcdCamInstrument, LatissInstrument)
 
 try:
     from lsst.daf.butler import Butler, DatasetType, StorageClassFactory

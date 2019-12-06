@@ -32,10 +32,10 @@ from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 from .instrument import LsstCamInstrument, LatissInstrument, \
     ImsimInstrument, PhosimInstrument, Ts8Instrument, \
     Ts3Instrument, UcdCamInstrument, LsstComCamInstrument
-from ..translators import LsstLatissTranslator, LsstCamTranslator, \
+from .translators import LsstLatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     PhosimTranslator, LsstTS8Translator, ImsimTranslator
-from ..assembly import fixAmpsAndAssemble, readRawAmps
+from .assembly import fixAmpsAndAssemble, readRawAmps
 
 
 class LsstCamRawFormatter(FitsRawFormatterBase):

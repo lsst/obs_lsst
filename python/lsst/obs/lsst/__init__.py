@@ -21,6 +21,6 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 from .version import *
+from .instrument import *
 from .lsstCamMapper import *
 from .filters import *
-from .gen3 import *
