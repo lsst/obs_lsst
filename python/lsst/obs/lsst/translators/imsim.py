@@ -14,6 +14,7 @@ __all__ = ("ImsimTranslator", )
 
 import logging
 import astropy.units as u
+from astropy.coordinates import Angle
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers
@@ -49,7 +50,6 @@ class ImsimTranslator(LsstSimTranslator):
         "dark_time": ("DARKTIME", dict(unit=u.s)),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
-        "boresight_rotation_angle": ("ROTANGLE", dict(unit=u.deg)),
     }
 
     cameraPolicyFile = "policy/imsim.yaml"
@@ -92,3 +92,9 @@ class ImsimTranslator(LsstSimTranslator):
         if altaz is not None:
             return altaz.secz.to_value()
         return None
+
+    @cache_translation
+    def to_boresight_rotation_angle(self):
+        angle = Angle(90.*u.deg) - Angle(self.quantity_from_card("ROTANGLE", u.deg))
+        angle = angle.wrap_at("360d")
+        return angle

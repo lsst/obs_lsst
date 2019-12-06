@@ -31,11 +31,9 @@ Python API reference
 
 .. automodapi:: lsst.obs.lsst
    :no-main-docstr:
-.. automodapi:: lsst.obs.lsst.auxTel
+.. automodapi:: lsst.obs.lsst.latiss
    :no-main-docstr:
 .. automodapi:: lsst.obs.lsst.imsim
-   :no-main-docstr:
-.. automodapi:: lsst.obs.lsst.auxTel
    :no-main-docstr:
 .. automodapi:: lsst.obs.lsst.ts8
    :no-main-docstr:

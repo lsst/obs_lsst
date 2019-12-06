@@ -62,6 +62,9 @@ for refObjLoader in (config.charImage.refObjLoader,
     refObjLoader.load(os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py'))
     refObjLoader.ref_dataset_name='cal_ref_cat'
 
+config.calibrate.connections.astromRefCat = "cal_ref_cat"
+config.calibrate.connections.photoRefCat = "cal_ref_cat"
+
 # Better astrometry matching
 # commented out for now
 #config.calibrate.astrometry.matcher.numBrightStars = 150

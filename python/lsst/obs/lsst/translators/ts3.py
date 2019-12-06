@@ -21,7 +21,7 @@ from astropy.time import Time
 
 from astro_metadata_translator import cache_translation
 
-from .lsst import compute_detector_exposure_id_generic, LsstBaseTranslator
+from .lsst import LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
@@ -62,6 +62,10 @@ class LsstTS3Translator(LsstBaseTranslator):
     DETECTOR_NAME = _DETECTOR_NAME
     """Fixed name of single sensor."""
 
+    DETECTOR_MAX = 999
+    """Maximum number of detectors to use when calculating the
+    detector_exposure_id."""
+
     cameraPolicyFile = "policy/ts3.yaml"
 
     @classmethod
@@ -86,31 +90,6 @@ class LsstTS3Translator(LsstBaseTranslator):
             otherwise.
         """
         return cls.can_translate_with_options(header, {"TSTAND": "BNL-TS3-2-Janeway"}, filename=filename)
-
-    @staticmethod
-    def compute_detector_exposure_id(exposure_id, detector_num):
-        """Compute the detector exposure ID from detector number and
-        exposure ID.
-
-        This is a helper method to allow code working outside the translator
-        infrastructure to use the same algorithm.
-
-        Parameters
-        ----------
-        exposure_id : `int`
-            Unique exposure ID.
-        detector_num : `int`
-            Detector number.
-
-        Returns
-        -------
-        detector_exposure_id : `int`
-            The calculated ID.
-        """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=999,
-                                                    mode="concat")
-
-        return exposure_id
 
     @staticmethod
     def compute_exposure_id(dateobs, seqnum=0):

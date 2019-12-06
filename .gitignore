@@ -3,13 +3,13 @@
 .scon*
 _build.*
 config.log
-bin
-tests/R11.yaml
+/bin/
+tests/tmp*
 ups/*.cfgc
 python/lsst/obs/lsst/version.py
 .coverage
 .pytest_cache
 tests/.tests
 pytest_session.txt
-*.fits
-*.sqlite3
+latiss/CALIB/calibRegistry.sqlite3
+latiss/CALIB/defects/

@@ -27,12 +27,13 @@ import lsst.daf.base
 import lsst.log
 
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
-from lsst.obs.lsst.auxTel import AuxTelParseTask
+from lsst.obs.lsst.latiss import LatissParseTask
 from lsst.obs.lsst.ts8 import Ts8ParseTask
 from lsst.obs.lsst.ts3 import Ts3ParseTask
-from lsst.obs.lsst.phosim import PhosimParseTask
+from lsst.obs.lsst.phosim import PhosimParseTask, PhosimEimgParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
+from lsst.obs.lsst.comCam import LsstComCamParseTask
 from lsst.obs.lsst.ingest import LsstCamParseTask
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -95,6 +96,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
             If the results differ from the expected values.
 
         """
+        self.maxDiff = None  # Give useful diffs on failure
         parser = self._constructParseTask(configdir, name, parseTask)
         for fileFragment, expected in testData:
             file = os.path.join(DATADIR, name, fileFragment)
@@ -105,8 +107,8 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                     print(f"{k}: {v!r}")
                 self.assertEqual(phuInfo, expected)
 
-    def test_parsetask_auxtel_translator(self):
-        """Run the gen 2 metadata extraction code for AuxTel"""
+    def test_parsetask_latiss_translator(self):
+        """Run the gen 2 metadata extraction code for LATISS"""
         test_data = (("raw/2018-09-20/2018092000065-det000.fits",
                       dict(
                           expTime=27.0,
@@ -123,11 +125,11 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           wavelength=-666,
                       )),
                      )
-        self.assertParseCompare(DATADIR, CONFIGDIR, "auxTel", AuxTelParseTask, test_data)
+        self.assertParseCompare(DATADIR, CONFIGDIR, "latiss", LatissParseTask, test_data)
 
         # Need to test some code paths for translations where we don't have
         # example headers.
-        parseTask = self._constructParseTask(CONFIGDIR, "auxTel", AuxTelParseTask)
+        parseTask = self._constructParseTask(CONFIGDIR, "latiss", LatissParseTask)
 
         md = lsst.daf.base.PropertyList()
         md["IMGNAME"] = "AT-O-20180816-00008"
@@ -288,6 +290,29 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimParseTask, test_data)
 
+    def test_parsetask_phosim_eimg_translator(self):
+        """Run the gen 2 metadata extraction code for Phosim"""
+        test_data = (("eimage/9006002/E000/R22/eimage_09006002_R22_S00_E000.fits.gz",
+                      dict(
+                          expTime=15.0,
+                          object='UNKNOWN',
+                          imageType='SKYEXP',
+                          testType='PHOSIM',
+                          lsstSerial='R22_S00',
+                          date='2021-12-31T23:59:52.500',
+                          dateObs='2021-12-31T23:59:52.500',
+                          run='9006002',
+                          wavelength=-666,
+                          raftName='R22',
+                          detectorName='S00',
+                          detector=90,
+                          snap=0,
+                          filter='g',
+                          visit=9006002,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimEimgParseTask, test_data)
+
     def test_parsetask_ucd_translator(self):
         """Run the gen 2 metadata extraction code for UCDCam"""
         self.maxDiff = None
@@ -387,6 +412,31 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "lsstCam", LsstCamParseTask, test_data)
+
+    def test_parsetask_comCam_translator(self):
+        """Run the gen 2 metadata extraction code for comCam"""
+        test_data = (("raw/unknown/R22/2019053000001-R22-S00-det000-000.fits",
+                      dict(
+                          expTime=0.0,
+                          object='UNKNOWN',
+                          imageType='BIAS',
+                          testType='BIAS',
+                          seqNum=1,
+                          dayObs="2019-05-30",
+                          filter='NONE',
+                          lsstSerial='ITL-3800C-229',
+                          date='2019-05-31T02:38:37.384',
+                          dateObs='2019-05-31T02:38:37.384',
+                          run='unknown',
+                          visit=2019053000001,
+                          wavelength=-666,
+                          raftName='R22',
+                          detectorName='S00',
+                          detector=0,
+                          snap=0,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "comCam", LsstComCamParseTask, test_data)
 
 
 if __name__ == "__main__":
