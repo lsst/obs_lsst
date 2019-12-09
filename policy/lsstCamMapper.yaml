@@ -432,13 +432,13 @@ datasets:
     persistable: ignored
     storage: ParquetStorage
     python: lsst.dia.pipe.parquetTable.ParquetTable
-    tables: 'raw'
   deepDiff_forced_diaSrc:
     description: "Catalog of forced measurements (shape and position parameters held fixed) on the difference images."
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    tables: 'raw'
   deepDiff_forced_diaSrc_schema:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
