@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 # AuxTel is not the same place as LSST
 # These coordinates read from Apple Maps
-AUXTEL_LOCATION = EarthLocation.from_geodetic(-30.244728, -70.747698, 2663.0)
+AUXTEL_LOCATION = EarthLocation.from_geodetic(-70.747698, -30.244728, 2663.0)
 
 # Date instrument is taking data at telescope
 # Prior to this date many parameters are automatically nulled out
