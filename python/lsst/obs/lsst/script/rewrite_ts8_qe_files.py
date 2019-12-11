@@ -62,9 +62,9 @@ def convert_qe_curve(filename):
     with a curve per amp.  If ther are other formats, a different
     converter will be necessary.
     """
-    hdu_list = fits.open(filename)
-    # qe data is in first extension
-    data = hdu_list[1].data
+    with fits.open(filename) as hdu_list:
+        # qe data is in first extension
+        data = hdu_list[1].data
     wlength = []
     eff = dict()
     for row in data:
