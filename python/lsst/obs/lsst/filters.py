@@ -78,4 +78,6 @@ LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(
     FilterDefinition(physical_filter="y",
                      abstract_filter="y",
                      lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4']),
+    FilterDefinition(physical_filter="diffuser",
+                     lambdaEff=0.0),
 )
