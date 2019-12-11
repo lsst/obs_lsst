@@ -26,6 +26,7 @@ import lsst.log
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstLatissTranslator
+from .filters import LATISS_FILTER_DEFINITIONS
 
 __all__ = ["LatissMapper", "LatissParseTask"]
 
@@ -42,6 +43,7 @@ class LatissMapper(LsstCamMapper):
 
     _cameraName = "latiss"
     yamlFileList = ["latiss/latissMapper.yaml"] + list(LsstCamMapper.yamlFileList)
+    filterDefinitions = LATISS_FILTER_DEFINITIONS
 
     def _extractDetectorName(self, dataId):
         return f"{LsstLatissTranslator.DETECTOR_GROUP_NAME}_{LsstLatissTranslator.DETECTOR_NAME}"
