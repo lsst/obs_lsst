@@ -223,8 +223,7 @@ CCDs :\
                 raftYaw = perRaftData['yaw']
             except KeyError:
                 raftYaw = 0.
-            geometryWithinRaft = raftCcdData['geometryWithinRaft'] \
-                                 if 'geometryWithinRaft' in raftCcdData else {} # noqa E127
+            geometryWithinRaft = raftCcdData.get('geometryWithinRaft', {})
 
             for ccdName, ccdLayout in ccds.items():
                 if ccdName in geometryWithinRaft:
