@@ -112,8 +112,8 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
         full_raft_name = pickle.load(fh)
         # The pickle file was written with sequential dumps,
         # so it needs to be read sequentially as well.
-        res = pickle.load(fh)  # noqa: F841
-        detector_list = pickle.load(fh)  # noqa: F841
+        _ = pickle.load(fh)  # res
+        _ = pickle.load(fh)  # Detector list
         file_list = pickle.load(fh)
 
     for detector_name, f in file_list.items():
