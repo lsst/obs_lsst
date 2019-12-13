@@ -1,0 +1,387 @@
+!<lsst.daf.base.PropertyList>
+- - SIMPLE
+  - Bool
+  - true
+  - file does conform to FITS standard
+- - EXTEND
+  - Bool
+  - true
+  - FITS dataset may contain extensions
+- - COMMENT
+  - String
+  - - '  FITS (Flexible Image Transport System) format is defined in ''Astronomy'
+    - '  and Astrophysics'', volume 376, page 359; bibcode: 2001A&A...376..359H'
+    - '  FITS (Flexible Image Transport System) format is defined in ''Astronomy'
+    - '  and Astrophysics'', volume 376, page 359; bibcode: 2001A&A...376..359H'
+    - '---- Date, night and basic image information ----'
+    - '---- Telescope info, location, observer ----'
+    - '---- Pointing info, etc. ----'
+    - '---- Image-identifying used to build OBS-ID ----'
+    - '---- Information from Camera ----'
+    - '---- Geometry from Camera ----'
+    - '---- Filter/grating information ----'
+    - '---- Exposure-related information ----'
+    - '---- Header information ----'
+    - '---- Checksums ----'
+  - ''
+- - ORIGIN
+  - String
+  - LSST DM Header Service
+  - FITS file originator
+- - TIMESYS
+  - String
+  - TAI
+  - The time scale used
+- - DATE
+  - String
+  - '2019-11-01T02:45:33.770'
+  - Creation Date and Time of File
+- - DATE-OBS
+  - String
+  - '1970-01-01T00:00:08.000'
+  - Date of the observation (image acquisition
+- - DATE-BEG
+  - String
+  - '1970-01-01T00:00:08.000'
+  - Time at the start of integration
+- - DATE-END
+  - String
+  - '1970-01-01T00:00:08.000'
+  - end date of the observation
+- - MJD
+  - Double
+  - 58788.1149741856
+  - Modified Julian Date that the file was written
+- - MJD-OBS
+  - Double
+  - 40587.0000925935
+  - Modified Julian Date of observation
+- - MJD-BEG
+  - Double
+  - 40587.0000925935
+  - Modified Julian Date derived from DATE-BEG
+- - MJD-END
+  - Double
+  - 40587.0000925935
+  - Modified Julian Date derived from DATE-END
+- - OBSID
+  - String
+  - AT_O_20191031_000004
+  - ImageName from Camera StartIntergration
+- - GROUPID
+  - String
+  - TEST01
+  - ''
+- - IMGTYPE
+  - String
+  - OBJECT
+  - BIAS, DARK, FLAT, OBJECT
+- - BUNIT
+  - String
+  - adu
+  - Brightness units for pixel array
+- - TELESCOP
+  - String
+  - LSST AuxTelescope
+  - Telescope name
+- - INSTRUME
+  - String
+  - LATISS
+  - Instrument used to obtain these data
+- - OBSERVER
+  - String
+  - LSST
+  - Observer name(s)
+- - OBS-LONG
+  - Double
+  - -70.749417
+  - '[deg] Observatory east longitude'
+- - OBS-LAT
+  - Double
+  - -30.244639
+  - '[deg] Observatory latitude'
+- - OBS-ELEV
+  - Double
+  - 2663.0
+  - '[m] Observatory elevation'
+- - OBSGEO-X
+  - Double
+  - 1818938.94
+  - '[m] X-axis Geocentric coordinate'
+- - OBSGEO-Y
+  - Double
+  - -5208470.95
+  - '[m] Y-axis Geocentric coordinate'
+- - OBSGEO-Z
+  - Double
+  - -3195172.08
+  - '[m] Z-axis Geocentric coordinate'
+- - RA
+  - Undef
+  - null
+  - RA commanded from pointing component
+- - DEC
+  - Undef
+  - null
+  - DEC commanded from pointing component
+- - RASTART
+  - Undef
+  - null
+  - RA of telescope from AZSTART and ELSTART
+- - DECSTART
+  - Undef
+  - null
+  - DEC of telescope from AZSTART and ELSTART
+- - RAEND
+  - Undef
+  - null
+  - RA of telescope from AZEND and ELEND
+- - DECEND
+  - Undef
+  - null
+  - DEC of telescope from AZEND and ELEND
+- - ROTPA
+  - Undef
+  - null
+  - Rotation angle relative to the sky (deg)
+- - ROTCOORD
+  - String
+  - sky
+  - Telescope Rotation Coordinates
+- - HASTART
+  - Undef
+  - null
+  - '[HH:MM:SS] Telescope hour angle at start'
+- - ELSTART
+  - Undef
+  - null
+  - '[deg] Telescope zenith distance at start'
+- - AZSTART
+  - Undef
+  - null
+  - '[deg] Telescope azimuth angle at start'
+- - AMSTART
+  - Undef
+  - null
+  - Airmass at start
+- - HAEND
+  - Undef
+  - null
+  - '[HH:MM:SS] Telescope hour angle at end'
+- - ELEND
+  - Undef
+  - null
+  - '[deg] Telescope zenith distance at end'
+- - AZEND
+  - Undef
+  - null
+  - '[deg] Telescope azimuth angle at end'
+- - AMEND
+  - Undef
+  - null
+  - Airmass at end
+- - INSTPORT
+  - Undef
+  - null
+  - The instrument port where LATISS is installed
+- - ATM3PORT
+  - Undef
+  - null
+  - The port the M3 is directing light into
+- - TRACKSYS
+  - Undef
+  - null
+  - Tracking coordinate system from ATMCS
+- - RADESYS
+  - Undef
+  - null
+  - Equatorial coordinate system
+- - FOCUSZ
+  - Undef
+  - null
+  - Focus Z position from ATAOS/ATHexapod (mm)
+- - TELCODE
+  - String
+  - AT
+  - The code for the telecope (AT/CC/MC)
+- - CONTRLLR
+  - String
+  - O
+  - The controller (e.g. O for OCS, C for (A)CCS)
+- - DAYOBS
+  - String
+  - '20191031'
+  - The observation day as defined by image name
+- - SEQNUM
+  - Int
+  - 4
+  - The sequence number from the image name
+- - CCD_MANU
+  - String
+  - ITL
+  - CCD Manufacturer
+- - CCD_TYPE
+  - Undef
+  - null
+  - CCD Model Number
+- - CCD_SERN
+  - Undef
+  - null
+  - Manufacturers CCD Serial Number
+- - LSST_NUM
+  - Undef
+  - null
+  - LSST Assigned CCD Number
+- - SEQCKSUM
+  - Undef
+  - null
+  - Checksum of Sequencer
+- - SEQNAME
+  - Undef
+  - null
+  - SequenceName from Camera StartIntergration
+- - REBNAME
+  - Undef
+  - null
+  - Name of the REB
+- - CONTNUM
+  - Undef
+  - null
+  - CCD Controller (WREB) Serial Number
+- - IMAGETAG
+  - String
+  - ''
+  - DAQ Image id
+- - TEMP_SET
+  - Double
+  - 0.0
+  - Temperature set point (deg C)
+- - CCDTEMP
+  - Double
+  - -90.3760604858398
+  - Measured temperature (deg C)
+- - OVERH
+  - Undef
+  - null
+  - Over-scan pixels
+- - OVERV
+  - Undef
+  - null
+  - Vert-overscan pix
+- - PREH
+  - Undef
+  - null
+  - Pre-scan pixels
+- - FILTER
+  - Undef
+  - null
+  - Name of the filter
+- - FILTPOS
+  - Undef
+  - null
+  - Filter position
+- - GRATING
+  - Undef
+  - null
+  - Name of the second disperser
+- - GRATPOS
+  - Undef
+  - null
+  - disperser position
+- - LINSPOS
+  - Undef
+  - null
+  - Linear Stage
+- - EXPTIME
+  - Double
+  - 3.0
+  - Exposure time in seconds
+- - SHUTTIME
+  - Double
+  - 3.035
+  - Shutter exposure time in seconds
+- - DARKTIME
+  - Double
+  - 0.0
+  - Dark time in seconds
+- - FILENAME
+  - String
+  - AT_O_20191031_000004.fits
+  - Original file name
+- - HEADVER
+  - String
+  - 1.0.1
+  - Version of header
+- - XTENSION
+  - String
+  - IMAGE
+  - IMAGE extension
+- - BITPIX
+  - Int
+  - 32
+  - number of bits per data pixel
+- - NAXIS
+  - Int
+  - 2
+  - number of data axes
+- - NAXIS1
+  - Int
+  - 576
+  - length of data axis 1
+- - NAXIS2
+  - Int
+  - 2048
+  - length of data axis 2
+- - PCOUNT
+  - Int
+  - 0
+  - required keyword; must = 0
+- - GCOUNT
+  - Int
+  - 1
+  - required keyword; must = 1
+- - EXTNAME
+  - String
+  - Segment00
+  - ''
+- - INHERIT
+  - Bool
+  - true
+  - Inherits global header
+- - DATASEC
+  - String
+  - '[4:512,1:2000]'
+  - ''
+- - DETSEC
+  - String
+  - '[509:1,4000:2001]'
+  - ''
+- - DETSIZE
+  - String
+  - '[1:4072,1:4000]'
+  - ''
+- - DTV1
+  - Int
+  - 513
+  - detector transformation vector
+- - DTV2
+  - Int
+  - 4001
+  - detector transformation vector
+- - DTM1_1
+  - Double
+  - -1.0
+  - detector transformation matrix
+- - DTM2_2
+  - Double
+  - -1.0
+  - detector transformation matrix
+- - DTM1_2
+  - Int
+  - 0
+  - detector transformation matrix
+- - DTM2_1
+  - Int
+  - 0
+  - detector transformation matrix
+
