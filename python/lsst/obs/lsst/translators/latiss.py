@@ -40,6 +40,12 @@ TSTART = Time("2019-12-08T00:00", format="isot", scale="utc")
 _DETECTOR_GROUP_NAME = "RXX"
 _DETECTOR_NAME = "S00"
 
+# Date 068 detector was put in LATISS
+DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
+
+# IMGTYPE header is filled in after this date
+IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
+
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -145,6 +151,71 @@ class LsstLatissTranslator(LsstBaseTranslator):
             return True
         return False
 
+    @classmethod
+    def fix_header(cls, header):
+        """Fix an incorrect LATISS header.
+
+        Parameters
+        ----------
+        header : `dict`
+            The header to update.  Updates are in place.
+
+        Returns
+        -------
+        modified = `bool`
+            Returns `True` if the header was updated.
+
+        Notes
+        -----
+        This method does not apply per-obsid corrections.  The following
+        corrections are applied:
+
+        * On June 24th 2019 the detector was changed from ITL-3800C-098
+          to ITL-3800C-068.  The header is intended to be correct in the
+          future.
+        * In late 2019 the DATE-OBS and MJD-OBS headers were reporting
+          1970 dates.  To correct, the DATE/MJD headers are copied in to
+          replace them and the -END headers are cleared.
+        * Until November 2019 the IMGTYPE was set in the GROUPID header.
+          The value is moved to IMGTYPE.
+        """
+        modified = False
+
+        # The DATE-OBS / MJD-OBS keys can be 1970
+        if header["DATE-OBS"].startswith("1970"):
+            # Copy the headers from the DATE and MJD since we have no other
+            # choice.
+            header["DATE-OBS"] = header["DATE"]
+            header["DATE-BEG"] = header["DATE-OBS"]
+            header["MJD-OBS"] = header["MJD"]
+            header["MJD-BEG"] = header["MJD-OBS"]
+
+            # And clear the DATE-END and MJD-END -- the translator will use
+            # EXPTIME instead.
+            header["DATE-END"] = None
+            header["MJD-END"] = None
+
+            modified = True
+
+        # Create a translator since we need the date
+        translator = cls(header)
+        date = translator.to_datetime_begin()
+        if date > DETECTOR_068_DATE:
+            header["LSST_NUM"] = "ITL-3800C-068"
+            modified = True
+
+        # Up until a certain date GROUPID was the IMGTYPE
+        if date < IMGTYPE_OKAY_DATE:
+            groupId = header.get("GROUPID")
+            if groupId and not groupId.startswith("test"):
+                imgType = header.get("IMGTYPE")
+                if not imgType:
+                    header["IMGTYPE"] = groupId
+                    header["GROUPID"] = None
+                    modified = True
+
+        return modified
+
     def _is_on_mountain(self):
         date = self.to_datetime_begin()
         if date > TSTART:
@@ -219,16 +290,10 @@ class LsstLatissTranslator(LsstBaseTranslator):
         """
 
         # LATISS observation type is documented to appear in OBSTYPE
-        # but for historical reasons prefers IMGTYPE.  Some data puts
-        # it in GROUPID (which is meant to be for something else).
+        # but for historical reasons prefers IMGTYPE.
         # Test the keys in order until we find one that contains a
         # defined value.
         obstype_keys = ["OBSTYPE", "IMGTYPE"]
-
-        # For now, hope that GROUPID does not contain an obs type value
-        # when on the mountain.
-        if not self._is_on_mountain():
-            obstype_keys.append("GROUPID")
 
         for k in obstype_keys:
             if self.is_key_ok(k):

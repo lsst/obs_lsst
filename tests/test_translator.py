@@ -240,7 +240,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
-                           detector_serial="ITL-3800C-098",
+                           detector_serial="ITL-3800C-068",
                            exposure_id=2020032900022,
                            exposure_time=0.0*u.s,
                            object="UNKNOWN",
