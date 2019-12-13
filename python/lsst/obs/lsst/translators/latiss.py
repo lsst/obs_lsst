@@ -13,6 +13,7 @@
 __all__ = ("LsstLatissTranslator", )
 
 import logging
+import re
 
 import astropy.units as u
 from astropy.time import Time
@@ -310,3 +311,23 @@ class LsstLatissTranslator(LsstBaseTranslator):
             obstype = "unknown"
         log.warning("Unable to determine observation type. Guessing '%s'", obstype)
         return obstype
+
+    @cache_translation
+    def to_physical_filter(self):
+        """Calculate the physical filter name.
+
+        Returns
+        -------
+        filter : `str`
+            Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
+            headers joined by a "+".  Returns "NONE" if no filter is declared.
+            Uses "EMPTY" if any of the filters indicate an "empty_N" name.
+        """
+        # The base class definition is fine
+        physical_filter = super().to_physical_filter()
+
+        # empty_N maps to EMPTY at the start of a filter concatenation
+        if physical_filter.startswith("empty"):
+            physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
+
+        return physical_filter
