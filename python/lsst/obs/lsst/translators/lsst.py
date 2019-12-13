@@ -443,7 +443,7 @@ class LsstBaseTranslator(FitsTranslator):
         obstype = self._header["IMGTYPE"]
         self._used_these_cards("IMGTYPE")
         obstype = obstype.lower()
-        if obstype == "skyexp":
+        if obstype in ("skyexp", "object"):
             obstype = "science"
         return obstype
 
