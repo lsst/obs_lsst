@@ -296,11 +296,23 @@ class LsstLatissTranslator(LsstBaseTranslator):
         # defined value.
         obstype_keys = ["OBSTYPE", "IMGTYPE"]
 
+        obstype = None
         for k in obstype_keys:
             if self.is_key_ok(k):
                 obstype = self._header[k]
                 self._used_these_cards(k)
-                return obstype.lower()
+                obstype = obstype.lower()
+                break
+
+        if obstype is not None:
+            if obstype == "object" and not self._is_on_mountain():
+                # Do not map object to science in lab since most
+                # code assume science is on sky with RA/Dec.
+                obstype = "labobject"
+            elif obstype in ("skyexp", "object"):
+                obstype = "science"
+
+            return obstype
 
         # In the absence of any observation type information, return
         # unknown unless we think it might be a bias.
