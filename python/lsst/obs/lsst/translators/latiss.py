@@ -299,7 +299,8 @@ class LsstLatissTranslator(LsstBaseTranslator):
 
         # A missing or undefined EXPTIME is problematic. Set to -1
         # to indicate that none was found.
-        log.warning("Insufficient information to derive exposure time. Setting to -1.0s")
+        log.warning("%s: Insufficient information to derive exposure time. Setting to -1.0s",
+                    self.to_observation_id())
         return -1.0 * u.s
 
     @cache_translation
@@ -346,7 +347,8 @@ class LsstLatissTranslator(LsstBaseTranslator):
             obstype = "bias"
         else:
             obstype = "unknown"
-        log.warning("Unable to determine observation type. Guessing '%s'", obstype)
+        log.warning("%s: Unable to determine observation type. Guessing '%s'",
+                    self.to_observation_id(), obstype)
         return obstype
 
     @cache_translation

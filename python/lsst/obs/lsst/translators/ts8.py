@@ -212,7 +212,8 @@ class LsstTS8Translator(LsstBaseTranslator):
             filter_pos = self._header["FILTPOS"]
             self._used_these_cards("FILTPOS")
         except KeyError:
-            log.warning("FILTPOS key not found in header (assuming NONE)")
+            log.warning("%s: FILTPOS key not found in header (assuming NONE)",
+                        self.to_observation_id())
             return "NONE"
 
         try:
@@ -224,7 +225,8 @@ class LsstTS8Translator(LsstBaseTranslator):
                 6: 'y',
             }[filter_pos]
         except KeyError:
-            log.warning("Unknown filter position (assuming NONE): %d", filter_pos)
+            log.warning("%s: Unknown filter position (assuming NONE): %d",
+                        self.to_observation_id(), filter_pos)
             return "NONE"
 
     def to_exposure_id(self):
