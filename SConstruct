@@ -6,6 +6,6 @@ from lsst.sconsUtils import scripts
 # of the defect registry required the camera to be instantiated.
 # If other cameras add defect generation they should add their build to
 # the end of this list, along with LATISS
-targetList = ("version", "shebang", "policy",) + scripts.DEFAULT_TARGETS + ("latiss", "ts8")
+targetList = ("version", "shebang", "policy",) + scripts.DEFAULT_TARGETS + ("latiss", "ts8", "lsstcam")
 
 scripts.BasicSConstruct("obs_lsst", disableCc=True, defaultTargets=targetList)
