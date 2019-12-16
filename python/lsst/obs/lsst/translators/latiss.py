@@ -179,8 +179,12 @@ class LsstLatissTranslator(LsstBaseTranslator):
           replace them and the -END headers are cleared.
         * Until November 2019 the IMGTYPE was set in the GROUPID header.
           The value is moved to IMGTYPE.
+
+        Corrections are reported as debug level log messages.
         """
         modified = False
+
+        obsid = header.get("OBSID", "unknown")
 
         # The DATE-OBS / MJD-OBS keys can be 1970
         if header["DATE-OBS"].startswith("1970"):
@@ -196,6 +200,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
             header["DATE-END"] = None
             header["MJD-END"] = None
 
+            log.debug("%s: Forcing 1970 dates to '%s'", obsid, header["DATE"])
             modified = True
 
         # Create a translator since we need the date
@@ -203,6 +208,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
         date = translator.to_datetime_begin()
         if date > DETECTOR_068_DATE:
             header["LSST_NUM"] = "ITL-3800C-068"
+            log.debug("%s: Forcing detector serial to %s", obsid, header["LSST_NUM"])
             modified = True
 
         # Up until a certain date GROUPID was the IMGTYPE
@@ -213,6 +219,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
                 if not imgType:
                     header["IMGTYPE"] = groupId
                     header["GROUPID"] = None
+                    log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
                     modified = True
 
         return modified
