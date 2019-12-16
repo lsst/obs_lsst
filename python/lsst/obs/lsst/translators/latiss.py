@@ -179,6 +179,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
           replace them and the -END headers are cleared.
         * Until November 2019 the IMGTYPE was set in the GROUPID header.
           The value is moved to IMGTYPE.
+        * SHUTTIME is always forced to be `None`.
 
         Corrections are reported as debug level log messages.
         """
@@ -221,6 +222,11 @@ class LsstLatissTranslator(LsstBaseTranslator):
                     header["GROUPID"] = None
                     log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
                     modified = True
+
+        if header.get("SHUTTIME"):
+            log.debug("%s: Forcing SHUTTIME header to be None", obsid)
+            header["SHUTTIME"] = None
+            modified = True
 
         return modified
 
