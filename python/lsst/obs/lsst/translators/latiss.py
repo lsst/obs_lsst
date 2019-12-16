@@ -270,11 +270,23 @@ class LsstLatissTranslator(LsstBaseTranslator):
     @cache_translation
     def to_dark_time(self):
         # Docstring will be inherited. Property defined in properties.py
-        if self.is_key_ok("DARKTIME"):
-            return self.quantity_from_card("DARKTIME", u.s)
 
-        log.warning("Explicit dark time not found, setting dark time to the exposure time.")
-        return self.to_exposure_time()
+        # Always compare with exposure time
+        # We may revisit this later if there is a cutoff date where we
+        # can always trust the header.
+        exptime = self.to_exposure_time()
+
+        if self.is_key_ok("DARKTIME"):
+            darktime = self.quantity_from_card("DARKTIME", u.s)
+            if darktime >= exptime:
+                return darktime
+            reason = "Dark time less than exposure time."
+        else:
+            reason = "Dark time not defined."
+
+        log.warning("%s: %s Setting dark time to the exposure time.",
+                    self.to_observation_id(), reason)
+        return exptime
 
     @cache_translation
     def to_exposure_time(self):
