@@ -35,5 +35,6 @@ config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
 config.charImage.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
 config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMin = 20
 
-# Discussed on Slack #desc-dm-dc2 with Lauren
-config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMax = 200
+# Discussed on Slack #desc-dm-dc2 with Lauren and set to 200 for Run2.1i
+# For Run2.2i, setting to zero per https://github.com/LSSTDESC/ImageProcessingPipelines/issues/136
+config.charImage.measurePsf.starSelector["objectSize"].signalToNoiseMax = 0
