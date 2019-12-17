@@ -62,9 +62,9 @@ def convert_qe_curve(filename):
     with a curve per amp.  If ther are other formats, a different
     converter will be necessary.
     """
-    hdu_list = fits.open(filename)
-    # qe data is in first extension
-    data = hdu_list[1].data
+    with fits.open(filename) as hdu_list:
+        # qe data is in first extension
+        data = hdu_list[1].data
     wlength = []
     eff = dict()
     for row in data:
@@ -112,8 +112,8 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
         full_raft_name = pickle.load(fh)
         # The pickle file was written with sequential dumps,
         # so it needs to be read sequentially as well.
-        res = pickle.load(fh)  # noqa: F841
-        detector_list = pickle.load(fh)  # noqa: F841
+        _ = pickle.load(fh)  # res
+        _ = pickle.load(fh)  # Detector list
         file_list = pickle.load(fh)
 
     for detector_name, f in file_list.items():

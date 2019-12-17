@@ -99,6 +99,7 @@ class LsstCamBaseMapper(CameraMapper):
     #
     MakeRawVisitInfoClass = None
     translatorClass = None
+    filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
 
     def __init__(self, inputPolicy=None, **kwargs):
         #
@@ -136,7 +137,8 @@ class LsstCamBaseMapper(CameraMapper):
         for d in (self.mappings, self.exposures):
             d['raw'] = d['_raw']
 
-        LSSTCAM_FILTER_DEFINITIONS.defineFilters()
+        self.filterDefinitions.reset()
+        self.filterDefinitions.defineFilters()
 
         LsstCamMapper._nbit_tract = 16
         LsstCamMapper._nbit_patch = 5

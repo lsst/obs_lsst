@@ -53,3 +53,33 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
                      abstract_filter="y",
                      lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4']),
 )
+
+LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    FilterDefinition(physical_filter="NONE",
+                     lambdaEff=0.0,
+                     alias={"no_filter", "OPEN"}),
+    # The LSST Filters from L. Jones 04/07/10
+    FilterDefinition(physical_filter="u",
+                     abstract_filter="u",
+                     lambdaEff=364.59, lambdaMin=324.0, lambdaMax=395.0),
+    FilterDefinition(physical_filter="g",
+                     abstract_filter="g",
+                     lambdaEff=476.31, lambdaMin=405.0, lambdaMax=552.0),
+    FilterDefinition(physical_filter="r",
+                     abstract_filter="r",
+                     lambdaEff=619.42, lambdaMin=552.0, lambdaMax=691.0),
+    FilterDefinition(physical_filter="i",
+                     abstract_filter="i",
+                     lambdaEff=752.06, lambdaMin=818.0, lambdaMax=921.0),
+    FilterDefinition(physical_filter="z",
+                     abstract_filter="z",
+                     lambdaEff=866.85, lambdaMin=922.0, lambdaMax=997.0),
+    # official y filter
+    FilterDefinition(physical_filter="y",
+                     abstract_filter="y",
+                     lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4']),
+    FilterDefinition(physical_filter="diffuser",
+                     lambdaEff=0.0),
+    FilterDefinition(physical_filter="EMPTY",
+                     lambdaEff=0.0),
+)

@@ -91,7 +91,10 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
         with just a change in overscan.
     """
     if logCmd is None:
-        logCmd = lambda x, *args: None  # noqa
+        # Define a null log command
+        def logCmd(*args):
+            return
+
     modified = False
 
     outAmp = inAmp.rebuild()

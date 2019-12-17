@@ -443,7 +443,7 @@ class LsstBaseTranslator(FitsTranslator):
         obstype = self._header["IMGTYPE"]
         self._used_these_cards("IMGTYPE")
         obstype = obstype.lower()
-        if obstype == "skyexp":
+        if obstype in ("skyexp", "object"):
             obstype = "science"
         return obstype
 
@@ -463,7 +463,8 @@ class LsstBaseTranslator(FitsTranslator):
             darktime = self._header["DARKTIME"]*u.s
             self._used_these_cards("DARKTIME")
         else:
-            log.warning("Unable to determine dark time. Setting from exposure time.")
+            log.warning("%s: Unable to determine dark time. Setting from exposure time.",
+                        self.to_observation_id())
             darktime = self.to_exposure_time()
         return darktime
 

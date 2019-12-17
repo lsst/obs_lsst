@@ -238,7 +238,8 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             self._used_these_cards("FILTER")
             return self._header["FILTER"].lower()
         else:
-            log.warning("FILTER key not found in header (assuming NONE)")
+            log.warning("%s: FILTER key not found in header (assuming NONE)",
+                        self.to_observation_id())
             return "NONE"
 
     def to_exposure_id(self):

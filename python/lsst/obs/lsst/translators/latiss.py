@@ -13,6 +13,7 @@
 __all__ = ("LsstLatissTranslator", )
 
 import logging
+import re
 
 import astropy.units as u
 from astropy.time import Time
@@ -39,6 +40,12 @@ TSTART = Time("2019-12-08T00:00", format="isot", scale="utc")
 # cameras we define one.
 _DETECTOR_GROUP_NAME = "RXX"
 _DETECTOR_NAME = "S00"
+
+# Date 068 detector was put in LATISS
+DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
+
+# IMGTYPE header is filled in after this date
+IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
 
 
 def is_non_science_or_lab(self):
@@ -145,6 +152,84 @@ class LsstLatissTranslator(LsstBaseTranslator):
             return True
         return False
 
+    @classmethod
+    def fix_header(cls, header):
+        """Fix an incorrect LATISS header.
+
+        Parameters
+        ----------
+        header : `dict`
+            The header to update.  Updates are in place.
+
+        Returns
+        -------
+        modified = `bool`
+            Returns `True` if the header was updated.
+
+        Notes
+        -----
+        This method does not apply per-obsid corrections.  The following
+        corrections are applied:
+
+        * On June 24th 2019 the detector was changed from ITL-3800C-098
+          to ITL-3800C-068.  The header is intended to be correct in the
+          future.
+        * In late 2019 the DATE-OBS and MJD-OBS headers were reporting
+          1970 dates.  To correct, the DATE/MJD headers are copied in to
+          replace them and the -END headers are cleared.
+        * Until November 2019 the IMGTYPE was set in the GROUPID header.
+          The value is moved to IMGTYPE.
+        * SHUTTIME is always forced to be `None`.
+
+        Corrections are reported as debug level log messages.
+        """
+        modified = False
+
+        obsid = header.get("OBSID", "unknown")
+
+        # The DATE-OBS / MJD-OBS keys can be 1970
+        if header["DATE-OBS"].startswith("1970"):
+            # Copy the headers from the DATE and MJD since we have no other
+            # choice.
+            header["DATE-OBS"] = header["DATE"]
+            header["DATE-BEG"] = header["DATE-OBS"]
+            header["MJD-OBS"] = header["MJD"]
+            header["MJD-BEG"] = header["MJD-OBS"]
+
+            # And clear the DATE-END and MJD-END -- the translator will use
+            # EXPTIME instead.
+            header["DATE-END"] = None
+            header["MJD-END"] = None
+
+            log.debug("%s: Forcing 1970 dates to '%s'", obsid, header["DATE"])
+            modified = True
+
+        # Create a translator since we need the date
+        translator = cls(header)
+        date = translator.to_datetime_begin()
+        if date > DETECTOR_068_DATE:
+            header["LSST_NUM"] = "ITL-3800C-068"
+            log.debug("%s: Forcing detector serial to %s", obsid, header["LSST_NUM"])
+            modified = True
+
+        # Up until a certain date GROUPID was the IMGTYPE
+        if date < IMGTYPE_OKAY_DATE:
+            groupId = header.get("GROUPID")
+            if groupId and not groupId.startswith("test"):
+                imgType = header.get("IMGTYPE")
+                if not imgType:
+                    header["IMGTYPE"] = groupId
+                    header["GROUPID"] = None
+                    log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
+                    modified = True
+
+        if header.get("SHUTTIME"):
+            log.debug("%s: Forcing SHUTTIME header to be None", obsid)
+            header["SHUTTIME"] = None
+            modified = True
+
+        return modified
+
     def _is_on_mountain(self):
         date = self.to_datetime_begin()
         if date > TSTART:
@@ -185,11 +270,23 @@ class LsstLatissTranslator(LsstBaseTranslator):
     @cache_translation
     def to_dark_time(self):
         # Docstring will be inherited. Property defined in properties.py
-        if self.is_key_ok("DARKTIME"):
-            return self.quantity_from_card("DARKTIME", u.s)
 
-        log.warning("Explicit dark time not found, setting dark time to the exposure time.")
-        return self.to_exposure_time()
+        # Always compare with exposure time
+        # We may revisit this later if there is a cutoff date where we
+        # can always trust the header.
+        exptime = self.to_exposure_time()
+
+        if self.is_key_ok("DARKTIME"):
+            darktime = self.quantity_from_card("DARKTIME", u.s)
+            if darktime >= exptime:
+                return darktime
+            reason = "Dark time less than exposure time."
+        else:
+            reason = "Dark time not defined."
+
+        log.warning("%s: %s Setting dark time to the exposure time.",
+                    self.to_observation_id(), reason)
+        return exptime
 
     @cache_translation
     def to_exposure_time(self):
@@ -202,7 +299,8 @@ class LsstLatissTranslator(LsstBaseTranslator):
 
         # A missing or undefined EXPTIME is problematic. Set to -1
         # to indicate that none was found.
-        log.warning("Insufficient information to derive exposure time. Setting to -1.0s")
+        log.warning("%s: Insufficient information to derive exposure time. Setting to -1.0s",
+                    self.to_observation_id())
         return -1.0 * u.s
 
     @cache_translation
@@ -219,22 +317,28 @@ class LsstLatissTranslator(LsstBaseTranslator):
         """
 
         # LATISS observation type is documented to appear in OBSTYPE
-        # but for historical reasons prefers IMGTYPE.  Some data puts
-        # it in GROUPID (which is meant to be for something else).
+        # but for historical reasons prefers IMGTYPE.
         # Test the keys in order until we find one that contains a
         # defined value.
         obstype_keys = ["OBSTYPE", "IMGTYPE"]
 
-        # For now, hope that GROUPID does not contain an obs type value
-        # when on the mountain.
-        if not self._is_on_mountain():
-            obstype_keys.append("GROUPID")
-
+        obstype = None
         for k in obstype_keys:
             if self.is_key_ok(k):
                 obstype = self._header[k]
                 self._used_these_cards(k)
-                return obstype.lower()
+                obstype = obstype.lower()
+                break
+
+        if obstype is not None:
+            if obstype == "object" and not self._is_on_mountain():
+                # Do not map object to science in lab since most
+                # code assume science is on sky with RA/Dec.
+                obstype = "labobject"
+            elif obstype in ("skyexp", "object"):
+                obstype = "science"
+
+            return obstype
 
         # In the absence of any observation type information, return
         # unknown unless we think it might be a bias.
@@ -243,5 +347,26 @@ class LsstLatissTranslator(LsstBaseTranslator):
             obstype = "bias"
         else:
             obstype = "unknown"
-        log.warning("Unable to determine observation type. Guessing '%s'", obstype)
+        log.warning("%s: Unable to determine observation type. Guessing '%s'",
+                    self.to_observation_id(), obstype)
         return obstype
+
+    @cache_translation
+    def to_physical_filter(self):
+        """Calculate the physical filter name.
+
+        Returns
+        -------
+        filter : `str`
+            Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
+            headers joined by a "+".  Returns "NONE" if no filter is declared.
+            Uses "EMPTY" if any of the filters indicate an "empty_N" name.
+        """
+        # The base class definition is fine
+        physical_filter = super().to_physical_filter()
+
+        # empty_N maps to EMPTY at the start of a filter concatenation
+        if physical_filter.startswith("empty"):
+            physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
+
+        return physical_filter
