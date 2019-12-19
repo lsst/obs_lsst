@@ -480,7 +480,7 @@ datasets:
     template: deepDiff/diaObject/%(tract)d/%(patch)s/diaObjectId-%(tract)d-%(patch)s.parq
     persistable: ignored
     storage: ParquetStorage
-    python: lsst.dia.pipe.parqueTable.ParquetTable
+    python: lsst.dia.pipe.parquetTable.ParquetTable
   imageDifferenceDriver_config:
     persistable: Config
     storage: ConfigStorage
@@ -497,7 +497,7 @@ datasets:
   associationDriver_config:
     persistable: Config
     storage: ConfigStorage
-    python: lsst.dia.pipe.associationDriver.associationDriverConfig
+    python: lsst.dia.pipe.associationDriver.AssociationDriverConfig
     template: config/associationDriver.py
   forcedPhotCcdDiaDriver_config:
     persistable: Config
