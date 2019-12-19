@@ -471,7 +471,7 @@ datasets:
   associationDriver_config:
     persistable: Config
     storage: ConfigStorage
-    python: lsst.dia.pipe.associationDriver.associationDriverConfig
+    python: lsst.dia.pipe.associationDriver.AssociationDriverConfig
     template: config/associationDriver.py
   forcedPhotCcdDiaDriver_config:
     persistable: Config
