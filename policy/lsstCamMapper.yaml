@@ -580,7 +580,7 @@ datasets:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
-    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaObject_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_forced_diaSrc_schema:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
