@@ -575,17 +575,23 @@ datasets:
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
     template: schema/deepDiff_diaObject.fits
-  deepDiff_forced_dia_src:
+  deepDiff_forced_diaSrc:
     description: "Catalog of forced measurements (shape and position parameters held fixed) on the difference images."
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-  deepDiff_forced_dia_src_schema:
+  deepDiff_forced_diaSrc_schema:
     persistable: SourceCatalog
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
-    template: schema/deepDiff_forced_dia_src.fits
+    template: schema/deepDiff_forced_diaSrc.fits
+  deepDiff_forced_diaObject:
+    description: "Catalog of forced measurements (shape and position parameters held fixed) on the templates."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/%(filter)s/%(tract)d/%(patch)s/diaForced-%(filter)s-%(tract)d-%(patch)s.fits
   imageDifferenceDriver_config:
     persistable: Config
     storage: ConfigStorage
@@ -609,3 +615,8 @@ datasets:
     storage: ConfigStorage
     python: lsst.dia.pipe.associationDriver.forcedPhotCcdDiaDriverConfig
     template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCoaddDiaDriver_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.associationDriver.forcedPhotCoaddDiaDriverConfig
+    template: config/forcedPhotCoaddDiaDriver.py
