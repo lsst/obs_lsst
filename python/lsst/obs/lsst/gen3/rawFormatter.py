@@ -122,33 +122,40 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
 class LatissRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstLatissTranslator
     _instrument = LatissInstrument
+    filterDefinitions = LatissInstrument.filterDefinitions
 
 
 class ImsimRawFormatter(LsstCamRawFormatter):
     translatorClass = ImsimTranslator
     _instrument = ImsimInstrument
+    filterDefinitions = ImsimInstrument.filterDefinitions
 
 
 class PhosimRawFormatter(LsstCamRawFormatter):
     translatorClass = PhosimTranslator
     _instrument = PhosimInstrument
+    filterDefinitions = PhosimInstrument.filterDefinitions
 
 
 class Ts8RawFormatter(LsstCamRawFormatter):
     translatorClass = LsstTS8Translator
     _instrument = Ts8Instrument
+    filterDefinitions = Ts8Instrument.filterDefinitions
 
 
 class Ts3RawFormatter(LsstCamRawFormatter):
     translatorClass = LsstTS3Translator
     _instrument = Ts3Instrument
+    filterDefinitions = Ts3Instrument.filterDefinitions
 
 
 class LsstComCamRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstComCamTranslator
     _instrument = LsstComCamInstrument
+    filterDefinitions = LsstComCamInstrument.filterDefinitions
 
 
 class UcdCamRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstUCDCamTranslator
     _instrument = UcdCamInstrument
+    filterDefinitions = UcdCamInstrument.filterDefinitions
