@@ -53,11 +53,11 @@ config.charImage.measureApCorr.sourceSelector['science'].flags.bad = []
 config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.minimum = 150.0
 config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.maximum = None
 config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.fluxField = 'base_PsfFlux_instFlux'
-config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.errField='base_PsfFlux_instFluxErr'
+config.charImage.measureApCorr.sourceSelector['science'].signalToNoise.errField = 'base_PsfFlux_instFluxErr'
 config.charImage.measureApCorr.sourceSelector.name = 'science'
 
 # S/N cuts for zero-point calculation
 config.calibrate.photoCal.match.sourceSelection.doSignalToNoise = True
 config.calibrate.photoCal.match.sourceSelection.signalToNoise.minimum = 150
-config.calibrate.photoCal.match.sourceSelection.signalToNoise.fluxField='base_PsfFlux_instFlux'
-config.calibrate.photoCal.match.sourceSelection.signalToNoise.errField='base_PsfFlux_instFluxErr'
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.fluxField = 'base_PsfFlux_instFlux'
+config.calibrate.photoCal.match.sourceSelection.signalToNoise.errField = 'base_PsfFlux_instFluxErr'
