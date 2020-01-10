@@ -30,6 +30,12 @@ config.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
 config.calibrate.astrometry.referenceSelector.unresolved.minimum = None
 config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
 
+# Make sure galaxies are not used for zero-point calculation.
+config.calibrate.photoCal.match.referenceSelection.doUnresolved = True
+config.calibrate.photoCal.match.referenceSelection.unresolved.name = 'resolved'
+config.calibrate.photoCal.match.referenceSelection.unresolved.minimum = None
+config.calibrate.photoCal.match.referenceSelection.unresolved.maximum = 0.5
+
 # DM-17043 and DM-16785
 config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
 config.charImage.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
