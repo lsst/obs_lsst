@@ -29,6 +29,8 @@ config.calibrate.astrometry.referenceSelector.doUnresolved = True
 config.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
 config.calibrate.astrometry.referenceSelector.unresolved.minimum = None
 config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
+# Discussed on #desc-dc2-validation 2020 Jan 10
+config.calibrate.photoCal.match.referenceSelection.doUnresolved = True
 
 # DM-17043 and DM-16785
 config.charImage.measurePsf.starSelector["objectSize"].doFluxLimit = False
