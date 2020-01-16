@@ -152,15 +152,14 @@ def build_argparser():
                         help = "ISO format date string stating the start of the validity range.",
                         default = '1970-01-01T00:00:00')
 
-    args = parser.parse_args()
-    sys.exit(rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start))
+    return parser
 
 
 def main():
     args = build_argparser().parse_args()
 
     try:
-        sys.exit(rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start))
+        rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start)
     except Exception as e:
         print(f"{e}", file=sys.stderr)
         return 1
