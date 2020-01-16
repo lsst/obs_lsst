@@ -149,7 +149,7 @@ def build_argparser():
     parser.add_argument('--out_root', type = str,
                         help = "Root directory to which to write outputs", default = '.')
     parser.add_argument('--valid_start', type = str,
-                        help = "ISO format date string stating the stgart of the validity range.",
+                        help = "ISO format date string stating the start of the validity range.",
                         default = '1970-01-01T00:00:00')
 
     args = parser.parse_args()
