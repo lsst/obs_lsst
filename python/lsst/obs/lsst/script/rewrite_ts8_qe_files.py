@@ -128,8 +128,8 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
         detector_id = cam[full_detector_name].getId()
         curve_table.meta.update({'CALIBDATE': valid_start, 'INSTRUME': 'TS8', 'OBSTYPE': 'qe_curves',
                                  'DETECTOR': detector_id, 'PICKLEFILE': os.path.split(picklefile)[1]})
-        curve_table.meta['CALIB_ID'] = (f'raftName={raft_name} detectorName={detector_name} ' +
-                                        f'detector={detector_id} calibDate={valid_start} ' +
+        curve_table.meta['CALIB_ID'] = (f'raftName={raft_name} detectorName={detector_name} '
+                                        f'detector={detector_id} calibDate={valid_start} '
                                         f'ccd={detector_id} ccdnum={detector_id} filter=None')
         curve.writeText(outfile)
 
@@ -143,24 +143,23 @@ def build_argparser():
         The argument parser that defines the ``rewrite_ts8_qe_files.py``
         command-line interface.
     """
-    parser = argparse.ArgumentParser(description = 'Rewrite native FITS files from the test ' +
+    parser = argparse.ArgumentParser(description = 'Rewrite native FITS files from the test '
                                                    'stand to a standard format')
     parser.add_argument('picklefile', help = "Pickle file to read.")
     parser.add_argument('--out_root', type = str,
                         help = "Root directory to which to write outputs", default = '.')
     parser.add_argument('--valid_start', type = str,
-                        help = "ISO format date string stating the stgart of the validity range.",
+                        help = "ISO format date string stating the start of the validity range.",
                         default = '1970-01-01T00:00:00')
 
-    args = parser.parse_args()
-    sys.exit(rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start))
+    return parser
 
 
 def main():
     args = build_argparser().parse_args()
 
     try:
-        sys.exit(rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start))
+        rewrite_ts8_files(args.picklefile, args.out_root, args.valid_start)
     except Exception as e:
         print(f"{e}", file=sys.stderr)
         return 1
