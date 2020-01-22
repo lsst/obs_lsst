@@ -145,6 +145,9 @@ class LsstBaseTranslator(FitsTranslator):
     """Maximum number of detectors to use when calculating the
     detector_exposure_id."""
 
+    _DEFAULT_LOCATION = LSST_LOCATION
+    """Default telescope location in absence of relevant FITS headers."""
+
     @classmethod
     def __init_subclass__(cls, **kwargs):
         """Ensure that subclasses clear their own detector mapping entries
@@ -417,14 +420,13 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
-        location = None
         if not self._is_on_mountain():
-            return location
+            return None
         try:
             # Try standard FITS headers
             return super().to_location()
         except KeyError:
-            return LSST_LOCATION
+            return self._DEFAULT_LOCATION
 
     @cache_translation
     def to_datetime_begin(self):

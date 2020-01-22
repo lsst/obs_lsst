@@ -119,6 +119,9 @@ class LsstLatissTranslator(LsstBaseTranslator):
     """Maximum number of detectors to use when calculating the
     detector_exposure_id."""
 
+    _DEFAULT_LOCATION = AUXTEL_LOCATION
+    """Default telescope location in absence of relevant FITS headers."""
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
@@ -262,13 +265,6 @@ class LsstLatissTranslator(LsstBaseTranslator):
         if detector_num != 0:
             log.warning("Unexpected non-zero detector number for LATISS")
         return exposure_id
-
-    @cache_translation
-    def to_location(self):
-        # Docstring will be inherited. Property defined in properties.py
-        if self._is_on_mountain():
-            return AUXTEL_LOCATION
-        return None
 
     @cache_translation
     def to_dark_time(self):
