@@ -95,22 +95,18 @@ class LsstLatissTranslator(LsstBaseTranslator):
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "boresight_rotation_coord": "unknown",
         "science_program": "unknown",
         "relative_humidity": None,
         "pressure": None,
         "temperature": None,
-        "altaz_begin": None,
-        "tracking_radec": None,
     }
 
     _trivial_map = {
         "observation_id": ("OBSID", dict(default=None, checker=is_non_science)),
         "detector_serial": ["LSST_NUM", "DETSER"],
-        "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
         "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
-        "boresight_rotation_angle": ("ROTANGLE", dict(checker=is_non_science_or_lab,
-                                                      default=float("nan"), unit=u.deg)),
+        "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
+                                                                 default=float("nan"), unit=u.deg)),
     }
 
     DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
@@ -377,3 +373,42 @@ class LsstLatissTranslator(LsstBaseTranslator):
             physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
 
         return physical_filter
+
+    @cache_translation
+    def to_boresight_rotation_coord(self):
+        """Boresight rotation angle.
+
+        Only relevant for science observations.
+        """
+        if not self.is_science_on_sky():
+            return "unknown"
+
+        self._used_these_cards("ROTCOORD")
+        return self._header["ROTCOORD"]
+
+    @cache_translation
+    def to_boresight_airmass(self):
+        """Calculate airmass at boresight at start of observation.
+
+        Notes
+        -----
+        Early data are missing AMSTART header so we fall back to calculating
+        it from ELSTART.
+        """
+        if not self.is_science_on_sky():
+            return None
+
+        # This observation should have AMSTART
+        amkey = "AMSTART"
+        if self.is_key_ok(amkey):
+            self._used_these_cards(amkey)
+            return self._header[amkey]
+
+        # Instead we need to look at azel
+        altaz = self.to_altaz_begin()
+        if altaz is not None:
+            return altaz.secz.to_value()
+
+        log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
+                    self.to_observation_id())
+        return 1.0
