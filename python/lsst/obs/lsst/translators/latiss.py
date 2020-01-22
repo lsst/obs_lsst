@@ -47,6 +47,9 @@ DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
 # IMGTYPE header is filled in after this date
 IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
 
+# OBJECT IMGTYPE really means ENGTEST until this date
+OBJECT_IS_ENGTEST = Time("2020-02-01T00:00", format="isot", scale="utc")
+
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -221,6 +224,15 @@ class LsstLatissTranslator(LsstBaseTranslator):
                     header["GROUPID"] = None
                     log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
                     modified = True
+
+        # We were using OBJECT for engineering observations early on
+        if date < OBJECT_IS_ENGTEST:
+            imgType = header.get("IMGTYPE")
+            if imgType == "OBJECT":
+                header["IMGTYPE"] = "ENGTEST"
+                log.debug("%s: Changing OBJECT observation type to %s",
+                          obsid, header["IMGTYPE"])
+                modified = True
 
         if header.get("SHUTTIME"):
             log.debug("%s: Forcing SHUTTIME header to be None", obsid)
