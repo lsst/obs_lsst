@@ -397,6 +397,20 @@ class LsstBaseTranslator(FitsTranslator):
             return False
         return True
 
+    def is_science_on_sky(self):
+        """Determine if this is an on-sky science observation.
+
+        Returns
+        -------
+        is_on_sky : `bool`
+            Returns True if this is a science observation on sky on the
+            summit.
+        """
+        # First see if this is a science observation
+        if self.to_observation_type() != "science":
+            return False
+        return self._is_on_mountain()
+
     @cache_translation
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
