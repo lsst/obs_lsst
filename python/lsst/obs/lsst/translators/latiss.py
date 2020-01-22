@@ -228,6 +228,13 @@ class LsstLatissTranslator(LsstBaseTranslator):
             header["SHUTTIME"] = None
             modified = True
 
+        if "OBJECT" not in header:
+            # Only patch OBJECT IMGTYPE
+            if "IMGTYPE" in header and header["IMGTYPE"] == "OBJECT":
+                log.debug("%s: Forcing OBJECT header to exist", obsid)
+                header["OBJECT"] = "NOTSET"
+                modified = True
+
         return modified
 
     def _is_on_mountain(self):
