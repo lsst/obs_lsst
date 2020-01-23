@@ -33,7 +33,7 @@ AUXTEL_LOCATION = EarthLocation.from_geodetic(-70.747698, -30.244728, 2663.0)
 # Date instrument is taking data at telescope
 # Prior to this date many parameters are automatically nulled out
 # since the headers have not historically been reliable
-TSTART = Time("2019-12-08T00:00", format="isot", scale="utc")
+TSTART = Time("2020-01-01T00:00", format="isot", scale="utc")
 
 # Define the sensor and group name for AuxTel globally so that it can be used
 # in multiple places. There is no raft but for consistency with other LSST
@@ -46,6 +46,9 @@ DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
 
 # IMGTYPE header is filled in after this date
 IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
+
+# OBJECT IMGTYPE really means ENGTEST until this date
+OBJECT_IS_ENGTEST = Time("2020-02-01T00:00", format="isot", scale="utc")
 
 
 def is_non_science_or_lab(self):
@@ -95,22 +98,18 @@ class LsstLatissTranslator(LsstBaseTranslator):
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "boresight_rotation_coord": "unknown",
         "science_program": "unknown",
         "relative_humidity": None,
         "pressure": None,
         "temperature": None,
-        "altaz_begin": None,
-        "tracking_radec": None,
     }
 
     _trivial_map = {
         "observation_id": ("OBSID", dict(default=None, checker=is_non_science)),
         "detector_serial": ["LSST_NUM", "DETSER"],
-        "boresight_airmass": ("AMSTART", dict(checker=is_non_science_or_lab)),
         "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
-        "boresight_rotation_angle": ("ROTANGLE", dict(checker=is_non_science_or_lab,
-                                                      default=float("nan"), unit=u.deg)),
+        "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
+                                                                 default=float("nan"), unit=u.deg)),
     }
 
     DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
@@ -122,6 +121,9 @@ class LsstLatissTranslator(LsstBaseTranslator):
     DETECTOR_MAX = 0
     """Maximum number of detectors to use when calculating the
     detector_exposure_id."""
+
+    _DEFAULT_LOCATION = AUXTEL_LOCATION
+    """Default telescope location in absence of relevant FITS headers."""
 
     @classmethod
     def can_translate(cls, header, filename=None):
@@ -223,10 +225,26 @@ class LsstLatissTranslator(LsstBaseTranslator):
                     log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
                     modified = True
 
+        # We were using OBJECT for engineering observations early on
+        if date < OBJECT_IS_ENGTEST:
+            imgType = header.get("IMGTYPE")
+            if imgType == "OBJECT":
+                header["IMGTYPE"] = "ENGTEST"
+                log.debug("%s: Changing OBJECT observation type to %s",
+                          obsid, header["IMGTYPE"])
+                modified = True
+
         if header.get("SHUTTIME"):
             log.debug("%s: Forcing SHUTTIME header to be None", obsid)
             header["SHUTTIME"] = None
             modified = True
+
+        if "OBJECT" not in header:
+            # Only patch OBJECT IMGTYPE
+            if "IMGTYPE" in header and header["IMGTYPE"] == "OBJECT":
+                log.debug("%s: Forcing OBJECT header to exist", obsid)
+                header["OBJECT"] = "NOTSET"
+                modified = True
 
         return modified
 
@@ -259,13 +277,6 @@ class LsstLatissTranslator(LsstBaseTranslator):
         if detector_num != 0:
             log.warning("Unexpected non-zero detector number for LATISS")
         return exposure_id
-
-    @cache_translation
-    def to_location(self):
-        # Docstring will be inherited. Property defined in properties.py
-        if self._is_on_mountain():
-            return AUXTEL_LOCATION
-        return None
 
     @cache_translation
     def to_dark_time(self):
@@ -370,3 +381,42 @@ class LsstLatissTranslator(LsstBaseTranslator):
             physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
 
         return physical_filter
+
+    @cache_translation
+    def to_boresight_rotation_coord(self):
+        """Boresight rotation angle.
+
+        Only relevant for science observations.
+        """
+        if not self.is_science_on_sky():
+            return "unknown"
+
+        self._used_these_cards("ROTCOORD")
+        return self._header["ROTCOORD"]
+
+    @cache_translation
+    def to_boresight_airmass(self):
+        """Calculate airmass at boresight at start of observation.
+
+        Notes
+        -----
+        Early data are missing AMSTART header so we fall back to calculating
+        it from ELSTART.
+        """
+        if not self.is_science_on_sky():
+            return None
+
+        # This observation should have AMSTART
+        amkey = "AMSTART"
+        if self.is_key_ok(amkey):
+            self._used_these_cards(amkey)
+            return self._header[amkey]
+
+        # Instead we need to look at azel
+        altaz = self.to_altaz_begin()
+        if altaz is not None:
+            return altaz.secz.to_value()
+
+        log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
+                    self.to_observation_id())
+        return 1.0

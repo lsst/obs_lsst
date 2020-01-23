@@ -17,6 +17,7 @@ import os.path
 import yaml
 import logging
 
+import astropy.coordinates
 import astropy.units as u
 from astropy.time import Time, TimeDelta
 from astropy.coordinates import EarthLocation
@@ -24,6 +25,8 @@ from astropy.coordinates import EarthLocation
 from lsst.utils import getPackageDir
 
 from astro_metadata_translator import cache_translation, FitsTranslator
+from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
+    altaz_from_degree_headers
 
 # LSST day clock starts at UTC+8
 ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
@@ -141,6 +144,9 @@ class LsstBaseTranslator(FitsTranslator):
     DETECTOR_MAX = 999
     """Maximum number of detectors to use when calculating the
     detector_exposure_id."""
+
+    _DEFAULT_LOCATION = LSST_LOCATION
+    """Default telescope location in absence of relevant FITS headers."""
 
     @classmethod
     def __init_subclass__(cls, **kwargs):
@@ -397,17 +403,30 @@ class LsstBaseTranslator(FitsTranslator):
             return False
         return True
 
+    def is_science_on_sky(self):
+        """Determine if this is an on-sky science observation.
+
+        Returns
+        -------
+        is_on_sky : `bool`
+            Returns True if this is a science observation on sky on the
+            summit.
+        """
+        # First see if this is a science observation
+        if self.to_observation_type() != "science":
+            return False
+        return self._is_on_mountain()
+
     @cache_translation
     def to_location(self):
         # Docstring will be inherited. Property defined in properties.py
-        location = None
         if not self._is_on_mountain():
-            return location
+            return None
         try:
             # Try standard FITS headers
             return super().to_location()
         except KeyError:
-            return LSST_LOCATION
+            return self._DEFAULT_LOCATION
 
     @cache_translation
     def to_datetime_begin(self):
@@ -514,3 +533,31 @@ class LsstBaseTranslator(FitsTranslator):
             joined = "NONE"
 
         return joined
+
+    @cache_translation
+    def to_tracking_radec(self):
+        if not self.is_science_on_sky():
+            return None
+
+        # RA/DEC are *derived* headers and for the case where the DATE-BEG
+        # is 1970 they are garbage and should not be used.
+        if self._header["DATE-OBS"] == self._header["DATE"]:
+            # A fixed up date -- use AZEL as source of truth
+            altaz = self.to_altaz_begin()
+            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS),
+                                                 obstime=altaz.obstime,
+                                                 location=altaz.location)
+        else:
+            radecsys = ("RADESYS",)
+            radecpairs = (("RASTART", "DECSTART"), ("RA", "DEC"))
+            radec = tracking_from_degree_headers(self, radecsys, radecpairs)
+
+        return radec
+
+    @cache_translation
+    def to_altaz_begin(self):
+        if not self.is_science_on_sky():
+            return None
+
+        return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
+                                         self.to_datetime_begin(), is_zd=False)
