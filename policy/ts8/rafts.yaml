@@ -71,3 +71,6 @@ rafts :
   RTM-009 :
     offset : [0.0, 0.0]                 # offset of centre of raft, mm
     id0 : 198                           # id for S00, incrementing uniformly
+  RTM-017 :
+    offset : [0.0, 0.0]                 # offset of centre of raft, mm
+    id0 : 207                           # id for S00, incrementing uniformly
