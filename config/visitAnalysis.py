@@ -12,5 +12,6 @@ config.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filt
 config.refObjLoader.ref_dataset_name="cal_ref_cat"
 
 config.doWriteParquetTables=False
-config.doApplyUberCal=False
+config.doApplyExternalPhotoCalib=False
+config.doApplyExternalSkyWcs=False
 config.doApplyColorTerms=False
