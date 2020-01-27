@@ -37,7 +37,7 @@ TZERO = Time("2015-01-01T00:00", format="isot", scale="utc")
 TZERO_DATETIME = TZERO.to_datetime()
 
 # Regex to use for parsing a GROUPID string
-GROUP_RE = re.compile(r"^(\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d)\.(\d\d\d)(?:\+(\d+))?$")
+GROUP_RE = re.compile(r"^(\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d)\.(\d\d\d)(?:[\+#](\d+))?$")
 
 # LSST Default location in the absence of headers
 LSST_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
@@ -562,8 +562,8 @@ class LsstBaseTranslator(FitsTranslator):
             tdelta = iso - TZERO_DATETIME
             epoch = int(tdelta.total_seconds())
 
-            # Form the integer from EPOCH + 3 DIGIT FRAC + N
-            visit_id = int(f"{epoch}{fraction}{n:03d}")
+            # Form the integer from EPOCH + 3 DIGIT FRAC + 0-pad N
+            visit_id = int(f"{epoch}{fraction}{n:04d}")
         else:
             # Non-standard string so convert to numbers
             # using a hash function. Use the first N hex digits
