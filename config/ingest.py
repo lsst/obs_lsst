@@ -44,6 +44,7 @@ config.parse.translators = {
     'snap': 'translate_snap',
     'controller': 'translate_controller',
     'obsid': 'translate_obsid',
+    'expGroup': 'translate_expGroup',
 }
 config.parse.defaults = {
 }
@@ -67,6 +68,7 @@ config.register.columns = {
     'wavelength': 'int',
     'controller': 'text',
     'obsid': 'text',
+    'expGroup': 'text',
 }
 config.register.unique = ["visit", "detector"]
 config.register.visit = ['visit', 'filter', 'dateObs', 'expTime']
