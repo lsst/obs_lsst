@@ -125,6 +125,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           wavelength=-666,
                           controller="C",
                           obsid="AT_C_20180920_000065",
+                          expGroup="3018092000065",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "latiss", LatissParseTask, test_data)
@@ -179,6 +180,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=17,
                           controller="C",
                           obsid="E2V-CCD250-179_lambda_flat_0700_6006D_20180724102845",
+                          expGroup="201807241028453",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts8", Ts8ParseTask, test_data)
@@ -216,6 +218,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=67,
                           controller="C",
                           obsid="ITL-3800C-098_lambda_flat_1000_067_20160722020740",
+                          expGroup="201607220607067",
                       )),
                      ("raw/2018-11-15/201811151255111-R433-S00-det433.fits",
                       dict(
@@ -237,6 +240,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=25,
                           controller="C",
                           obsid="E2V-CCD250-411_lambda_flat_1000_025_20181115075559",
+                          expGroup="201811151255111",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ts3", Ts3ParseTask, test_data)
@@ -273,6 +277,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           controller="O",
                           obsid="204595",
+                          expGroup="204595",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "imsim", ImsimParseTask, test_data)
@@ -298,6 +303,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           visit=204595,
                           controller="O",
                           obsid="204595",
+                          expGroup="204595",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimParseTask, test_data)
@@ -323,6 +329,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           visit=9006002,
                           controller="O",
                           obsid="9006002",
+                          expGroup="9006002",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "phosim", PhosimEimgParseTask, test_data)
@@ -350,6 +357,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=100,
                           controller="C",
                           obsid="E2V-CCD250-112-04_flat_flat_100_20181205153143",
+                          expGroup="20181205233148",
                       )),
                      ("raw/2018-05-30/20180530150355-S00-det002.fits",
                       dict(
@@ -371,6 +379,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           testSeqNum=100,
                           controller="C",
                           obsid="ITL-3800C-002_flat_flat_100_20180530080354",
+                          expGroup="20180530150355",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "ucd", UcdParseTask, test_data)
@@ -409,6 +418,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           controller="C",
                           obsid="MC_C_20190319_000001",
+                          expGroup="3019031900001",
                       )),
                      ("raw/6489D/R10/3019032200002-R10-S22-det035-000.fits",
                       dict(
@@ -431,6 +441,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           controller="C",
                           obsid="MC_C_20190322_000002",
+                          expGroup="3019032200002",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "lsstCam", LsstCamParseTask, test_data)
@@ -458,6 +469,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           controller="C",
                           obsid="CC_C_20190530_000001",
+                          expGroup="3019053000001",
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "comCam", LsstComCamParseTask, test_data)

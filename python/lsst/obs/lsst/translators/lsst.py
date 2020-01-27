@@ -16,6 +16,9 @@ __all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids",
 import os.path
 import yaml
 import logging
+import re
+import datetime
+import hashlib
 
 import astropy.coordinates
 import astropy.units as u
@@ -30,7 +33,11 @@ from astro_metadata_translator.translators.helpers import tracking_from_degree_h
 
 # LSST day clock starts at UTC+8
 ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
-TZERO = Time("2010-01-01T00:00", format="isot", scale="utc")
+TZERO = Time("2015-01-01T00:00", format="isot", scale="utc")
+TZERO_DATETIME = TZERO.to_datetime()
+
+# Regex to use for parsing a GROUPID string
+GROUP_RE = re.compile(r"^(\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d)\.(\d\d\d)(?:[\+#](\d+))?$")
 
 # LSST Default location in the absence of headers
 LSST_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
@@ -515,8 +522,62 @@ class LsstBaseTranslator(FitsTranslator):
 
         return self.compute_exposure_id(dayobs, seqnum, controller=controller)
 
-    # For now "visits" are defined to be identical to exposures.
-    to_visit_id = to_exposure_id
+    @cache_translation
+    def to_visit_id(self):
+        """Calculate the visit associated with this exposure.
+
+        Notes
+        -----
+        For LATISS and LSSTCam the default visit is derived from the
+        exposure group.  For other instruments we return the exposure_id.
+        """
+
+        exposure_group = self.to_exposure_group()
+        # If the group is an int we return it
+        try:
+            visit_id = int(exposure_group)
+            return visit_id
+        except ValueError:
+            pass
+
+        # A Group is defined as ISO date with an extension
+        # The integer must be the same for a given group so we can never
+        # use datetime_begin.
+        # Nominally a GROUPID looks like "ISODATE+N" where the +N is
+        # optional.  This can be converted to seconds since epoch with
+        # an adjustment for N.
+        # For early data lacking that form we hash the group and return
+        # the int.
+        matches_date = GROUP_RE.match(exposure_group)
+        if matches_date:
+            iso_str = matches_date.group(1)
+            fraction = matches_date.group(2)
+            n = matches_date.group(3)
+            if n is not None:
+                n = int(n)
+            else:
+                n = 0
+            iso = datetime.datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S")
+
+            tdelta = iso - TZERO_DATETIME
+            epoch = int(tdelta.total_seconds())
+
+            # Form the integer from EPOCH + 3 DIGIT FRAC + 0-pad N
+            visit_id = int(f"{epoch}{fraction}{n:04d}")
+        else:
+            # Non-standard string so convert to numbers
+            # using a hash function. Use the first N hex digits
+            group_bytes = exposure_group.encode("us-ascii")
+            hasher = hashlib.blake2b(group_bytes)
+            # Need to be big enough it does not possibly clash with the
+            # date-based version above
+            digest = hasher.hexdigest()[:14]
+            visit_id = int(digest, base=16)
+
+            # To help with hash collision, append the string length
+            visit_id = int(f"{visit_id}{len(exposure_group):02d}")
+
+        return visit_id
 
     @cache_translation
     def to_physical_filter(self):
@@ -561,3 +622,17 @@ class LsstBaseTranslator(FitsTranslator):
 
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
                                          self.to_datetime_begin(), is_zd=False)
+
+    @cache_translation
+    def to_exposure_group(self):
+        """Calculate the exposure group string.
+
+        For LSSTCam and LATISS this is read from the ``GROUPID`` header.
+        If that header is missing the exposure_id is returned instead as
+        a string.
+        """
+        if self.is_key_ok("GROUPID"):
+            exposure_group = self._header["GROUPID"]
+            self._used_these_cards("GROUPID")
+            return exposure_group
+        return super().to_exposure_group()

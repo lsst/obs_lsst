@@ -222,8 +222,14 @@ class LsstLatissTranslator(LsstBaseTranslator):
                 if not imgType:
                     header["IMGTYPE"] = groupId
                     header["GROUPID"] = None
-                    log.debug("%s: Setting IMGTYPE from GROUPID", obsid)
+                    log.debug("%s: Setting IMGTYPE to '%s' from GROUPID", obsid, header["IMGTYPE"])
                     modified = True
+                else:
+                    # Someone could be fixing headers in old data
+                    # and we do not want GROUPID == IMGTYPE
+                    if imgType == groupId:
+                        # Clear the group so we default to original
+                        header["GROUPID"] = None
 
         # We were using OBJECT for engineering observations early on
         if date < OBJECT_IS_ENGTEST:
