@@ -48,7 +48,7 @@ DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
 IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
 
 # OBJECT IMGTYPE really means ENGTEST until this date
-OBJECT_IS_ENGTEST = Time("2020-02-01T00:00", format="isot", scale="utc")
+OBJECT_IS_ENGTEST = Time("2020-01-27T20:00", format="isot", scale="utc")
 
 
 def is_non_science_or_lab(self):
