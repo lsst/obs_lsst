@@ -14,6 +14,7 @@ __all__ = ("LsstLatissTranslator", )
 
 import logging
 import re
+import math
 
 import astropy.units as u
 from astropy.time import Time
@@ -49,6 +50,12 @@ IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
 
 # OBJECT IMGTYPE really means ENGTEST until this date
 OBJECT_IS_ENGTEST = Time("2020-01-27T20:00", format="isot", scale="utc")
+
+# RA and DEC headers are in radians until this date
+RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
+
+# Scaling factor radians to degrees.  Keep it simple.
+RAD2DEG = 180.0 / math.pi
 
 
 def is_non_science_or_lab(self):
@@ -238,6 +245,17 @@ class LsstLatissTranslator(LsstBaseTranslator):
                 header["IMGTYPE"] = "ENGTEST"
                 log.debug("%s: Changing OBJECT observation type to %s",
                           obsid, header["IMGTYPE"])
+                modified = True
+
+        # Early on the RA/DEC headers were stored in radians
+        if date < RADEC_IS_RADIANS:
+            if header.get("RA") is not None:
+                header["RA"] *= RAD2DEG
+                log.debug("%s: Changing RA header to degrees", obsid)
+                modified = True
+            if header.get("DEC") is not None:
+                header["DEC"] *= RAD2DEG
+                log.debug("%s: Changing DEC header to degrees", obsid)
                 modified = True
 
         if header.get("SHUTTIME"):
