@@ -34,7 +34,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "lsstCam"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 3019031900001, 'detectorName': 'S02', 'raftName': 'R10'},
+        dataIds = {'raw': {'expId': 3019031900001, 'detectorName': 'S02', 'raftName': 'R10'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
@@ -78,9 +78,9 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               )
 
         path_to_raw = os.path.join(self.data_dir, "raw", "30190319", "R10",
-                                   "3019031900001-R10-S02-det029-000.fits")
+                                   "3019031900001-R10-S02-det029.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
+                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label', 'expId',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 3019031900001}, [(3019031900001, 'NONE')]),
@@ -92,11 +92,11 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = os.path.join("processCcd_metadata/3019031900001-NONE/R10",
                                             "processCcdMetadata_3019031900001-NONE-R10-S02-det029.yaml")
-        raw_filename = '3019031900001-R10-S02-det029-000.fits'
+        raw_filename = '3019031900001-R10-S02-det029.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName']))
+        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
@@ -159,10 +159,14 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         name = self.mapper._extractDetectorName({'visit': 3019031900001, 'detector': 29})
         self.assertEqual(name, "R10_S02")
 
+        name = self.mapper._extractDetectorName({'expId': 3019031900001, 'detector': 29})
+        self.assertEqual(name, "R10_S02")
+
         name = self.mapper._extractDetectorName({'detector': 29})
         self.assertEqual(name, "R10_S02")
 
-        name = self.mapper._extractDetectorName({'visit': 3019031900001})
+        name = self.mapper._extractDetectorName({'obsid': "MC_C_20190319_000001",
+                                                 'lsstSerial': "ITL-3800C-041"})
         self.assertEqual(name, "R10_S02")
 
         with self.assertRaises(RuntimeError):

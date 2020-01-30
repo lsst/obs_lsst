@@ -72,7 +72,7 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         path_to_raw = os.path.join(self.data_dir, "raw", "2018-05-30", "20180530150355-S00-det002")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 20180530150355}, [(20180530150355, 'r')]),
                          ({'detector': '2'}, [(20180530150355, 'r')]),
@@ -85,9 +85,9 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         raw_filename = '20180530150355-S00-det002.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName'])),
-                      ('filter', set(['visit', 'detector', 'run', 'detectorName'])),
-                      ('visit', set(['visit', 'detector', 'run', 'detectorName']))
+        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName'])),
+                      ('filter', set(['expId', 'detector', 'run', 'detectorName'])),
+                      ('visit', set(['expId', 'detector', 'run', 'detectorName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

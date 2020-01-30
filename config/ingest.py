@@ -45,6 +45,7 @@ config.parse.translators = {
     'controller': 'translate_controller',
     'obsid': 'translate_obsid',
     'expGroup': 'translate_expGroup',
+    'expId': 'translate_expId',
 }
 config.parse.defaults = {
 }
@@ -69,6 +70,7 @@ config.register.columns = {
     'controller': 'text',
     'obsid': 'text',
     'expGroup': 'text',
+    'expId': 'int',
 }
-config.register.unique = ["visit", "detector"]
+config.register.unique = ["expId", "detector", "visit"]
 config.register.visit = ['visit', 'filter', 'dateObs', 'expTime']

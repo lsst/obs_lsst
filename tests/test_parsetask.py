@@ -122,6 +122,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           filter='NONE',
                           seqNum=65,
                           visit=3018092000065,
+                          expId=3018092000065,
                           wavelength=-666,
                           controller="C",
                           obsid="AT_C_20180920_000065",
@@ -177,6 +178,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-07-24',
                           filter='z',
                           visit=201807241028453,
+                          expId=201807241028453,
                           testSeqNum=17,
                           controller="C",
                           obsid="E2V-CCD250-179_lambda_flat_0700_6006D_20180724102845",
@@ -215,6 +217,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2016-07-21',
                           filter='550CutOn',
                           visit=201607220607067,
+                          expId=201607220607067,
                           testSeqNum=67,
                           controller="C",
                           obsid="ITL-3800C-098_lambda_flat_1000_067_20160722020740",
@@ -237,6 +240,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-11-15',
                           filter='550CutOn',
                           visit=201811151255111,
+                          expId=201811151255111,
                           testSeqNum=25,
                           controller="C",
                           obsid="E2V-CCD250-411_lambda_flat_1000_025_20181115075559",
@@ -258,7 +262,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""
-        test_data = (("raw/204595/R11/00204595-R11-S20-det042-000.fits",
+        test_data = (("raw/204595/R11/00204595-R11-S20-det042.fits",
                       dict(
                           expTime=30.0,
                           object='UNKNOWN',
@@ -270,6 +274,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dateObs='2022-10-05T06:53:26.357',
                           run='204595',
                           visit=204595,
+                          expId=204595,
                           wavelength=-666,
                           raftName='R11',
                           detectorName='S20',
@@ -284,7 +289,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_phosim_translator(self):
         """Run the gen 2 metadata extraction code for Phosim"""
-        test_data = (("raw/204595/R11/00204595-R11-S20-det042-000.fits",
+        test_data = (("raw/204595/R11/00204595-R11-S20-det042.fits",
                       dict(
                           expTime=30.0,
                           object='UNKNOWN',
@@ -301,6 +306,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           filter='i',
                           visit=204595,
+                          expId=204595,
                           controller="O",
                           obsid="204595",
                           expGroup="204595",
@@ -327,6 +333,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           snap=0,
                           filter='g',
                           visit=9006002,
+                          expId=9006002,
                           controller="O",
                           obsid="9006002",
                           expGroup="9006002",
@@ -354,6 +361,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-12-05',
                           filter='r',
                           visit=20181205233148,
+                          expId=20181205233148,
                           testSeqNum=100,
                           controller="C",
                           obsid="E2V-CCD250-112-04_flat_flat_100_20181205153143",
@@ -376,6 +384,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dayObs='2018-05-30',
                           filter='r',
                           visit=20180530150355,
+                          expId=20180530150355,
                           testSeqNum=100,
                           controller="C",
                           obsid="ITL-3800C-002_flat_flat_100_20180530080354",
@@ -397,7 +406,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_lsstCam_translator(self):
         """Run the gen 2 metadata extraction code for lsstCam"""
-        test_data = (("raw/unknown/R10/3019031900001-R10-S02-det029-000.fits",
+        test_data = (("raw/unknown/R10/3019031900001-R10-S02-det029.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -411,6 +420,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dateObs='2019-03-19T15:50:28.145',
                           run='unknown',
                           visit=3019031900001,
+                          expId=3019031900001,
                           wavelength=-666,
                           raftName='R10',
                           detectorName='S02',
@@ -420,7 +430,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           obsid="MC_C_20190319_000001",
                           expGroup="3019031900001",
                       )),
-                     ("raw/6489D/R10/3019032200002-R10-S22-det035-000.fits",
+                     ("raw/6489D/R10/3019032200002-R10-S22-det035.fits",
                       dict(
                           expTime=1.0,
                           object='UNKNOWN',
@@ -434,6 +444,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dateObs='2019-03-22T15:31:01.904',
                           run='6489D',
                           visit=3019032200002,
+                          expId=3019032200002,
                           wavelength=-666,
                           raftName='R10',
                           detectorName='S22',
@@ -448,7 +459,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_comCam_translator(self):
         """Run the gen 2 metadata extraction code for comCam"""
-        test_data = (("raw/unknown/R22/3019053000001-R22-S00-det000-000.fits",
+        test_data = (("raw/unknown/R22/3019053000001-R22-S00-det000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -462,6 +473,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           dateObs='2019-05-31T02:38:37.384',
                           run='unknown',
                           visit=3019053000001,
+                          expId=3019053000001,
                           wavelength=-666,
                           raftName='R22',
                           detectorName='S00',

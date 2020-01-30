@@ -94,7 +94,8 @@ def processPhosimData(ids, visit, inputDir, outputDir):
     ----------
     ids : `str`
         DataId to be used to access the data. Can only be given as
-        ``visit=NNN`` form. ``visit`` is used if this is `None`
+        ``visit=NNN`` form. ``visit`` is used if this is `None`.
+        ``expId`` is assumed to be an alias for ``visit`` in PhoSim.
     visit : `int`
         Explicit visit number to read from repository. Only used if
         ``ids`` is `None` or to check that it is consistent with the value
@@ -141,7 +142,8 @@ def processPhosimData(ids, visit, inputDir, outputDir):
             raise RuntimeError(f"No raw data found in butler repository at {inputDir}")
         visit = rawData[0]
 
-    dataId = dict(visit=visit)
+    # For phosim we declare that visit==expId
+    dataId = dict(expId=visit)
     #
     # Due to butler stupidity it can't/won't lookup things when you also
     # specify a channel.  Sigh
