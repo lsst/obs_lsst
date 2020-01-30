@@ -410,18 +410,25 @@ class LsstBaseTranslator(FitsTranslator):
             return False
         return True
 
-    def is_science_on_sky(self):
-        """Determine if this is an on-sky science observation.
+    def is_on_sky(self):
+        """Determine if this is an on-sky observation.
 
         Returns
         -------
         is_on_sky : `bool`
-            Returns True if this is a science observation on sky on the
+            Returns True if this is a observation on sky on the
             summit.
         """
-        # First see if this is a science observation
-        if self.to_observation_type() != "science":
+        # For LSST we think on sky unless tracksys is local
+        if self.is_key_ok("TRACKSYS"):
+            if self._header["TRACKSYS"].lower() == "local":
+                # not on sky
+                return False
+
+        # These are obviously not on sky
+        if self.to_observation_type() in ("bias", "dark", "flat"):
             return False
+
         return self._is_on_mountain()
 
     @cache_translation
@@ -597,7 +604,7 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_tracking_radec(self):
-        if not self.is_science_on_sky():
+        if not self.is_on_sky():
             return None
 
         # RA/DEC are *derived* headers and for the case where the DATE-BEG
@@ -617,7 +624,11 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_altaz_begin(self):
-        if not self.is_science_on_sky():
+        if not self._is_on_mountain():
+            return None
+
+        # ALTAZ always relevant unless bias or dark
+        if self.to_observation_type() in ("bias", "dark"):
             return None
 
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),

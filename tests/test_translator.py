@@ -357,7 +357,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      ("latiss-AT_O_20200121_000045.yaml",
                       dict(telescope="LSSTAuxTel",
                            instrument="LATISS",
-                           boresight_rotation_coord="unknown",
+                           boresight_rotation_coord="sky",
                            dark_time=100.0*u.s,
                            detector_exposure_id=2020012100045,
                            detector_group="RXX",

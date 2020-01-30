@@ -419,11 +419,15 @@ class LsstLatissTranslator(LsstBaseTranslator):
 
         Only relevant for science observations.
         """
-        if not self.is_science_on_sky():
-            return "unknown"
+        unknown = "unknown"
+        if not self.is_on_sky():
+            return unknown
 
         self._used_these_cards("ROTCOORD")
-        return self._header["ROTCOORD"]
+        coord = self._header.get("ROTCOORD", unknown)
+        if coord is None:
+            coord = unknown
+        return coord
 
     @cache_translation
     def to_boresight_airmass(self):
@@ -434,7 +438,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
         Early data are missing AMSTART header so we fall back to calculating
         it from ELSTART.
         """
-        if not self.is_science_on_sky():
+        if not self.is_on_sky():
             return None
 
         # This observation should have AMSTART
