@@ -270,6 +270,13 @@ class LsstLatissTranslator(LsstBaseTranslator):
                 header["OBJECT"] = "NOTSET"
                 modified = True
 
+        if "RADESYS" in header:
+            if header["RADESYS"] == "":
+                # Default to ICRS
+                header["RADESYS"] = "ICRS"
+                log.debug("%s: Forcing blank RADESYS to '%s'", obsid, header["RADESYS"])
+                modified = True
+
         return modified
 
     def _is_on_mountain(self):
