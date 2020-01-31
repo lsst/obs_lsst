@@ -31,8 +31,8 @@ config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
 config.modelPsf.defaultFwhm = 7.7
 
 # FUTURE: Set both to True when we decide to run jointcal
-config.doApplyExternalPhotoCalib = False
-config.doApplyExternalSkyWcs = False
+config.readCalexp.doApplyExternalPhotoCalib = False
+config.readCalexp.doApplyExternalSkyWcs = False
 
 # FUTURE: Set to True when we have sky background estimate
-config.doApplySkyCorr = False
+config.readCalexp.doApplySkyCorr = False
