@@ -50,6 +50,9 @@ config.register.columns = {
     'object': 'text',
     'imageType': 'text',
     'wavelength': 'int',
+    'expGroup': 'text',
+    'obsid': 'text',
+    'expId': 'int'
 }
-config.register.unique = ["visit", "detector"]
+config.register.unique = ["expId", "visit"]
 config.register.visit = list(config.register.columns.keys())

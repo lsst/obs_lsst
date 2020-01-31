@@ -280,6 +280,9 @@ class LsstCamParseTask(ParseTask):
     def translate_expGroup(self, md):
         return self.observationInfo.exposure_group
 
+    def translate_expId(self, md):
+        return self.observationInfo.exposure_id
+
     def translate_controller(self, md):
         if "CONTRLLR" in md:
             if md["CONTRLLR"]:

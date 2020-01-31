@@ -74,7 +74,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-RTM-010-S11-det067.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 201807241028453}, [(201807241028453, 'z')]),
                          ({'detector': 67}, [(201807241028453, 'z')]),
@@ -88,9 +88,9 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         raw_filename = '201807241028453-RTM-010-S11-det067.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['visit', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['visit', 'detector', 'run', 'detectorName', 'raftName']))
+        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

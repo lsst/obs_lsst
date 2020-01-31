@@ -74,7 +74,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         path_to_raw = os.path.join(self.data_dir, "raw", "2018-09-20", "3018092000065-det000.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
         query_format = ["visit", "seqNum", "dayObs"]
         queryMetadata = (({'visit': 3018092000065}, [(3018092000065, 65, '2018-09-20')]),
                          ({'detector': 0}, [(3018092000065, 65, '2018-09-20')]),
@@ -88,9 +88,9 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         raw_filename = '3018092000065-det000.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'dayObs'])),
-                      ('filter', set(['visit', 'detector', 'dayObs'])),
-                      ('visit', set(['visit', 'detector', 'dayObs']))
+        raw_levels = (('skyTile', set(['expId', 'detector', 'dayObs'])),
+                      ('filter', set(['expId', 'detector', 'dayObs'])),
+                      ('visit', set(['expId', 'detector', 'dayObs']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

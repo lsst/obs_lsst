@@ -17,5 +17,5 @@ del config.register.columns['snap']
 config.register.columns['dayObs'] = 'text'
 config.register.columns['testSeqNum'] = 'int'
 
-config.register.unique = ["visit", "detector"]
+config.register.unique = ["expId", "detector", "visit"]
 config.register.visit = list(config.register.columns.keys())

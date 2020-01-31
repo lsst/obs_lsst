@@ -69,10 +69,10 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042-000.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 204595}, [(204595, 'i')]),
                          ({'filter': 'i'}, [(204595, 'i')]),
@@ -83,11 +83,11 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_storage_name = 'FitsStorage'
         metadata_output_path = os.path.join('processCcd_metadata', '00204595-i', 'R11',
                                             'processCcdMetadata_00204595-i-R11-S20-det042.yaml')
-        raw_filename = '00204595-R11-S20-det042-000.fits'
+        raw_filename = '00204595-R11-S20-det042.fits'
         default_level = 'visit'
-        raw_levels = (('skyTile', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['visit', 'detector', 'snap', 'run', 'detectorName', 'raftName']))
+        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

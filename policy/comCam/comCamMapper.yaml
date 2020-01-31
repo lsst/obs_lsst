@@ -14,7 +14,7 @@ exposures:
     python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
+    template: raw/%(run)s/%(raftName)s/%(expId)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
   raw:
     assembler: lsst.obs.lsst.lsstCamMapper.assemble_raw
     python: lsst.afw.image.DecoratedImageF
@@ -32,20 +32,20 @@ exposures:
     python: lsst.afw.image.DecoratedImageF
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[%(channel)d]
+    template: raw/%(run)s/%(raftName)s/%(expId)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
   postISRCCD:
-    template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: postISRCCD/%(expId)08d-%(filter)s/%(raftName)s/postISRCCD_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   postISRCCD_uninterpolated:
-    template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
+    template: postISRCCD/%(expId)08d-%(filter)s/%(raftName)s/postISRCCD_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
   calexp:
-    template: calexp/%(visit)08d-%(filter)s/%(raftName)s/calexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: calexp/%(expId)08d-%(filter)s/%(raftName)s/calexp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icExp:
-    template: icExp/%(visit)08d-%(filter)s/%(raftName)s/icExp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: icExp/%(expId)08d-%(filter)s/%(raftName)s/icExp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   wcs:
     tables:
     - raw
     - raw_visit
-    template: wcs/%(visit)08d-%(filter)s/%(raftName)s/wcs_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: wcs/%(expId)08d-%(filter)s/%(raftName)s/wcs_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   fcr:
     level: Ccd
     persistable: ExposureI
@@ -54,21 +54,21 @@ exposures:
     tables:
     - raw
     - raw_visit
-    template: fcr/%(visit)08d-%(filter)s/%(raftName)s/fcr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: fcr/%(expId)08d-%(filter)s/%(raftName)s/fcr_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepCoadd_directWarp:
-    template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/warp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
+    template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/warp-%(filter)s-%(tract)d-%(patch)s-%(expId)d.fits
   deepCoadd_psfMatchedWarp:
-    template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
+    template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(expId)d.fits
   dcrCoadd_directWarp:
-    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(visit)d.fits
+    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(expId)d.fits
   deepDiff_differenceExp:
-    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: deepDiff/v%(expId)08d-f%(filter)s/%(raftName)s/diffexp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_matchedExp:
-    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: deepDiff/v%(expId)08d-f%(filter)s/%(raftName)s/matchexp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_differenceExp:
-    template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: dcrDiff/v%(expId)08d-f%(filter)s/%(raftName)s/diffexp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_matchedExp:
-    template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: dcrDiff/v%(expId)08d-f%(filter)s/%(raftName)s/matchexp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 
 calibrations:
@@ -213,7 +213,7 @@ datasets:
     python: lsst.meas.algorithms.ApertureCorrection
     storage: PickleStorage
     tables: raw
-    template: apCorr/%(visit)08d-%(filter)s/%(raftName)s/apCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
+    template: apCorr/%(expId)08d-%(filter)s/%(raftName)s/apCorr_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
   cal_ref_cat:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
@@ -225,7 +225,7 @@ datasets:
     python: lsst.afw.math.BackgroundList
     storage: FitsCatalogStorage
     tables: raw
-    template: calexp/%(visit)08d-%(filter)s/%(raftName)s/bkgd_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: calexp/%(expId)08d-%(filter)s/%(raftName)s/bkgd_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   ccdExposureId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
@@ -233,9 +233,9 @@ datasets:
     tables: raw
     template: ignored
   calexp_camera:
-    template: calexp_camera/%(visit)08d-%(filter)s/%(raftName)s/calexp_camera_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: calexp_camera/%(expId)08d-%(filter)s/%(raftName)s/calexp_camera_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   skyCorr:
-    template: skyCorr/%(visit)08d-%(filter)s/%(raftName)s/skyCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: skyCorr/%(expId)08d-%(filter)s/%(raftName)s/skyCorr_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   ccdExposureId_bits:
     persistable: ignored
     python: lsst.daf.base.PropertySet
@@ -255,29 +255,29 @@ datasets:
     tables: raw
     template: ignored
   dcrDiff_diaSrc:
-    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: dcrDiff/v%(expId)d-f%(filter)s/%(raftName)s/diaSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_kernelSrc:
-    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: dcrDiff/v%(expId)d-f%(filter)s/%(raftName)s/kernelSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_metadata:
-    template: dcrDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: dcrDiff/v%(expId)d-f%(filter)s/%(raftName)s/metadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   deepDiff_diaSrc:
-    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/diaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: deepDiff/v%(expId)d-f%(filter)s/%(raftName)s/diaSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_kernelSrc:
-    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/kernelSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: deepDiff/v%(expId)d-f%(filter)s/%(raftName)s/kernelSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_metadata:
-    template: deepDiff/v%(visit)d-f%(filter)s/%(raftName)s/metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: deepDiff/v%(expId)d-f%(filter)s/%(raftName)s/metadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   forced_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
     storage: YamlStorage
     tables: raw
-    template: forced_metadata/%(visit)08d-%(filter)s/%(raftName)s/forcedMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: forced_metadata/%(expId)08d-%(filter)s/%(raftName)s/forcedMetadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   forced_src:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: forced/%(visit)08d-%(filter)s/%(raftName)s/forced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: forced/%(expId)08d-%(filter)s/%(raftName)s/forced_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   goodSeeingCoaddId:
     persistable: ignored
     python: lsst.daf.base.PropertySet
@@ -295,26 +295,26 @@ datasets:
     python: lsst.afw.math.BackgroundList
     storage: FitsCatalogStorage
     tables: raw
-    template: icExp/%(visit)08d-%(filter)s/%(raftName)s/icExp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: icExp/%(expId)08d-%(filter)s/%(raftName)s/icExp_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icSrc:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: icSrc/%(visit)08d-%(filter)s/%(raftName)s/icSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: icSrc/%(expId)08d-%(filter)s/%(raftName)s/icSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   processCcd_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
     storage: YamlStorage
     tables: raw
-    template: processCcd_metadata/%(visit)08d-%(filter)s/%(raftName)s/processCcdMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: processCcd_metadata/%(expId)08d-%(filter)s/%(raftName)s/processCcdMetadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   raw_hdu:
     level: Ccd
     persistable: PropertyList
     python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
+    template: raw/%(run)s/%(raftName)s/%(expId)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
   refcat:
     persistable: SimpleCatalog
     python: lsst.afw.table.SimpleCatalog
@@ -326,23 +326,23 @@ datasets:
     python: lsst.afw.table.SourceCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: src/%(visit)08d-%(filter)s/%(raftName)s/src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: src/%(expId)08d-%(filter)s/%(raftName)s/src_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   srcMatch:
     persistable: BaseCatalog
     python: lsst.afw.table.BaseCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: srcMatch/%(expId)08d-%(filter)s/%(raftName)s/srcMatch_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   jointcal_wcs:  # astrometric calibration produced by jointcal
-    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_wcs-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_wcs-%(expId)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   jointcal_photoCalib:  # photometric calibration produced by jointcal
-    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_photoCalib-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_photoCalib-%(expId)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
     storage: YamlStorage
     tables: raw
-    template: transformSrcMeasurement_metadata/%(visit)08d-%(filter)s/%(raftName)s/transformSrcMeasurementMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: transformSrcMeasurement_metadata/%(expId)08d-%(filter)s/%(raftName)s/transformSrcMeasurementMetadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   singleFrameDriver_metadata:
     persistable: PropertySet
     python: lsst.daf.base.PropertySet
@@ -350,13 +350,13 @@ datasets:
     tables:
     - raw
     - raw_visit
-    template: singleFrameDriver_metadata/%(visit)06d-%(filter)s/%(raftName)s/singleFrameDriverMetadata_%(visit)06d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: singleFrameDriver_metadata/%(expId)06d-%(filter)s/%(raftName)s/singleFrameDriverMetadata_%(expId)06d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   transformed_src:
     persistable: ignored
     python: lsst.afw.table.BaseCatalog
     storage: FitsCatalogStorage
     tables: raw
-    template: transformedSrc/%(visit)08d-%(filter)s/%(raftName)s/transformedSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: transformedSrc/%(expId)08d-%(filter)s/%(raftName)s/transformedSrc_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   eotest_gain:  # set of amplifier gains, as measured by eotest
     level: Ccd
     persistable: ignored
@@ -365,9 +365,9 @@ datasets:
     tables: raw
     template: gain/%(run)s/gain_%(run)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
   apPipe_metadata:
-    template: apPipe_metadata/%(visit)08d-%(filter)s/%(raftName)s/apPipeMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: apPipe_metadata/%(expId)08d-%(filter)s/%(raftName)s/apPipeMetadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   runIsr_metadata:
-    template: runIsr_metadata/%(visit)08d-%(filter)s/%(raftName)s/runIsrMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: runIsr_metadata/%(expId)08d-%(filter)s/%(raftName)s/runIsrMetadata_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   brighterFatterKernel:
     template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.pkl
   brighterFatterGain:
@@ -393,7 +393,7 @@ datasets:
     persistable: None
     python: builtins.str
     storage: TextStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/plot-v%(visit)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/plot-v%(expId)d-%(description)s-%(style)s.png
   plotCompareCoadd:
     persistable: None
     python: builtins.str
@@ -403,12 +403,12 @@ datasets:
     persistable: None
     python: builtins.str
     storage: TextStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/compareVisit-v%(expId)d-%(description)s-%(style)s.png
   # ISR stage thumbnails
   ossThumb:
-    template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/ossThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
+    template: thumbs/%(expId)08d-%(filter)s/%(raftName)s/ossThumb_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
   flattenedThumb:
-    template: thumbs/%(visit)08d-%(filter)s/%(raftName)s/flattenedThumb_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
+    template: thumbs/%(expId)08d-%(filter)s/%(raftName)s/flattenedThumb_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
 
   # Focal plane summary plots
   focal_plane_fits:
@@ -417,24 +417,24 @@ datasets:
     python: lsst.afw.image.MaskedImageF
     storage: FitsStorage
     tables: raw
-    template: focal_plane/%(dstype)s-v%(visit)08d.fits
+    template: focal_plane/%(dstype)s-v%(expId)08d.fits
   focal_plane_png:
     level: Visit
     persistable: None
     python: builtins.str
     storage: TextStorage
-    template: focal_plane/%(dstype)s-v%(visit)08d.png
+    template: focal_plane/%(dstype)s-v%(expId)08d.png
   binned_sensor_fits:
     level: Visit
     persistable: MaskedImageF
     python: lsst.afw.image.MaskedImageF
     storage: FitsStorage
     tables: raw
-    template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s.fits
+    template: binned_sensor/%(dstype)s-v%(expId)08d/%(raftName)s/%(detectorName)s.fits
   binned_sensor_fits_halves:
     level: Visit
     persistable: MaskedImageF
     python: lsst.afw.image.MaskedImageF
     storage: FitsStorage
     tables: raw
-    template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s_%(half)s.fits
+    template: binned_sensor/%(dstype)s-v%(expId)08d/%(raftName)s/%(detectorName)s_%(half)s.fits

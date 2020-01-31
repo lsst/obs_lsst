@@ -65,7 +65,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
             with self.assertLogs("lsst.obs.lsst.script.phosimToRafts", level="INFO") as cm:
                 processPhosimData("visit=204595", None, DATADIR, self.testdir)
 
-            self.assertIn("DataId = {'visit': 204595, 'run': '204595', 'snap': 0}", cm.output[0])
+            self.assertIn("DataId = {'expId': 204595, 'run': '204595', 'snap': 0}", cm.output[0])
             self.assertIn("Processing data from detector R11_S20", cm.output[1])
 
             self.assertRaftsEqual()
