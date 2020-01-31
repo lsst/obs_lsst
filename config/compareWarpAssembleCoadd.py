@@ -28,7 +28,3 @@ config.load(os.path.join(getPackageDir("obs_lsst"), "config", "assembleCoadd.py"
 
 # 200 rows (since patch width is typically < 10k pixels
 config.assembleStaticSkyModel.subregionSize = (10000, 200)
-
-# FUTURE Set both to True if we run meas_mosaic or jointcal
-config.assembleStaticSkyModel.doApplyExternalPhotoCalib = False
-config.assembleStaticSkyModel.doApplyExternalSkyWcs = False
