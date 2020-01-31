@@ -14,6 +14,7 @@ __all__ = ("LsstLatissTranslator", )
 
 import logging
 import re
+import math
 
 import astropy.units as u
 from astropy.time import Time
@@ -48,7 +49,13 @@ DETECTOR_068_DATE = Time("2019-06-24T00:00", format="isot", scale="utc")
 IMGTYPE_OKAY_DATE = Time("2019-11-07T00:00", format="isot", scale="utc")
 
 # OBJECT IMGTYPE really means ENGTEST until this date
-OBJECT_IS_ENGTEST = Time("2020-02-01T00:00", format="isot", scale="utc")
+OBJECT_IS_ENGTEST = Time("2020-01-27T20:00", format="isot", scale="utc")
+
+# RA and DEC headers are in radians until this date
+RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
+
+# Scaling factor radians to degrees.  Keep it simple.
+RAD2DEG = 180.0 / math.pi
 
 
 def is_non_science_or_lab(self):
@@ -240,6 +247,17 @@ class LsstLatissTranslator(LsstBaseTranslator):
                           obsid, header["IMGTYPE"])
                 modified = True
 
+        # Early on the RA/DEC headers were stored in radians
+        if date < RADEC_IS_RADIANS:
+            if header.get("RA") is not None:
+                header["RA"] *= RAD2DEG
+                log.debug("%s: Changing RA header to degrees", obsid)
+                modified = True
+            if header.get("DEC") is not None:
+                header["DEC"] *= RAD2DEG
+                log.debug("%s: Changing DEC header to degrees", obsid)
+                modified = True
+
         if header.get("SHUTTIME"):
             log.debug("%s: Forcing SHUTTIME header to be None", obsid)
             header["SHUTTIME"] = None
@@ -250,6 +268,13 @@ class LsstLatissTranslator(LsstBaseTranslator):
             if "IMGTYPE" in header and header["IMGTYPE"] == "OBJECT":
                 log.debug("%s: Forcing OBJECT header to exist", obsid)
                 header["OBJECT"] = "NOTSET"
+                modified = True
+
+        if "RADESYS" in header:
+            if header["RADESYS"] == "":
+                # Default to ICRS
+                header["RADESYS"] = "ICRS"
+                log.debug("%s: Forcing blank RADESYS to '%s'", obsid, header["RADESYS"])
                 modified = True
 
         return modified
@@ -394,11 +419,15 @@ class LsstLatissTranslator(LsstBaseTranslator):
 
         Only relevant for science observations.
         """
-        if not self.is_science_on_sky():
-            return "unknown"
+        unknown = "unknown"
+        if not self.is_on_sky():
+            return unknown
 
         self._used_these_cards("ROTCOORD")
-        return self._header["ROTCOORD"]
+        coord = self._header.get("ROTCOORD", unknown)
+        if coord is None:
+            coord = unknown
+        return coord
 
     @cache_translation
     def to_boresight_airmass(self):
@@ -409,7 +438,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
         Early data are missing AMSTART header so we fall back to calculating
         it from ELSTART.
         """
-        if not self.is_science_on_sky():
+        if not self.is_on_sky():
             return None
 
         # This observation should have AMSTART
