@@ -1,17 +1,17 @@
 R43 :
   detectorType : ITL
-  raftSerial : LCA-11021_RTM-023
+  raftSerial : LCA-11021_RTM-022
 
   ccdSerials :
-    S00 : ITL-3800C-145-Dev
-    S01 : ITL-3800C-022-Dev
-    S02 : ITL-3800C-041-Dev
-    S10 : ITL-3800C-100-Dev
-    S11 : ITL-3800C-017-Dev
-    S12 : ITL-3800C-018-Dev
-    S20 : ITL-3800C-102-Dev
-    S21 : ITL-3800C-146-Dev
-    S22 : ITL-3800C-103-Dev
+    S00 : ITL-3800C-080
+    S01 : ITL-3800C-506
+    S02 : ITL-3800C-450
+    S10 : ITL-3800C-396
+    S11 : ITL-3800C-203
+    S12 : ITL-3800C-476
+    S20 : ITL-3800C-166
+    S21 : ITL-3800C-313
+    S22 : ITL-3800C-076
 
   geometryWithinRaft:
     S00 : {

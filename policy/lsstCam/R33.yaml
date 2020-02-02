@@ -1,17 +1,17 @@
 R33 :
-  detectorType : ITL
-  raftSerial : LCA-11021_RTM-018
+  detectorType : E2V
+  raftSerial : LCA-11021_RTM-017
 
   ccdSerials :
-    S00 : ITL-3800C-145-Dev
-    S01 : ITL-3800C-022-Dev
-    S02 : ITL-3800C-041-Dev
-    S10 : ITL-3800C-100-Dev
-    S11 : ITL-3800C-017-Dev
-    S12 : ITL-3800C-018-Dev
-    S20 : ITL-3800C-102-Dev
-    S21 : ITL-3800C-146-Dev
-    S22 : ITL-3800C-103-Dev
+    S00 : E2V-CCD250-266
+    S01 : E2V-CCD250-268
+    S02 : E2V-CCD250-200
+    S10 : E2V-CCD250-273
+    S11 : E2V-CCD250-179
+    S12 : E2V-CCD250-263
+    S20 : E2V-CCD250-226
+    S21 : E2V-CCD250-264
+    S22 : E2V-CCD250-137
 
   amplifiers :
     S00 :
