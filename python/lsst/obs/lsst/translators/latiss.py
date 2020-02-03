@@ -13,7 +13,6 @@
 __all__ = ("LsstLatissTranslator", )
 
 import logging
-import re
 import math
 
 import astropy.units as u
@@ -433,16 +432,27 @@ class LsstLatissTranslator(LsstBaseTranslator):
         Returns
         -------
         filter : `str`
-            Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
+            Name of filter. Can be a combination of FILTER and GRATING
             headers joined by a "+".  Returns "NONE" if no filter is declared.
             Uses "EMPTY" if any of the filters indicate an "empty_N" name.
+            Grating is added only if not empty.
         """
-        # The base class definition is fine
-        physical_filter = super().to_physical_filter()
 
-        # empty_N maps to EMPTY at the start of a filter concatenation
-        if physical_filter.startswith("empty"):
-            physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
+        if self.is_key_ok("FILTER"):
+            physical_filter = self._header["FILTER"]
+            self._used_these_cards("FILTER")
+
+            if physical_filter.startswith("empty_"):
+                physical_filter = "EMPTY"
+        else:
+            physical_filter = "NONE"
+
+        if self.is_key_ok("GRATING"):
+            grating = self._header["GRATING"]
+            self._used_these_cards("GRATING")
+
+            if grating and not grating.startswith("empty_"):
+                physical_filter = f"{physical_filter}+{grating}"
 
         return physical_filter
 
