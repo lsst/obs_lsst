@@ -54,6 +54,9 @@ OBJECT_IS_ENGTEST = Time("2020-01-27T20:00", format="isot", scale="utc")
 # RA and DEC headers are in radians until this date
 RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 
+# RASTART/DECSTART/RAEND/DECEND used wrong telescope location before this
+RASTART_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
+
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
 
@@ -276,6 +279,13 @@ class LsstLatissTranslator(LsstBaseTranslator):
                 header["RADESYS"] = "ICRS"
                 log.debug("%s: Forcing blank RADESYS to '%s'", obsid, header["RADESYS"])
                 modified = True
+
+        if date < RASTART_IS_BAD:
+            # The wrong telescope position was used. Unsetting these will force
+            # the RA/DEC demand headers to be used instead.
+            for h in ("RASTART", "DECSTART", "RAEND", "DECEND"):
+                header[h] = None
+            log.debug("%s: Forcing derived RA/Dec headers to undefined", obsid)
 
         return modified
 

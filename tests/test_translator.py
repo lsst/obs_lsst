@@ -377,6 +377,33 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            temperature=None,
                            visit_id=4702443654717948604,
                            )),
+                     ("latiss-AT_O_20200128_000379.yaml",
+                      dict(telescope="LSSTAuxTel",
+                           instrument="LATISS",
+                           boresight_rotation_coord="sky",
+                           dark_time=5.0*u.s,
+                           detector_exposure_id=2020012800379,
+                           detector_group="RXX",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-068",
+                           exposure_id=2020012800379,
+                           exposure_group="2020-01-29T07:25:52.166",
+                           exposure_time=5.0*u.s,
+                           object="HD107696",
+                           observation_id="AT_O_20200128_000379",
+                           observation_type="science",
+                           physical_filter="KPNO_406_828nm",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=1602123521660000,
+                           # We have some timing discrepancies in the headers
+                           # that make it hard to match the demand RA/DEC to
+                           # the recorded AZ/EL/TIME.
+                           wcs_params=dict(max_sep=7.),
+                           )),
                      )
         self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
         for filename, expected in test_data:
