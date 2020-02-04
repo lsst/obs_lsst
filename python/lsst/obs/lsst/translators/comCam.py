@@ -18,6 +18,18 @@ from .lsstCam import LsstCamTranslator
 
 log = logging.getLogger(__name__)
 
+DETECTOR_SERIALS = {
+    "S00": "ITL-3800C-229",
+    "S01": "ITL-3800C-251",
+    "S02": "ITL-3800C-215",
+    "S10": "ITL-3800C-326",
+    "S11": "ITL-3800C-283",
+    "S12": "ITL-3800C-243",
+    "S20": "ITL-3800C-319",
+    "S21": "ITL-3800C-209",
+    "S22": "ITL-3800C-206",
+}
+
 
 class LsstComCamTranslator(LsstCamTranslator):
     """Metadata translation for the LSST Commissioning Camera."""
@@ -59,5 +71,35 @@ class LsstComCamTranslator(LsstCamTranslator):
             instrument = header["INSTRUME"].lower()
             if instrument == "comcam" and telescope == "LSST":
                 return True
+            telcode = header.get("TELCODE", None)
+            # Some lab data reports that it is LSST_CAMERA
+            if telcode == "CC" and telescope == "LSST":
+                return True
 
         return False
+
+    @classmethod
+    def fix_header(cls, header):
+        """Fix ComCam headers.
+
+        Notes
+        -----
+        Fixes the following issues:
+
+        * If LSST_NUM is missing it is filled in by looking at the CCDSLOT
+          value and assuming that the ComCam detectors are fixed.
+
+        Corrections are reported as debug level log messages.
+        """
+        modified = False
+
+        obsid = header.get("OBSID", "unknown")
+
+        if "LSST_NUM" not in header:
+            slot = header.get("CCDSLOT", None)
+            if slot in DETECTOR_SERIALS:
+                header["LSST_NUM"] = DETECTOR_SERIALS[slot]
+                modified = True
+                log.debug("%s: Set LSST_NUM to %s", obsid, header["LSST_NUM"])
+
+        return modified
