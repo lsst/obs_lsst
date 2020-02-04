@@ -59,5 +59,9 @@ class LsstComCamTranslator(LsstCamTranslator):
             instrument = header["INSTRUME"].lower()
             if instrument == "comcam" and telescope == "LSST":
                 return True
+            telcode = header.get("TELCODE", None)
+            # Some lab data reports that it is LSST_CAMERA
+            if telcode == "CC" and telescope == "LSST":
+                return True
 
         return False
