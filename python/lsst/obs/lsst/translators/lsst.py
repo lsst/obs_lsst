@@ -594,9 +594,9 @@ class LsstBaseTranslator(FitsTranslator):
         -------
         filter : `str`
             Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
-            headers joined by a "+".  Returns "NONE" if no filter is declared.
+            headers joined by a "~".  Returns "NONE" if no filter is declared.
         """
-        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim="+")
+        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim="~")
         if not joined:
             joined = "NONE"
 

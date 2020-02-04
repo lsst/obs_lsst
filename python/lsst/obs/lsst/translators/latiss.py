@@ -432,10 +432,11 @@ class LsstLatissTranslator(LsstBaseTranslator):
         Returns
         -------
         filter : `str`
-            Name of filter. Can be a combination of FILTER and GRATING
-            headers joined by a "+".  Returns "NONE" if no filter is declared.
-            Uses "EMPTY" if any of the filters indicate an "empty_N" name.
-            Grating is added only if not empty.
+            Name of filter. A combination of FILTER and GRATING
+            headers joined by a "~".  The filter and grating are always
+            combined.  The filter or grating part will be "NONE" if no value
+            is specified.  Uses "EMPTY" if any of the filters or gratings
+            indicate an "empty_N" name.
         """
 
         if self.is_key_ok("FILTER"):
@@ -451,8 +452,12 @@ class LsstLatissTranslator(LsstBaseTranslator):
             grating = self._header["GRATING"]
             self._used_these_cards("GRATING")
 
-            if grating and not grating.startswith("empty_"):
-                physical_filter = f"{physical_filter}+{grating}"
+            if not grating or grating.startswith("empty_"):
+                grating = "EMPTY"
+        else:
+            grating = "NONE"
+
+        physical_filter = f"{physical_filter}~{grating}"
 
         return physical_filter
 
