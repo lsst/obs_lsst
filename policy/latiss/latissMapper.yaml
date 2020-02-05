@@ -1,5 +1,3 @@
-defects: ../latiss/defects
-
 calibrations:
   bias:
     obsTimeName: dayObs

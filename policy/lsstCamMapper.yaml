@@ -1,5 +1,3 @@
-defects: ../description/defects
-
 needCalibRegistry: true
 
 levels:
@@ -96,14 +94,15 @@ calibrations:
   defects:
     columns:
     - detector
-    - calibDate
+    - dateObs
     level: Ccd
-    persistable: BaseCatalog
+    obsTimeName: dateObs
+    persistable: DefectsList
     python: lsst.meas.algorithms.Defects
     refCols:
     - visit
     reference: raw_visit
-    storage: FitsCatalogStorage
+    storage: FitsStorage
     tables: defects
     template: defects/%(calibDate)s/defects-%(calibDate)s-%(detectorName)s.fits
     validEndName: validEnd
