@@ -455,7 +455,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
             physical_filter = self._header["FILTER"]
             self._used_these_cards("FILTER")
 
-            if physical_filter.startswith("empty_"):
+            if physical_filter.lower().startswith("empty"):
                 physical_filter = "EMPTY"
         else:
             # Be explicit about having no knowledge of the filter
@@ -468,7 +468,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
             grating = self._header["GRATING"]
             self._used_these_cards("GRATING")
 
-            if not grating or grating.startswith("empty_"):
+            if not grating or grating.lower().startswith("empty"):
                 grating = "EMPTY"
         else:
             # Be explicit about having no knowledge of the grating
