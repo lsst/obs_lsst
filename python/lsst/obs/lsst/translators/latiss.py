@@ -230,8 +230,18 @@ class LsstLatissTranslator(LsstBaseTranslator):
             if groupId and not groupId.startswith("test"):
                 imgType = header.get("IMGTYPE")
                 if not imgType:
+                    if "_" in groupId:
+                        # Sometimes have the form dark_0001_0002
+                        # in this case we pull the IMGTYPE off the front and
+                        # do not clear groupId (although groupId may now
+                        # repeat on different days).
+                        groupId, _ = groupId.split("_", 1)
+                    elif groupId != "FOCUS" and groupId.startswith("FOCUS"):
+                        # If it is exactly FOCUS we want groupId cleared
+                        groupId = "FOCUS"
+                    else:
+                        header["GROUPID"] = None
                     header["IMGTYPE"] = groupId
-                    header["GROUPID"] = None
                     log.debug("%s: Setting IMGTYPE to '%s' from GROUPID", obsid, header["IMGTYPE"])
                     modified = True
                 else:
