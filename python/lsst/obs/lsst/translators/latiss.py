@@ -21,7 +21,7 @@ from astropy.coordinates import EarthLocation
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
-from .lsst import LsstBaseTranslator
+from .lsst import LsstBaseTranslator, FILTER_DELIMITER
 
 log = logging.getLogger(__name__)
 
@@ -457,7 +457,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
         else:
             grating = "NONE"
 
-        physical_filter = f"{physical_filter}~{grating}"
+        physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 
         return physical_filter
 

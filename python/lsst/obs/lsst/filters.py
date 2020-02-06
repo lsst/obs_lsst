@@ -22,6 +22,7 @@
 __all__ = ()
 
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
+from .translators.lsst import FILTER_DELIMITER
 
 
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
@@ -79,7 +80,6 @@ _latiss_filters = (
 
 # Form a new set of filter definitions from all the explicit filters
 _latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "EMPTY", "NONE")
-_delimiter = "~"
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name
@@ -88,10 +88,10 @@ _latiss_filter_and_grating = [f for f in _latiss_filters]
 for filter in _latiss_filters:
     for grating in _latiss_gratings:
         # FilterDefinition is a frozen dataclass
-        new_name = _delimiter.join([filter.physical_filter, grating])
+        new_name = FILTER_DELIMITER.join([filter.physical_filter, grating])
 
         # Also need to update aliases
-        new_aliases = {_delimiter.join([a, grating]) for a in filter.alias}
+        new_aliases = {FILTER_DELIMITER.join([a, grating]) for a in filter.alias}
 
         combo = FilterDefinition(physical_filter=new_name,
                                  lambdaEff=filter.lambdaEff,
