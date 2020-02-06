@@ -44,7 +44,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3018092000065, 'bias': 3018092000065}
-        filters = {'raw': 'NONE~NONE', 'bias': '_unknown_'}
+        filters = {'raw': '????~????', 'bias': '_unknown_'}
         exptimes = {'raw': 27.0, 'bias': 0}
         detectorIds = {'raw': 0, 'bias': 0}
         detector_names = {'raw': 'RXX_S00', 'bias': 'RXX_S00'}
@@ -52,10 +52,10 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': 'NONE~NONE'}, 1),
+        raw_subsets = (({'level': 'sensor', 'filter': '????~????'}, 1),
                        ({'level': 'sensor', 'visit': 3018092000065}, 1),
                        ({'level': 'filter', 'visit': 3018092000065}, 1),
-                       ({'level': 'visit', 'filter': 'NONE~NONE'}, 1)
+                       ({'level': 'visit', 'filter': '????~????'}, 1)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
