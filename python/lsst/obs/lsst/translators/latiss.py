@@ -248,7 +248,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
                         # do not clear groupId (although groupId may now
                         # repeat on different days).
                         groupId, _ = groupId.split("_", 1)
-                    elif groupId != "FOCUS" and groupId.startswith("FOCUS"):
+                    elif groupId.upper() != "FOCUS" and groupId.upper().startswith("FOCUS"):
                         # If it is exactly FOCUS we want groupId cleared
                         groupId = "FOCUS"
                     else:
