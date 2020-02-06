@@ -57,6 +57,9 @@ RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 # RASTART/DECSTART/RAEND/DECEND used wrong telescope location before this
 RASTART_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 
+# DATE-END is not to be trusted before this date
+DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
+
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
 
@@ -224,14 +227,34 @@ class LsstLatissTranslator(LsstBaseTranslator):
             log.debug("%s: Forcing detector serial to %s", obsid, header["LSST_NUM"])
             modified = True
 
+        if date < DATE_END_IS_BAD:
+            # DATE-END may or may not be in TAI and may or may not be
+            # before DATE-BEG.  Simpler to clear it
+            if header.get("DATE-END"):
+                header["DATE-END"] = None
+                header["MJD-END"] = None
+
+                log.debug("%s: Clearing DATE-END as being untrustworthy", obsid)
+                modified = True
+
         # Up until a certain date GROUPID was the IMGTYPE
         if date < IMGTYPE_OKAY_DATE:
             groupId = header.get("GROUPID")
             if groupId and not groupId.startswith("test"):
                 imgType = header.get("IMGTYPE")
                 if not imgType:
+                    if "_" in groupId:
+                        # Sometimes have the form dark_0001_0002
+                        # in this case we pull the IMGTYPE off the front and
+                        # do not clear groupId (although groupId may now
+                        # repeat on different days).
+                        groupId, _ = groupId.split("_", 1)
+                    elif groupId != "FOCUS" and groupId.startswith("FOCUS"):
+                        # If it is exactly FOCUS we want groupId cleared
+                        groupId = "FOCUS"
+                    else:
+                        header["GROUPID"] = None
                     header["IMGTYPE"] = groupId
-                    header["GROUPID"] = None
                     log.debug("%s: Setting IMGTYPE to '%s' from GROUPID", obsid, header["IMGTYPE"])
                     modified = True
                 else:
