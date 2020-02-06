@@ -57,6 +57,9 @@ RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 # RASTART/DECSTART/RAEND/DECEND used wrong telescope location before this
 RASTART_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 
+# DATE-END is not to be trusted before this date
+DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
+
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
 
@@ -223,6 +226,16 @@ class LsstLatissTranslator(LsstBaseTranslator):
             header["LSST_NUM"] = "ITL-3800C-068"
             log.debug("%s: Forcing detector serial to %s", obsid, header["LSST_NUM"])
             modified = True
+
+        if date < DATE_END_IS_BAD:
+            # DATE-END may or may not be in TAI and may or may not be
+            # before DATE-BEG.  Simpler to clear it
+            if header.get("DATE-END"):
+                header["DATE-END"] = None
+                header["MJD-END"] = None
+
+                log.debug("%s: Clearing DATE-END as being untrustworthy", obsid)
+                modified = True
 
         # Up until a certain date GROUPID was the IMGTYPE
         if date < IMGTYPE_OKAY_DATE:
