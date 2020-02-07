@@ -13,7 +13,6 @@
 __all__ = ("LsstLatissTranslator", )
 
 import logging
-import re
 import math
 
 import astropy.units as u
@@ -22,7 +21,7 @@ from astropy.coordinates import EarthLocation
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
-from .lsst import LsstBaseTranslator
+from .lsst import LsstBaseTranslator, FILTER_DELIMITER
 
 log = logging.getLogger(__name__)
 
@@ -433,16 +432,49 @@ class LsstLatissTranslator(LsstBaseTranslator):
         Returns
         -------
         filter : `str`
-            Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
-            headers joined by a "+".  Returns "NONE" if no filter is declared.
-            Uses "EMPTY" if any of the filters indicate an "empty_N" name.
+            Name of filter. A combination of FILTER and GRATING
+            headers joined by a "~".  The filter and grating are always
+            combined.  The filter or grating part will be "NONE" if no value
+            is specified.  Uses "EMPTY" if any of the filters or gratings
+            indicate an "empty_N" name. "????" indicates that the filter is
+            not defined anywhere but we think it should be.  "NONE" indicates
+            that the filter was not defined but the observation is a dark
+            or bias.
         """
-        # The base class definition is fine
-        physical_filter = super().to_physical_filter()
 
-        # empty_N maps to EMPTY at the start of a filter concatenation
-        if physical_filter.startswith("empty"):
-            physical_filter = re.sub(r"^empty_\d+", "EMPTY", physical_filter)
+        # If there is no filter defined we want to report this as a special
+        # filter. ???? indicates that we think it should be set.
+        obstype = self.to_observation_type()
+        undefined_filter = "????"
+        log_undefined = True
+        if obstype in ("bias", "dark"):
+            undefined_filter = "NONE"
+            log_undefined = False
+
+        if self.is_key_ok("FILTER"):
+            physical_filter = self._header["FILTER"]
+            self._used_these_cards("FILTER")
+
+            if physical_filter.lower().startswith("empty"):
+                physical_filter = "EMPTY"
+        else:
+            # Be explicit about having no knowledge of the filter
+            physical_filter = undefined_filter
+            if log_undefined:
+                log.warning("%s: Unable to determine the filter",
+                            self.to_observation_id())
+
+        if self.is_key_ok("GRATING"):
+            grating = self._header["GRATING"]
+            self._used_these_cards("GRATING")
+
+            if not grating or grating.lower().startswith("empty"):
+                grating = "EMPTY"
+        else:
+            # Be explicit about having no knowledge of the grating
+            grating = undefined_filter
+
+        physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 
         return physical_filter
 

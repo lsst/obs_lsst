@@ -36,6 +36,9 @@ ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
 TZERO = Time("2015-01-01T00:00", format="isot", scale="utc")
 TZERO_DATETIME = TZERO.to_datetime()
 
+# Delimiter to use for multiple filters/gratings
+FILTER_DELIMITER = "~"
+
 # Regex to use for parsing a GROUPID string
 GROUP_RE = re.compile(r"^(\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d)\.(\d\d\d)(?:[\+#](\d+))?$")
 
@@ -594,9 +597,9 @@ class LsstBaseTranslator(FitsTranslator):
         -------
         filter : `str`
             Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
-            headers joined by a "+".  Returns "NONE" if no filter is declared.
+            headers joined by a "~".  Returns "NONE" if no filter is declared.
         """
-        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim="+")
+        joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim=FILTER_DELIMITER)
         if not joined:
             joined = "NONE"
 

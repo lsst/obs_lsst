@@ -22,6 +22,7 @@
 __all__ = ()
 
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
+from .translators.lsst import FILTER_DELIMITER
 
 
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
@@ -54,7 +55,9 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
                      lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4']),
 )
 
-LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(
+# LATISS filters include a grating in the name so we need to construct
+# filters for each combination of filter+grating.
+_latiss_filters = (
     FilterDefinition(physical_filter="NONE",
                      lambdaEff=0.0,
                      alias={"no_filter", "OPEN"}),
@@ -73,4 +76,31 @@ LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="EMPTY",
                      lambdaEff=0.0),
+    FilterDefinition(physical_filter="????",
+                     lambdaEff=0.0),
 )
+
+# Form a new set of filter definitions from all the explicit filters
+_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "EMPTY", "????", "NONE")
+
+# Include the filters without the grating in case someone wants
+# to retrieve a filter by an actual filter name
+_latiss_filter_and_grating = [f for f in _latiss_filters]
+
+for filter in _latiss_filters:
+    for grating in _latiss_gratings:
+        # FilterDefinition is a frozen dataclass
+        new_name = FILTER_DELIMITER.join([filter.physical_filter, grating])
+
+        # Also need to update aliases
+        new_aliases = {FILTER_DELIMITER.join([a, grating]) for a in filter.alias}
+
+        combo = FilterDefinition(physical_filter=new_name,
+                                 lambdaEff=filter.lambdaEff,
+                                 lambdaMin=filter.lambdaMin,
+                                 lambdaMax=filter.lambdaMax,
+                                 alias=new_aliases)
+        _latiss_filter_and_grating.append(combo)
+
+
+LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(*_latiss_filter_and_grating)

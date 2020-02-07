@@ -29,7 +29,7 @@ import lsst.utils.tests
 from lsst.obs.base.ingest_tests import IngestTestBase
 import lsst.obs.lsst
 
-TESTDIR = os.path.dirname(__file__)
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
 
 
