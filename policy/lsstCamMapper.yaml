@@ -79,12 +79,11 @@ calibrations:
   qe_curve:
     columns:
     - detector
-    - calibDate
+    - dateObs
     level: Ccd
+    obsTimeName: dateObs
     persistable: BaseCatalog
     python: lsst.meas.algorithms.simple_curve.Curve
-    refCols:
-    - visit
     storage: FitsCatalogStorage
     tables: qe_curve
     template: qe_curve/%(calibDate)s/qe_curve-%(calibDate)s-%(raftName)s-%(detectorName)s.fits
@@ -99,8 +98,6 @@ calibrations:
     obsTimeName: dateObs
     persistable: DefectsList
     python: lsst.meas.algorithms.Defects
-    refCols:
-    - visit
     reference: raw_visit
     storage: FitsStorage
     tables: defects
@@ -117,8 +114,6 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
-    refCols:
-    - visit
     reference: raw_visit
     storage: FitsStorage
     tables: bias
@@ -133,8 +128,6 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
-    refCols:
-    - visit
     reference: raw_visit
     storage: FitsStorage
     tables: dark
@@ -151,9 +144,6 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
-    refCols:
-    - visit
-    - filter
     reference: raw_visit
     storage: FitsStorage
     tables: flat
@@ -170,9 +160,6 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
-    refCols:
-    - visit
-    - filter
     reference: raw_visit
     storage: FitsStorage
     tables: flat
@@ -216,9 +203,6 @@ calibrations:
     - detectorName
     obsTimeName: dateObs
     reference: raw_visit
-    refCols:
-    - visit
-    - filter
     filter: true
     validRange: true
     validStartName: validStart
