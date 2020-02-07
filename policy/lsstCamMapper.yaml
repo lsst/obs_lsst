@@ -79,8 +79,9 @@ calibrations:
   qe_curve:
     columns:
     - detector
-    - calibDate
+    - dateObs
     level: Ccd
+    obsTimeName: dateObs
     persistable: BaseCatalog
     python: lsst.meas.algorithms.simple_curve.Curve
     storage: FitsCatalogStorage
