@@ -79,6 +79,8 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
     reference: raw_visit
     storage: FitsStorage
     tables: bias
@@ -93,6 +95,8 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
     reference: raw_visit
     storage: FitsStorage
     tables: dark
@@ -109,6 +113,9 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    - filter
     reference: raw_visit
     storage: FitsStorage
     tables: flat
@@ -125,6 +132,9 @@ calibrations:
     obsTimeName: dateObs
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
+    refCols:
+    - visit
+    - filter
     reference: raw_visit
     storage: FitsStorage
     tables: flat
@@ -168,6 +178,9 @@ calibrations:
     - detectorName
     obsTimeName: dateObs
     reference: raw_visit
+    refCols:
+    - visit
+    - filter
     filter: true
     validRange: true
     validStartName: validStart
