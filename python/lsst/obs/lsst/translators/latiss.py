@@ -117,7 +117,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
     }
 
     _trivial_map = {
-        "observation_id": ("OBSID", dict(default=None, checker=is_non_science)),
+        "observation_id": (["OBSID", "IMGNAME"], dict(default=None, checker=is_non_science)),
         "detector_serial": ["LSST_NUM", "DETSER"],
         "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
         "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
@@ -199,7 +199,42 @@ class LsstLatissTranslator(LsstBaseTranslator):
         """
         modified = False
 
-        obsid = header.get("OBSID", "unknown")
+        if "OBSID" not in header:
+            # Very old data used IMGNAME
+            header["OBSID"] = header.get("IMGNAME", "unknown")
+            modified = True
+            log.debug("Assigning OBSID to a value of '%s'", header["OBSID"])
+
+        obsid = header["OBSID"]
+
+        if "DAYOBS" not in header:
+            # OBS-NITE could have the value for DAYOBS but it is safer
+            # for older data to set it from the OBSID. Fall back to OBS-NITE
+            # if we have no alternative
+            dayObs = None
+            try:
+                dayObs = obsid.split("_", 3)[2]
+            except ValueError:
+                # did not split as expected
+                pass
+            if dayObs is None or len(dayObs) != 8:
+                dayObs = header["OBS-NITE"]
+                log.debug("%s: Setting DAYOBS to '%s' from OBS-NITE header", obsid, dayObs)
+            else:
+                log.debug("%s: Setting DAYOBS to '%s' from OBSID", obsid, dayObs)
+            header["DAYOBS"] = dayObs
+            modified = True
+
+        if "SEQNUM" not in header:
+            try:
+                seqnum = obsid.split("_", 3)[3]
+            except ValueError:
+                # did not split as expected
+                pass
+            else:
+                header["SEQNUM"] = int(seqnum)
+                modified = True
+                log.debug("%s: Extracting SEQNUM of '%s' from OBSID", obsid, header["SEQNUM"])
 
         # The DATE-OBS / MJD-OBS keys can be 1970
         if header["DATE-OBS"].startswith("1970"):
@@ -248,7 +283,7 @@ class LsstLatissTranslator(LsstBaseTranslator):
                         # do not clear groupId (although groupId may now
                         # repeat on different days).
                         groupId, _ = groupId.split("_", 1)
-                    elif groupId != "FOCUS" and groupId.startswith("FOCUS"):
+                    elif groupId.upper() != "FOCUS" and groupId.upper().startswith("FOCUS"):
                         # If it is exactly FOCUS we want groupId cleared
                         groupId = "FOCUS"
                     else:
