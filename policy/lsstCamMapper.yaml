@@ -610,4 +610,4 @@ datasets:
     storage: FitsStorage
     tables:
     - raw
-    template: calibrations/defects/defects-det%(detector)03d.fits
+    template: calibrations/SomethingHasToGoHereButThisIsOverwrittenLater%(detector)03d.extension
