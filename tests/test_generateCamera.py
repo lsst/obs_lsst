@@ -77,7 +77,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         """Test with LATISS in a test directory."""
         content = self.runGenerateCamera(["latiss", "lsstCam", os.path.curdir])
         self.assertEqual(content["name"], "LATISS")
-        self.assertEqual(content["plateScale"], 20.0)
+        self.assertEqual(content["plateScale"], 10.112)
 
     def testGenerateCameraTs8(self):
         """Test with LATISS in a test directory."""
