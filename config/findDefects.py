@@ -12,6 +12,8 @@ config.ccdKey = 'detector'
 # that only data from within a run is processed together
 config.assertSameRun = True
 
+config.isrForDarks.doFlat = False  # don't flatfield darks
+
 # none of the calibration products exists to perform these yet
 for config in [config.isrForDarks, config.isrForFlats]:
     config.doCrosstalk = False
