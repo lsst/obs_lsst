@@ -26,4 +26,4 @@ from lsst.utils import getPackageDir
 config.load(os.path.join(getPackageDir("obs_lsst"), "config", "lsstCamCommon.py"))
 config.isr.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
 
-#config.repair.cosmicray.nCrPixelMax = 100000
+config.repair.cosmicray.nCrPixelMax = 500000
