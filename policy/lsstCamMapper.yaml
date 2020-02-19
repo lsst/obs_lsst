@@ -74,6 +74,15 @@ exposures:
     template: dcrDiff/v%(expId)013d-f%(filter)s/%(raftName)s/diffexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_matchedExp:
     template: dcrDiff/v%(expId)013d-f%(filter)s/%(raftName)s/matchexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  quickLookExp:
+    description: "An assembled image with an arbitrary amount if ISR applied as displayed on quick-look monitors"
+    persistable: ExposureF
+    python: lsst.afw.image.ExposureF
+    storage: FitsStorage
+    level: Ccd
+    template: 'quickLookExp/v%(expId)08d_d%(dayObs)s_s%(seqNum)05d.fits'
+    tables:
+    - raw
 
 calibrations:
   linearizer:
