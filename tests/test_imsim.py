@@ -97,7 +97,8 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042.fits")
+        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11",
+                                   "0000000204595-R11-S20-det042.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
@@ -109,9 +110,10 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         map_python_std_type = lsst.afw.image.ExposureF
         map_cpp_type = 'DecoratedImageF'
         map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join('processCcd_metadata', '00204595-i', 'R11',
-                                            'processCcdMetadata_00204595-i-R11-S20-det042.yaml')
-        raw_filename = '00204595-R11-S20-det042.fits'
+        metadata_output_path = os.path.join('processCcd_metadata', '0000000204595-i', 'R11',
+                                            'processCcdMetadata_0000000204595'
+                                            '-i-R11-S20-det042.yaml')
+        raw_filename = '0000000204595-R11-S20-det042.fits'
         default_level = 'visit'
         raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
                       ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
