@@ -23,20 +23,20 @@ calibrations:
 
 datasets:
   raw_hdu:
-    template: raw/%(dayObs)s/%(expId)08d-det%(detector)03d.fits[0]
+    template: raw/%(dayObs)s/%(expId)013d-det%(detector)03d.fits[0]
   apPipe_metadata:
-    template: apPipe_metadata/%(expId)08d-%(filter)s/apPipeMetadata_%(expId)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
+    template: apPipe_metadata/%(expId)013d-%(filter)s/apPipeMetadata_%(expId)013d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
   runIsr_metadata:
-    template: runIsr_metadata/%(expId)08d-%(filter)s/runIsrMetadata_%(expId)08d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
+    template: runIsr_metadata/%(expId)013d-%(filter)s/runIsrMetadata_%(expId)013d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
   brighterFatterKernel:
     template: calibrations/bfKernel-%(detectorName)s-det%(detector)03d.pkl
 
 exposures:
   _raw:
-    template: raw/%(dayObs)s/%(expId)08d-det%(detector)03d.fits[0]
+    template: raw/%(dayObs)s/%(expId)013d-det%(detector)03d.fits[0]
   raw_amp:
-    template: raw/%(dayObs)s/%(expId)08d-det%(detector)03d.fits[%(channel)d]
+    template: raw/%(dayObs)s/%(expId)013d-det%(detector)03d.fits[%(channel)d]
   postISRCCD:
-    template: postISRCCD/%(dayObs)s/postISRCCD_%(expId)08d-%(filter)s-det%(detector)03d.fits
+    template: postISRCCD/%(dayObs)s/postISRCCD_%(expId)013d-%(filter)s-det%(detector)03d.fits
   calexp:
-    template: calexp/%(dayObs)s/calexp_%(expId)08d-%(filter)s-det%(detector)03d.fits
+    template: calexp/%(dayObs)s/calexp_%(expId)013d-%(filter)s-det%(detector)03d.fits
