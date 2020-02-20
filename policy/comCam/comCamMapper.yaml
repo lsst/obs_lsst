@@ -81,7 +81,13 @@ calibrations:
     python: lsst.afw.image.ExposureF
     refCols:
     - visit
-    reference: raw_visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
     storage: FitsStorage
     tables: bias
     template: bias/%(calibDate)s/bias-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
@@ -97,7 +103,13 @@ calibrations:
     python: lsst.afw.image.ExposureF
     refCols:
     - visit
-    reference: raw_visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
     storage: FitsStorage
     tables: dark
     template: dark/%(calibDate)s/dark-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
@@ -116,7 +128,13 @@ calibrations:
     refCols:
     - visit
     - filter
-    reference: raw_visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
     storage: FitsStorage
     tables: flat
     template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
@@ -135,7 +153,13 @@ calibrations:
     refCols:
     - visit
     - filter
-    reference: raw_visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
     storage: FitsStorage
     tables: flat
     template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
@@ -177,10 +201,16 @@ calibrations:
     - raftName
     - detectorName
     obsTimeName: dateObs
-    reference: raw_visit
     refCols:
     - visit
     - filter
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
     filter: true
     validRange: true
     validStartName: validStart
