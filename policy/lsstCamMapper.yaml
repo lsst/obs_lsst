@@ -80,7 +80,7 @@ exposures:
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: Ccd
-    template: 'quickLookExp/v%(expId)08d_d%(dayObs)s_s%(seqNum)05d.fits'
+    template: 'quickLookExp/d%(dayObs)s/quickLookExp-d%(dayObs)s-s%(seqNum)05d.fits'
     tables:
     - raw
 
