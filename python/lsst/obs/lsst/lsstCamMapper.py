@@ -142,7 +142,7 @@ class LsstCamBaseMapper(CameraMapper):
 
         LsstCamMapper._nbit_tract = 16
         LsstCamMapper._nbit_patch = 5
-        LsstCamMapper._nbit_filter = 6
+        LsstCamMapper._nbit_filter = 7
 
         LsstCamMapper._nbit_id = 64 - (LsstCamMapper._nbit_tract + 2*LsstCamMapper._nbit_patch
                                        + LsstCamMapper._nbit_filter)

@@ -78,6 +78,13 @@ _latiss_filters = (
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="????",
                      lambdaEff=0.0),
+    FilterDefinition(physical_filter="BG40",
+                     # abstract_filter="g",  # afw only allows one g filter
+                     lambdaEff=472.0, lambdaMin=334.5, lambdaMax=609.5),
+    FilterDefinition(physical_filter="quadnotch1",
+                     lambdaEff=0.0),
+    FilterDefinition(physical_filter="RG610",
+                     lambdaEff=0.0),
 )
 
 # Form a new set of filter definitions from all the explicit filters
