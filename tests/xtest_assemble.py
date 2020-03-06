@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import numpy
 import os
 import sys
 import unittest
@@ -26,31 +27,38 @@ import unittest
 import lsst.utils.tests
 from lsst.utils import getPackageDir
 from lsst.daf.persistence import Butler
-from lsst.afw.cameraGeom import Camera, Detector
+from lsst.afw.cameraGeom import Detector
 from lsst.afw.image import ImageFitsReader
 import lsst.obs.base.yamlCamera as yamlCamera
+from lsst.ip.isr import AssembleCcdTask
 
-from lsst.obs.lsst.assembly import fixAmpGeometry
 from lsst.obs.lsst.utils import readRawFile
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
-LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, "data", "input", "latiss")
-BAD_OVERSCAN_GEN2_DATA_ID = {'dayObs': '2018-09-20', 'seqNum': 65, 'detector': 0}
-BAD_OVERSCAN_FILENAME = "raw/2018-09-20/3018092000065-det000.fits"
-LOCAL_DATA_ROOT = os.path.join(TESTDIR, "data")
+LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, 'data', 'input', 'latiss')
+BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input')
+E2V_DATA_ID = {'raftName': 'R22', 'detectorName': 'S11', 'visit': 3019103101985}
+ITL_DATA_ID = {'raftName': 'R02', 'detectorName': 'S02', 'visit': 3019110102212}
+TESTDATA_ROOT = os.path.join(TESTDIR, "data")
 
 
 class RawAssemblyTestCase(lsst.utils.tests.TestCase):
+    """Test assembly of each of data from each of the two
+       manufacturers.  Data come from BOT spot data runs.
+       """
 
     def setUp(self):
-        # A snapshot of LATISS that has incorrect overscan regions for this
-        # data ID
-        self.cameraBroken = Camera.readFits(os.path.join(LOCAL_DATA_ROOT, "camera-bad-overscan.fits"))
-        # A snapshot of the Detector for this file after we've read it in with
-        # code that fixes the overscans.
-        self.detectorFixed = Detector.readFits(os.path.join(LOCAL_DATA_ROOT, "detector-fixed-assembled.fits"))
-        self.assertEqual(self.cameraBroken[0].getName(), self.detectorFixed.getName())
+        # E2V and ITL detecotrs and expected assembled images
+        self.e2v = {'detector': Detector.readFits(os.path.join(TESTDATA_ROOT, 'e2v_detector.fits')),
+                    'expected': ImageFitsReader(os.path.join(TESTDATA_ROOT,
+                                                             'e2v_expected_assembled.fits.gz'))}
+        self.itl = {'detector': Detector.readFits(os.path.join(TESTDATA_ROOT, 'itl_detector.fits')),
+                    'expected': ImageFitsReader(os.path.join(TESTDATA_ROOT,
+                                                             'itl_expected_assembled.fits.gz'))}
+        self.roots = [BOT_DATA_ROOT, BOT_DATA_ROOT]
+        self.ids = [E2V_DATA_ID, ITL_DATA_ID]
+        self.expecteds = [self.e2v, self.itl]
 
     def assertAmpRawBBoxesEqual(self, amp1, amp2):
         """Check that Raw bounding boxes match between amps.
@@ -110,50 +118,34 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(testHOSBox, amp2.getRawHorizontalOverscanBBox())
         self.assertEqual(testVOSBox, amp2.getRawVerticalOverscanBBox())
 
-    def testGen2GetBadOverscan(self):
-        """Test that we can use the Gen2 Butler to read a file with overscan
-        regions that disagree with cameraGeom, and that the detector attached
-        to it has its overscan regions corrected.
-
-        This is essentially just a regression test, and an incomplete one at
-        that: the fixed Detector snapshot that we're comparing to was generated
-        by the same code we're calling here.  And because the LATISS
-        associated by the Butler we use in this test may in the future be
-        corrected to have the right overscan regions, we may end up just
-        testing a simpler case than we intended.  We'll use a snapshot of
-        the incorrect Camera in other tests to get coverage of that case.
+    def testDetectors(self):
+        """Test that the detector returned by the gen 2 butler is the same
+        as the expected one.
         """
-        butler = Butler(LATISS_DATA_ROOT)
-        raw = butler.get("raw", dataId=BAD_OVERSCAN_GEN2_DATA_ID)
-        for amp1, amp2 in zip(self.detectorFixed, raw.getDetector()):
-            with self.subTest(amp=amp1.getName()):
-                self.assertEqual(amp1.getName(), amp2.getName())
-                self.assertAmpRawBBoxesEqual(amp1, amp2)
+        for root, did, expected in zip(self.roots, self.ids, self.expecteds):
+            butler = Butler(root)
+            raw = butler.get("raw", dataId=did)
+            for amp1, amp2 in zip(expected['detector'], raw.getDetector()):
+                with self.subTest(amp=amp1.getName()):
+                    self.assertEqual(amp1.getName(), amp2.getName())
+                    self.assertAmpRawBBoxesEqual(amp1, amp2)
 
-    def testFixBadOverscans(self):
-        """Test the low-level code for repairing cameraGeom overscan regions
-        that disagree with raw files.
+    def testAssemble(self):
+        """Test the assembly of E2V and ITL sensors
         """
-        testFile = os.path.join(LATISS_DATA_ROOT, BAD_OVERSCAN_FILENAME)
-
-        for i, (ampBad, ampGood) in enumerate(zip(self.cameraBroken[0], self.detectorFixed)):
-            with self.subTest(amp=ampBad.getName()):
-                self.assertEqual(ampBad.getName(), ampGood.getName())
-                hdu = i + 1
-                reader = ImageFitsReader(testFile, hdu=hdu)
-                metadata = reader.readMetadata()
-                image = reader.read()
-                self.assertEqual(ampGood.getRawBBox().getDimensions(), image.getBBox().getDimensions())
-                self.assertNotEqual(ampBad.getRawBBox().getDimensions(), image.getBBox().getDimensions())
-                newAmp, modified = fixAmpGeometry(ampBad, image.getBBox(), metadata)
-                self.assertTrue(modified)
-                self.assertNotEqual(newAmp.getRawBBox().getDimensions(), ampBad.getRawBBox().getDimensions())
-                self.assertAmpRawBBoxesFlippablyEqual(newAmp, ampGood)
+        task = AssembleCcdTask()
+        # exclude LATISS for this test since we don't have an expected output
+        for root, did, expected in zip(self.roots, self.ids, self.expecteds):
+            butler = Butler(root)
+            raw = butler.get("raw", dataId=did)
+            assembled = task.assembleCcd(raw)
+            count = numpy.sum(expected['expected'].read().array - assembled.getImage().array)
+            self.assertEqual(count, 0)
 
 
 class ReadRawFileTestCase(lsst.utils.tests.TestCase):
     def testReadRawLatissFile(self):
-        fileName = os.path.join(LATISS_DATA_ROOT, BAD_OVERSCAN_FILENAME)
+        fileName = os.path.join(LATISS_DATA_ROOT, "raw/2018-09-20/3018092000065-det000.fits")
         policy = os.path.join(PACKAGE_DIR, "policy", "latiss.yaml")
         camera = yamlCamera.makeCamera(policy)
         exposure = readRawFile(fileName, camera[0], dataId={"file": fileName})
