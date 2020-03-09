@@ -32,8 +32,8 @@ config.isr.doDefect = False
 
 config.isr.doWrite = False
 
-config.isr.overscanFitType = "AKIMA_SPLINE"
-config.isr.overscanOrder = 30
+config.isr.overscan.fitType = "AKIMA_SPLINE"
+config.isr.overscan.order = 30
 
 config.isr.doUseOpticsTransmission = False
 config.isr.doUseFilterTransmission = False
