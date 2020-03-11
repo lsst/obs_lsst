@@ -168,7 +168,7 @@ class LsstCamInstrument(Instrument):
 
         # Write defects with validity ranges taken from
         # obs_lsst_data/{name}/defects (along with the defects themselves).
-        datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "DefectsList",
+        datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "Defects",
                                   universe=butler.registry.dimensions)
         butler.registry.registerDatasetType(datasetType)
         defectPath = os.path.join(getPackageDir("obs_lsst"), self.policyName, "defects")
