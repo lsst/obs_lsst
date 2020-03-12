@@ -1,17 +1,17 @@
 R23 :
-  detectorType : ITL
-  raftSerial : LCA-11021_RTM-013
+  detectorType : E2V
+  raftSerial : LCA-11021_RTM-005
 
   ccdSerials :
-    S00 : ITL-3800C-145-Dev
-    S01 : ITL-3800C-022-Dev
-    S02 : ITL-3800C-041-Dev
-    S10 : ITL-3800C-100-Dev
-    S11 : ITL-3800C-017-Dev
-    S12 : ITL-3800C-018-Dev
-    S20 : ITL-3800C-102-Dev
-    S21 : ITL-3800C-146-Dev
-    S22 : ITL-3800C-103-Dev
+    S00 : E2V-CCD250-220
+    S01 : E2V-CCD250-239
+    S02 : E2V-CCD250-154
+    S10 : E2V-CCD250-165
+    S11 : E2V-CCD250-130
+    S12 : E2V-CCD250-153
+    S20 : E2V-CCD250-163
+    S21 : E2V-CCD250-216
+    S22 : E2V-CCD250-252
 
   geometryWithinRaft:
     S00 : {
@@ -53,155 +53,155 @@ R23 :
 
   amplifiers :
     S00 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.124809, readNoise : 5.255559, saturation : 179207.234375 }
+      C01 : { gain : 1.122827, readNoise : 5.341796, saturation : 178716.234375 }
+      C02 : { gain : 1.118801, readNoise : 5.094342, saturation : 176149.703125 }
+      C03 : { gain : 1.121356, readNoise : 5.121670, saturation : 174577.500000 }
+      C04 : { gain : 1.119191, readNoise : 5.294566, saturation : 174064.484375 }
+      C05 : { gain : 1.127886, readNoise : 5.164384, saturation : 173149.750000 }
+      C06 : { gain : 1.119569, readNoise : 5.159494, saturation : 172999.953125 }
+      C07 : { gain : 1.127834, readNoise : 5.200887, saturation : 173311.890625 }
+      C10 : { gain : 1.163973, readNoise : 5.384439, saturation : 175525.203125 }
+      C11 : { gain : 1.165546, readNoise : 5.318178, saturation : 172627.765625 }
+      C12 : { gain : 1.161090, readNoise : 5.344634, saturation : 170753.265625 }
+      C13 : { gain : 1.156211, readNoise : 5.274538, saturation : 170393.906250 }
+      C14 : { gain : 1.159723, readNoise : 5.326133, saturation : 171119.296875 }
+      C15 : { gain : 1.160928, readNoise : 5.293704, saturation : 171441.484375 }
+      C16 : { gain : 1.165516, readNoise : 5.357028, saturation : 174479.890625 }
+      C17 : { gain : 1.155397, readNoise : 5.317289, saturation : 177732.875000 }
     S01 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.166228, readNoise : 5.277891, saturation : 181278.421875 }
+      C01 : { gain : 1.170047, readNoise : 5.374192, saturation : 183858.234375 }
+      C02 : { gain : 1.179258, readNoise : 5.333343, saturation : 184802.593750 }
+      C03 : { gain : 1.178681, readNoise : 5.316946, saturation : 184134.515625 }
+      C04 : { gain : 1.190867, readNoise : 5.404510, saturation : 184386.484375 }
+      C05 : { gain : 1.186625, readNoise : 5.391605, saturation : 184818.343750 }
+      C06 : { gain : 1.186680, readNoise : 5.335817, saturation : 183091.437500 }
+      C07 : { gain : 1.194477, readNoise : 5.429344, saturation : 182491.687500 }
+      C10 : { gain : 1.181681, readNoise : 5.464900, saturation : 182337.578125 }
+      C11 : { gain : 1.176062, readNoise : 5.438107, saturation : 186587.171875 }
+      C12 : { gain : 1.176469, readNoise : 5.445655, saturation : 185893.812500 }
+      C13 : { gain : 1.169554, readNoise : 5.414901, saturation : 184105.765625 }
+      C14 : { gain : 1.168760, readNoise : 5.428911, saturation : 184482.609375 }
+      C15 : { gain : 1.167022, readNoise : 5.388416, saturation : 184903.765625 }
+      C16 : { gain : 1.153805, readNoise : 5.351148, saturation : 185564.250000 }
+      C17 : { gain : 1.150137, readNoise : 5.446816, saturation : 184562.843750 }
     S02 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.170942, readNoise : 5.531794, saturation : 183067.265625 }
+      C01 : { gain : 1.166314, readNoise : 5.938514, saturation : 181310.593750 }
+      C02 : { gain : 1.167037, readNoise : 6.818102, saturation : 178816.062500 }
+      C03 : { gain : 1.178203, readNoise : 6.306977, saturation : 178062.359375 }
+      C04 : { gain : 1.187720, readNoise : 6.708280, saturation : 177318.062500 }
+      C05 : { gain : 1.198524, readNoise : 6.716232, saturation : 177379.125000 }
+      C06 : { gain : 1.205957, readNoise : 7.541145, saturation : 177308.453125 }
+      C07 : { gain : 1.212720, readNoise : 6.634114, saturation : 178062.140625 }
+      C10 : { gain : 1.172939, readNoise : 5.846169, saturation : 183459.625000 }
+      C11 : { gain : 1.174637, readNoise : 5.554425, saturation : 179471.250000 }
+      C12 : { gain : 1.173131, readNoise : 5.782061, saturation : 176408.203125 }
+      C13 : { gain : 1.168811, readNoise : 5.695283, saturation : 174651.546875 }
+      C14 : { gain : 1.165900, readNoise : 6.274868, saturation : 174791.687500 }
+      C15 : { gain : 1.160444, readNoise : 5.714932, saturation : 175813.187500 }
+      C16 : { gain : 1.165516, readNoise : 6.779690, saturation : 176790.437500 }
+      C17 : { gain : 1.170697, readNoise : 8.076047, saturation : 179520.421875 }
     S10 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.062231, readNoise : 5.159262, saturation : 179807.718750 }
+      C01 : { gain : 1.063227, readNoise : 5.028735, saturation : 182081.281250 }
+      C02 : { gain : 1.082812, readNoise : 5.942442, saturation : 182546.468750 }
+      C03 : { gain : 1.081939, readNoise : 5.307687, saturation : 180195.250000 }
+      C04 : { gain : 1.085236, readNoise : 5.209123, saturation : 179219.046875 }
+      C05 : { gain : 1.081622, readNoise : 5.232090, saturation : 179322.078125 }
+      C06 : { gain : 1.085390, readNoise : 5.157413, saturation : 179500.531250 }
+      C07 : { gain : 1.097931, readNoise : 5.263625, saturation : 179571.828125 }
+      C10 : { gain : 1.104805, readNoise : 5.306713, saturation : 181380.453125 }
+      C11 : { gain : 1.091339, readNoise : 5.208646, saturation : 181948.796875 }
+      C12 : { gain : 1.089798, readNoise : 5.301162, saturation : 180590.593750 }
+      C13 : { gain : 1.080316, readNoise : 5.178509, saturation : 178760.312500 }
+      C14 : { gain : 1.080200, readNoise : 5.417984, saturation : 179426.875000 }
+      C15 : { gain : 1.075174, readNoise : 5.140944, saturation : 180943.156250 }
+      C16 : { gain : 1.088792, readNoise : 5.754570, saturation : 183301.062500 }
+      C17 : { gain : 1.072039, readNoise : 5.212198, saturation : 183720.937500 }
     S11 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.167362, readNoise : 5.272988, saturation : 175977.140625 }
+      C01 : { gain : 1.154274, readNoise : 5.249743, saturation : 179662.265625 }
+      C02 : { gain : 1.153725, readNoise : 5.262024, saturation : 182584.906250 }
+      C03 : { gain : 1.159989, readNoise : 5.487920, saturation : 184013.984375 }
+      C04 : { gain : 1.164032, readNoise : 5.447345, saturation : 183200.343750 }
+      C05 : { gain : 1.160875, readNoise : 5.356674, saturation : 182807.765625 }
+      C06 : { gain : 1.160848, readNoise : 5.348804, saturation : 183564.078125 }
+      C07 : { gain : 1.166062, readNoise : 5.374461, saturation : 180103.656250 }
+      C10 : { gain : 1.142903, readNoise : 5.463472, saturation : 175152.031250 }
+      C11 : { gain : 1.155962, readNoise : 5.431615, saturation : 183543.796875 }
+      C12 : { gain : 1.151518, readNoise : 5.480437, saturation : 183597.015625 }
+      C13 : { gain : 1.145805, readNoise : 5.390086, saturation : 181869.078125 }
+      C14 : { gain : 1.159516, readNoise : 5.442058, saturation : 182881.250000 }
+      C15 : { gain : 1.156699, readNoise : 5.458632, saturation : 182769.640625 }
+      C16 : { gain : 1.155822, readNoise : 5.638413, saturation : 183640.812500 }
+      C17 : { gain : 1.131946, readNoise : 5.339185, saturation : 179421.343750 }
     S12 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.125255, readNoise : 5.242580, saturation : 185979.343750 }
+      C01 : { gain : 1.123048, readNoise : 5.195981, saturation : 185350.375000 }
+      C02 : { gain : 1.138185, readNoise : 5.433486, saturation : 185064.000000 }
+      C03 : { gain : 1.123387, readNoise : 5.508009, saturation : 184233.468750 }
+      C04 : { gain : 1.123372, readNoise : 5.211367, saturation : 184699.875000 }
+      C05 : { gain : 1.142023, readNoise : 5.545826, saturation : 185217.046875 }
+      C06 : { gain : 1.139007, readNoise : 5.571498, saturation : 187009.171875 }
+      C07 : { gain : 1.137795, readNoise : 5.427657, saturation : 188022.281250 }
+      C10 : { gain : 1.176644, readNoise : 5.566709, saturation : 190968.531250 }
+      C11 : { gain : 1.154955, readNoise : 5.399415, saturation : 187998.140625 }
+      C12 : { gain : 1.176830, readNoise : 5.400620, saturation : 185488.968750 }
+      C13 : { gain : 1.188598, readNoise : 5.691170, saturation : 182311.281250 }
+      C14 : { gain : 1.186914, readNoise : 5.560287, saturation : 180709.265625 }
+      C15 : { gain : 1.208564, readNoise : 5.618403, saturation : 182723.734375 }
+      C16 : { gain : 1.230503, readNoise : 5.647494, saturation : 183833.828125 }
+      C17 : { gain : 1.235592, readNoise : 5.638662, saturation : 185684.015625 }
     S20 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.142876, readNoise : 5.253450, saturation : 183260.718750 }
+      C01 : { gain : 1.136074, readNoise : 5.151622, saturation : 179354.171875 }
+      C02 : { gain : 1.139132, readNoise : 5.262372, saturation : 176842.046875 }
+      C03 : { gain : 1.135815, readNoise : 5.168841, saturation : 174001.015625 }
+      C04 : { gain : 1.152773, readNoise : 5.277767, saturation : 173360.796875 }
+      C05 : { gain : 1.136194, readNoise : 5.266083, saturation : 173729.046875 }
+      C06 : { gain : 1.152771, readNoise : 5.296184, saturation : 174954.171875 }
+      C07 : { gain : 1.154153, readNoise : 5.289741, saturation : 175145.531250 }
+      C10 : { gain : 1.207128, readNoise : 5.600151, saturation : 177817.234375 }
+      C11 : { gain : 1.201870, readNoise : 5.435685, saturation : 174219.921875 }
+      C12 : { gain : 1.178118, readNoise : 5.336883, saturation : 171095.812500 }
+      C13 : { gain : 1.172890, readNoise : 5.264597, saturation : 170867.734375 }
+      C14 : { gain : 1.169780, readNoise : 5.333803, saturation : 171693.484375 }
+      C15 : { gain : 1.163405, readNoise : 5.322634, saturation : 173969.359375 }
+      C16 : { gain : 1.167150, readNoise : 5.507033, saturation : 176148.953125 }
+      C17 : { gain : 1.165038, readNoise : 5.565084, saturation : 180111.187500 }
     S21 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.132929, readNoise : 5.437628, saturation : 178395.000000 }
+      C01 : { gain : 1.138806, readNoise : 5.159825, saturation : 184079.468750 }
+      C02 : { gain : 1.133624, readNoise : 5.174906, saturation : 185478.437500 }
+      C03 : { gain : 1.151523, readNoise : 5.252109, saturation : 185750.843750 }
+      C04 : { gain : 1.151816, readNoise : 5.239609, saturation : 184830.906250 }
+      C05 : { gain : 1.132599, readNoise : 5.176154, saturation : 183958.953125 }
+      C06 : { gain : 1.145865, readNoise : 5.219810, saturation : 185349.375000 }
+      C07 : { gain : 1.138096, readNoise : 5.182885, saturation : 183232.046875 }
+      C10 : { gain : 1.155797, readNoise : 5.409449, saturation : 181686.593750 }
+      C11 : { gain : 1.157853, readNoise : 5.346939, saturation : 186692.187500 }
+      C12 : { gain : 1.154007, readNoise : 5.308437, saturation : 185176.406250 }
+      C13 : { gain : 1.150088, readNoise : 5.310638, saturation : 183913.140625 }
+      C14 : { gain : 1.151222, readNoise : 5.342990, saturation : 184873.562500 }
+      C15 : { gain : 1.141566, readNoise : 5.322234, saturation : 184695.171875 }
+      C16 : { gain : 1.141769, readNoise : 5.423987, saturation : 186391.859375 }
+      C17 : { gain : 1.134503, readNoise : 5.257353, saturation : 183831.156250 }
     S22 :
-      C00 : { gain : 1.700, readNoise : 7.00 }
-      C01 : { gain : 1.700, readNoise : 7.00 }
-      C02 : { gain : 1.700, readNoise : 7.00 }
-      C03 : { gain : 1.700, readNoise : 7.00 }
-      C04 : { gain : 1.700, readNoise : 7.00 }
-      C05 : { gain : 1.700, readNoise : 7.00 }
-      C06 : { gain : 1.700, readNoise : 7.00 }
-      C07 : { gain : 1.700, readNoise : 7.00 }
-      C10 : { gain : 1.700, readNoise : 7.00 }
-      C11 : { gain : 1.700, readNoise : 7.00 }
-      C12 : { gain : 1.700, readNoise : 7.00 }
-      C13 : { gain : 1.700, readNoise : 7.00 }
-      C14 : { gain : 1.700, readNoise : 7.00 }
-      C15 : { gain : 1.700, readNoise : 7.00 }
-      C16 : { gain : 1.700, readNoise : 7.00 }
-      C17 : { gain : 1.700, readNoise : 7.00 }
+      C00 : { gain : 1.153778, readNoise : 5.196177, saturation : 184130.968750 }
+      C01 : { gain : 1.160708, readNoise : 5.311155, saturation : 182463.296875 }
+      C02 : { gain : 1.157966, readNoise : 5.281825, saturation : 179763.828125 }
+      C03 : { gain : 1.158419, readNoise : 5.318740, saturation : 178091.140625 }
+      C04 : { gain : 1.166716, readNoise : 5.231047, saturation : 176340.921875 }
+      C05 : { gain : 1.155446, readNoise : 5.223845, saturation : 176461.828125 }
+      C06 : { gain : 1.162453, readNoise : 5.257739, saturation : 178263.562500 }
+      C07 : { gain : 1.155240, readNoise : 5.212501, saturation : 177108.609375 }
+      C10 : { gain : 1.147210, readNoise : 5.435986, saturation : 182251.109375 }
+      C11 : { gain : 1.147667, readNoise : 5.342172, saturation : 178875.515625 }
+      C12 : { gain : 1.132759, readNoise : 5.363185, saturation : 177487.328125 }
+      C13 : { gain : 1.130659, readNoise : 5.317638, saturation : 176524.656250 }
+      C14 : { gain : 1.130932, readNoise : 5.359612, saturation : 176559.656250 }
+      C15 : { gain : 1.132005, readNoise : 5.310688, saturation : 178909.078125 }
+      C16 : { gain : 1.136813, readNoise : 5.290998, saturation : 181368.984375 }
+      C17 : { gain : 1.125339, readNoise : 5.392326, saturation : 183731.671875 }

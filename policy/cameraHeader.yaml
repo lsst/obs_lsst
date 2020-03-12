@@ -104,69 +104,69 @@ CCD_E2V : &CCD_E2V
       C10: &C10_E2V
         <<: *AMP_E2V
         hdu : 1
-        flipXY : [True, False]
-        ixy : [0, 0]
+        flipXY : [True, True]
+        ixy : [0, 1]
       C11: &C11_E2V
         <<: *C10_E2V
         hdu : 2
-        ixy : [1, 0]
+        ixy : [1, 1]
       C12: &C12_E2V
         <<: *C10_E2V
         hdu : 3
-        ixy : [2, 0]
+        ixy : [2, 1]
       C13: &C13_E2V
         <<: *C10_E2V
         hdu : 4
-        ixy : [3, 0]
+        ixy : [3, 1]
       C14: &C14_E2V
         <<: *C10_E2V
         hdu : 5
-        ixy : [4, 0]
+        ixy : [4, 1]
       C15: &C15_E2V
         <<: *C10_E2V
         hdu : 6
-        ixy : [5, 0]
+        ixy : [5, 1]
       C16: &C16_E2V
         <<: *C10_E2V
         hdu : 7
-        ixy : [6, 0]
+        ixy : [6, 1]
       C17: &C17_E2V
         <<: *C10_E2V
         hdu : 8
-        ixy : [7, 0]
+        ixy : [7, 1]
       C07: &C07_E2V
         <<: *AMP_E2V
         hdu : 9
-        flipXY : [False, True]
-        ixy : [7, 1]
+        flipXY : [False, False]
+        ixy : [7, 0]
       C06: &C06_E2V
         <<: *C07_E2V
         hdu : 10
-        ixy : [6, 1]
+        ixy : [6, 0]
       C05: &C05_E2V
         <<: *C07_E2V
         hdu : 11
-        ixy : [5, 1]
+        ixy : [5, 0]
       C04: &C04_E2V
         <<: *C07_E2V
         hdu : 12
-        ixy : [4, 1]
+        ixy : [4, 0]
       C03: &C03_E2V
         <<: *C07_E2V
         hdu : 13
-        ixy : [3, 1]
+        ixy : [3, 0]
       C02: &C02_E2V
         <<: *C07_E2V
         hdu : 14
-        ixy : [2, 1]
+        ixy : [2, 0]
       C01: &C01_E2V
         <<: *C07_E2V
         hdu : 15
-        ixy : [1, 1]
+        ixy : [1, 0]
       C00: &C00_E2V
         <<: *C07_E2V
         hdu : 16
-        ixy : [0, 1]
+        ixy : [0, 0]
 
 CCD_ITL : &CCD_ITL
     detectorType : 0
@@ -185,69 +185,69 @@ CCD_ITL : &CCD_ITL
       C10: &C10_ITL
         <<: *AMP_ITL
         hdu : 1
-        flipXY : [True, False]
-        ixy : [0, 0]
+        flipXY : [True, True]
+        ixy : [0, 1]
       C11: &C11_ITL
         <<: *C10_ITL
         hdu : 2
-        ixy : [1, 0]
+        ixy : [1, 1]
       C12: &C12_ITL
         <<: *C10_ITL
         hdu : 3
-        ixy : [2, 0]
+        ixy : [2, 1]
       C13: &C13_ITL
         <<: *C10_ITL
         hdu : 4
-        ixy : [3, 0]
+        ixy : [3, 1]
       C14: &C14_ITL
         <<: *C10_ITL
         hdu : 5
-        ixy : [4, 0]
+        ixy : [4, 1]
       C15: &C15_ITL
         <<: *C10_ITL
         hdu : 6
-        ixy : [5, 0]
+        ixy : [5, 1]
       C16: &C16_ITL
         <<: *C10_ITL
         hdu : 7
-        ixy : [6, 0]
+        ixy : [6, 1]
       C17: &C17_ITL
         <<: *C10_ITL
         hdu : 8
-        ixy : [7, 0]
+        ixy : [7, 1]
       C07: &C07_ITL
         <<: *AMP_ITL
         hdu : 9
-        flipXY : [True, True]
-        ixy : [7, 1]
+        flipXY : [True, False]
+        ixy : [7, 0]
       C06: &C06_ITL
         <<: *C07_ITL
         hdu : 10
-        ixy : [6, 1]
+        ixy : [6, 0]
       C05: &C05_ITL
         <<: *C07_ITL
         hdu : 11
-        ixy : [5, 1]
+        ixy : [5, 0]
       C04: &C04_ITL
         <<: *C07_ITL
         hdu : 12
-        ixy : [4, 1]
+        ixy : [4, 0]
       C03: &C03_ITL
         <<: *C07_ITL
         hdu : 13
-        ixy : [3, 1]
+        ixy : [3, 0]
       C02: &C02_ITL
         <<: *C07_ITL
         hdu : 14
-        ixy : [2, 1]
+        ixy : [2, 0]
       C01: &C01_ITL
         <<: *C07_ITL
         hdu : 15
-        ixy : [1, 1]
+        ixy : [1, 0]
       C00: &C00_ITL
         <<: *C07_ITL
         hdu : 16
-        ixy : [0, 1]
+        ixy : [0, 0]
 
 #
 # Layout of CCDs within an ITL raft

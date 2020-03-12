@@ -53,7 +53,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         detector_names = {'raw': 'R10_S02',
                           }
         # This name comes from the camera and not from the butler
-        detector_serials = {'raw': 'ITL-3800C-041-Dev',
+        detector_serials = {'raw': 'ITL-3800C-167',
                             }
         dimensions = {'raw': Extent2I(4608, 4096),
                       }
