@@ -65,7 +65,7 @@ exposures:
   deepCoadd_psfMatchedWarp:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(expId)d.fits
   dcrCoadd_directWarp:
-    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(expId)d.fits
+    template: dcrCoadd/%(filter)s%(subfilter)d/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)d-%(tract)d-%(patch)s-%(expId)d.fits
   deepDiff_differenceExp:
     template: deepDiff/v%(expId)013d-f%(filter)s/%(raftName)s/diffexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_matchedExp:
@@ -548,7 +548,7 @@ datasets:
     tables:
     - raw
     - raw_visit
-    template: imageDifferenceDriver_metadata/%(expId)013d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(expId)013d-%(filter)s-%(raftName)-%(detectorName)s-det%(detector)03d.yaml
+    template: imageDifferenceDriver_metadata/%(expId)013d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   associationDriver_config:
     persistable: Config
     storage: ConfigStorage
