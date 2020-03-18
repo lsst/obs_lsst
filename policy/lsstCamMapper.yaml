@@ -459,8 +459,10 @@ datasets:
     template: measurePhotonTransferCurves_metadata/%(detector)03d.yaml
   photonTransferCurveDataset:
     template: calibrations/ptc/ptcDataset-det%(detector)03d.pkl
+  linearityTable:
+          template: calibrations/linearizers/linearity-table-det%(detector)03d.yaml
   linearizerLut:
-    template: calibrations/linearizers/linearizer-det%(detector)03d.yaml
+          template: calibrations/linearizers/linearizer-lut-det%(detector)03d.yaml
   plotCoadd:
     persistable: None
     python: builtins.str
