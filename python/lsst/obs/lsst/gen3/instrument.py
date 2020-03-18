@@ -171,7 +171,7 @@ class LsstCamInstrument(Instrument):
         datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "Defects",
                                   universe=butler.registry.dimensions)
         butler.registry.registerDatasetType(datasetType)
-        defectPath = os.path.join(getPackageDir("obs_lsst"), self.policyName, "defects")
+        defectPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName, "defects")
 
         if os.path.exists(defectPath):
             camera = self.getCamera()
@@ -179,7 +179,6 @@ class LsstCamInstrument(Instrument):
             endOfTime = '20380119T031407'
             with butler.transaction():
                 for det in defectsDict:
-                    detector = camera[det]
                     times = sorted([k for k in defectsDict[det]])
                     defects = [defectsDict[det][time] for time in times]
                     times = times + [parser.parse(endOfTime), ]
@@ -196,7 +195,7 @@ class LsstCamInstrument(Instrument):
                             }
                         )
                         butler.put(defect, datasetType, instrument=self.getName(),
-                                   calibration_label=calibrationLabelName, detector=detector.getId())
+                                   calibration_label=calibrationLabelName, detector=md["DETECTOR"])
 
 
 class LsstComCamInstrument(LsstCamInstrument):
