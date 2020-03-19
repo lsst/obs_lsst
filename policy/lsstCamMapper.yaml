@@ -76,7 +76,51 @@ exposures:
     template: dcrDiff/v%(expId)013d-f%(filter)s/%(raftName)s/matchexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 calibrations:
-  qe_curve:
+ linearity_table:
+    columns:
+    - detector
+    - calibDate
+    level: Ccd
+    persistable: ignore
+    python: numpy.array
+    refCols:
+    - visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
+    storage: YamlStorage
+    tables: linearity_table
+    template: linearizer/%(calibDate)s/linearity-table-det%(detector)03d_%(calibDate)s.yaml
+    validEndName: validEnd
+    validRange: true
+    validStartName: validStart
+linearizer_lut:
+    columns:
+    - detector
+    - calibDate
+    level: Ccd
+    persistable: ignore 
+    python: lsst.ip.isr.linearize.Linearizer 
+    refCols:
+    - visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
+    storage: YamlStorage
+    tables: linearizer_lut
+    template: linearizer/%(calibDate)s/linearity-table-det%(detector)03d_%(calibDate)s.yaml
+    validEndName: validEnd
+    validRange: true
+    validStartName: validStart
+qe_curve:
     columns:
     - detector
     - calibDate
