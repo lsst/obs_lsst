@@ -230,7 +230,7 @@ class PhosimInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "LSST-PhoSim"
+    instrument = "PhoSim"
     policyName = "phosim"
     translatorClass = PhosimTranslator
 
@@ -258,7 +258,7 @@ class UcdCamInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for UCDCam test stand data.
     """
 
-    instrument = "UCDCam"
+    instrument = "LSST-UCDCam"
     policyName = "ucd"
     translatorClass = LsstUCDCamTranslator
 
