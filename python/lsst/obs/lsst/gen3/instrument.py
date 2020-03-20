@@ -166,25 +166,40 @@ class LsstCamInstrument(Instrument):
         camera = self.getCamera()
         butler.put(camera, datasetType, unboundedDataId)
 
-        # Write defects with validity ranges taken from
-        # obs_lsst_data/{name}/defects (along with the defects themselves).
-        datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "Defects",
-                                  universe=butler.registry.dimensions)
-        butler.registry.registerDatasetType(datasetType)
-        defectPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName, "defects")
+        # Write calibrations from obs_lsst_data
 
-        if os.path.exists(defectPath):
+        curatedCalibrations = {
+            "defects": {"dimensions": ("instrument", "detector", "calibration_label"),
+                        "storageClass": "Defects"},
+            "qe_curve": {"dimensions": ("instrument", "detector", "calibration_label"),
+                         "storageClass": "QECurve"},
+        }
+
+        for typeName, definition in curatedCalibrations.items():
+            # We need to define the dataset types.
+            datasetType = DatasetType(typeName, definition["dimensions"],
+                                      definition["storageClass"],
+                                      universe=butler.registry.dimensions)
+            butler.registry.registerDatasetType(datasetType)
+            self._write_obs_lsst_data(butler, datasetType)
+
+    def _write_obs_lsst_data(self, butler, datasetType):
+        calibPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName,
+                                 datasetType.name)
+
+        if os.path.exists(calibPath):
             camera = self.getCamera()
-            defectsDict = read_all(defectPath, camera)[0]  # second return is calib type
+            calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
+            print(calibsDict)
             endOfTime = '20380119T031407'
             with butler.transaction():
-                for det in defectsDict:
-                    times = sorted([k for k in defectsDict[det]])
-                    defects = [defectsDict[det][time] for time in times]
+                for det in calibsDict:
+                    times = sorted([k for k in calibsDict[det]])
+                    calibs = [calibsDict[det][time] for time in times]
                     times = times + [parser.parse(endOfTime), ]
-                    for defect, beginTime, endTime in zip(defects, times[:-1], times[1:]):
-                        md = defect.getMetadata()
-                        calibrationLabelName = f"defect/{md['CALIBDATE']}/{md['DETECTOR']}"
+                    for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
+                        md = calib.getMetadata()
+                        calibrationLabelName = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
                         butler.registry.insertDimensionData(
                             "calibration_label",
                             {
@@ -194,7 +209,7 @@ class LsstCamInstrument(Instrument):
                                 "datetime_end": endTime,
                             }
                         )
-                        butler.put(defect, datasetType, instrument=self.getName(),
+                        butler.put(calib, datasetType, instrument=self.getName(),
                                    calibration_label=calibrationLabelName, detector=md["DETECTOR"])
 
 
