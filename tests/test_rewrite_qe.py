@@ -48,7 +48,7 @@ class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
             self.assertEqual(len(files), 9)
             for f in files:
                 curve1 = Curve.readText(f)
-                expect_file = os.path.join(DATADIR, 'ts8', 'qe_curves', os.path.relpath(f, root))
+                expect_file = os.path.join(DATADIR, 'ts8', 'qe_curve', os.path.relpath(f, root))
                 curve2 = Curve.readText(expect_file)
                 self.assertEqual(curve1, curve2)
         except Exception:
