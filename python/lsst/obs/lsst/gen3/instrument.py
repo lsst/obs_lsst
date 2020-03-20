@@ -81,6 +81,7 @@ class LsstCamInstrument(Instrument):
     _camera = None
     _cameraCachedClass = None
     translatorClass = LsstCamTranslator
+    obsDataPackageDir = getPackageDir("obs_lsst_data")
 
     @property
     def configPaths(self):
@@ -181,10 +182,30 @@ class LsstCamInstrument(Instrument):
                                       definition["storageClass"],
                                       universe=butler.registry.dimensions)
             butler.registry.registerDatasetType(datasetType)
-            self._write_obs_lsst_data(butler, datasetType)
+            self._writeCuratedCalibrationDataset(butler, datasetType)
 
-    def _write_obs_lsst_data(self, butler, datasetType):
-        calibPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName,
+    def _writeCuratedCalibrationDataset(self, butler, datasetType):
+        """Write a standardized curated calibration dataset from an obs data
+        package.
+
+        Parameters
+        ----------
+        butler : `lsst.daf.butler.Butler`
+            Gen3 butler in which to put the calibrations.
+        datasetType : `lsst.daf.butler.DatasetType`
+            Dataset type to be put.
+
+        Notes
+        -----
+        This method scans the location defined in the ``obsDataPackageDir``
+        class attribute for curated calibrations corresponding to the
+        supplied dataset type.  The directory name in the data package much
+        match the name of the dataset type. They are assumed to use the
+        standard layout and can be read by
+        `~lsst.pipe.tasks.read_curated_calibs.read_all` and provide standard
+        metadata.
+        """
+        calibPath = os.path.join(self.obsDataPackageDir, self.policyName,
                                  datasetType.name)
 
         if not os.path.exists(calibPath):
