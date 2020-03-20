@@ -28,7 +28,7 @@ from dateutil import parser
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType
+from lsst.daf.butler import DatasetType, DataCoordinate
 from lsst.pipe.tasks.read_curated_calibs import read_all
 from ..filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
@@ -187,30 +187,42 @@ class LsstCamInstrument(Instrument):
         calibPath = os.path.join(getPackageDir("obs_lsst_data"), self.policyName,
                                  datasetType.name)
 
-        if os.path.exists(calibPath):
-            camera = self.getCamera()
-            calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
-            print(calibsDict)
-            endOfTime = '20380119T031407'
-            with butler.transaction():
-                for det in calibsDict:
-                    times = sorted([k for k in calibsDict[det]])
-                    calibs = [calibsDict[det][time] for time in times]
-                    times = times + [parser.parse(endOfTime), ]
-                    for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
-                        md = calib.getMetadata()
-                        calibrationLabelName = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
-                        butler.registry.insertDimensionData(
-                            "calibration_label",
-                            {
-                                "instrument": self.getName(),
-                                "name": calibrationLabelName,
-                                "datetime_begin": beginTime,
-                                "datetime_end": endTime,
-                            }
-                        )
-                        butler.put(calib, datasetType, instrument=self.getName(),
-                                   calibration_label=calibrationLabelName, detector=md["DETECTOR"])
+        if not os.path.exists(calibPath):
+            return
+
+        camera = self.getCamera()
+        calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
+        endOfTime = '20380119T031407'
+        dimensionRecords = []
+        datasetRecords = []
+        for det in calibsDict:
+            times = sorted([k for k in calibsDict[det]])
+            calibs = [calibsDict[det][time] for time in times]
+            times = times + [parser.parse(endOfTime), ]
+            for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
+                md = calib.getMetadata()
+                calibrationLabel = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
+                dataId = DataCoordinate.standardize(
+                    universe=butler.registry.dimensions,
+                    instrument=self.getName(),
+                    calibration_label=calibrationLabel,
+                    detector=md["DETECTOR"],
+                )
+                datasetRecords.append((calib, dataId))
+                dimensionRecords.append({
+                    "instrument": self.getName(),
+                    "name": calibrationLabel,
+                    "datetime_begin": beginTime,
+                    "datetime_end": endTime,
+                })
+
+        # Second loop actually does the inserts and filesystem writes.
+        with butler.transaction():
+            butler.registry.insertDimensionData("calibration_label", *dimensionRecords)
+            # TODO: vectorize these puts, once butler APIs for that become
+            # available.
+            for calib, dataId in datasetRecords:
+                butler.put(calib, datasetType, dataId)
 
 
 class LsstComCamInstrument(LsstCamInstrument):
