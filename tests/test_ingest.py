@@ -1,4 +1,4 @@
-# This file is part of obs_decam.
+# This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
 # This product includes software developed by the LSST Project
