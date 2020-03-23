@@ -15,3 +15,6 @@ latiss/CALIB/calibRegistry.sqlite3
 latiss/CALIB/defects/
 ts8/CALIB/calibRegistry.sqlite3
 ts8/CALIB/qe_curve/
+lsstcam/CALIB/calibRegistry.sqlite3
+lsstcam/CALIB/qe_curve/
+

@@ -28,7 +28,7 @@ from dateutil import parser
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType
+from lsst.daf.butler import DatasetType, DataCoordinate
 from lsst.pipe.tasks.read_curated_calibs import read_all
 from ..filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
@@ -81,6 +81,7 @@ class LsstCamInstrument(Instrument):
     _camera = None
     _cameraCachedClass = None
     translatorClass = LsstCamTranslator
+    obsDataPackageDir = getPackageDir("obs_lsst_data")
 
     @property
     def configPaths(self):
@@ -166,37 +167,83 @@ class LsstCamInstrument(Instrument):
         camera = self.getCamera()
         butler.put(camera, datasetType, unboundedDataId)
 
-        # Write defects with validity ranges taken from
-        # obs_lsst_data/{name}/defects (along with the defects themselves).
-        datasetType = DatasetType("defects", ("instrument", "detector", "calibration_label"), "Defects",
-                                  universe=butler.registry.dimensions)
-        butler.registry.registerDatasetType(datasetType)
-        defectPath = os.path.join(getPackageDir("obs_lsst"), self.policyName, "defects")
+        # Write calibrations from obs_lsst_data
 
-        if os.path.exists(defectPath):
-            camera = self.getCamera()
-            defectsDict = read_all(defectPath, camera)[0]  # second return is calib type
-            endOfTime = '20380119T031407'
-            with butler.transaction():
-                for det in defectsDict:
-                    detector = camera[det]
-                    times = sorted([k for k in defectsDict[det]])
-                    defects = [defectsDict[det][time] for time in times]
-                    times = times + [parser.parse(endOfTime), ]
-                    for defect, beginTime, endTime in zip(defects, times[:-1], times[1:]):
-                        md = defect.getMetadata()
-                        calibrationLabelName = f"defect/{md['CALIBDATE']}/{md['DETECTOR']}"
-                        butler.registry.insertDimensionData(
-                            "calibration_label",
-                            {
-                                "instrument": self.getName(),
-                                "name": calibrationLabelName,
-                                "datetime_begin": beginTime,
-                                "datetime_end": endTime,
-                            }
-                        )
-                        butler.put(defect, datasetType, instrument=self.getName(),
-                                   calibration_label=calibrationLabelName, detector=detector.getId())
+        curatedCalibrations = {
+            "defects": {"dimensions": ("instrument", "detector", "calibration_label"),
+                        "storageClass": "Defects"},
+            "qe_curve": {"dimensions": ("instrument", "detector", "calibration_label"),
+                         "storageClass": "QECurve"},
+        }
+
+        for typeName, definition in curatedCalibrations.items():
+            # We need to define the dataset types.
+            datasetType = DatasetType(typeName, definition["dimensions"],
+                                      definition["storageClass"],
+                                      universe=butler.registry.dimensions)
+            butler.registry.registerDatasetType(datasetType)
+            self._writeCuratedCalibrationDataset(butler, datasetType)
+
+    def _writeCuratedCalibrationDataset(self, butler, datasetType):
+        """Write a standardized curated calibration dataset from an obs data
+        package.
+
+        Parameters
+        ----------
+        butler : `lsst.daf.butler.Butler`
+            Gen3 butler in which to put the calibrations.
+        datasetType : `lsst.daf.butler.DatasetType`
+            Dataset type to be put.
+
+        Notes
+        -----
+        This method scans the location defined in the ``obsDataPackageDir``
+        class attribute for curated calibrations corresponding to the
+        supplied dataset type.  The directory name in the data package much
+        match the name of the dataset type. They are assumed to use the
+        standard layout and can be read by
+        `~lsst.pipe.tasks.read_curated_calibs.read_all` and provide standard
+        metadata.
+        """
+        calibPath = os.path.join(self.obsDataPackageDir, self.policyName,
+                                 datasetType.name)
+
+        if not os.path.exists(calibPath):
+            return
+
+        camera = self.getCamera()
+        calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
+        endOfTime = '20380119T031407'
+        dimensionRecords = []
+        datasetRecords = []
+        for det in calibsDict:
+            times = sorted([k for k in calibsDict[det]])
+            calibs = [calibsDict[det][time] for time in times]
+            times = times + [parser.parse(endOfTime), ]
+            for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
+                md = calib.getMetadata()
+                calibrationLabel = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
+                dataId = DataCoordinate.standardize(
+                    universe=butler.registry.dimensions,
+                    instrument=self.getName(),
+                    calibration_label=calibrationLabel,
+                    detector=md["DETECTOR"],
+                )
+                datasetRecords.append((calib, dataId))
+                dimensionRecords.append({
+                    "instrument": self.getName(),
+                    "name": calibrationLabel,
+                    "datetime_begin": beginTime,
+                    "datetime_end": endTime,
+                })
+
+        # Second loop actually does the inserts and filesystem writes.
+        with butler.transaction():
+            butler.registry.insertDimensionData("calibration_label", *dimensionRecords)
+            # TODO: vectorize these puts, once butler APIs for that become
+            # available.
+            for calib, dataId in datasetRecords:
+                butler.put(calib, datasetType, dataId)
 
 
 class LsstComCamInstrument(LsstCamInstrument):
@@ -231,7 +278,7 @@ class PhosimInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "LSST-PhoSim"
+    instrument = "PhoSim"
     policyName = "phosim"
     translatorClass = PhosimTranslator
 
@@ -259,7 +306,7 @@ class UcdCamInstrument(LsstCamInstrument):
     """Gen3 Butler specialization for UCDCam test stand data.
     """
 
-    instrument = "UCDCam"
+    instrument = "LSST-UCDCam"
     policyName = "ucd"
     translatorClass = LsstUCDCamTranslator
 
