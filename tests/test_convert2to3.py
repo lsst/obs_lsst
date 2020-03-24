@@ -24,7 +24,6 @@ import unittest
 
 import lsst.utils.tests
 from lsst.obs.base.gen2to3 import convertTests
-import lsst.obs.lsst.gen3
 
 testDataPackage = "obs_lsst"
 try:
@@ -54,7 +53,7 @@ class ConvertGen2To3TestCase(convertTests.ConvertGen2To3TestCase):
 class LatissGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LATISS"
     instrumentDir = "latiss"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.LatissInstrument"
+    instrumentClass = "lsst.obs.lsst.LatissInstrument"
     biases = [{"detector": 0, "calibration_label": "gen2/bias_2018-09-21_000",
                "instrument": instrumentName}]
 
@@ -63,7 +62,7 @@ class Ts8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-TS8"
     instrumentDir = "ts8"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.Ts8Instrument"
+    instrumentClass = "lsst.obs.lsst.Ts8Instrument"
     biases = [{"detector": 67, "calibration_label": "gen2/bias_2018-07-24_067",
                "instrument": instrumentName}]
 
@@ -72,28 +71,28 @@ class Ts3Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-TS3"
     instrumentDir = "ts3"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.Ts3Instrument"
+    instrumentClass = "lsst.obs.lsst.Ts3Instrument"
 
 
 class UcdCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-UCDCam"
     instrumentDir = "ucd"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.UcdCamInstrument"
+    instrumentClass = "lsst.obs.lsst.UcdCamInstrument"
 
 
 class PhosimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "PhoSim"
     instrumentDir = "phosim"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.PhosimInstrument"
+    instrumentClass = "lsst.obs.lsst.PhosimInstrument"
 
 
 class ImsimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-ImSim"
     instrumentDir = "imsim"
-    instrumentClass = "lsst.obs.lsst.gen3.instrument.ImsimInstrument"
+    instrumentClass = "lsst.obs.lsst.ImsimInstrument"
     biases = [{"detector": 42, "calibration_label": "gen2/bias_2022-01-01_042",
                "instrument": instrumentName}]
     darks = [{"detector": 42, "calibration_label": "gen2/dark_2022-01-01_042",

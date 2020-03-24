@@ -30,9 +30,9 @@ from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType, DataCoordinate
 from lsst.pipe.tasks.read_curated_calibs import read_all
-from ..filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
+from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
-from ..translators import LsstLatissTranslator, LsstCamTranslator, \
+from .translators import LsstLatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     PhosimTranslator, LsstTS8Translator, ImsimTranslator
 
