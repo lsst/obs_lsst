@@ -58,7 +58,7 @@ class LatissGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
                "instrument": instrumentName}]
 
 
-class Ts8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
+class TS8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-TS8"
     instrumentDir = "ts8"
@@ -67,28 +67,28 @@ class Ts8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
                "instrument": instrumentName}]
 
 
-class Ts3Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
+class TS3Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-TS3"
     instrumentDir = "ts3"
     instrumentClass = "lsst.obs.lsst.LsstTS3"
 
 
-class UcdCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
+class UCDCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-UCDCam"
     instrumentDir = "ucd"
     instrumentClass = "lsst.obs.lsst.LsstUCDCam"
 
 
-class PhosimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
+class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
-    instrumentName = "PhoSim"
+    instrumentName = "LSST-PhoSim"
     instrumentDir = "phosim"
     instrumentClass = "lsst.obs.lsst.LsstPhoSim"
 
 
-class ImsimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
+class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
     instrumentName = "LSST-ImSim"
     instrumentDir = "imsim"

@@ -25,7 +25,7 @@ import re
 import lsst.log
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import LsstLatissTranslator
+from .translators import LatissTranslator
 from .filters import LATISS_FILTER_DEFINITIONS
 
 __all__ = ["LatissMapper", "LatissParseTask"]
@@ -33,7 +33,7 @@ __all__ = ["LatissMapper", "LatissParseTask"]
 
 class LatissMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = LsstLatissTranslator
+    metadataTranslator = LatissTranslator
 
 
 class LatissMapper(LsstCamMapper):
@@ -46,7 +46,7 @@ class LatissMapper(LsstCamMapper):
     filterDefinitions = LATISS_FILTER_DEFINITIONS
 
     def _extractDetectorName(self, dataId):
-        return f"{LsstLatissTranslator.DETECTOR_GROUP_NAME}_{LsstLatissTranslator.DETECTOR_NAME}"
+        return f"{LatissTranslator.DETECTOR_GROUP_NAME}_{LatissTranslator.DETECTOR_NAME}"
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.
@@ -72,8 +72,8 @@ class LatissMapper(LsstCamMapper):
             else:
                 lsst.log.Log.getLogger("LsstLatissMapper").warn("Controller unknown, using 'C'")
                 controller = "C"
-            visit = LsstLatissTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"],
-                                                             controller)
+            visit = LatissTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"],
+                                                         controller)
 
         if "detector" in dataId:
             detector = dataId["detector"]
@@ -83,7 +83,7 @@ class LatissMapper(LsstCamMapper):
         else:
             detector = 0
 
-        return LsstLatissTranslator.compute_detector_exposure_id(visit, detector)
+        return LatissTranslator.compute_detector_exposure_id(visit, detector)
 
 
 class LatissParseTask(LsstCamParseTask):
@@ -91,7 +91,7 @@ class LatissParseTask(LsstCamParseTask):
     """
 
     _mapperClass = LatissMapper
-    _translatorClass = LsstLatissTranslator
+    _translatorClass = LatissTranslator
 
     def translate_seqNum(self, md):
         """Return the sequence number.

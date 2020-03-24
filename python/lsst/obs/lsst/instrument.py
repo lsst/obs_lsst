@@ -32,9 +32,9 @@ from lsst.daf.butler import DatasetType, DataCoordinate
 from lsst.pipe.tasks.read_curated_calibs import read_all
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
-from .translators import LsstLatissTranslator, LsstCamTranslator, \
+from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    PhosimTranslator, LsstTS8Translator, ImsimTranslator
+    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -76,7 +76,7 @@ class LsstCam(Instrument):
        future.
     """
     filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
-    instrument = "lsstCam"
+    instrument = "LSSTCam"
     policyName = "lsstCam"
     _camera = None
     _cameraCachedClass = None
@@ -250,7 +250,7 @@ class LsstComCam(LsstCam):
     """Gen3 Butler specialization for ComCam data.
     """
 
-    instrument = "LSST-ComCam"
+    instrument = "LSSTComCam"
     policyName = "comCam"
     translatorClass = LsstComCamTranslator
 
@@ -266,7 +266,7 @@ class LsstImSim(LsstCam):
 
     instrument = "LSST-ImSim"
     policyName = "imsim"
-    translatorClass = ImsimTranslator
+    translatorClass = LsstImSimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -278,9 +278,9 @@ class LsstPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "PhoSim"
+    instrument = "LSST-PhoSim"
     policyName = "phosim"
-    translatorClass = PhosimTranslator
+    translatorClass = LsstPhoSimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -336,7 +336,7 @@ class Latiss(LsstCam):
     filterDefinitions = LATISS_FILTER_DEFINITIONS
     instrument = "LATISS"
     policyName = "latiss"
-    translatorClass = LsstLatissTranslator
+    translatorClass = LatissTranslator
 
     def extractDetectorRecord(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one

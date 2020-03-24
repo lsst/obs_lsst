@@ -32,9 +32,9 @@ from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 from .instrument import LsstCam, Latiss, \
     LsstImSim, LsstPhoSim, LsstTS8, \
     LsstTS3, LsstUCDCam, LsstComCam
-from .translators import LsstLatissTranslator, LsstCamTranslator, \
+from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    PhosimTranslator, LsstTS8Translator, ImsimTranslator
+    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
 from .assembly import fixAmpsAndAssemble, readRawAmps
 
 
@@ -120,19 +120,19 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
 
 
 class LatissRawFormatter(LsstCamRawFormatter):
-    translatorClass = LsstLatissTranslator
+    translatorClass = LatissTranslator
     _instrument = Latiss
     filterDefinitions = Latiss.filterDefinitions
 
 
 class LsstImSimRawFormatter(LsstCamRawFormatter):
-    translatorClass = ImsimTranslator
+    translatorClass = LsstImSimTranslator
     _instrument = LsstImSim
     filterDefinitions = LsstImSim.filterDefinitions
 
 
 class LsstPhoSimRawFormatter(LsstCamRawFormatter):
-    translatorClass = PhosimTranslator
+    translatorClass = LsstPhoSimTranslator
     _instrument = LsstPhoSim
     filterDefinitions = LsstPhoSim.filterDefinitions
 
