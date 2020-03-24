@@ -28,8 +28,8 @@ from pstats import Stats
 
 import numpy as np
 
-from lsst.obs.lsst import (LsstCamInstrument, LsstComCamInstrument, ImsimInstrument, PhosimInstrument,
-                           Ts8Instrument, Ts3Instrument, UcdCamInstrument, LatissInstrument)
+from lsst.obs.lsst import (LsstCam, LsstComCam, LsstImSim, LsstPhoSim,
+                           LsstTS8, LsstTS3, LsstUCDCam, Latiss)
 
 try:
     from lsst.daf.butler import Butler, DatasetType, StorageClassFactory
@@ -126,28 +126,28 @@ class TestInstruments(unittest.TestCase):
             self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
 
     def testLsstCam(self):
-        self.checkInstrumentWithRegistry(LsstCamInstrument)
+        self.checkInstrumentWithRegistry(LsstCam)
 
     def testComCam(self):
-        self.checkInstrumentWithRegistry(LsstComCamInstrument)
+        self.checkInstrumentWithRegistry(LsstComCam)
 
-    def testImsimCam(self):
-        self.checkInstrumentWithRegistry(ImsimInstrument)
+    def testImSim(self):
+        self.checkInstrumentWithRegistry(LsstImSim)
 
-    def testPhosimCam(self):
-        self.checkInstrumentWithRegistry(PhosimInstrument)
+    def testPhoSim(self):
+        self.checkInstrumentWithRegistry(LsstPhoSim)
 
     def testTs8(self):
-        self.checkInstrumentWithRegistry(Ts8Instrument)
+        self.checkInstrumentWithRegistry(LsstTS8)
 
     def testTs3(self):
-        self.checkInstrumentWithRegistry(Ts3Instrument)
+        self.checkInstrumentWithRegistry(LsstTS3)
 
     def testUcdCam(self):
-        self.checkInstrumentWithRegistry(UcdCamInstrument)
+        self.checkInstrumentWithRegistry(LsstUCDCam)
 
     def testLatiss(self):
-        self.checkInstrumentWithRegistry(LatissInstrument)
+        self.checkInstrumentWithRegistry(Latiss)
 
 
 if __name__ == "__main__":

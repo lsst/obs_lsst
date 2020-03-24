@@ -36,7 +36,7 @@ DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
 class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     def setUp(self):
         self.ingestDir = TESTDIR
-        self.instrument = lsst.obs.lsst.LatissInstrument()
+        self.instrument = lsst.obs.lsst.Latiss()
         self.file = os.path.join(DATAROOT, "latiss", "raw", "2018-09-20",
                                  "3018092000065-det000.fits")
         self.dataIds = [dict(instrument="LATISS", exposure=3018092000065, detector=0)]
@@ -47,7 +47,7 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
 class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     def setUp(self):
         self.ingestDir = TESTDIR
-        self.instrument = lsst.obs.lsst.Ts3Instrument()
+        self.instrument = lsst.obs.lsst.LsstTS3()
         self.file = os.path.join(DATAROOT, "ts3", "raw", "2018-11-15",
                                  "201811151255111-R433-S00-det433.fits")
         self.dataIds = [dict(instrument="LSST-TS3", exposure=201811151255111, detector=433)]
