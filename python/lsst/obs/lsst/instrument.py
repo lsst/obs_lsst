@@ -23,12 +23,13 @@ __all__ = ("LsstCam", "LsstImSim", "LsstPhoSim", "LsstTS8",
            "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
 
 import os.path
-from dateutil import parser
+
+import astropy.time
 
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType, DataCoordinate
+from lsst.daf.butler import DatasetType, DataCoordinate, TIMESPAN_MAX
 from lsst.pipe.tasks.read_curated_calibs import read_all
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
@@ -213,13 +214,14 @@ class LsstCam(Instrument):
 
         camera = self.getCamera()
         calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
-        endOfTime = '20380119T031407'
+        endOfTime = TIMESPAN_MAX
         dimensionRecords = []
         datasetRecords = []
         for det in calibsDict:
             times = sorted([k for k in calibsDict[det]])
             calibs = [calibsDict[det][time] for time in times]
-            times = times + [parser.parse(endOfTime), ]
+            times = [astropy.time.Time(t, format="datetime", scale="utc") for t in times]
+            times += [endOfTime]
             for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
                 md = calib.getMetadata()
                 calibrationLabel = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
