@@ -52,8 +52,8 @@ class PhosimParseTask(LsstCamParseTask):
     _translatorClass = PhosimTranslator
 
     def translate_controller(self, md):
-        """Always return OCS as controller for imsim data."""
-        return "O"
+        """Always return Simulation as controller for imsim data."""
+        return "S"
 
 
 class PhosimEimgParseTask(PhosimParseTask):

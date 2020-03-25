@@ -52,5 +52,5 @@ class ImsimParseTask(LsstCamParseTask):
     _translatorClass = ImsimTranslator
 
     def translate_controller(self, md):
-        """Always return OCS as controller for imsim data."""
-        return "O"
+        """Always return Simulation as controller for imsim data."""
+        return "S"
