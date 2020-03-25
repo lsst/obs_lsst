@@ -76,29 +76,7 @@ exposures:
     template: dcrDiff/v%(expId)013d-f%(filter)s/%(raftName)s/matchexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 calibrations:
-  linearity_table:
-    columns:
-    - detector
-    - calibDate
-    level: Ccd
-    persistable: ignore
-    python: numpy.array
-    refCols:
-    - visit
-    - detector
-    - raftName
-    - detectorName
-    - expId
-    - dayObs
-    - seqNum
-    reference: raw
-    storage: FitsCatalogStorage
-    tables: linearity_table
-    template: linearizer/%(calibDate)s/linearity-table-det%(detector)03d_%(calibDate)s.yaml
-    validEndName: validEnd
-    validRange: true
-    validStartName: validStart
-  linearizer_lut:
+  linearizer:
     columns:
     - detector
     - calibDate
@@ -115,11 +93,10 @@ calibrations:
     - seqNum
     reference: raw
     storage: FitsCatalogStorage
-    tables: linearizer_lut
-    template: linearizer/%(calibDate)s/linearity-table-det%(detector)03d_%(calibDate)s.yaml
+    tables: linearizer
+    template: linearizer/%(calibDate)s/linearizer-det%(detector)03d_%(calibDate)s.fits
     validEndName: validEnd
     validRange: true
-    validStartName: validStart
   qe_curve:
     columns:
     - detector
@@ -504,9 +481,9 @@ datasets:
   photonTransferCurveDataset:
     template: calibrations/ptc/ptcDataset-det%(detector)03d.pkl
   linearizeLut:
-          template: calibrations/linearizers/linearize-lut-det%(detector)03d.yaml
+          template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.yaml
   linearizeSquared:
-          template: calibrations/linearizers/linearize-squared-det%(detector)03d.yaml
+          template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.yaml
   plotCoadd:
     persistable: None
     python: builtins.str
