@@ -34,7 +34,7 @@ DETECTOR_SERIALS = {
 class LsstComCamTranslator(LsstCamTranslator):
     """Metadata translation for the LSST Commissioning Camera."""
 
-    name = "LSST-ComCam"
+    name = "LSSTComCam"
     """Name of this translation class"""
 
     _const_map = {

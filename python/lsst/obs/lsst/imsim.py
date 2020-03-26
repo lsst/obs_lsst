@@ -22,19 +22,19 @@
 #
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import ImsimTranslator
+from .translators import LsstImSimTranslator
 
 __all__ = ["ImsimMapper", "ImsimParseTask"]
 
 
 class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = ImsimTranslator
+    metadataTranslator = LsstImSimTranslator
 
 
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
-    translatorClass = ImsimTranslator
+    translatorClass = LsstImSimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
     _cameraName = "imsim"
@@ -49,7 +49,7 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _mapperClass = ImsimMapper
-    _translatorClass = ImsimTranslator
+    _translatorClass = LsstImSimTranslator
 
     def translate_controller(self, md):
         """Always return Simulation as controller for imsim data."""

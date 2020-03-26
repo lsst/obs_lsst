@@ -29,19 +29,19 @@ from astro_metadata_translator import fix_header, merge_headers
 import lsst.afw.fits
 from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 
-from .instrument import LsstCamInstrument, LatissInstrument, \
-    ImsimInstrument, PhosimInstrument, Ts8Instrument, \
-    Ts3Instrument, UcdCamInstrument, LsstComCamInstrument
-from ..translators import LsstLatissTranslator, LsstCamTranslator, \
+from .instrument import LsstCam, Latiss, \
+    LsstImSim, LsstPhoSim, LsstTS8, \
+    LsstTS3, LsstUCDCam, LsstComCam
+from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    PhosimTranslator, LsstTS8Translator, ImsimTranslator
-from ..assembly import fixAmpsAndAssemble, readRawAmps
+    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
+from .assembly import fixAmpsAndAssemble, readRawAmps
 
 
 class LsstCamRawFormatter(FitsRawFormatterBase):
     translatorClass = LsstCamTranslator
-    filterDefinitions = LsstCamInstrument.filterDefinitions
-    _instrument = LsstCamInstrument
+    filterDefinitions = LsstCam.filterDefinitions
+    _instrument = LsstCam
 
     def readMetadata(self):
         """Read all header metadata directly into a PropertyList.
@@ -120,42 +120,42 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
 
 
 class LatissRawFormatter(LsstCamRawFormatter):
-    translatorClass = LsstLatissTranslator
-    _instrument = LatissInstrument
-    filterDefinitions = LatissInstrument.filterDefinitions
+    translatorClass = LatissTranslator
+    _instrument = Latiss
+    filterDefinitions = Latiss.filterDefinitions
 
 
-class ImsimRawFormatter(LsstCamRawFormatter):
-    translatorClass = ImsimTranslator
-    _instrument = ImsimInstrument
-    filterDefinitions = ImsimInstrument.filterDefinitions
+class LsstImSimRawFormatter(LsstCamRawFormatter):
+    translatorClass = LsstImSimTranslator
+    _instrument = LsstImSim
+    filterDefinitions = LsstImSim.filterDefinitions
 
 
-class PhosimRawFormatter(LsstCamRawFormatter):
-    translatorClass = PhosimTranslator
-    _instrument = PhosimInstrument
-    filterDefinitions = PhosimInstrument.filterDefinitions
+class LsstPhoSimRawFormatter(LsstCamRawFormatter):
+    translatorClass = LsstPhoSimTranslator
+    _instrument = LsstPhoSim
+    filterDefinitions = LsstPhoSim.filterDefinitions
 
 
-class Ts8RawFormatter(LsstCamRawFormatter):
+class LsstTS8RawFormatter(LsstCamRawFormatter):
     translatorClass = LsstTS8Translator
-    _instrument = Ts8Instrument
-    filterDefinitions = Ts8Instrument.filterDefinitions
+    _instrument = LsstTS8
+    filterDefinitions = LsstTS8.filterDefinitions
 
 
-class Ts3RawFormatter(LsstCamRawFormatter):
+class LsstTS3RawFormatter(LsstCamRawFormatter):
     translatorClass = LsstTS3Translator
-    _instrument = Ts3Instrument
-    filterDefinitions = Ts3Instrument.filterDefinitions
+    _instrument = LsstTS3
+    filterDefinitions = LsstTS3.filterDefinitions
 
 
 class LsstComCamRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstComCamTranslator
-    _instrument = LsstComCamInstrument
-    filterDefinitions = LsstComCamInstrument.filterDefinitions
+    _instrument = LsstComCam
+    filterDefinitions = LsstComCam.filterDefinitions
 
 
-class UcdCamRawFormatter(LsstCamRawFormatter):
+class LsstUCDCamRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstUCDCamTranslator
-    _instrument = UcdCamInstrument
-    filterDefinitions = UcdCamInstrument.filterDefinitions
+    _instrument = LsstUCDCam
+    filterDefinitions = LsstUCDCam.filterDefinitions

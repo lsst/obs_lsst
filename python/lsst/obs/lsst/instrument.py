@@ -19,8 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ("LsstCamInstrument", "ImsimInstrument", "PhosimInstrument", "Ts8Instrument",
-           "LatissInstrument", "Ts3Instrument", "UcdCamInstrument", "LsstComCamInstrument")
+__all__ = ("LsstCam", "LsstImSim", "LsstPhoSim", "LsstTS8",
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
 
 import os.path
 from dateutil import parser
@@ -30,16 +30,16 @@ from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
 from lsst.daf.butler import DatasetType, DataCoordinate
 from lsst.pipe.tasks.read_curated_calibs import read_all
-from ..filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
+from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
-from ..translators import LsstLatissTranslator, LsstCamTranslator, \
+from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    PhosimTranslator, LsstTS8Translator, ImsimTranslator
+    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
 
-class LsstCamInstrument(Instrument):
+class LsstCam(Instrument):
     """Gen3 Butler specialization for the LSST Main Camera.
 
     Parameters
@@ -76,7 +76,7 @@ class LsstCamInstrument(Instrument):
        future.
     """
     filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
-    instrument = "lsstCam"
+    instrument = "LSSTCam"
     policyName = "lsstCam"
     _camera = None
     _cameraCachedClass = None
@@ -246,11 +246,11 @@ class LsstCamInstrument(Instrument):
                 butler.put(calib, datasetType, dataId)
 
 
-class LsstComCamInstrument(LsstCamInstrument):
+class LsstComCam(LsstCam):
     """Gen3 Butler specialization for ComCam data.
     """
 
-    instrument = "LSST-ComCam"
+    instrument = "LSSTComCam"
     policyName = "comCam"
     translatorClass = LsstComCamTranslator
 
@@ -260,35 +260,35 @@ class LsstComCamInstrument(LsstCamInstrument):
         return LsstComCamRawFormatter
 
 
-class ImsimInstrument(LsstCamInstrument):
+class LsstImSim(LsstCam):
     """Gen3 Butler specialization for ImSim simulations.
     """
 
     instrument = "LSST-ImSim"
     policyName = "imsim"
-    translatorClass = ImsimTranslator
+    translatorClass = LsstImSimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import ImsimRawFormatter
-        return ImsimRawFormatter
+        from .rawFormatter import LsstImSimRawFormatter
+        return LsstImSimRawFormatter
 
 
-class PhosimInstrument(LsstCamInstrument):
+class LsstPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "PhoSim"
+    instrument = "LSST-PhoSim"
     policyName = "phosim"
-    translatorClass = PhosimTranslator
+    translatorClass = LsstPhoSimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import PhosimRawFormatter
-        return PhosimRawFormatter
+        from .rawFormatter import LsstPhoSimRawFormatter
+        return LsstPhoSimRawFormatter
 
 
-class Ts8Instrument(LsstCamInstrument):
+class LsstTS8(LsstCam):
     """Gen3 Butler specialization for raft test stand data.
     """
 
@@ -298,11 +298,11 @@ class Ts8Instrument(LsstCamInstrument):
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import Ts8RawFormatter
-        return Ts8RawFormatter
+        from .rawFormatter import LsstTS8RawFormatter
+        return LsstTS8RawFormatter
 
 
-class UcdCamInstrument(LsstCamInstrument):
+class LsstUCDCam(LsstCam):
     """Gen3 Butler specialization for UCDCam test stand data.
     """
 
@@ -312,11 +312,11 @@ class UcdCamInstrument(LsstCamInstrument):
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import UcdCamRawFormatter
-        return UcdCamRawFormatter
+        from .rawFormatter import LsstUCDCamRawFormatter
+        return LsstUCDCamRawFormatter
 
 
-class Ts3Instrument(LsstCamInstrument):
+class LsstTS3(LsstCam):
     """Gen3 Butler specialization for TS3 test stand data.
     """
 
@@ -326,17 +326,17 @@ class Ts3Instrument(LsstCamInstrument):
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import Ts3RawFormatter
-        return Ts3RawFormatter
+        from .rawFormatter import LsstTS3RawFormatter
+        return LsstTS3RawFormatter
 
 
-class LatissInstrument(LsstCamInstrument):
+class Latiss(LsstCam):
     """Gen3 Butler specialization for AuxTel LATISS data.
     """
     filterDefinitions = LATISS_FILTER_DEFINITIONS
     instrument = "LATISS"
     policyName = "latiss"
-    translatorClass = LsstLatissTranslator
+    translatorClass = LatissTranslator
 
     def extractDetectorRecord(self, camGeomDetector):
         # Override to remove group (raft) name, because LATISS only has one

@@ -10,7 +10,7 @@
 
 """Metadata translation code for LSST LATISS headers"""
 
-__all__ = ("LsstLatissTranslator", )
+__all__ = ("LatissTranslator", )
 
 import logging
 import math
@@ -90,7 +90,7 @@ def is_non_science_or_lab(self):
     raise KeyError("Required key is missing and this is a mountain science observation")
 
 
-class LsstLatissTranslator(LsstBaseTranslator):
+class LatissTranslator(LsstBaseTranslator):
     """Metadata translator for LSST LATISS data from AuxTel.
 
     For lab measurements many values are masked out.

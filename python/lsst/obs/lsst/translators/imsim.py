@@ -10,7 +10,7 @@
 
 """Metadata translation code for ImSim headers"""
 
-__all__ = ("ImsimTranslator", )
+__all__ = ("LsstImSimTranslator", )
 
 import logging
 import astropy.units as u
@@ -24,7 +24,7 @@ from .lsstsim import LsstSimTranslator
 log = logging.getLogger(__name__)
 
 
-class ImsimTranslator(LsstSimTranslator):
+class LsstImSimTranslator(LsstSimTranslator):
     """Metadata translation class for ImSim headers"""
 
     name = "LSST-ImSim"

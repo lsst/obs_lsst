@@ -10,7 +10,7 @@
 
 """Metadata translation code for LSST PhoSim FITS headers"""
 
-__all__ = ("PhosimTranslator", )
+__all__ = ("LsstPhoSimTranslator", )
 
 import logging
 
@@ -26,15 +26,15 @@ from .lsstsim import LsstSimTranslator
 log = logging.getLogger(__name__)
 
 
-class PhosimTranslator(LsstSimTranslator):
+class LsstPhoSimTranslator(LsstSimTranslator):
     """Metadata translator for LSST PhoSim data.
     """
 
-    name = "PhoSim"
+    name = "LSST-PhoSim"
     """Name of this translation class"""
 
     _const_map = {
-        "instrument": "PhoSim",
+        "instrument": "LSST-PhoSim",
         "boresight_rotation_coord": "sky",
         "observation_type": "science",
         "object": "UNKNOWN",

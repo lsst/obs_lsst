@@ -45,7 +45,7 @@ class LsstCamTranslator(LsstBaseTranslator):
     name = "LSSTCam"
     """Name of this translation class"""
 
-    supported_instrument = "lsstCam"
+    supported_instrument = "LSSTCam"
     """Supports the lsstCam instrument."""
 
     _const_map = {
@@ -74,3 +74,28 @@ class LsstCamTranslator(LsstBaseTranslator):
 
     # Use Imsim raft definitions until a true lsstCam definition exists
     cameraPolicyFile = "policy/lsstCam.yaml"
+
+    @classmethod
+    def can_translate(cls, header, filename=None):
+        """Indicate whether this translation class can translate the
+        supplied header.
+
+        Parameters
+        ----------
+        header : `dict`-like
+            Header to convert to standardized form.
+        filename : `str`, optional
+            Name of file being translated.
+
+        Returns
+        -------
+        can : `bool`
+            `True` if the header is recognized by this class. `False`
+            otherwise.
+        """
+        # INSTRUME keyword might be of two types
+        if "INSTRUME" in header:
+            instrume = header["INSTRUME"].lower()
+            if instrume == cls.supported_instrument.lower():
+                return True
+        return False
