@@ -26,8 +26,7 @@ import os.path
 
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
-from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType
+from lsst.obs.base.instrument import Instrument
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
 from .translators import LatissTranslator, LsstCamTranslator, \
@@ -157,13 +156,8 @@ class LsstCam(Instrument):
         a standardized approach to this problem.
         """
 
-        # Write cameraGeom.Camera, with an infinite validity range.
-        datasetType = DatasetType("camera", ("instrument", "calibration_label"), "Camera",
-                                  universe=butler.registry.dimensions)
-        butler.registry.registerDatasetType(datasetType)
-        unboundedDataId = addUnboundedCalibrationLabel(butler.registry, self.getName())
-        camera = self.getCamera()
-        butler.put(camera, datasetType, unboundedDataId)
+        # Write cameraGeom.Camera
+        self.writeCameraGeom(butler)
 
         # Write calibrations from obs_lsst_data
         self.writeStandardTextCuratedCalibrations(butler)
