@@ -31,9 +31,11 @@ datasets:
   brighterFatterKernel:
     template: calibrations/bfKernel-%(detectorName)s-det%(detector)03d.pkl
   linearizeLut:
-    template: calibrations/linearizers/linearize-lut-det%(detector)03d.yaml
+    template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.yaml
   linearizeSquared:
-    template: calibrations/linearizers/linearize-squared-det%(detector)03d.yaml
+    template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.yaml
+  linearizePolynomial:
+    template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.yaml
 
 exposures:
   _raw:

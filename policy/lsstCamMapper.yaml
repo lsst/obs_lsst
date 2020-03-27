@@ -79,9 +79,10 @@ calibrations:
   linearizer:
     columns:
     - detector
-    - calibDate
+    - dateObs
     level: Ccd
-    persistable: ignore
+    obsTimeName: dateObs        
+    persistable: Linearizer
     python: lsst.ip.isr.linearize.Linearizer
     refCols:
     - visit
@@ -97,6 +98,7 @@ calibrations:
     template: linearizer/%(calibDate)s/linearizer-det%(detector)03d_%(calibDate)s.fits
     validEndName: validEnd
     validRange: true
+    validStartName: validStart
   qe_curve:
     columns:
     - detector
@@ -484,6 +486,8 @@ datasets:
           template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.yaml
   linearizeSquared:
           template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.yaml
+  linearizePolynomial:
+          template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.yaml
   plotCoadd:
     persistable: None
     python: builtins.str
