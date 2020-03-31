@@ -148,20 +148,6 @@ class LsstCam(Instrument):
             raft=group,
         )
 
-    def writeCuratedCalibrations(self, butler):
-        """Write human-curated calibration Datasets to the given Butler with
-        the appropriate validity ranges.
-
-        This is a temporary API that should go away once obs_ packages have
-        a standardized approach to this problem.
-        """
-
-        # Write cameraGeom.Camera
-        self.writeCameraGeom(butler)
-
-        # Write calibrations from obs_lsst_data
-        self.writeStandardTextCuratedCalibrations(butler)
-
 
 class LsstComCam(LsstCam):
     """Gen3 Butler specialization for ComCam data.
