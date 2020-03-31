@@ -24,13 +24,9 @@ __all__ = ("LsstCam", "LsstImSim", "LsstPhoSim", "LsstTS8",
 
 import os.path
 
-import astropy.time
-
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils import getPackageDir
-from lsst.obs.base.instrument import Instrument, addUnboundedCalibrationLabel
-from lsst.daf.butler import DatasetType, DataCoordinate, TIMESPAN_MAX
-from lsst.pipe.tasks.read_curated_calibs import read_all
+from lsst.obs.base.instrument import Instrument
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
 from .translators import LatissTranslator, LsstCamTranslator, \
@@ -82,7 +78,7 @@ class LsstCam(Instrument):
     _camera = None
     _cameraCachedClass = None
     translatorClass = LsstCamTranslator
-    obsDataPackageDir = getPackageDir("obs_lsst_data")
+    obsDataPackage = "obs_lsst_data"
 
     @property
     def configPaths(self):
@@ -151,101 +147,6 @@ class LsstCam(Instrument):
             purpose=purpose,
             raft=group,
         )
-
-    def writeCuratedCalibrations(self, butler):
-        """Write human-curated calibration Datasets to the given Butler with
-        the appropriate validity ranges.
-
-        This is a temporary API that should go away once obs_ packages have
-        a standardized approach to this problem.
-        """
-
-        # Write cameraGeom.Camera, with an infinite validity range.
-        datasetType = DatasetType("camera", ("instrument", "calibration_label"), "Camera",
-                                  universe=butler.registry.dimensions)
-        butler.registry.registerDatasetType(datasetType)
-        unboundedDataId = addUnboundedCalibrationLabel(butler.registry, self.getName())
-        camera = self.getCamera()
-        butler.put(camera, datasetType, unboundedDataId)
-
-        # Write calibrations from obs_lsst_data
-
-        curatedCalibrations = {
-            "defects": {"dimensions": ("instrument", "detector", "calibration_label"),
-                        "storageClass": "Defects"},
-            "qe_curve": {"dimensions": ("instrument", "detector", "calibration_label"),
-                         "storageClass": "QECurve"},
-        }
-
-        for typeName, definition in curatedCalibrations.items():
-            # We need to define the dataset types.
-            datasetType = DatasetType(typeName, definition["dimensions"],
-                                      definition["storageClass"],
-                                      universe=butler.registry.dimensions)
-            butler.registry.registerDatasetType(datasetType)
-            self._writeCuratedCalibrationDataset(butler, datasetType)
-
-    def _writeCuratedCalibrationDataset(self, butler, datasetType):
-        """Write a standardized curated calibration dataset from an obs data
-        package.
-
-        Parameters
-        ----------
-        butler : `lsst.daf.butler.Butler`
-            Gen3 butler in which to put the calibrations.
-        datasetType : `lsst.daf.butler.DatasetType`
-            Dataset type to be put.
-
-        Notes
-        -----
-        This method scans the location defined in the ``obsDataPackageDir``
-        class attribute for curated calibrations corresponding to the
-        supplied dataset type.  The directory name in the data package much
-        match the name of the dataset type. They are assumed to use the
-        standard layout and can be read by
-        `~lsst.pipe.tasks.read_curated_calibs.read_all` and provide standard
-        metadata.
-        """
-        calibPath = os.path.join(self.obsDataPackageDir, self.policyName,
-                                 datasetType.name)
-
-        if not os.path.exists(calibPath):
-            return
-
-        camera = self.getCamera()
-        calibsDict = read_all(calibPath, camera)[0]  # second return is calib type
-        endOfTime = TIMESPAN_MAX
-        dimensionRecords = []
-        datasetRecords = []
-        for det in calibsDict:
-            times = sorted([k for k in calibsDict[det]])
-            calibs = [calibsDict[det][time] for time in times]
-            times = [astropy.time.Time(t, format="datetime", scale="utc") for t in times]
-            times += [endOfTime]
-            for calib, beginTime, endTime in zip(calibs, times[:-1], times[1:]):
-                md = calib.getMetadata()
-                calibrationLabel = f"{datasetType.name}/{md['CALIBDATE']}/{md['DETECTOR']}"
-                dataId = DataCoordinate.standardize(
-                    universe=butler.registry.dimensions,
-                    instrument=self.getName(),
-                    calibration_label=calibrationLabel,
-                    detector=md["DETECTOR"],
-                )
-                datasetRecords.append((calib, dataId))
-                dimensionRecords.append({
-                    "instrument": self.getName(),
-                    "name": calibrationLabel,
-                    "datetime_begin": beginTime,
-                    "datetime_end": endTime,
-                })
-
-        # Second loop actually does the inserts and filesystem writes.
-        with butler.transaction():
-            butler.registry.insertDimensionData("calibration_label", *dimensionRecords)
-            # TODO: vectorize these puts, once butler APIs for that become
-            # available.
-            for calib, dataId in datasetRecords:
-                butler.put(calib, datasetType, dataId)
 
 
 class LsstComCam(LsstCam):

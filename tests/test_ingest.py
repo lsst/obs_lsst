@@ -34,6 +34,8 @@ DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
 
 
 class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+    curatedCalibrationDatasetTypes = ("camera", "defects")
+
     def setUp(self):
         self.ingestDir = TESTDIR
         self.instrument = lsst.obs.lsst.Latiss()
@@ -45,6 +47,8 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
 
 
 class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+    curatedCalibrationDatasetTypes = ("camera",)
+
     def setUp(self):
         self.ingestDir = TESTDIR
         self.instrument = lsst.obs.lsst.LsstTS3()
