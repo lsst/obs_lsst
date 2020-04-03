@@ -483,11 +483,11 @@ datasets:
   photonTransferCurveDataset:
     template: calibrations/ptc/ptcDataset-det%(detector)03d.pkl
   linearizeLut:
-          template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.yaml
+          template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.fits
   linearizeSquared:
-          template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.yaml
+          template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.fits
   linearizePolynomial:
-          template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.yaml
+          template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.fits
   plotCoadd:
     persistable: None
     python: builtins.str
