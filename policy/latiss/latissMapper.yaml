@@ -30,6 +30,12 @@ datasets:
     template: runIsr_metadata/%(expId)013d-%(filter)s/runIsrMetadata_%(expId)013d-%(filter)s-%(detectorName)s-det%(detector)03d.yaml
   brighterFatterKernel:
     template: calibrations/bfKernel-%(detectorName)s-det%(detector)03d.pkl
+  linearizeLut:
+    template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.fits
+  linearizeSquared:
+    template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.fits
+  linearizePolynomial:
+    template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.fits
 
 exposures:
   _raw:

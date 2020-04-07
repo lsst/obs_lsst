@@ -76,6 +76,29 @@ exposures:
     template: dcrDiff/v%(expId)013d-f%(filter)s/%(raftName)s/matchexp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
 
 calibrations:
+  linearizer:
+    columns:
+    - detector
+    - dateObs
+    level: Ccd
+    obsTimeName: dateObs        
+    persistable: Linearizer
+    python: lsst.ip.isr.linearize.Linearizer
+    refCols:
+    - visit
+    - detector
+    - raftName
+    - detectorName
+    - expId
+    - dayObs
+    - seqNum
+    reference: raw
+    storage: FitsCatalogStorage
+    tables: linearizer
+    template: linearizer/%(calibDate)s/linearizer-det%(detector)03d_%(calibDate)s.fits
+    validEndName: validEnd
+    validRange: true
+    validStartName: validStart
   qe_curve:
     columns:
     - detector
@@ -459,6 +482,12 @@ datasets:
     template: measurePhotonTransferCurves_metadata/%(detector)03d.yaml
   photonTransferCurveDataset:
     template: calibrations/ptc/ptcDataset-det%(detector)03d.pkl
+  linearizeLut:
+          template: calibrations/linearizers/linearize-lut-det%(detector)03d_%(calibDate)s.fits
+  linearizeSquared:
+          template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.fits
+  linearizePolynomial:
+          template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.fits
   plotCoadd:
     persistable: None
     python: builtins.str
