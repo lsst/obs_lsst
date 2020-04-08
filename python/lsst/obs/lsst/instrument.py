@@ -25,6 +25,7 @@ __all__ = ("LsstCam", "LsstImSim", "LsstPhoSim", "LsstTS8",
 import os.path
 
 import lsst.obs.base.yamlCamera as yamlCamera
+from lsst.daf.butler.core.utils import getFullTypeName
 from lsst.utils import getPackageDir
 from lsst.obs.base.instrument import Instrument
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
@@ -116,7 +117,9 @@ class LsstCam(Instrument):
                                      {"name": self.getName(),
                                       "detector_max": self.translatorClass.DETECTOR_MAX,
                                       "visit_max": obsMax,
-                                      "exposure_max": obsMax})
+                                      "exposure_max": obsMax,
+                                      "class_name": getFullTypeName(self),
+                                      })
 
         records = [self.extractDetectorRecord(detector) for detector in self.getCamera()]
         registry.insertDimensionData("detector", *records)
