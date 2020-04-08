@@ -488,6 +488,11 @@ datasets:
           template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.fits
   linearizePolynomial:
           template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.fits
+  crosstalk:
+     persistable: ignored
+     storage: YamlStorage
+     python: 
+     template: 'calibrations/crosstalk/crosstalk-det%(detector)03d.yaml'
   plotCoadd:
     persistable: None
     python: builtins.str
