@@ -35,7 +35,6 @@ config.isr.doWrite = False
 config.isr.overscanFitType = "AKIMA_SPLINE"
 config.isr.overscanOrder = 30
 
-config.isr.doAddDistortionModel = False
 config.isr.doUseOpticsTransmission = False
 config.isr.doUseFilterTransmission = False
 config.isr.doUseSensorTransmission = False

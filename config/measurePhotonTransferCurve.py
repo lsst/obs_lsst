@@ -8,7 +8,6 @@ config.ccdKey = 'detector'
 config.isr.doFlat = False
 config.isr.doFringe = False
 config.isr.doCrosstalk = False
-config.isr.doAddDistortionModel = False
 config.isr.doUseOpticsTransmission = False
 config.isr.doUseFilterTransmission = False
 config.isr.doUseSensorTransmission = False
