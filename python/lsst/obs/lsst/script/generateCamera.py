@@ -118,6 +118,9 @@ def generateCamera(cameraFile, path):
         the output ``cameraFile``.
     """
     cameraFileDir = os.path.dirname(cameraFile)
+    # In some places, it's convenient to have aliases to rafts that should be
+    # removed in the built camera.
+    raftNameMap = {'R00W': 'R00', 'R44W': 'R44', 'R04W': 'R04', 'R40W': 'R40'}
 
     if not cameraFile.endswith(".yaml"):
         raise RuntimeError(f"Output file name ({cameraFile}) does not end with .yaml")
@@ -233,7 +236,7 @@ CCDs :\
                     doffset = (0.0, 0.0,)
                     yaw = None
 
-                print(indent(), "%s_%s : " % (raftName.split('_')[0], ccdName), file=fd)
+                print(indent(), "%s_%s : " % (raftNameMap.get(raftName, raftName), ccdName), file=fd)
                 nindent += 1
                 print(indent(), "<< : *%s_%s" % (ccdName, detectorType), file=fd)
                 if sensorTypes is not None:
