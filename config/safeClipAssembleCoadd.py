@@ -21,7 +21,6 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 import os.path
-from lsst.utils import getPackageDir
 
 # Load configs from base assembleCoadd
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "assembleCoadd.py"))
+config.load(os.path.join(os.path.dirname(__file__), "assembleCoadd.py"))
