@@ -101,7 +101,8 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                    "0000000204595-R11-S20-det042.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
+                    'dayObs', 'seqNum',))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 204595}, [(204595, 'i')]),
                          ({'filter': 'i'}, [(204595, 'i')]),

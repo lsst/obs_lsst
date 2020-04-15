@@ -81,7 +81,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                    "3019031900001-R10-S02-det029.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label', 'expId',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter',
+                    'dayObs', 'seqNum',))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 3019031900001}, [(3019031900001, 'NONE')]),
                          ({'filter': 'NONE'}, [(3019031900001, 'NONE')]),
