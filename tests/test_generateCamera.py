@@ -80,8 +80,21 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         self.assertEqual(content["plateScale"], 10.112)
 
     def testGenerateCameraTs8(self):
-        """Test with LATISS in a test directory."""
+        """Test with ts8 in a test directory."""
         content = self.runGenerateCamera(["ts8", "lsstCam", os.path.curdir])
+        self.assertEqual(content["name"], "lsstCam")
+        self.assertEqual(content["plateScale"], 20.0)
+
+    def testGenerateCamera(self):
+        """Test with lsstCam in a test directory."""
+        content = self.runGenerateCamera(["lsstCam", os.path.curdir])
+        # Test that the raft name mapping is working
+        self.assertTrue('R00_SW0' in content['CCDs'])
+        self.assertTrue('R40_SW0' in content['CCDs'])
+        self.assertTrue('R04_SW0' in content['CCDs'])
+        self.assertTrue('R44_SW0' in content['CCDs'])
+        # Also make sure no bad names are sneaking through
+        self.assertEqual([x for x in content['CCDs'] if 'W_' in x], [])
         self.assertEqual(content["name"], "lsstCam")
         self.assertEqual(content["plateScale"], 20.0)
 
