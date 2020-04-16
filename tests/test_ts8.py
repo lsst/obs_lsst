@@ -74,7 +74,8 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-RTM-010-S11-det067.fits")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
+                    'dayObs', 'seqNum',))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 201807241028453}, [(201807241028453, 'z')]),
                          ({'detector': 67}, [(201807241028453, 'z')]),

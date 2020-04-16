@@ -72,7 +72,8 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         path_to_raw = os.path.join(self.data_dir, "raw", "2018-05-30", "20180530150355-S00-det002")
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId'))
+                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
+                    'dayObs', 'seqNum',))
         query_format = ["visit", "filter"]
         queryMetadata = (({'visit': 20180530150355}, [(20180530150355, 'r')]),
                          ({'detector': '2'}, [(20180530150355, 'r')]),
