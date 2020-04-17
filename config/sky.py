@@ -22,11 +22,6 @@
 
 import os.path
 
-# The following will have to be uncommented and adapted when the
-# X-talk correction will be active
-#from lsst.obs.lsst.isr import SubaruIsrTask
-#config.isr.retarget(SubaruIsrTask)
-#config.isr.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
 configDir = os.path.dirname(__file__)
 
 config.load(os.path.join(configDir, "lsstCamCommon.py"))
