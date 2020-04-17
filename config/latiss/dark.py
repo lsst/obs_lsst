@@ -21,8 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 import os.path
-from lsst.utils import getPackageDir
 
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "latiss", "latiss.py"))
+config.load(os.path.join(os.path.dirname(__file__), "latiss.py"))
 
 config.repair.cosmicray.nCrPixelMax = 100000

@@ -21,7 +21,6 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 import os.path
-from lsst.utils import getPackageDir
 
 if hasattr(config.astrometryRefObjLoader, "ref_dataset_name"):
     config.astrometryRefObjLoader.ref_dataset_name = 'cal_ref_cat'
@@ -30,6 +29,6 @@ if hasattr(config.photometryRefObjLoader, "ref_dataset_name"):
 # existing synthetic refcat does not have coordinate errors
 config.astrometryReferenceErr = 1
 
-filterMapFile = os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py')
+filterMapFile = os.path.join(os.path.dirname(__file__), "filterMap.py")
 config.astrometryRefObjLoader.load(filterMapFile)
 config.photometryRefObjLoader.load(filterMapFile)

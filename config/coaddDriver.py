@@ -24,7 +24,6 @@
 
 import os.path
 
-from lsst.utils import getPackageDir
 
 from lsst.pipe.tasks.assembleCoadd import CompareWarpAssembleCoaddTask
 config.assembleCoadd.retarget(CompareWarpAssembleCoaddTask)
@@ -33,7 +32,7 @@ for sub, filename in (("makeCoaddTempExp", "makeCoaddTempExp"),
 #                      ("backgroundReference", "backgroundReference"),
                       ("assembleCoadd", "compareWarpAssembleCoadd"),
                       ("processCoadd", "processCoadd")):
-    path = os.path.join(getPackageDir("obs_lsst"), "config", filename + ".py")
+    path = os.path.join(os.path.dirname(__file__), filename + ".py")
     if os.path.exists(path):
         getattr(config, sub).load(path)
 

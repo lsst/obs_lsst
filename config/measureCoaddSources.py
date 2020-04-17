@@ -23,16 +23,15 @@
 """LSST-specific overrides for MeasureMergedCoaddSourcesTask"""
 
 import os.path
-from lsst.utils import getPackageDir
 
-config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "apertures.py"))
-config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "kron.py"))
-config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "convolvedFluxes.py"))
-config.measurement.load(os.path.join(getPackageDir("obs_lsst"), "config", "hsm.py"))
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "convolvedFluxes.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "hsm.py"))
+config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
 
 config.match.refObjLoader.ref_dataset_name = "cal_ref_cat"
-config.match.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filterMap.py"))
+config.match.refObjLoader.load(os.path.join(os.path.dirname(__file__), "filterMap.py"))
 config.connections.refCat = "cal_ref_cat"
 
 config.doWriteMatchesDenormalized = True

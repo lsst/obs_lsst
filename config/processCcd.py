@@ -25,10 +25,9 @@ LSST Cam-specific overrides for ProcessCcdTask
 """
 import os.path
 
-from lsst.utils import getPackageDir
 from lsst.meas.algorithms import ColorLimit
 
-obsConfigDir = os.path.join(getPackageDir("obs_lsst"), "config")
+obsConfigDir = os.path.join(os.path.dirname(__file__))
 
 config.isr.load(os.path.join(obsConfigDir, "isr.py"))
 
@@ -59,7 +58,7 @@ config.charImage.measurePsf.psfDeterminer.name = "psfex"
 for refObjLoader in (config.charImage.refObjLoader,
                      config.calibrate.astromRefObjLoader,
                      config.calibrate.photoRefObjLoader):
-    refObjLoader.load(os.path.join(getPackageDir('obs_lsst'), 'config', 'filterMap.py'))
+    refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
     refObjLoader.ref_dataset_name='cal_ref_cat'
 
 config.calibrate.connections.astromRefCat = "cal_ref_cat"

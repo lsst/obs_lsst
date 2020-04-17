@@ -23,7 +23,4 @@
 
 import os.path
 
-from lsst.utils import getPackageDir
-
-config.processCcd.load(os.path.join(getPackageDir("obs_lsst"), "config",
-                                    "imsim", "processCcd.py"))
+config.processCcd.load(os.path.join(os.path.dirname(__file__), "processCcd.py"))

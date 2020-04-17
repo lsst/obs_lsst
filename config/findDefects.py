@@ -1,9 +1,8 @@
 import os.path
-from lsst.utils import getPackageDir
 
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "lsstCamCommon.py"))
-config.isrForFlats.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
-config.isrForDarks.load(os.path.join(getPackageDir("obs_lsst"), "config", "isr.py"))
+config.load(os.path.join(os.path.dirname(__file__), "lsstCamCommon.py"))
+config.isrForFlats.load(os.path.join(os.path.dirname(__file__), "isr.py"))
+config.isrForDarks.load(os.path.join(os.path.dirname(__file__), "isr.py"))
 
 config.ccdKey = 'detector'
 

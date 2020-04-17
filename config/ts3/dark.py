@@ -21,8 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 import os.path
-from lsst.utils import getPackageDir
 
-config.load(os.path.join(getPackageDir("obs_lsst"), "config", "ts3", "ts3.py"))
+config.load(os.path.join(os.path.dirname(__file__), "ts3.py"))
 
 config.repair.cosmicray.nCrPixelMax = 1000000
