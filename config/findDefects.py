@@ -16,7 +16,6 @@ config.isrForDarks.doFlat = False  # don't flatfield darks
 # none of the calibration products exists to perform these yet
 for config in [config.isrForDarks, config.isrForFlats]:
     config.doCrosstalk = False
-    config.doAddDistortionModel = False
     config.doUseOpticsTransmission = False
     config.doUseFilterTransmission = False
     config.doUseSensorTransmission = False
