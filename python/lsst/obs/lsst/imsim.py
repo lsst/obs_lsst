@@ -38,6 +38,7 @@ class ImsimMapper(LsstCamMapper):
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
 
     _cameraName = "imsim"
+    yamlFileList = ["imsim/imsimMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
