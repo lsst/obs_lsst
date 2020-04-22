@@ -262,7 +262,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_imsim_translator(self):
         """Run the gen 2 metadata extraction code for Imsim"""
-        test_data = (("raw/204595/R11/0000000204595-R11-S20-det042.fits",
+        test_data = (("raw/204595/R11/00204595-R11-S20-det042.fits",
                       dict(
                           expTime=30.0,
                           object='UNKNOWN',
