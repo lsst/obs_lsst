@@ -432,6 +432,18 @@ datasets:
     persistable: ignored
     storage: ParquetStorage
     python: lsst.dia.pipe.parquetTable.ParquetTable
+  deepDiff_forced_diaSrcTemplate:
+    description: "Catalog of forced measurements on the difference images at the position of the template catalogs."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForcedTemplate_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    tables: 'raw'
+  deepDiff_forced_diaSrcTemplate_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_forced_dia_template_src.fits
   deepDiff_forced_diaSrc:
     description: "Catalog of forced measurements (shape and position parameters held fixed) on the difference images."
     persistable: SourceCatalog
@@ -455,6 +467,17 @@ datasets:
     storage: FitsCatalogStorage
     python: lsst.afw.table.SourceCatalog
     template: schema/deepDiff_forced_dia_object.fits
+  deepDiff_forced_template_diaSrc:
+    description: "Catalog of forced measurements on the templates at the position of diaSrc objects."
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/templateForcedDiaSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  deepDiff_forced_template_diaSrc_schema:
+    persistable: SourceCatalog
+    storage: FitsCatalogStorage
+    python: lsst.afw.table.SourceCatalog
+    template: schema/deepDiff_forced_template_dia_src.fits
   imageDifferenceDriver_config:
     persistable: Config
     storage: ConfigStorage
@@ -488,11 +511,21 @@ datasets:
     storage: ConfigStorage
     python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCcdDiaDriverConfig
     template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCcdTemplateDia_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCcdTemplateDiaConfig
+    template: config/forcedPhotCcdDiaTemplate.py
   forcedPhotCoaddDia_config:
     persistable: Config
     storage: ConfigStorage
     python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCoaddDiaConfig
     template: config/forcedPhotCoaddDia.py
+  forcedPhotCoaddDiaSrc_config:
+    persistable: Config
+    storage: ConfigStorage
+    python: lsst.dia.pipe.forcedPhotDia.ForcedPhotCoaddDiaSrcConfig
+    template: config/forcedPhotCoaddDiaSrc.py
 
   # Focal plane summary plots
   focal_plane_fits:
