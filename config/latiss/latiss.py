@@ -26,5 +26,6 @@
 if hasattr(config, 'ccdKeys'):
     config.ccdKeys = ['detector', 'detectorName']
 
+config.isr.doDefect = True
 config.isr.doLinearize = False
 config.isr.doCrosstalk = False
