@@ -16,6 +16,7 @@ import logging
 
 import astropy.units as u
 import astropy.units.cds as cds
+from astropy.coordinates import Angle
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
@@ -52,7 +53,6 @@ class LsstPhoSimTranslator(LsstSimTranslator):
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "temperature": ("TEMPERA", dict(unit=u.deg_C)),
         "pressure": ("PRESS", dict(unit=cds.mmHg)),
-        "boresight_rotation_angle": (["ROTANGZ", "ROTANGLE"], dict(unit=u.deg)),
         "boresight_airmass": "AIRMASS",
         "detector_name": "SENSNAME",
         "detector_serial": "LSST_NUM",
@@ -100,3 +100,9 @@ class LsstPhoSimTranslator(LsstSimTranslator):
                                              self.to_datetime_begin(), is_zd=set(["ZENITH"]))
         else:
             return super().to_altaz_begin()
+
+    @cache_translation
+    def to_boresight_rotation_angle(self):
+        angle = Angle(90.*u.deg) - Angle(self.quantity_from_card(["ROTANGZ", "ROTANGLE"], u.deg))
+        angle = angle.wrap_at("360d")
+        return angle
