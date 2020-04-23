@@ -25,4 +25,4 @@ import os.path
 config.load(os.path.join(os.path.dirname(__file__), "lsstCamCommon.py"))
 config.isr.load(os.path.join(os.path.dirname(__file__), "isr.py"))
 
-#config.repair.cosmicray.nCrPixelMax = 100000
+config.repair.cosmicray.nCrPixelMax = 100000
