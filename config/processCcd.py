@@ -79,7 +79,7 @@ config.calibrate.photoCal.applyColorTerms = False
 #colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.0)
 #colors["r-i"] = ColorLimit(primary="r_flux", secondary="i_flux", maximum=0.5)
 config.calibrate.photoCal.match.referenceSelection.doMagLimit = True
-config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
+# config.calibrate.photoCal.match.referenceSelection.magLimit.fluxField = "phot_g_mean"
 config.calibrate.photoCal.match.referenceSelection.magLimit.maximum = 22.0
 # select only stars for photometry calibration
 config.calibrate.photoCal.match.sourceSelection.unresolved.maximum=0.5
