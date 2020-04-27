@@ -1,9 +1,37 @@
 needCalibRegistry: true
 
 levels:
+  # List of keys that are NOT relevant to a particular level
   tract: patch
+  skyTile:
+  - visit
+  - raftName
+  - detectorName
+  - detector
+  expId:
+  - raftName
+  - detectorName
+  - detector
+  visit:
+  - raftName
+  - detectorName
+  - detector
+  - run
+  - dayObs
+  filter:
+  - raftName
+  - detectorName
+  - detector
+  - run
+  - dayObs
 
-defaultLevel: visit
+defaultLevel: sensor
+
+defaultSubLevels:
+   skyTile: sensor
+   expId: sensor
+   visit: sensor
+
 
 exposures:
   _raw:
@@ -241,31 +269,31 @@ calibrations:
     template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
     validRange: true
   bias_camera:
-    template: focalplane/bias/%(calibDate)s/bias_%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    template: focalplane/bias/%(calibDate)s/bias_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   dark_camera:
-    template: focalplane/dark/%(calibDate)s/dark_%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    template: focalplane/dark/%(calibDate)s/dark_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   flat_camera:
-    template: focalplane/flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    template: focalplane/flat/%(calibDate)s/%(filter)s/flat-%(filter)s_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   fringe_camera:
-    template: focalplane/fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    template: focalplane/fringe/%(calibDate)s/%(filter)s/fringe-%(filter)s_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
     level: None
   sky:
-    template: SKY/%(calibDate)s/%(filter)s/SKY-%(calibDate)s-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+    template: sky/%(calibDate)s/%(filter)s/sky-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
     python: lsst.afw.image.ExposureF
     persistable: ExposureF
     storage: FitsStorage
@@ -292,7 +320,7 @@ calibrations:
     validStartName: validStart
     validEndName: validEnd
   sky_camera:
-    template: focalplane/SKY/%(calibDate)s/%(filter)s/SKY-%(filter)s_%(calibDate)s.fits
+    template: focalplane/sky/%(calibDate)s/%(filter)s/sky-%(filter)s_%(calibDate)s.fits
     persistable: ExposureF
     python: lsst.afw.image.ExposureF
     storage: FitsStorage
@@ -337,7 +365,7 @@ datasets:
     tables: raw
     template: ignored
   calexp_camera:
-    template: calexp_camera/%(expId)013d-%(filter)s/%(raftName)s/calexp_camera_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: calexp_camera/%(expId)013d-%(filter)s/calexp_camera_%(expId)013d-%(filter)s.fits
   skyCorr:
     template: skyCorr/%(expId)013d-%(filter)s/%(raftName)s/skyCorr_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   ccdExposureId_bits:

@@ -36,7 +36,7 @@ datasets:
   calexpBackground:
     template: calexp/%(visit)08d-%(filter)s/%(raftName)s/bkgd_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   calexp_camera:
-    template: calexp_camera/%(visit)08d-%(filter)s/%(raftName)s/calexp_camera_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: calexp_camera/%(visit)08d-%(filter)s/calexp_camera_%(visit)08d-%(filter)s.fits
   skyCorr:
     template: skyCorr/%(visit)08d-%(filter)s/%(raftName)s/skyCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_diaSrc:
