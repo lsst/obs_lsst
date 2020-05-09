@@ -29,45 +29,73 @@ from lsst.obs.base.cli.butler_cmd_test import ButlerCmdTestBase
 
 
 class TestButlerCmdLsstComCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstComCam"
-        self.instrument_name = "LSSTComCam"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstComCam"
+
+    @staticmethod
+    def instrumentName():
+        return "LSSTComCam"
 
 
 class TestButlerCmdLsstImSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstImSim"
-        self.instrument_name = "LSST-ImSim"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstImSim"
+
+    @staticmethod
+    def instrumentName():
+        return "LSST-ImSim"
 
 
 class TestButlerCmdLsstPhoSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstPhoSim"
-        self.instrument_name = "LSST-PhoSim"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstPhoSim"
+
+    @staticmethod
+    def instrumentName():
+        return "LSST-PhoSim"
 
 
 class TestButlerCmdLsstTS8(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstTS8"
-        self.instrument_name = "LSST-TS8"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstTS8"
+
+    @staticmethod
+    def instrumentName():
+        return "LSST-TS8"
 
 
 class TestButlerCmdLsstUCDCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstUCDCam"
-        self.instrument_name = "LSST-UCDCam"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstUCDCam"
+
+    @staticmethod
+    def instrumentName():
+        return "LSST-UCDCam"
 
 
 class TestButlerCmdLsstTS3(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.LsstTS3"
-        self.instrument_name = "LSST-TS3"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.LsstTS3"
+
+    @staticmethod
+    def instrumentName():
+        return "LSST-TS3"
 
 
 class TestButlerCmdLatiss(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    def setUp(self):
-        self.instrument_class = "lsst.obs.lsst.Latiss"
-        self.instrument_name = "LATISS"
+    @staticmethod
+    def instrumentClass():
+        return "lsst.obs.lsst.Latiss"
+
+    @staticmethod
+    def instrumentName():
+        return "LATISS"
 
 
 def setup_module(module):
