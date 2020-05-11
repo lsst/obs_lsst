@@ -47,7 +47,9 @@ class ConvertGen2To3TestCase(convertTests.ConvertGen2To3TestCase):
             self.gen2calib = calibpath
 
         super().setUp()
-        self.collections.add(f"calib/{self.instrumentName}")
+
+        if self.gen2calib:
+            self.collections.add(f"calib/{self.instrumentName}")
 
 
 class LatissGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
