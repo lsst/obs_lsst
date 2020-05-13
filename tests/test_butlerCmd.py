@@ -33,19 +33,11 @@ class TestButlerCmdLsstComCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     def instrumentClass():
         return "lsst.obs.lsst.LsstComCam"
 
-    @staticmethod
-    def instrumentName():
-        return "LSSTComCam"
-
 
 class TestButlerCmdLsstImSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     @staticmethod
     def instrumentClass():
         return "lsst.obs.lsst.LsstImSim"
-
-    @staticmethod
-    def instrumentName():
-        return "LSST-ImSim"
 
 
 class TestButlerCmdLsstPhoSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
@@ -53,19 +45,11 @@ class TestButlerCmdLsstPhoSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     def instrumentClass():
         return "lsst.obs.lsst.LsstPhoSim"
 
-    @staticmethod
-    def instrumentName():
-        return "LSST-PhoSim"
-
 
 class TestButlerCmdLsstTS8(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     @staticmethod
     def instrumentClass():
         return "lsst.obs.lsst.LsstTS8"
-
-    @staticmethod
-    def instrumentName():
-        return "LSST-TS8"
 
 
 class TestButlerCmdLsstUCDCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
@@ -73,29 +57,17 @@ class TestButlerCmdLsstUCDCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     def instrumentClass():
         return "lsst.obs.lsst.LsstUCDCam"
 
-    @staticmethod
-    def instrumentName():
-        return "LSST-UCDCam"
-
 
 class TestButlerCmdLsstTS3(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     @staticmethod
     def instrumentClass():
         return "lsst.obs.lsst.LsstTS3"
 
-    @staticmethod
-    def instrumentName():
-        return "LSST-TS3"
-
 
 class TestButlerCmdLatiss(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     @staticmethod
     def instrumentClass():
         return "lsst.obs.lsst.Latiss"
-
-    @staticmethod
-    def instrumentName():
-        return "LATISS"
 
 
 def setup_module(module):
