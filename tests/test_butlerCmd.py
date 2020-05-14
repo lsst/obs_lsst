@@ -29,45 +29,31 @@ from lsst.obs.base.cli.butler_cmd_test import ButlerCmdTestBase
 
 
 class TestButlerCmdLsstComCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstComCam"
+    instrumentClassName = "lsst.obs.lsst.LsstComCam"
 
 
 class TestButlerCmdLsstImSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstImSim"
+    instrumentClassName = "lsst.obs.lsst.LsstImSim"
 
 
 class TestButlerCmdLsstPhoSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstPhoSim"
+    instrumentClassName = "lsst.obs.lsst.LsstPhoSim"
 
 
 class TestButlerCmdLsstTS8(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstTS8"
+    instrumentClassName = "lsst.obs.lsst.LsstTS8"
 
 
 class TestButlerCmdLsstUCDCam(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstUCDCam"
+    instrumentClassName = "lsst.obs.lsst.LsstUCDCam"
 
 
 class TestButlerCmdLsstTS3(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.LsstTS3"
+    instrumentClassName = "lsst.obs.lsst.LsstTS3"
 
 
 class TestButlerCmdLatiss(ButlerCmdTestBase, lsst.utils.tests.TestCase):
-    @staticmethod
-    def instrumentClass():
-        return "lsst.obs.lsst.Latiss"
+    instrumentClassName = "lsst.obs.lsst.Latiss"
 
 
 def setup_module(module):
