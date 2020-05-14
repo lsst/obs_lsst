@@ -68,26 +68,20 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     FilterDefinition(physical_filter='SDSSz+ND_OD3.0', lambdaEff=0.0),
     FilterDefinition(physical_filter='SDSSz+ND_OD0.1', lambdaEff=0.0),
     FilterDefinition(physical_filter='SDSSY+ND_OD0.1', lambdaEff=0.0),
-    # The LSST Filters from L. Jones 04/07/10
-    FilterDefinition(physical_filter="u",
-                     abstract_filter="u",
-                     lambdaEff=364.59, lambdaMin=324.0, lambdaMax=395.0),
-    FilterDefinition(physical_filter="g",
-                     abstract_filter="g",
-                     lambdaEff=476.31, lambdaMin=405.0, lambdaMax=552.0),
-    FilterDefinition(physical_filter="r",
-                     abstract_filter="r",
-                     lambdaEff=619.42, lambdaMin=552.0, lambdaMax=691.0),
-    FilterDefinition(physical_filter="i",
-                     abstract_filter="i",
-                     lambdaEff=752.06, lambdaMin=818.0, lambdaMax=921.0),
-    FilterDefinition(physical_filter="z",
-                     abstract_filter="z",
-                     lambdaEff=866.85, lambdaMin=922.0, lambdaMax=997.0),
-    # official y filter
-    FilterDefinition(physical_filter="y",
-                     abstract_filter="y",
-                     lambdaEff=971.68, lambdaMin=975.0, lambdaMax=1075.0, alias=['y4']),
+    # The LSST Filters from L. Jones 05/14/2020 - "Edges" = 5% of peak throughput
+    # See https://github.com/rhiannonlynne/notebooks/blob/master/Filter%20Characteristics.ipynb
+    FilterDefinition(physical_filter="u", abstract_filter="u",
+                     lambdaEff=368.48, lambdaMin=320.00, lambdaMax=408.60),
+    FilterDefinition(physical_filter="g", abstract_filter="g",
+                     lambdaEff=480.20, lambdaMin=386.40, lambdaMax=567.00),
+    FilterDefinition(physical_filter="r", abstract_filter="r",
+                     lambdaEff=623.12, lambdaMin=537.00, lambdaMax=706.00),
+    FilterDefinition(physical_filter="i", abstract_filter="i",
+                     lambdaEff=754.17, lambdaMin=676.00, lambdaMax=833.00),
+    FilterDefinition(physical_filter="z", abstract_filter="z",
+                     lambdaEff=869.05, lambdaMin=803.00, lambdaMax=938.60),
+    FilterDefinition(physical_filter="y", abstract_filter="y",
+                     lambdaEff=973.64, lambdaMin=908.40, lambdaMax=1099.00)
 )
 
 # LATISS filters include a grating in the name so we need to construct
