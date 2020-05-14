@@ -103,10 +103,8 @@ class LatissTranslator(LsstBaseTranslator):
     """Supports the LATISS instrument."""
 
     _const_map = {
-        # LATISS is not yet attached to a telescope so many translations
-        # are null.
         "instrument": "LATISS",
-        "telescope": "LSSTAuxTel",
+        "telescope": "Rubin Auxiliary Telescope",
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor

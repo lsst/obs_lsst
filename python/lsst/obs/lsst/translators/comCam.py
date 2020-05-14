@@ -15,6 +15,7 @@ __all__ = ("LsstComCamTranslator", )
 import logging
 
 from .lsstCam import LsstCamTranslator
+from .lsst import SIMONYI_TELESCOPE
 
 log = logging.getLogger(__name__)
 
@@ -69,11 +70,11 @@ class LsstComCamTranslator(LsstCamTranslator):
         if "INSTRUME" in header and "TELESCOP" in header:
             telescope = header["TELESCOP"]
             instrument = header["INSTRUME"].lower()
-            if instrument == "comcam" and telescope == "LSST":
+            if instrument == "comcam" and telescope in (SIMONYI_TELESCOPE, "LSST"):
                 return True
             telcode = header.get("TELCODE", None)
             # Some lab data reports that it is LSST_CAMERA
-            if telcode == "CC" and telescope == "LSST":
+            if telcode == "CC" and telescope in (SIMONYI_TELESCOPE, "LSST"):
                 return True
 
         return False
