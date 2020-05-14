@@ -19,7 +19,7 @@ import astropy.utils.exceptions
 from astropy.coordinates import AltAz
 from astro_metadata_translator import cache_translation
 
-from .lsst import LsstBaseTranslator, LSST_LOCATION
+from .lsst import LsstBaseTranslator, SIMONYI_LOCATION, SIMONYI_TELESCOPE
 
 log = logging.getLogger(__name__)
 
@@ -48,10 +48,10 @@ class LsstSimTranslator(LsstBaseTranslator):
         # Docstring will be inherited. Property defined in properties.py
         telescope = None
         if self.is_key_ok("OUTFILE") and self._header["OUTFILE"].startswith("lsst"):
-            telescope = "LSST"
+            telescope = SIMONYI_TELESCOPE
             self._used_these_cards("OUTFILE")
         elif "LSST_NUM" in self._header:
-            telescope = "LSST"
+            telescope = SIMONYI_TELESCOPE
             self._used_these_cards("LSST_NUM")
         return telescope
 
@@ -61,8 +61,8 @@ class LsstSimTranslator(LsstBaseTranslator):
         location = None
         # In theory simulated files might not be for LSST
         tel = self.to_telescope()
-        if tel == "LSST":
-            location = LSST_LOCATION
+        if tel == SIMONYI_TELESCOPE:
+            location = SIMONYI_LOCATION
         else:
             # Try standard FITS headers
             try:

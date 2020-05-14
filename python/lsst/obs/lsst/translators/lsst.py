@@ -10,8 +10,9 @@
 
 """Metadata translation support code for LSST headers"""
 
-__all__ = ("ROLLOVERTIME", "TZERO", "LSST_LOCATION", "read_detector_ids",
-           "compute_detector_exposure_id_generic", "LsstBaseTranslator")
+__all__ = ("ROLLOVERTIME", "TZERO", "SIMONYI_LOCATION", "read_detector_ids",
+           "compute_detector_exposure_id_generic", "LsstBaseTranslator",
+           "SIMONYI_TELESCOPE")
 
 import os.path
 import yaml
@@ -43,7 +44,10 @@ FILTER_DELIMITER = "~"
 GROUP_RE = re.compile(r"^(\d\d\d\d\-\d\d\-\d\dT\d\d:\d\d:\d\d)\.(\d\d\d)(?:[\+#](\d+))?$")
 
 # LSST Default location in the absence of headers
-LSST_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
+SIMONYI_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
+
+# Name of the main survey telescope
+SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 
 obs_lsst_packageDir = getPackageDir("obs_lsst")
 
@@ -155,7 +159,7 @@ class LsstBaseTranslator(FitsTranslator):
     """Maximum number of detectors to use when calculating the
     detector_exposure_id."""
 
-    _DEFAULT_LOCATION = LSST_LOCATION
+    _DEFAULT_LOCATION = SIMONYI_LOCATION
     """Default telescope location in absence of relevant FITS headers."""
 
     @classmethod

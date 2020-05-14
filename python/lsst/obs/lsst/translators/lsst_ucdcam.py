@@ -43,7 +43,7 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
 
     _const_map = {
         # TS8 is not attached to a telescope so many translations are null.
-        "telescope": "LSST",
+        "telescope": None,
         "location": None,
         "boresight_rotation_coord": None,
         "boresight_rotation_angle": None,

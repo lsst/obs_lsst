@@ -18,7 +18,7 @@ import astropy.units as u
 # from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
 
-from .lsst import LsstBaseTranslator
+from .lsst import LsstBaseTranslator, SIMONYI_TELESCOPE
 
 log = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class LsstCamTranslator(LsstBaseTranslator):
     """Supports the lsstCam instrument."""
 
     _const_map = {
-        "telescope": "LSST",
+        "telescope": SIMONYI_TELESCOPE,
         # Migrate these to full translations once test data appears that
         # includes them
         "boresight_rotation_coord": "unknown",
