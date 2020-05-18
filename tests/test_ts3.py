@@ -34,7 +34,7 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts3"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 201607220607067, 'detectorName': 'S00', 'raftName': 'R071'},
+        dataIds = {'raw': {'expId': 201607220607067, 'detectorName': 'S00', 'raftName': 'R071'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
@@ -51,10 +51,17 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4352, 4096),
                       }
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': '550CutOn'}, 2),
-                       ({'level': 'sensor', 'visit': 201607220607067}, 1),
-                       ({'level': 'filter', 'visit': 201607220607067}, 1),
-                       ({'level': 'visit', 'filter': '550CutOn'}, 2)
+        raw_subsets = (({'level': 'sensor'}, 2),
+                       ({'level': 'sensor', 'filter': '550CutOn'}, 2),
+                       ({'level': 'sensor', 'detector': 71}, 1),
+                       ({'level': 'sensor', 'raftName': 'R433'}, 1),
+                       ({'level': 'sensor', 'raftName': 'R999'}, 0),
+                       ({'level': 'sensor', 'expId': 201607220607067}, 1),
+                       ({'level': 'filter'}, 2),
+                       ({'level': 'filter', 'expId': 201607220607067}, 1),
+                       ({'level': 'expId'}, 2),
+                       ({'level': 'expId', 'filter': '550CutOn'}, 2),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -75,8 +82,8 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum',))
-        query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 201607220607067}, [(201607220607067, '550CutOn')]),
+        query_format = ["expId", "filter"]
+        queryMetadata = (({'expId': 201607220607067}, [(201607220607067, '550CutOn')]),
                          ({'detector': 71}, [(201607220607067, '550CutOn')]),
                          ({'detectorName': 'S00', 'raftName': 'R071'}, [(201607220607067, '550CutOn')]),
                          )
@@ -87,10 +94,11 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
         raw_filename = '201607220607067-R071-S00-det071.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'run'])),
+                      ('filter', set(['expId'])),
+                      ('expId', set(['expId', 'run']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
