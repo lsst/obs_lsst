@@ -542,7 +542,7 @@ datasets:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/plot-v%(expId)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/plot-v%(visit)d-%(description)s-%(style)s.png
   plotCompareCoadd:
     persistable: None
     python: None
@@ -552,7 +552,7 @@ datasets:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/compareVisit-v%(expId)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
   # ISR stage thumbnails
   ossThumb:
     template: thumbs/%(expId)013d-%(filter)s/%(raftName)s/ossThumb_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
