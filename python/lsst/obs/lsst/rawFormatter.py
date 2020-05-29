@@ -29,7 +29,7 @@ from astro_metadata_translator import fix_header, merge_headers
 import lsst.afw.fits
 from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
 
-from .instrument import LsstCam, Latiss, \
+from ._instrument import LsstCam, Latiss, \
     LsstImSim, LsstPhoSim, LsstTS8, \
     LsstTS3, LsstUCDCam, LsstComCam
 from .translators import LatissTranslator, LsstCamTranslator, \

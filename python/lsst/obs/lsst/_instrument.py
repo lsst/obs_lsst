@@ -27,7 +27,7 @@ import os.path
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.daf.butler.core.utils import getFullTypeName
 from lsst.utils import getPackageDir
-from lsst.obs.base.instrument import Instrument
+from lsst.obs.base import Instrument
 from lsst.obs.base.gen2to3 import TranslatorFactory
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS
 
