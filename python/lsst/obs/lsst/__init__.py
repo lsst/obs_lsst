@@ -23,4 +23,4 @@
 from .version import *
 from .lsstCamMapper import *
 from .filters import *
-from .instrument import *
+from ._instrument import *
