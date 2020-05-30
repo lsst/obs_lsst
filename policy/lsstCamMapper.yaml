@@ -497,33 +497,33 @@ datasets:
      template: 'calibrations/crosstalk/crosstalk-det%(detector)03d.yaml'
   plotCoadd:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/%(filter)s/tract-%(tract)d/plot-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
   plotSky:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/%(filter)s/sky/plot-%(filter)s-%(description)s-%(style)s.png
   plotColor:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/color/tract-%(tract)d/plot-t%(tract)d-%(description)s-%(style)s.png
   plotVisit:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/plot-v%(expId)d-%(description)s-%(style)s.png
   plotCompareCoadd:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/%(filter)s/tract-%(tract)d/compare-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
   plotCompareVisit:
     persistable: None
-    python: builtins.str
-    storage: TextStorage
+    python: None
+    storage: MatplotlibStorage
     template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/compareVisit-v%(expId)d-%(description)s-%(style)s.png
   # ISR stage thumbnails
   ossThumb:
