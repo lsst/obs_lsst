@@ -35,7 +35,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "latiss"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 3018092000065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
+        dataIds = {'raw': {'expId': 3018092000065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'bias': {'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
@@ -52,10 +52,17 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': '????~????'}, 1),
-                       ({'level': 'sensor', 'visit': 3018092000065}, 1),
-                       ({'level': 'filter', 'visit': 3018092000065}, 1),
-                       ({'level': 'visit', 'filter': '????~????'}, 1)
+        raw_subsets = (({'level': 'sensor'}, 1),
+                       ({'level': 'sensor', 'filter': '????~????'}, 1),
+                       ({'level': 'sensor', 'filter': 'foo'}, 0),
+                       ({'level': 'sensor', 'dayObs': '2018-09-20'}, 1),
+                       ({'level': 'sensor', 'expId': 3018092000065}, 1),
+                       ({'level': 'sensor', 'expId': 9999999999999}, 0),
+                       ({'level': 'filter'}, 1),
+                       ({'level': 'filter', 'expId': 3018092000065}, 1),
+                       ({'level': 'expId'}, 1),
+                       ({'level': 'expId', 'filter': '????~????'}, 1),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -76,8 +83,8 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'seqNum'))
-        query_format = ["visit", "seqNum", "dayObs"]
-        queryMetadata = (({'visit': 3018092000065}, [(3018092000065, 65, '2018-09-20')]),
+        query_format = ["expId", "seqNum", "dayObs"]
+        queryMetadata = (({'expId': 3018092000065}, [(3018092000065, 65, '2018-09-20')]),
                          ({'detector': 0}, [(3018092000065, 65, '2018-09-20')]),
                          ({'seqNum': 65}, [(3018092000065, 65, '2018-09-20')]),
                          )
@@ -88,10 +95,11 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
         raw_filename = '3018092000065-det000.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'dayObs'])),
-                      ('filter', set(['expId', 'detector', 'dayObs'])),
-                      ('visit', set(['expId', 'detector', 'dayObs']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'dayObs'])),
+                      ('skyTile', set(['expId', 'dayObs'])),
+                      ('filter', set(['expId'])),
+                      ('expId', set(['expId', 'dayObs']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

@@ -34,7 +34,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "comCam"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 3019053000001, 'detectorName': 'S00', 'raftName': 'R22'},
+        dataIds = {'raw': {'expId': 3019053000001, 'detectorName': 'S00', 'raftName': 'R22'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
@@ -58,10 +58,14 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       }
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': 'NONE'}, 1),
+        raw_subsets = (({'level': 'sensor'}, 1),
+                       ({'level': 'sensor', 'filter': 'NONE'}, 1),
+                       ({'level': 'sensor', 'filter': 'foo'}, 0),
                        ({'level': 'sensor', 'visit': 3019053000001}, 1),
                        ({'level': 'filter', 'visit': 3019053000001}, 1),
-                       ({'level': 'visit', 'filter': 'NONE'}, 1)
+                       ({'level': 'expId'}, 1),
+                       ({'level': 'expId', 'filter': 'NONE'}, 1),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -83,8 +87,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum'))
-        query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 3019053000001}, [(3019053000001, 'NONE')]),
+        query_format = ["expId", "filter"]
+        queryMetadata = (({'expId': 3019053000001}, [(3019053000001, 'NONE')]),
                          ({'filter': 'NONE'}, [(3019053000001, 'NONE')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
@@ -94,10 +98,11 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         metadata_output_path = os.path.join("processCcd_metadata/3019053000001-NONE/R22",
                                             "processCcdMetadata_3019053000001-NONE-R22-S00-det000.yaml")
         raw_filename = '3019053000001-R22-S00-det000.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'run'])),
+                      ('filter', set(['expId'])),
+                      ('expId', set(['expId', 'run']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

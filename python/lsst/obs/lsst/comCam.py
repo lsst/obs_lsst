@@ -37,7 +37,6 @@ class LsstComCamMapper(LsstCamMapper):
     translatorClass = LsstComCamTranslator
     MakeRawVisitInfoClass = LsstComCamMakeRawVisitInfo
     _cameraName = "comCam"
-    yamlFileList = ["comCam/comCamMapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
 
 class LsstComCamParseTask(LsstCamParseTask):

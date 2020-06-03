@@ -34,7 +34,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
+        dataIds = {'raw': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
@@ -50,10 +50,15 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         detector_serials = {'raw': 'ITL-3800C-102-Dev'}
         dimensions = {'raw': Extent2I(4176, 4020)}
         sky_origin = (55.67759886, -30.44239357)
-        raw_subsets = (({'level': 'sensor', 'filter': 'i'}, 1),
+        raw_subsets = (({'level': 'sensor'}, 1),
+                       ({'level': 'sensor', 'filter': 'i'}, 1),
+                       ({'level': 'sensor', 'filter': 'foo'}, 0),
                        ({'level': 'sensor', 'visit': 204595}, 1),
+                       ({'level': 'filter'}, 1),
                        ({'level': 'filter', 'visit': 204595}, 1),
-                       ({'level': 'visit', 'filter': 'i'}, 1)
+                       ({'level': 'expId'}, 1),
+                       ({'level': 'expId', 'filter': 'i'}, 1),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -74,8 +79,8 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum',))
-        query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 204595}, [(204595, 'i')]),
+        query_format = ["expId", "filter"]
+        queryMetadata = (({'expId': 204595}, [(204595, 'i')]),
                          ({'filter': 'i'}, [(204595, 'i')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
@@ -85,10 +90,11 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         metadata_output_path = os.path.join('processCcd_metadata', '00204595-i', 'R11',
                                             'processCcdMetadata_00204595-i-R11-S20-det042.yaml')
         raw_filename = '00204595-R11-S20-det042.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'run'])),
+                      ('filter', set(['expId'])),
+                      ('expId', set(['expId', 'run']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

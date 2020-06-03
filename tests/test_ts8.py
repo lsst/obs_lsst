@@ -34,7 +34,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts8"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 201807241028453, 'detectorName': 'S11', 'raftName': 'RTM-010'},
+        dataIds = {'raw': {'expId': 201807241028453, 'detectorName': 'S11', 'raftName': 'RTM-010'},
                    'bias': {'detectorName': 'S11', 'raftName': 'RTM-010',
                             'dateObs': '2018-07-24T10:28:45.342'},
                    'flat': unittest.SkipTest,
@@ -52,10 +52,14 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4096, 4004)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor', 'filter': 'z'}, 1),
-                       ({'level': 'sensor', 'visit': 201807241028453}, 1),
-                       ({'level': 'filter', 'visit': 201807241028453}, 1),
-                       ({'level': 'visit', 'filter': 'z'}, 1)
+        raw_subsets = (({'level': 'sensor'}, 1),
+                       ({'level': 'sensor', 'filter': 'z'}, 1),
+                       ({'level': 'sensor', 'filter': 'foo'}, 0),
+                       ({'level': 'sensor', 'expId': 201807241028453}, 1),
+                       ({'level': 'filter', 'expId': 201807241028453}, 1),
+                       ({'level': 'expId'}, 1),
+                       ({'level': 'expId', 'filter': 'z'}, 1),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -76,8 +80,8 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum',))
-        query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 201807241028453}, [(201807241028453, 'z')]),
+        query_format = ["expId", "filter"]
+        queryMetadata = (({'expId': 201807241028453}, [(201807241028453, 'z')]),
                          ({'detector': 67}, [(201807241028453, 'z')]),
                          ({'detectorName': 'S11', 'raftName': 'RTM-010'}, [(201807241028453, 'z')]),
                          )
@@ -88,10 +92,11 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         metadata_output_path = None  # Not on sky data so processCcd not run.
 
         raw_filename = '201807241028453-RTM-010-S11-det067.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'run'])),
+                      ('filter', set(['expId'])),
+                      ('expId', set(['expId', 'run']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,

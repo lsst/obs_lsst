@@ -34,10 +34,10 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "imsim"
 
     def setUp(self):
-        dataIds = {'raw': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
-                   'bias': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
-                   'flat': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11', 'filter': 'i'},
-                   'dark': {'visit': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
+        dataIds = {'raw': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
+                   'bias': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
+                   'flat': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11', 'filter': 'i'},
+                   'dark': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
 
@@ -78,10 +78,15 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       'flat': Extent2I(4072, 4000),
                       }
         sky_origin = (55.67759886, -30.44239357)
-        raw_subsets = (({'level': 'sensor', 'filter': 'i'}, 1),
-                       ({'level': 'sensor', 'visit': 204595}, 1),
-                       ({'level': 'filter', 'visit': 204595}, 1),
-                       ({'level': 'visit', 'filter': 'i'}, 1)
+        raw_subsets = (({'level': 'sensor'}, 1),
+                       ({'level': 'sensor', 'filter': 'i'}, 1),
+                       ({'level': 'sensor', 'filter': 'foo'}, 0),
+                       ({'level': 'sensor', 'expId': 204595}, 1),
+                       ({'level': 'filter', 'expId': 204595}, 1),
+                       ({'level': 'filter'}, 1),
+                       ({'level': 'expId'}, 1),
+                       ({'level': 'expId', 'filter': 'i'}, 1),
+                       ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -115,10 +120,11 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                             'processCcdMetadata_00204595'
                                             '-i-R11-S20-det042.yaml')
         raw_filename = '00204595-R11-S20-det042.fits'
-        default_level = 'visit'
-        raw_levels = (('skyTile', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('filter', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('visit', set(['expId', 'detector', 'run', 'detectorName', 'raftName']))
+        default_level = 'sensor'
+        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'run'])),
+                      ('filter', set(['expId'])),
+                      ('visit', set(['expId']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
