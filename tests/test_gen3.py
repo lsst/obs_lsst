@@ -31,11 +31,8 @@ import numpy as np
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstImSim, LsstPhoSim,
                            LsstTS8, LsstTS3, LsstUCDCam, Latiss)
 
-try:
-    from lsst.daf.butler import Butler, DatasetType, StorageClassFactory
-    haveGen3 = True
-except ImportError:
-    haveGen3 = False
+from lsst.daf.butler import (Butler, DatasetType, FileDescriptor, Location,
+                             StorageClass, StorageClassFactory)
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -45,7 +42,6 @@ TESTDIR = os.path.abspath(os.path.dirname(__file__))
 PRINT_PROFILE = False
 
 
-@unittest.skipUnless(haveGen3, "daf_butler not setup")
 class TestInstruments(unittest.TestCase):
 
     def setUp(self):
