@@ -42,7 +42,8 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
     """Name of this translation class"""
 
     _const_map = {
-        # TS8 is not attached to a telescope so many translations are null.
+        # UCDCam is not attached to a telescope so many translations are null.
+        "instrument": "LSST-UCDCam",
         "telescope": None,
         "location": None,
         "boresight_rotation_coord": None,
@@ -177,18 +178,6 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
         # Use 1 second resolution
         exposure_id = re.sub(r"\D", "", dateobs[:19])
         return int(exposure_id)
-
-    @cache_translation
-    def to_instrument(self):
-        """Calculate the instrument name.
-
-        Returns
-        -------
-        instrume : `str`
-            Name of the test stand.  We do not distinguish between ITL and
-            E2V.
-        """
-        return self.name
 
     @cache_translation
     def to_datetime_begin(self):
