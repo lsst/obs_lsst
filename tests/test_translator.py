@@ -135,7 +135,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
     def test_comCam_translator(self):
         test_data = (("comCam-CC_C_20190530_000001_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
-                           instrument="LSST-ComCam",
+                           instrument="LSSTComCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.398*u.s,
                            detector_exposure_id=3019053000001000,
@@ -157,7 +157,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            visit_id=3019053000001)),
                      ("comCam-CC_C_20190526_000223_R22_S01.yaml",
                       dict(telescope="Simonyi Survey Telescope",
-                           instrument="LSST-ComCam",
+                           instrument="LSSTComCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.034*u.s,
                            detector_exposure_id=3019052600223001,
