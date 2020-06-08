@@ -39,7 +39,7 @@ class LsstComCamTranslator(LsstCamTranslator):
     """Name of this translation class"""
 
     _const_map = {
-        "instrument": "LSST-ComCam",
+        "instrument": "LSSTComCam",
     }
 
     # Use the comCam raft definition

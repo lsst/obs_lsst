@@ -34,6 +34,7 @@ class LsstTS8Translator(LsstBaseTranslator):
 
     _const_map = {
         # TS8 is not attached to a telescope so many translations are null.
+        "instrument": "LSST-TS8",
         "telescope": None,
         "location": None,
         "boresight_rotation_coord": None,
@@ -123,17 +124,6 @@ class LsstTS8Translator(LsstBaseTranslator):
         # and read the first 21 characters.
         exposure_id = re.sub(r"\D", "", dateobs[:21])
         return int(exposure_id)
-
-    @cache_translation
-    def to_instrument(self):
-        """Calculate the instrument name.
-
-        Returns
-        -------
-        instrume : `str`
-            Name of the test stand.
-        """
-        return "LSST-TS8"
 
     @cache_translation
     def to_datetime_begin(self):

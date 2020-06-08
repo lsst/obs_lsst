@@ -31,13 +31,11 @@ import numpy as np
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstImSim, LsstPhoSim,
                            LsstTS8, LsstTS3, LsstUCDCam, Latiss)
 
-try:
-    from lsst.daf.butler import Butler, DatasetType, StorageClassFactory
-    haveGen3 = True
-except ImportError:
-    haveGen3 = False
+from lsst.daf.butler import (Butler, DatasetType, FileDescriptor, Location,
+                             StorageClass, StorageClassFactory)
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
+DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
 
 # This test is unfortunately slow; leave a profiling option in in case we want
 # to improve it later.  Initial version is about 60% YamlCamera construction
@@ -45,7 +43,6 @@ TESTDIR = os.path.abspath(os.path.dirname(__file__))
 PRINT_PROFILE = False
 
 
-@unittest.skipUnless(haveGen3, "daf_butler not setup")
 class TestInstruments(unittest.TestCase):
 
     def setUp(self):
@@ -70,12 +67,19 @@ class TestInstruments(unittest.TestCase):
             stats.sort_stats("cumtime")
             stats.print_stats()
 
-    def checkInstrumentWithRegistry(self, cls):
+    def checkInstrumentWithRegistry(self, cls, testRaw):
 
         Butler.makeRepo(self.root)
         butler = Butler(self.root, run="tests")
         instrument = cls()
         scFactory = StorageClassFactory()
+
+        # Check instrument class and metadata translator agree on
+        # instrument name -- use the raw formatter to do the file reading
+        rawFormatterClass = instrument.getRawFormatter({})
+        formatter = rawFormatterClass(FileDescriptor(Location(DATAROOT, testRaw), StorageClass("x")))
+        obsInfo = formatter.observationInfo
+        self.assertEqual(instrument.getName(), obsInfo.instrument)
 
         # Add Instrument, Detector, and PhysicalFilter entries to the
         # Butler Registry.
@@ -126,28 +130,36 @@ class TestInstruments(unittest.TestCase):
             self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
 
     def testLsstCam(self):
-        self.checkInstrumentWithRegistry(LsstCam)
+        self.checkInstrumentWithRegistry(LsstCam,
+                                         "lsstCam/raw/6489D/R10/3019032200002-R10-S22-det035.fits")
 
     def testComCam(self):
-        self.checkInstrumentWithRegistry(LsstComCam)
+        self.checkInstrumentWithRegistry(LsstComCam,
+                                         "comCam/raw/unknown/R22/3019053000001-R22-S00-det000.fits")
 
     def testImSim(self):
-        self.checkInstrumentWithRegistry(LsstImSim)
+        self.checkInstrumentWithRegistry(LsstImSim,
+                                         "imsim/raw/204595/R11/00204595-R11-S20-det042.fits")
 
     def testPhoSim(self):
-        self.checkInstrumentWithRegistry(LsstPhoSim)
+        self.checkInstrumentWithRegistry(LsstPhoSim,
+                                         "phosim/raw/204595/R11/00204595-R11-S20-det042.fits")
 
     def testTs8(self):
-        self.checkInstrumentWithRegistry(LsstTS8)
+        self.checkInstrumentWithRegistry(LsstTS8,
+                                         "ts8/raw/6006D/201807241028453-RTM-010-S11-det067.fits")
 
     def testTs3(self):
-        self.checkInstrumentWithRegistry(LsstTS3)
+        self.checkInstrumentWithRegistry(LsstTS3,
+                                         "ts3/raw/2016-07-22/201607220607067-R071-S00-det071.fits")
 
     def testUcdCam(self):
-        self.checkInstrumentWithRegistry(LsstUCDCam)
+        self.checkInstrumentWithRegistry(LsstUCDCam,
+                                         "ucd/raw/2018-12-05/20181205233148-S00-det000.fits")
 
     def testLatiss(self):
-        self.checkInstrumentWithRegistry(Latiss)
+        self.checkInstrumentWithRegistry(Latiss,
+                                         "latiss/raw/2018-09-20/3018092000065-det000.fits")
 
 
 if __name__ == "__main__":

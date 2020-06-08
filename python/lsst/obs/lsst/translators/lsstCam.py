@@ -22,6 +22,9 @@ from .lsst import LsstBaseTranslator, SIMONYI_TELESCOPE
 
 log = logging.getLogger(__name__)
 
+# Normalized name of the LSST Camera
+LSST_CAM = "LSSTCam"
+
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -42,13 +45,14 @@ def is_non_science_or_lab(self):
 class LsstCamTranslator(LsstBaseTranslator):
     """Metadata translation for the main LSST Camera."""
 
-    name = "LSSTCam"
+    name = LSST_CAM
     """Name of this translation class"""
 
-    supported_instrument = "LSSTCam"
+    supported_instrument = LSST_CAM
     """Supports the lsstCam instrument."""
 
     _const_map = {
+        "instrument": LSST_CAM,
         "telescope": SIMONYI_TELESCOPE,
         # Migrate these to full translations once test data appears that
         # includes them
