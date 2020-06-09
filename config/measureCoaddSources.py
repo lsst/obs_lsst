@@ -42,7 +42,11 @@ config.doWriteMatchesDenormalized = True
 # algorithm based on a configuration parameter; see DM-4159 for a discussion.  The name
 # BRIGHT_MASK must match assembleCoaddConfig.brightObjectMaskName
 #
-config.measurement.plugins["base_PixelFlags"].masksFpCenter.append("BRIGHT_OBJECT")
-config.measurement.plugins["base_PixelFlags"].masksFpAnywhere.append("BRIGHT_OBJECT")
+if 'BRIGHT_OBJECT' not in config.measurement.plugins["base_PixelFlags"].masksFpCenter:
+    config.measurement.plugins["base_PixelFlags"].masksFpCenter.append("BRIGHT_OBJECT")
+if 'BRIGHT_OBJECT' not in config.measurement.plugins["base_PixelFlags"].masksFpAnywhere:
+    config.measurement.plugins["base_PixelFlags"].masksFpAnywhere.append("BRIGHT_OBJECT")
 
 config.measurement.plugins.names |= ["base_InputCount"]
+
+config.propagateFlags.ccdName = 'detector'

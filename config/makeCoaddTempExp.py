@@ -33,5 +33,4 @@ config.modelPsf.defaultFwhm = 7.7
 # FUTURE: Set to True when we decide to run jointcal
 config.doApplyUberCal = False
 
-# FUTURE: Set to True when we have sky background estimate
-config.doApplySkyCorr = False
+config.doApplySkyCorr = True
