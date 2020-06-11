@@ -1,5 +1,5 @@
 description: obs_lsst/latiss flat calibration construction
-instrument: lsst.obs.lsst.gen3.LatissInstrument
+instrument: lsst.obs.lsst.Latiss
 # Do not inherit until defect/linearize/ct work
 # inherits:
 #   location: $CP_PIPE_DIR/pipelines/cpFlat.yaml
@@ -21,20 +21,25 @@ tasks:
       doFlat: False
       doFringe: False
       doApplyGains: False
+  cpFlatMeasure:
+    class: lsst.cp.pipe.cpFlatNormTask.CpFlatMeasureTask
+    config:
+      connections.inputExp: 'cpFlatProc'
+      connections.outputStats: 'flatStats'
   cpFlatNorm:
     class: lsst.cp.pipe.cpFlatNormTask.CpFlatNormalizationTask
     config:
-      connections.inputExps: 'isr_metadata'
-      connections.outputScales: 'cpFlatNorm_yaml'
+      connections.inputMDs: 'flatStats'
+      connections.outputScales: 'cpFlatNormScales'
   cpCombine:
-    class: lsst.cp.pipe.cpFunctions.CalibCombineTask
+    class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpFlatProc'
-      connections.inputScales: 'cpFlatNorm_yaml'
+      connections.inputScales: 'cpFlatNormScales'
       connections.outputData: 'flatProposal'
       calibrationType: 'flat'
       calibrationDimensions: ['physical_filter']
       exposureScaling: InputList
-      scalingLevel: Amplifier
+      scalingLevel: AMP
 contracts:
   - isr.doFlat == False

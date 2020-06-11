@@ -1,5 +1,5 @@
 description: obs_lsst/latiss fringe calibration construction
-instrument: lsst.obs.lsst.gen3.LatissInstrument
+instrument: lsst.obs.lsst.Latiss
 # Do not inherit until defects/linearize/ct is fixed.
 # inherits:
 #   location: $CP_PIPE_DIR/pipelines/cpFringe.yaml
@@ -8,7 +8,7 @@ tasks:
     class: lsst.ip.isr.isrTask.IsrTask
     config:
       connections.ccdExposure: 'raw'
-      connections.outputExposure: 'cpFringeISR'
+      connections.outputExposure: 'cpFringeIsr'
       doBias: True
       doVariance: True
       doLinearize: False
@@ -23,10 +23,10 @@ tasks:
   cpFringe:
     class: lsst.cp.pipe.cpFringeTask.CpFringeTask
     config:
-      connections.inputExp: 'cpFringeISR'
+      connections.inputExp: 'cpFringeIsr'
       connections.outputExp: 'cpFringeProc'
   cpCombine:
-    class: lsst.cp.pipe.cpFunctions.CalibCombineTask
+    class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpFringeProc'
       connections.outputData: 'fringeProposal'
