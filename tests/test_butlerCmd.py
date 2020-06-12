@@ -56,6 +56,11 @@ class TestButlerCmdLatiss(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.Latiss"
 
 
+class TestMultiple(ButlerCmdTestBase, lsst.utils.tests.TestCase):
+    instrumentClassName = "lsst.obs.lsst.Latiss"
+    secondInstrumentClassName = "lsst.obs.lsst.LsstTS3"
+
+
 def setup_module(module):
     lsst.utils.tests.init()
 
