@@ -27,7 +27,7 @@ __all__ = ("LsstCamRawFormatter", "LatissRawFormatter")
 from astro_metadata_translator import fix_header, merge_headers
 
 import lsst.afw.fits
-from lsst.obs.base.fitsRawFormatterBase import FitsRawFormatterBase
+from lsst.obs.base import FitsRawFormatterBase
 
 from ._instrument import LsstCam, Latiss, \
     LsstImSim, LsstPhoSim, LsstTS8, \
