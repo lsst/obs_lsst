@@ -32,8 +32,10 @@ config.load(os.path.join(getPackageDir("obs_lsst"), "config", "cmodel.py"))
 
 config.measurement.slots.gaussianFlux = None
 
-config.measurement.plugins['base_PixelFlags'].masksFpCenter.append('BRIGHT_OBJECT')
-config.measurement.plugins['base_PixelFlags'].masksFpAnywhere.append('BRIGHT_OBJECT')
+if 'BRIGHT_OBJECT' not in config.measurement.plugins['base_PixelFlags'].masksFpCenter:
+    config.measurement.plugins['base_PixelFlags'].masksFpCenter.append('BRIGHT_OBJECT')
+if 'BRIGHT_OBJECT' not in config.measurement.plugins['base_PixelFlags'].masksFpAnywhere:
+    config.measurement.plugins['base_PixelFlags'].masksFpAnywhere.append('BRIGHT_OBJECT')
 
 config.catalogCalculation.plugins.names = ["base_ClassificationExtendedness"]
 config.measurement.slots.psfFlux = "base_PsfFlux"
