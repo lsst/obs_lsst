@@ -27,6 +27,7 @@ import lsst.log as lsstLog
 from .translators.lsst import ROLLOVERTIME
 from .translators import LsstCamTranslator
 from .lsstCamMapper import LsstCamMapper
+from ._fitsHeader import readRawFitsHeader
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
@@ -47,6 +48,29 @@ class LsstCamParseTask(ParseTask):
         super().__init__(config, *args, **kwargs)
 
         self.observationInfo = None
+
+    def getInfo(self, filename):
+        """Get information about the image from the filename and its contents
+
+        Here, we open the image and parse the header.
+
+        Parameters
+        ----------
+        filename : `str`
+            Name of file to inspect
+
+        Returns
+        -------
+        info : `dict`
+            File properties
+        linfo : `list` of `dict`
+            List of file properties. Always contains the same as ``info``
+            because no extensions are read.
+        """
+        md = readRawFitsHeader(filename, translator_class=self._translatorClass)
+        phuInfo = self.getInfoFromMetadata(md)
+        # No extensions to worry about
+        return phuInfo, [phuInfo]
 
     def getInfoFromMetadata(self, md, info=None):
         """Attempt to pull the desired information out of the header.
