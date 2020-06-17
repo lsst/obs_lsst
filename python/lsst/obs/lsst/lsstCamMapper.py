@@ -23,17 +23,15 @@
 """The LsstCam Mapper."""  # necessary to suppress D100 flake8 warning.
 
 import os
-import re
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
 import lsst.afw.image as afwImage
-from lsst.afw.fits import readMetadata
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo
 import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 from .translators import LsstCamTranslator
-from astro_metadata_translator import fix_header
+from ._fitsHeader import readRawFitsHeader
 
 from .filters import LSSTCAM_FILTER_DEFINITIONS
 from .assembly import attachRawWcsFromBoresight, fixAmpsAndAssemble
@@ -73,7 +71,6 @@ def assemble_raw(dataId, componentInfo, cls):
     ampExps = componentInfo['raw_amp'].obj
     exposure = fixAmpsAndAssemble(ampExps, str(dataId))
     md = componentInfo['raw_hdu'].obj
-    fix_header(md)  # No mapper so cannot specify the translator class
     exposure.setMetadata(md)
 
     if not attachRawWcsFromBoresight(exposure):
@@ -380,17 +377,22 @@ class LsstCamBaseMapper(CameraMapper):
         """
         return self.map__raw_visitInfo(*args, **kwargs)
 
+    def bypass_raw_md(self, datasetType, pythonType, location, dataId):
+        fileName = location.getLocationsWithRoot()[0]
+        md = readRawFitsHeader(fileName, translator_class=self.translatorClass)
+        return md
+
+    def bypass_raw_hdu(self, datasetType, pythonType, location, dataId):
+        # We need to override raw_hdu so that we can trap a request
+        # for the primary HDU and merge it with the default content.
+        fileName = location.getLocationsWithRoot()[0]
+        md = readRawFitsHeader(fileName, translator_class=self.translatorClass)
+        return md
+
     def bypass_raw_visitInfo(self, datasetType, pythonType, location, dataId):
         fileName = location.getLocationsWithRoot()[0]
-        mat = re.search(r"\[(\d+)\]$", fileName)
-        if mat:
-            hdu = int(mat.group(1))
-            md = readMetadata(fileName, hdu=hdu)
-        else:
-            md = readMetadata(fileName)  # or hdu = INT_MIN; -(1 << 31)
-
+        md = readRawFitsHeader(fileName, translator_class=self.translatorClass)
         makeVisitInfo = self.MakeRawVisitInfoClass(log=self.log)
-        fix_header(md, translator_class=self.translatorClass)
         return makeVisitInfo(md)
 
     def std_raw_amp(self, item, dataId):

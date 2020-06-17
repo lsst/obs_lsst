@@ -22,12 +22,14 @@
 import os
 import sys
 import unittest
+import unittest.mock
 
 import lsst.utils.tests
 from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
 class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
@@ -119,6 +121,38 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         super().setUp()
+
+    def testMetadata(self):
+        """Check that we can read headers properly"""
+        dataId = {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
+        md = self.butler.get("raw_md", dataId)
+
+        # This header comes from amp header
+        self.assertEqual(md["PRESS"], 520.0)
+
+        # This header is in HDU0
+        self.assertEqual(md["TESTTYPE"], "PHOSIM")
+
+        visitInfo = self.butler.get("raw_visitInfo", dataId)
+        weather = visitInfo.getWeather()
+        self.assertEqual(weather.getAirTemperature(), 20.0)
+
+        # Check that corrections are being applied
+        with unittest.mock.patch.dict(os.environ,
+                                      {"METADATA_CORRECTIONS_PATH": os.path.join(TESTDIR, "data")}):
+            # Check that corrections are applied during simple md get
+            md_md = self.butler.get("raw_md", dataId)
+            self.assertEqual(md_md["NEWHDR"], "corrected")
+
+            # Check that corrections are applied if we do assembly
+            raw = self.butler.get("raw", dataId)
+            raw_md = raw.getMetadata()
+            self.assertEqual(raw_md, md_md)
+
+            # And finally ensure that visitInfo gets corrections
+            visitInfo = self.butler.get("raw_visitInfo", dataId)
+            weather = visitInfo.getWeather()
+            self.assertEqual(weather.getAirTemperature(), 10.0)
 
     def testCcdExposureId(self):
         with self.assertRaises(KeyError):
