@@ -25,7 +25,7 @@
 Miscellaneous utilities related to lsst cameras
 """
 
-__all__ = ("readRawFile", "readRawFitsHeader")
+__all__ = ("readRawFile",)
 
 from .lsstCamMapper import assemble_raw
 from .assembly import readRawAmps
