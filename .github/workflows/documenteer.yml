@@ -1,0 +1,26 @@
+name: Build package docs
+on: [push, pull_request]
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    container:
+      image: lsstsqre/centos:d_latest
+      options: "--user root"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: install
+        run: |
+          source /opt/lsst/software/stack/loadLSST.bash
+          conda install graphviz
+          cd /tmp
+          curl -LO https://raw.githubusercontent.com/lsst/pipelines_lsst_io/master/requirements.txt
+          pip install -r requirements.txt
+      - name: build
+        run: |
+          source /opt/lsst/software/stack/loadLSST.bash
+          cd ${GITHUB_WORKSPACE:-/github/workspace}
+          setup -k -r .
+          scons version doc
+          package-docs build
