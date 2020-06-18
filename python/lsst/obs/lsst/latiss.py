@@ -21,8 +21,15 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 import os.path
+import math
 import re
+import traceback
+from lsst.afw.cameraGeom import PIXELS, FIELD_ANGLE
+from lsst.afw.geom.skyWcs import makeSkyWcs
+from lsst.afw.image import RotType
+import lsst.geom as geom
 import lsst.log
+from lsst.obs.base.utils import InitialSkyWcsError
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LatissTranslator
@@ -84,6 +91,53 @@ class LatissMapper(LsstCamMapper):
             detector = 0
 
         return LatissTranslator.compute_detector_exposure_id(visit, detector)
+
+    def _standardizeExposure(self, mapping, item, dataId, filter=True, trimmed=True, setVisitInfo=True):
+        """Defer to the base class, except for the initial wcs creation."""
+        exposure = super()._standardizeExposure(mapping, item, dataId, filter=filter,
+                                                trimmed=trimmed, setVisitInfo=setVisitInfo)
+        if mapping.level.lower() != "amp":
+            self._createInitialSkyWcs(exposure)
+        return exposure
+
+    def _createInitialSkyWcs(self, exposure, extraRotationDegrees=None, translationXy=None):
+        # LATISS has a coordinate system flipped in Y with respect to our
+        # VisitInfo definition of the field angle orientation.
+        # We have to override this method until RFC-605 is implemented, to pass
+        # `flipX=True` to createInitialSkyWcs below and add the necessary 180
+        # deg rotation on top to turn the flipX into a flipY
+
+        if exposure.getInfo().getVisitInfo() is None:
+            msg = "No VisitInfo; cannot access boresight information. Defaulting to metadata-based SkyWcs."
+            self.log.warn(msg)
+            return
+        try:
+            detector = exposure.getDetector()
+            visitInfo = exposure.getInfo().getVisitInfo()
+            rotAngle = visitInfo.getBoresightRotAngle()
+            boresight = visitInfo.getBoresightRaDec()
+            pixelsToFieldAngle = detector.getTransform(detector.makeCameraSys(PIXELS),
+                                                       detector.makeCameraSys(FIELD_ANGLE))
+
+            if visitInfo.getRotType() != RotType.SKY:
+                msg = (f"Cannot create SkyWcs from camera geometry: rotator angle defined using "
+                       f"RotType={visitInfo.getRotType()} instead of SKY.")
+                raise InitialSkyWcsError(msg)
+
+            flipX = True
+            wcs = makeSkyWcs(pixelsToFieldAngle, rotAngle, flipX, boresight)
+
+            exposure.setWcs(wcs)
+            return
+        except lsst.pex.exceptions.InvalidParameterError as e:
+            raise InitialSkyWcsError("Cannot compute PIXELS to FIELD_ANGLE Transform.") from e
+        except InitialSkyWcsError as e:
+            msg = "Cannot create SkyWcs using VisitInfo and Detector, using metadata-based SkyWcs: %s"
+            self.log.warn(msg, e)
+            self.log.debug("Exception was: %s", traceback.TracebackException.from_exception(e))
+            if e.__context__ is not None:
+                self.log.debug("Root-cause Exception was: %s",
+                               traceback.TracebackException.from_exception(e.__context__))
 
 
 class LatissParseTask(LsstCamParseTask):
