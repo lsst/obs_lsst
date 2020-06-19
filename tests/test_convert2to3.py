@@ -48,9 +48,6 @@ class ConvertGen2To3TestCase(convertTests.ConvertGen2To3TestCase):
 
         super().setUp()
 
-        if self.gen2calib:
-            self.collections.add(f"calib/{self.instrumentName}")
-
 
 class LatissGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LATISS"
