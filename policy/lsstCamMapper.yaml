@@ -510,6 +510,8 @@ datasets:
     template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
   measurePhotonTransferCurve_metadata:
     template: measurePhotonTransferCurves_metadata/%(detector)03d.yaml
+  plotPhotonTransferCurve_metadata:
+    template: plotPhotonTransferCurves_metadata/%(detector)03d.yaml
   photonTransferCurveDataset:
     template: calibrations/ptc/ptcDataset-det%(detector)03d.pkl
   linearizeLut:
