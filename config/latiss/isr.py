@@ -20,14 +20,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 """
-imsim-specific overrides for ProcessCcdTask
+latiss-specific overrides for IsrTask
 """
-import os.path
-
-ObsConfigDir = os.path.dirname(__file__)
-
-for sub in ("isr", "charImage", "calibrate"):
-    path = os.path.join(ObsConfigDir, sub + ".py")
-    if os.path.exists(path):
-        getattr(config, sub).load(path)
-
+config.doCrosstalk=False

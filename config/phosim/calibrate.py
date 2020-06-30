@@ -20,14 +20,10 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 """
-imsim-specific overrides for ProcessCcdTask
+phosim-specific overrides for CalibrateTask
 """
-import os.path
-
-ObsConfigDir = os.path.dirname(__file__)
-
-for sub in ("isr", "charImage", "calibrate"):
-    path = os.path.join(ObsConfigDir, sub + ".py")
-    if os.path.exists(path):
-        getattr(config, sub).load(path)
-
+# Additional configs for star+galaxy ref cats post DM-17917
+config.astrometry.referenceSelector.doUnresolved = True
+config.astrometry.referenceSelector.unresolved.name = 'resolved'
+config.astrometry.referenceSelector.unresolved.minimum = None
+config.astrometry.referenceSelector.unresolved.maximum = 0.5

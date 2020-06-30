@@ -19,5 +19,15 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
+"""
+latiss-specific overrides for ProcessCcdTask
+"""
+import os.path
 
-config.isr.doCrosstalk=False
+ObsConfigDir = os.path.dirname(__file__)
+
+for sub in ("isr", "charImage", "calibrate"):
+    path = os.path.join(ObsConfigDir, sub + ".py")
+    if os.path.exists(path):
+        getattr(config, sub).load(path)
+
