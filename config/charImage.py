@@ -21,11 +21,9 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 """
-LSST Cam-specific overrides for CharImageTask
+LSST Cam-specific overrides for CharacterizeImageTask
 """
 import os.path
-
-from lsst.meas.algorithms import ColorLimit
 
 obsConfigDir = os.path.join(os.path.dirname(__file__))
 
@@ -52,7 +50,7 @@ config.measurePsf.psfDeterminer.name = "psfex"
 
 # Astrometry
 config.refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
-config.refObjLoader.ref_dataset_name='cal_ref_cat'
+config.refObjLoader.ref_dataset_name = 'cal_ref_cat'
 
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
@@ -84,4 +82,4 @@ if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
 
 # Prevent spurious detections in vignetting areas
-config.detection.thresholdType='pixel_stdev'
+config.detection.thresholdType ='pixel_stdev'

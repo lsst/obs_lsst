@@ -22,4 +22,4 @@
 """
 imsim-specific overrides for IsrTask
 """
-config.doCrosstalk=True
+config.doCrosstalk = True
