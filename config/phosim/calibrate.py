@@ -19,12 +19,11 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
-
 """
-LSST Cam-specific overrides for IsrTask
+phosim-specific overrides for CalibrateTask
 """
-config.doLinearize = False
-config.doDefect = False
-config.doCrosstalk = True
-config.qa.doThumbnailOss = False
-config.qa.doThumbnailFlattened = False
+# Additional configs for star+galaxy ref cats post DM-17917
+config.astrometry.referenceSelector.doUnresolved = True
+config.astrometry.referenceSelector.unresolved.name = 'resolved'
+config.astrometry.referenceSelector.unresolved.minimum = None
+config.astrometry.referenceSelector.unresolved.maximum = 0.5

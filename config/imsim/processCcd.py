@@ -19,12 +19,15 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
+"""
+imsim-specific overrides for ProcessCcdTask
+"""
+import os.path
 
-config.isr.doCrosstalk=True
+ObsConfigDir = os.path.dirname(__file__)
 
-# Additional configs for star+galaxy ref cats now that DM-17917 is merged
-config.calibrate.astrometry.referenceSelector.doUnresolved = True
-config.calibrate.astrometry.referenceSelector.unresolved.name = 'resolved'
-config.calibrate.astrometry.referenceSelector.unresolved.minimum = None
-config.calibrate.astrometry.referenceSelector.unresolved.maximum = 0.5
+for sub in ("isr", "charImage", "calibrate"):
+    path = os.path.join(ObsConfigDir, sub + ".py")
+    if os.path.exists(path):
+        getattr(config, sub).load(path)
 
