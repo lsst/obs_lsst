@@ -406,7 +406,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_lsstCam_translator(self):
         """Run the gen 2 metadata extraction code for lsstCam"""
-        test_data = (("raw/unknown/R10/3019031900001-R10-S02-det029.fits",
+        test_data = (("raw/2019-03-19/3019031900001/3019031900001-R10-S02-det029.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
@@ -430,7 +430,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           obsid="MC_C_20190319_000001",
                           expGroup="3019031900001",
                       )),
-                     ("raw/6489D/R10/3019032200002-R10-S22-det035.fits",
+                     ("raw/2019-03-22/3019032200002/3019032200002-R10-S22-det035.fits",
                       dict(
                           expTime=1.0,
                           object='UNKNOWN',
@@ -459,7 +459,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
 
     def test_parsetask_comCam_translator(self):
         """Run the gen 2 metadata extraction code for comCam"""
-        test_data = (("raw/unknown/R22/3019053000001-R22-S00-det000.fits",
+        test_data = (("raw/2019-05-30/3019053000001/3019053000001-R22-S00-det000.fits",
                       dict(
                           expTime=0.0,
                           object='UNKNOWN',
