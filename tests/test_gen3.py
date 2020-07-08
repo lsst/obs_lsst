@@ -131,11 +131,11 @@ class TestInstruments(unittest.TestCase):
 
     def testLsstCam(self):
         self.checkInstrumentWithRegistry(LsstCam,
-                                         "lsstCam/raw/2019-03-22/3019032200002/3019032200002-R10-S22-det035.fits")
+            "lsstCam/raw/2019-03-22/3019032200002/3019032200002-R10-S22-det035.fits")
 
     def testComCam(self):
         self.checkInstrumentWithRegistry(LsstComCam,
-                                         "comCam/raw/2019-05-30/3019053000001/3019053000001-R22-S00-det000.fits")
+            "comCam/raw/2019-05-30/3019053000001/3019053000001-R22-S00-det000.fits")
 
     def testImSim(self):
         self.checkInstrumentWithRegistry(LsstImSim,
