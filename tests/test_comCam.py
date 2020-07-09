@@ -83,8 +83,12 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         path_to_raw = os.path.join(self.data_dir, "raw", "2019-05-30", "3019053000001",
                                    "3019053000001-R22-S00-det000.fits")
+#        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
+#                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
+#                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
+#                    'dayObs', 'seqNum'))
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
+                    'snap', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum'))
         query_format = ["expId", "filter"]

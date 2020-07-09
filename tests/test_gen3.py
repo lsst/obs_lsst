@@ -130,11 +130,11 @@ class TestInstruments(unittest.TestCase):
             self.assertEqual(cameraGeomDetector.getSerial(), cameraGeomDetector2.getSerial())
 
     def testLsstCam(self):
-        testFpath="lsstCam/raw/2019-03-22/3019032200002/3019032200002-R10-S22-det035.fits"
+        testFpath = "lsstCam/raw/2019-03-22/3019032200002/3019032200002-R10-S22-det035.fits"
         self.checkInstrumentWithRegistry(LsstCam, testFpath)
 
     def testComCam(self):
-        testFpath="comCam/raw/2019-05-30/3019053000001/3019053000001-R22-S00-det000.fits"
+        testFpath = "comCam/raw/2019-05-30/3019053000001/3019053000001-R22-S00-det000.fits"
         self.checkInstrumentWithRegistry(LsstComCam, testFpath)
 
     def testImSim(self):
