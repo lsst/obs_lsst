@@ -122,21 +122,21 @@ R32 :
       C17 : { gain : 1.170963, readNoise : 5.353580, saturation : 176999.234375 }
     S11 :
       C00 : { gain : 1.001258, readNoise : 4.897938, saturation : 149060.031250 }
-      C01 : { gain : 37.961899, readNoise : 182.279449, saturation : 5827546.000000 }
-      C02 : { gain : 23.563162, readNoise : 113.509460, saturation : 3690415.250000 }
-      C03 : { gain : 15.515940, readNoise : 74.053513, saturation : 2394221.000000 }
-      C04 : { gain : 17.442200, readNoise : 83.237762, saturation : 2679719.000000 }
-      C05 : { gain : 15.965768, readNoise : 76.091324, saturation : 2485805.000000 }
-      C06 : { gain : 19.339588, readNoise : 91.079048, saturation : 2967704.750000 }
+      C01 : { gain : 37.961899, readNoise : 4.500315276, saturation : 5827546.000000 }
+      C02 : { gain : 23.563162, readNoise : 4.508758105, saturation : 3690415.250000 }
+      C03 : { gain : 15.515940, readNoise : 4.471489049, saturation : 2394221.000000 }
+      C04 : { gain : 17.442200, readNoise : 4.724292472, saturation : 2679719.000000 }
+      C05 : { gain : 15.965768, readNoise : 4.477770989, saturation : 2485805.000000 }
+      C06 : { gain : 19.339588, readNoise : 4.505067645, saturation : 2967704.750000 }
       C07 : { gain : 1.060547, readNoise : 5.106999, saturation : 157569.390625 }
       C10 : { gain : 1.073394, readNoise : 5.088564, saturation : 156869.015625 }
-      C11 : { gain : 18.500753, readNoise : 86.413933, saturation : 2848917.750000 }
-      C12 : { gain : 13.294087, readNoise : 62.434978, saturation : 2058324.125000 }
+      C11 : { gain : 18.500753, readNoise : 4.779745472, saturation : 2848917.750000 }
+      C12 : { gain : 13.294087, readNoise : 4.665771513, saturation : 2058324.125000 }
       C13 : { gain : 1.078112, readNoise : 5.061831, saturation : 166065.765625 }
       C14 : { gain : 1.087866, readNoise : 5.266569, saturation : 166009.328125 }
-      C15 : { gain : 19.886690, readNoise : 92.845299, saturation : 3022302.250000 }
-      C16 : { gain : 17.630716, readNoise : 82.727119, saturation : 2666438.750000 }
-      C17 : { gain : 19.186939, readNoise : 89.783714, saturation : 2873123.000000 }
+      C15 : { gain : 19.886690, readNoise : 4.635306297, saturation : 3022302.250000 }
+      C16 : { gain : 17.630716, readNoise : 4.618241341, saturation : 2666438.750000 }
+      C17 : { gain : 19.186939, readNoise : 4.689901488, saturation : 2873123.000000 }
     S12 :
       C00 : { gain : 1.055081, readNoise : 4.946365, saturation : 173928.703125 }
       C01 : { gain : 1.059406, readNoise : 4.986541, saturation : 175387.703125 }
