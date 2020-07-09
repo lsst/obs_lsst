@@ -99,7 +99,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                             "processCcdMetadata_3019053000001-NONE-R22-S00-det000.yaml")
         raw_filename = '3019053000001-R22-S00-det000.fits'
         default_level = 'sensor'
-#        raw_levels = (('sensor', set(['expId', 'detector', 
+#        raw_levels = (('sensor', set(['expId', 'detector',
 #                       'run', 'detectorName', 'raftName'])),
         raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
                       ('skyTile', set(['expId', 'run'])),
