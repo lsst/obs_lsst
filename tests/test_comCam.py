@@ -83,12 +83,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         path_to_raw = os.path.join(self.data_dir, "raw", "2019-05-30", "3019053000001",
                                    "3019053000001-R22-S00-det000.fits")
-#        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-#                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-#                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-#                    'dayObs', 'seqNum'))
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'snap', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
+                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum'))
         query_format = ["expId", "filter"]
@@ -103,7 +99,9 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                             "processCcdMetadata_3019053000001-NONE-R22-S00-det000.yaml")
         raw_filename = '3019053000001-R22-S00-det000.fits'
         default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
+#        raw_levels = (('sensor', set(['expId', 'detector', 
+#                       'run', 'detectorName', 'raftName'])),
+        raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
                       ('skyTile', set(['expId', 'run'])),
                       ('filter', set(['expId'])),
                       ('expId', set(['expId', 'run']))
