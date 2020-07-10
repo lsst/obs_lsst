@@ -105,7 +105,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 #                      ('filter', set(['expId'])),
 #                      ('expId', set(['expId', 'run']))
         raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
-                      ('skyTile', set(['expId'])),
+                      ('skyTile', set(['expId', 'dayObs'])),
                       ('filter', set(['expId'])),
                       ('expId', set(['expId']))
                       )
