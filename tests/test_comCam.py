@@ -107,7 +107,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
                       ('skyTile', set(['expId', 'dayObs'])),
                       ('filter', set(['expId'])),
-                      ('expId', set(['expId']))
+                      ('expId', set(['expId', 'dayObs']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
