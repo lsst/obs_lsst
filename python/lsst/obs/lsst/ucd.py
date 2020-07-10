@@ -23,6 +23,7 @@
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstUCDCamTranslator
+from ._instrument import LsstUCDCam
 
 __all__ = ["UcdMapper", "UcdParseTask"]
 
@@ -36,6 +37,7 @@ class UcdMapper(LsstCamMapper):
     """The Mapper for the UCDavis camera."""
     translatorClass = LsstUCDCamTranslator
     MakeRawVisitInfoClass = UcdMakeRawVisitInfo
+    _gen3instrument = LsstUCDCam
 
     _cameraName = "ucd"
     yamlFileList = ["ucd/ucdMapper.yaml"] + list(LsstCamMapper.yamlFileList)

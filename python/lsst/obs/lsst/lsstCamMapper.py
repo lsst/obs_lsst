@@ -32,6 +32,7 @@ import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
 from .translators import LsstCamTranslator
 from ._fitsHeader import readRawFitsHeader
+from ._instrument import LsstCam
 
 from .filters import LSSTCAM_FILTER_DEFINITIONS
 from .assembly import attachRawWcsFromBoresight, fixAmpsAndAssemble
@@ -414,3 +415,4 @@ class LsstCamMapper(LsstCamBaseMapper):
     translatorClass = LsstCamTranslator
     MakeRawVisitInfoClass = LsstCamRawVisitInfo
     _cameraName = "lsstCam"
+    _gen3instrument = LsstCam

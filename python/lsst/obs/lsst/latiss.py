@@ -27,6 +27,7 @@ from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LatissTranslator
 from .filters import LATISS_FILTER_DEFINITIONS
+from ._instrument import Latiss
 
 __all__ = ["LatissMapper", "LatissParseTask"]
 
@@ -40,6 +41,7 @@ class LatissMapper(LsstCamMapper):
     """The Mapper for the LATISS camera."""
 
     MakeRawVisitInfoClass = LatissMakeRawVisitInfo
+    _gen3instrument = Latiss
 
     _cameraName = "latiss"
     yamlFileList = ["latiss/latissMapper.yaml"] + list(LsstCamMapper.yamlFileList)

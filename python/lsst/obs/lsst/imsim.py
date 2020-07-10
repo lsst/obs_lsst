@@ -23,6 +23,7 @@
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstImSimTranslator
+from ._instrument import LsstImSim
 
 __all__ = ["ImsimMapper", "ImsimParseTask"]
 
@@ -36,6 +37,7 @@ class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
     translatorClass = LsstImSimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
+    _gen3instrument = LsstImSim
 
     _cameraName = "imsim"
     yamlFileList = ["imsim/imsimMapper.yaml"] + list(LsstCamMapper.yamlFileList)

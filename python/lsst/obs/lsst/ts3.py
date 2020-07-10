@@ -23,6 +23,7 @@
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstTS3Translator
+from ._instrument import LsstTS3
 
 __all__ = ["Ts3Mapper", "Ts3ParseTask"]
 
@@ -36,6 +37,7 @@ class Ts3Mapper(LsstCamMapper):
     """The Mapper for the ts3 camera."""
     translatorClass = LsstTS3Translator
     MakeRawVisitInfoClass = Ts3MakeRawVisitInfo
+    _gen3instrument = LsstTS3
     _cameraName = "ts3"
     yamlFileList = ["ts3/ts3Mapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
