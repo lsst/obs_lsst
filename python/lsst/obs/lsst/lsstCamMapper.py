@@ -23,6 +23,7 @@
 """The LsstCam Mapper."""  # necessary to suppress D100 flake8 warning.
 
 import os
+from functools import lru_cache
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
@@ -167,7 +168,13 @@ class LsstCamBaseMapper(CameraMapper):
         camera : `lsst.afw.cameraGeom.Camera`
             Camera geometry.
         """
+        return cls._makeYamlCamera(cameraYamlFile=cameraYamlFile)
 
+    @classmethod
+    @lru_cache(maxsize=10)
+    def _makeYamlCamera(cls, cameraYamlFile=None):
+        """Helper function for _makeCamera that can be cached.
+        """
         if not cameraYamlFile:
             cameraYamlFile = os.path.join(utils.getPackageDir(cls.packageName), "policy",
                                           ("%s.yaml" % cls.getCameraName()))
