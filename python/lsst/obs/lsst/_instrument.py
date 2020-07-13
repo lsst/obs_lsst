@@ -78,7 +78,6 @@ class LsstCam(Instrument):
     instrument = "LSSTCam"
     policyName = "lsstCam"
     _camera = None
-    _cameraCachedClass = None
     translatorClass = LsstCamTranslator
     obsDataPackage = "obs_lsst_data"
 
@@ -94,13 +93,11 @@ class LsstCam(Instrument):
 
     @classmethod
     def getCamera(cls):
-        # Constructing a YAML camera takes a long time so cache the result
-        # We have to be careful to ensure we cache at the subclass level
-        # since LsstCam base class will look like a cache to the subclasses
-        if cls._camera is None or cls._cameraCachedClass != cls:
+        # Constructing a YAML camera takes a long time so defer reading
+        # until we need to.  We rely on caching in yaml camera itself.
+        if cls._camera is None:
             cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
             cls._camera = yamlCamera.makeCamera(cameraYamlFile)
-            cls._cameraCachedClass = cls
         return cls._camera
 
     def getRawFormatter(self, dataId):
