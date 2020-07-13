@@ -23,6 +23,7 @@
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstTS8Translator
+from ._instrument import LsstTS8
 
 __all__ = ["Ts8Mapper", "Ts8ParseTask"]
 
@@ -36,6 +37,7 @@ class Ts8Mapper(LsstCamMapper):
     """The Mapper for the ts8 camera."""
     translatorClass = LsstTS8Translator
     MakeRawVisitInfoClass = Ts8MakeRawVisitInfo
+    _gen3instrument = LsstTS8
     _cameraName = "ts8"
     yamlFileList = ["ts8/ts8Mapper.yaml"] + list(LsstCamMapper.yamlFileList)
 
