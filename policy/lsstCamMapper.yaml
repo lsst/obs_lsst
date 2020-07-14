@@ -40,7 +40,7 @@ exposures:
     python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
+    template: raw/%(dayObs)s/%(expId)013d/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
   raw:
     assembler: lsst.obs.lsst.lsstCamMapper.assemble_raw
     python: lsst.afw.image.DecoratedImageF
@@ -58,7 +58,7 @@ exposures:
     python: lsst.afw.image.DecoratedImageF
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
+    template: raw/%(dayObs)s/%(expId)013d/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
   postISRCCD:
     template: postISRCCD/%(expId)013d-%(filter)s/%(raftName)s/postISRCCD_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   postISRCCD_uninterpolated:
@@ -448,7 +448,7 @@ datasets:
     python: lsst.daf.base.PropertyList
     storage: FitsStorage
     tables: raw
-    template: raw/%(run)s/%(raftName)s/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
+    template: raw/%(dayObs)s/%(expId)013d/%(expId)013d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
   refcat:
     persistable: SimpleCatalog
     python: lsst.afw.table.SimpleCatalog

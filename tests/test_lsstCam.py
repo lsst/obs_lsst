@@ -104,10 +104,10 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                             "processCcdMetadata_3019031900001-NONE-R10-S02-det029.yaml")
         raw_filename = '3019031900001-R10-S02-det029.fits'
         default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('skyTile', set(['expId', 'run'])),
+        raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
+                      ('skyTile', set(['expId', 'dayObs'])),
                       ('filter', set(['expId'])),
-                      ('expId', set(['expId', 'run']))
+                      ('expId', set(['expId', 'dayObs']))
                       )
         self.setUp_mapper(output=self.data_dir,
                           path_to_raw=path_to_raw,
