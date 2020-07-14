@@ -23,6 +23,7 @@
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstComCamTranslator
+from ._instrument import LsstComCam
 
 __all__ = ["LsstComCamMapper", "LsstComCamParseTask"]
 
@@ -36,6 +37,7 @@ class LsstComCamMapper(LsstCamMapper):
     """The Mapper for the LSST ComCam camera."""
     translatorClass = LsstComCamTranslator
     MakeRawVisitInfoClass = LsstComCamMakeRawVisitInfo
+    _gen3instrument = LsstComCam
     _cameraName = "comCam"
 
 
