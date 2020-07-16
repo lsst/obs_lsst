@@ -54,7 +54,9 @@ OBJECT_IS_ENGTEST = Time("2020-01-27T20:00", format="isot", scale="utc")
 RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 
 # RASTART/DECSTART/RAEND/DECEND used wrong telescope location before this
-RASTART_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
+# 2020-02-01T00:00 we fixed the telescope location, but RASTART is still
+# in mount coordinates, so off by pointing model.
+RASTART_IS_BAD = Time("2020-05-01T00:00", format="isot", scale="utc")
 
 # DATE-END is not to be trusted before this date
 DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
