@@ -170,7 +170,7 @@ calibrations:
     reference: raw
     storage: FitsStorage
     tables: defects
-    template: defects/%(calibDate)s/defects-%(calibDate)s-%(detectorName)s.fits
+    template: defects/%(calibDate)s/defects-%(calibDate)s-%(raftName)s-%(detectorName)s-%(detector)03d.fits
     validEndName: validEnd
     validRange: true
     validStartName: validStart
