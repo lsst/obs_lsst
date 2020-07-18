@@ -114,7 +114,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           test_config_metadata=False,
                           )
 
-        self.setUp_camera(camera_name='lsstCam',
+        self.setUp_camera(camera_name='LSST-TS8',
                           n_detectors=225,
                           first_detector_name='RTM-002_S00',
                           plate_scale=20.0 * arcseconds,

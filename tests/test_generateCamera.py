@@ -82,7 +82,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
     def testGenerateCameraTs8(self):
         """Test with ts8 in a test directory."""
         content = self.runGenerateCamera(["ts8", "lsstCam", os.path.curdir])
-        self.assertEqual(content["name"], "lsstCam")
+        self.assertEqual(content["name"], "LSST-TS8")
         self.assertEqual(content["plateScale"], 20.0)
 
     def testGenerateCamera(self):
@@ -95,7 +95,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         self.assertTrue('R44_SW0' in content['CCDs'])
         # Also make sure no bad names are sneaking through
         self.assertEqual([x for x in content['CCDs'] if 'W_' in x], [])
-        self.assertEqual(content["name"], "lsstCam")
+        self.assertEqual(content["name"], "LSSTCam")
         self.assertEqual(content["plateScale"], 20.0)
 
     def testFailures(self):

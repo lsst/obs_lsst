@@ -26,7 +26,7 @@
 # There are nine ccds with names "S00".."S22" and IDs 0..8 in each of 21 rafts
 # N.b. Ignoring corner rafts for now
 
-name : "lsstCam"
+name : "LSSTCam"
 
 #
 # A single amplifier ("segment" to the camera team)
