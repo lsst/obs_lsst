@@ -77,7 +77,6 @@ class LsstCam(Instrument):
     filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
     instrument = "LSSTCam"
     policyName = "lsstCam"
-    _camera = None
     translatorClass = LsstCamTranslator
     obsDataPackage = "obs_lsst_data"
 
@@ -93,12 +92,14 @@ class LsstCam(Instrument):
 
     @classmethod
     def getCamera(cls):
-        # Constructing a YAML camera takes a long time so defer reading
-        # until we need to.  We rely on caching in yaml camera itself.
-        if cls._camera is None:
-            cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
-            cls._camera = yamlCamera.makeCamera(cameraYamlFile)
-        return cls._camera
+        # Constructing a YAML camera takes a long time but we rely on
+        # yamlCamera to cache for us.
+        cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
+        camera = yamlCamera.makeCamera(cameraYamlFile)
+        if camera.getName() != cls.getName():
+            raise RuntimeError(f"Expected to read camera geometry for {cls.instrument}"
+                               f" but instead got geometry for {cls._camera.getName()}")
+        return camera
 
     def getRawFormatter(self, dataId):
         # Docstring inherited from Instrument.getRawFormatter
