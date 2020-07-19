@@ -116,7 +116,7 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           test_config_metadata=False,
                           )
 
-        self.setUp_camera(camera_name='lsstCam',
+        self.setUp_camera(camera_name='LSST-TS3',
                           n_detectors=435,
                           first_detector_name='R000_S00',
                           plate_scale=20.0 * arcseconds,
