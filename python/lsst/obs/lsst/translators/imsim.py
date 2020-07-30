@@ -107,4 +107,4 @@ class LsstImSimTranslator(LsstSimTranslator):
                 version_key = 'VER' + key[len('PKG'):]
                 throughputs_version = self._header[version_key].strip()
                 break
-        return '_'.join((self._header['FILTER'], f'sim_{throughputs_version}'))
+        return '_'.join((self._header['FILTER'], 'sim', throughputs_version))
