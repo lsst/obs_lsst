@@ -102,9 +102,14 @@ class LsstImSimTranslator(LsstSimTranslator):
     def to_physical_filter(self):
         # Find throughputs version from imSim header data.  For DC2
         # data, we used throughputs version 1.4.
+        throughputs_version = None
         for key, value in self._header.items():
             if key.startswith('PKG') and value == "throughputs":
                 version_key = 'VER' + key[len('PKG'):]
                 throughputs_version = self._header[version_key].strip()
                 break
+        if throughputs_version is None:
+            log.warning("%s: throughputs version not found.  Using FILTER keyword value '%s'.",
+                        self.to_observation_id(), self._header['FILTER'])
+            return self._header['FILTER']
         return '_'.join((self._header['FILTER'], 'sim', throughputs_version))
