@@ -98,3 +98,14 @@ class LsstImSimTranslator(LsstSimTranslator):
         angle = Angle(90.*u.deg) - Angle(self.quantity_from_card("ROTANGLE", u.deg))
         angle = angle.wrap_at("360d")
         return angle
+
+    @cache_translation
+    def to_physical_filter(self):
+        # Find throughputs version from imSim header data.  For DC2
+        # data, we used throughputs version 1.4.
+        for key, value in self._header.items():
+            if key.startswith('PKG') and value == "throughputs":
+                version_key = 'VER' + key[len('PKG'):]
+                throughputs_version = self._header[version_key].strip()
+                break
+        return '_'.join((self._header['FILTER'], f'sim_{throughputs_version}')

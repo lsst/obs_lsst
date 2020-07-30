@@ -111,3 +111,27 @@ for filter in _latiss_filters:
 
 
 LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(*_latiss_filter_and_grating)
+
+
+LSST_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    # These were computed using throughputs 1.4 and
+    # lsst.sims.photUtils.BandpassSet.
+    FilterDefinition(physical_filter="u_sim_1.4",
+                     abstract_filter="u",
+                     lambdaEff=367.070, lambdaMin=308.0, lambdaMax=408.6),
+    FilterDefinition(physical_filter="g_sim_1.4",
+                     abstract_filter="g",
+                     lambdaEff=482.685, lambdaMin=386.5, lambdaMax=567.0),
+    FilterDefinition(physical_filter="r_sim_1.4",
+                     abstract_filter="r",
+                     lambdaEff=622.324, lambdaMin=537.0, lambdaMax=706.0),
+    FilterDefinition(physical_filter="i_sim_1.4",
+                     abstract_filter="i",
+                     lambdaEff=754.598, lambdaMin=676.0, lambdaMax=833.0),
+    FilterDefinition(physical_filter="z_sim_1.4",
+                     abstract_filter="z",
+                     lambdaEff=869.090, lambdaMin=803.0, lambdaMax=938.6),
+    FilterDefinition(physical_filter="y_sim_1.4",
+                     abstract_filter="y",
+                     lambdaEff=971.028, lambdaMin=908.4, lambdaMax=1096.3)
+    )
