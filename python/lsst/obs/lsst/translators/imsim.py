@@ -46,7 +46,6 @@ class LsstImSimTranslator(LsstSimTranslator):
         "science_program": "RUNNUM",
         "exposure_id": "OBSID",
         "visit_id": "OBSID",
-        "physical_filter": "FILTER",
         "dark_time": ("DARKTIME", dict(unit=u.s)),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
@@ -108,4 +107,4 @@ class LsstImSimTranslator(LsstSimTranslator):
                 version_key = 'VER' + key[len('PKG'):]
                 throughputs_version = self._header[version_key].strip()
                 break
-        return '_'.join((self._header['FILTER'], f'sim_{throughputs_version}')
+        return '_'.join((self._header['FILTER'], f'sim_{throughputs_version}'))
