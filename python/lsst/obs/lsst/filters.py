@@ -134,4 +134,4 @@ LSST_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     FilterDefinition(physical_filter="y_sim_1.4",
                      abstract_filter="y",
                      lambdaEff=971.028, lambdaMin=908.4, lambdaMax=1096.3)
-    )
+)
