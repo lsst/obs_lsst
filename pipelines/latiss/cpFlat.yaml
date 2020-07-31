@@ -26,12 +26,13 @@ tasks:
     config:
       connections.inputExp: 'cpFlatProc'
       connections.outputStats: 'flatStats'
+      doVignette: False
   cpFlatNorm:
     class: lsst.cp.pipe.cpFlatNormTask.CpFlatNormalizationTask
     config:
       connections.inputMDs: 'flatStats'
       connections.outputScales: 'cpFlatNormScales'
-  cpCombine:
+  cpFlatCombine:
     class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpFlatProc'
