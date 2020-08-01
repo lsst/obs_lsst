@@ -9,11 +9,11 @@ R00W :
   geometryWithinRaft:
     SW0 : {
       offset : [2.5, 1.4375],
-      yaw : 180.0
+      yaw : 0.0
     }
     SW1 : {
       offset : [2.5, 3.5625],
-      yaw : 0.0
+      yaw : 180.0
     }
 
   sensorTypes :
@@ -22,20 +22,20 @@ R00W :
 
   amplifiers :
     SW0 :
-      C07 : { gain : 1.679, readNoise : 4.28 }
-      C06 : { gain : 1.738, readNoise : 4.19 }
-      C05 : { gain : 1.584, readNoise : 4.28 }
-      C04 : { gain : 1.689, readNoise : 4.12 }
-      C03 : { gain : 1.782, readNoise : 4.09 }
-      C02 : { gain : 1.788, readNoise : 3.87 }
-      C01 : { gain : 1.596, readNoise : 4.46 }
-      C00 : { gain : 1.725, readNoise : 4.13 }
+      C10 : { gain : 1.679, readNoise : 4.28 }
+      C11 : { gain : 1.738, readNoise : 4.19 }
+      C12 : { gain : 1.584, readNoise : 4.28 }
+      C13 : { gain : 1.689, readNoise : 4.12 }
+      C14 : { gain : 1.782, readNoise : 4.09 }
+      C15 : { gain : 1.788, readNoise : 3.87 }
+      C16 : { gain : 1.596, readNoise : 4.46 }
+      C17 : { gain : 1.725, readNoise : 4.13 }
     SW1 :
-      C07 : { gain : 1.679, readNoise : 4.28 }
-      C06 : { gain : 1.738, readNoise : 4.19 }
-      C05 : { gain : 1.584, readNoise : 4.28 }
-      C04 : { gain : 1.689, readNoise : 4.12 }
-      C03 : { gain : 1.782, readNoise : 4.09 }
-      C02 : { gain : 1.788, readNoise : 3.87 }
-      C01 : { gain : 1.596, readNoise : 4.46 }
-      C00 : { gain : 1.725, readNoise : 4.13 }
+      C10 : { gain : 1.679, readNoise : 4.28 }
+      C11 : { gain : 1.738, readNoise : 4.19 }
+      C12 : { gain : 1.584, readNoise : 4.28 }
+      C13 : { gain : 1.689, readNoise : 4.12 }
+      C14 : { gain : 1.782, readNoise : 4.09 }
+      C15 : { gain : 1.788, readNoise : 3.87 }
+      C16 : { gain : 1.596, readNoise : 4.46 }
+      C17 : { gain : 1.725, readNoise : 4.13 }
