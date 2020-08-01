@@ -275,6 +275,9 @@ CCDs :\
                     print(indent(), "<< : *%s_%s" % (ampName, detectorType), file=fd)
                     print(indent(), "gain : %g" % (amplifierData[ampName]['gain']), file=fd)
                     print(indent(), "readNoise : %g" % (amplifierData[ampName]['readNoise']), file=fd)
+                    saturation = amplifierData[ampName].get('saturation')
+                    if saturation:   # if known, override the per-CCD-type default from cameraHeader.yaml
+                        print(indent(), "saturation : %g" % (saturation), file=fd)
                     nindent -= 1
                 nindent -= 1
 
