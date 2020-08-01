@@ -195,23 +195,34 @@ CCDs :\
 
             try:
                 detectorType = raftCcdData["detectorType"]
+            except KeyError:
+                raise RuntimeError("Unable to lookup detector type for %s" % raftName)
+
+            try:
                 _ccds = cameraSkl['RAFT_%s' % detectorType]["ccds"]        # describe this *type* of raft
+            except KeyError:
+                raise RuntimeError("No raft for detector type %s" % detectorType)
 
+            try:
+                sensorTypes = raftCcdData["sensorTypes"]
+            except KeyError:
+                sensorTypes = None
+
+            # only include CCDs in the raft for which we have a serial
+            # (the value isn't checked)
+            ccds = {}
+            for ccdName in raftCcdData["ccdSerials"]:
                 try:
-                    sensorTypes = raftCcdData["sensorTypes"]
-                except KeyError:
-                    sensorTypes = None
-
-                # only include CCDs in the raft for which we have a serial
-                # (the value isn't checked)
-                ccds = {}
-                for ccdName in raftCcdData["ccdSerials"]:
                     ccds[ccdName] = _ccds[ccdName]
-                del _ccds
+                except KeyError:
+                    raise RuntimeError("Unable to look up CCD %s in %s" %
+                                       (ccdName, 'RAFT_%s' % detectorType))
+            del _ccds
 
+            try:
                 amps = cameraSkl['CCD_%s' % detectorType]["amplifiers"]  # describe this *type* of ccd
             except KeyError:
-                raise RuntimeError("Unknown detector type %s" % detectorType)
+                raise RuntimeError("Unable to lookup amplifiers for CCD type CCD_%s" % detectorType)
 
             try:
                 crosstalkCoeffs = ccdData["crosstalk"][detectorType]
@@ -264,12 +275,20 @@ CCDs :\
                     nindent -= 1
                     print("]", file=fd)
 
+                try:
+                    amplifierData = raftCcdData['amplifiers'][ccdName]
+                except KeyError:
+                    raise RuntimeError("Unable to lookup amplifier data for detector %s_%s" %
+                                       (raftName, ccdName))
+
                 print(indent(), "amplifiers :", file=fd)
                 nindent += 1
                 for ampName, ampData in amps.items():
-                    amplifierData = raftCcdData['amplifiers'][ccdName]
-
                     print(indent(), "%s :" % ampName, file=fd)
+
+                    if ampName not in amplifierData:
+                        raise RuntimeError("Unable to lookup amplifier data for amp %s in detector %s_%s" %
+                                           (ampName, raftName, ccdName))
 
                     nindent += 1
                     print(indent(), "<< : *%s_%s" % (ampName, detectorType), file=fd)
