@@ -523,7 +523,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            object="UNKNOWN",
                            observation_id="204595",
                            observation_type="science",  # The header is wrong
-                           physical_filter="i",
+                           physical_filter="i_sim_1.4",
                            pressure=None,
                            relative_humidity=40.0,
                            science_program="204595",
