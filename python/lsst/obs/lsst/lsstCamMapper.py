@@ -302,7 +302,27 @@ class LsstCamBaseMapper(CameraMapper):
         ValueError
             The channel number requested in ``dataId`` is out of range.
         """
-        nChannel = 16                   # number of possible channels, 1..nChannel
+        # set number of possible channels, 1..nChannel
+        # The wave front chips are special, 4k x 2k with only 8 amps
+
+        if "detectorName" in dataId:
+            detectorName = dataId.get("detectorName")
+        elif "detector" in dataId:
+            detector = dataId.get("detector")
+            if detector in self.camera:
+                name = self.camera[detector].getName()
+                detectorName = name.split('_')[1]
+            else:
+                raise RuntimeError('Unable to find detector %s in camera' % detector)
+        else:
+            logger = lsst.log.Log.getLogger("LsstCamMapper")
+            logger.debug('Unable to lookup either "detectorName" or "detector" in the dataId')
+            detectorName = "unknown"
+
+        if detectorName in ["SW0", "SW1"]:
+            nChannel = 8
+        else:
+            nChannel = 16
 
         if "channel" in dataId:         # they specified a channel
             dataId = dataId.copy()
