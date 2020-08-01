@@ -302,7 +302,13 @@ class LsstCamBaseMapper(CameraMapper):
         ValueError
             The channel number requested in ``dataId`` is out of range.
         """
-        nChannel = 16                   # number of possible channels, 1..nChannel
+        # set number of possible channels, 1..nChannel
+        # The wave front chips are special, 4k x 2k with only 8 amps
+        if dataId.get("detector") in [191, 192, 195, 196, 199, 200, 203, 204] or \
+           dataId.get("detectorName", "") in ["SW0", "SW1"]:
+            nChannel = 8
+        else:
+            nChannel = 16
 
         if "channel" in dataId:         # they specified a channel
             dataId = dataId.copy()
