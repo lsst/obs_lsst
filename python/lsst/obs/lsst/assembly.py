@@ -223,6 +223,12 @@ def fixAmpsAndAssemble(ampExps, msg):
     tempCcd = ccd.rebuild()
     tempCcd.clear()
     for amp, ampExp in zip(ccd, ampExps):
+        # check that the book-keeping worked and we got the correct EXTNAME
+        extname = ampExp.getMetadata().get("EXTNAME")
+        predictedExtname = f"Segment{amp.getName()[1:]}"
+        if extname is not None and predictedExtname != extname:
+            logger.warn('%s: expected to see EXTNAME == "%s", but saw "%s"', msg, predictedExtname, extname)
+
         outAmp, modified = fixAmpGeometry(amp,
                                           bbox=ampExp.getBBox(),
                                           metadata=ampExp.getMetadata(),
