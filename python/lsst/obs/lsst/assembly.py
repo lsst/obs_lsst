@@ -32,7 +32,7 @@ from astro_metadata_translator import ObservationInfo
 logger = lsst.log.Log.getLogger("LsstCamAssembler")
 
 
-def attachRawWcsFromBoresight(exposure):
+def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
     """Attach a WCS by extracting boresight, rotation, and camera geometry from
     an Exposure.
 
@@ -63,6 +63,9 @@ def attachRawWcsFromBoresight(exposure):
         exposure.setWcs(createInitialSkyWcs(visitInfo, exposure.getDetector(), flipX=flipX))
         return True
 
+    if obsInfo.observation_type == "science":
+        logger.warn("Unable to set WCS from header as RA/Dec/Angle are unavailable",
+                    ("" if dataIdForErrMsg is None else "for dataId %s" % dataIdForErrMsg))
     return False
 
 
