@@ -29,7 +29,7 @@ from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
 from astro_metadata_translator import ObservationInfo
 
-logger = lsst.log.Log.getLogger("LsstCamAssembler")
+logger = lsst.log.Log.getLogger("obs.lsst.assembly")
 
 
 def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
