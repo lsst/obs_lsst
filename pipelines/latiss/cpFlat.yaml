@@ -13,7 +13,7 @@ tasks:
       doVariance: True
       doLinearize: False
       doCrosstalk: False
-      doDefect: False
+      doDefect: True
       doNanMasking: True
       doInterpolate: True
       doDark: True
