@@ -88,8 +88,8 @@ class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
                "instrument": instrumentName}]
     darks = [{"detector": 42, "calibration_label": "gen2/dark_2022-01-01_042",
               "instrument": instrumentName}]
-    flats = [{"detector": 42, "calibration_label": "gen2/flat_2022-08-06_042_i",
-              "instrument": instrumentName, "physical_filter": "i"}]
+    flats = [{"detector": 42, "calibration_label": "gen2/flat_2022-08-06_042_i_sim_1.4",
+              "instrument": instrumentName, "physical_filter": "i_sim_1.4"}]
 
 
 def setup_module(module):

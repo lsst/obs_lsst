@@ -268,7 +268,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           object='UNKNOWN',
                           imageType='SKYEXP',
                           testType='IMSIM',
-                          filter='i',
+                          filter='i_sim_1.4',
                           lsstSerial='LCA-11021_RTM-000',
                           date='2022-10-05T06:53:26.357',
                           dateObs='2022-10-05T06:53:26.357',
