@@ -24,6 +24,7 @@ from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
 from .translators import LsstImSimTranslator
 from ._instrument import LsstImSim
+from .filters import LSST_IMSIM_FILTER_DEFINITIONS
 
 __all__ = ["ImsimMapper", "ImsimParseTask"]
 
@@ -41,6 +42,7 @@ class ImsimMapper(LsstCamMapper):
 
     _cameraName = "imsim"
     yamlFileList = ["imsim/imsimMapper.yaml"] + list(LsstCamMapper.yamlFileList)
+    filterDefinitions = LSST_IMSIM_FILTER_DEFINITIONS
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""

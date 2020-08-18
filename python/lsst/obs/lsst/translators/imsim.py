@@ -46,7 +46,6 @@ class LsstImSimTranslator(LsstSimTranslator):
         "science_program": "RUNNUM",
         "exposure_id": "OBSID",
         "visit_id": "OBSID",
-        "physical_filter": "FILTER",
         "dark_time": ("DARKTIME", dict(unit=u.s)),
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
@@ -98,3 +97,19 @@ class LsstImSimTranslator(LsstSimTranslator):
         angle = Angle(90.*u.deg) - Angle(self.quantity_from_card("ROTANGLE", u.deg))
         angle = angle.wrap_at("360d")
         return angle
+
+    @cache_translation
+    def to_physical_filter(self):
+        # Find throughputs version from imSim header data.  For DC2
+        # data, we used throughputs version 1.4.
+        throughputs_version = None
+        for key, value in self._header.items():
+            if key.startswith("PKG") and value == "throughputs":
+                version_key = "VER" + key[len("PKG"):]
+                throughputs_version = self._header[version_key].strip()
+                break
+        if throughputs_version is None:
+            log.warning("%s: throughputs version not found.  Using FILTER keyword value '%s'.",
+                        self.to_observation_id(), self._header["FILTER"])
+            return self._header["FILTER"]
+        return "_".join((self._header["FILTER"], "sim", throughputs_version))

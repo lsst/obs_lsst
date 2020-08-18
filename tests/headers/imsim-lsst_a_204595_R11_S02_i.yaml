@@ -94,4 +94,10 @@
 - [BIASSEC, String, '[513:532,1:2000]', '']
 - [GAIN, Double, 1.7, '']
 - [EXTNAME, String, Segment10, '']
+- [PKG00000, String, lsst_sims, '']
+- [VER00000, String, v0.6.1, '']
+- [PKG00001, String, throughputs, '']
+- [VER00001, String, '1.4', '']
+- [PKG00002, String, sims_skybrightness_data, '']
+- [VER00002, String, 2017.05.05, '']
 

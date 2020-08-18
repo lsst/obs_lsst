@@ -36,7 +36,7 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     def setUp(self):
         dataIds = {'raw': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
                    'bias': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
-                   'flat': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11', 'filter': 'i'},
+                   'flat': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11', 'filter': 'i_sim_1.4'},
                    'dark': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
                    }
         self.setUp_tests(self._butler, self._mapper, dataIds)
@@ -47,10 +47,10 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                        'dark': 204595042,
                        'flat': 204595042
                        }
-        filters = {'raw': 'i',
+        filters = {'raw': 'i_sim_1.4',
                    'bias': '_unknown_',
                    'dark': '_unknown_',
-                   'flat': 'i'
+                   'flat': 'i_sim_1.4'
                    }
         exptimes = {'raw': 30.0,
                     'bias': 0.0,
@@ -72,20 +72,20 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                             'dark': 'ITL-3800C-102-Dev',
                             'flat': 'ITL-3800C-102-Dev'
                             }
-        dimensions = {'raw': Extent2I(4256, 4040),
+        dimensions = {'raw': Extent2I(4352, 4096),
                       'bias': Extent2I(4072, 4000),
                       'dark': Extent2I(4072, 4000),
                       'flat': Extent2I(4072, 4000),
                       }
         sky_origin = (55.67759886, -30.44239357)
         raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'i'}, 1),
+                       ({'level': 'sensor', 'filter': 'i_sim_1.4'}, 1),
                        ({'level': 'sensor', 'filter': 'foo'}, 0),
                        ({'level': 'sensor', 'expId': 204595}, 1),
                        ({'level': 'filter', 'expId': 204595}, 1),
                        ({'level': 'filter'}, 1),
                        ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'i'}, 1),
+                       ({'level': 'expId', 'filter': 'i_sim_1.4'}, 1),
                        ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
@@ -109,16 +109,16 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
                     'dayObs', 'seqNum',))
         query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 204595}, [(204595, 'i')]),
-                         ({'filter': 'i'}, [(204595, 'i')]),
+        queryMetadata = (({'visit': 204595}, [(204595, 'i_sim_1.4')]),
+                         ({'filter': 'i_sim_1.4'}, [(204595, 'i_sim_1.4')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
         map_cpp_type = 'DecoratedImageF'
         map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join('processCcd_metadata', '00204595-i', 'R11',
+        metadata_output_path = os.path.join('processCcd_metadata', '00204595-i_sim_1.4', 'R11',
                                             'processCcdMetadata_00204595'
-                                            '-i-R11-S20-det042.yaml')
+                                            '-i_sim_1.4-R11-S20-det042.yaml')
         raw_filename = '00204595-R11-S20-det042.fits'
         default_level = 'sensor'
         raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
