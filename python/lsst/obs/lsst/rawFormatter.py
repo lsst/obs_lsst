@@ -123,6 +123,7 @@ class LatissRawFormatter(LsstCamRawFormatter):
     translatorClass = LatissTranslator
     _instrument = Latiss
     filterDefinitions = Latiss.filterDefinitions
+    wcsFlipX = True
 
 
 class LsstImSimRawFormatter(LsstCamRawFormatter):
