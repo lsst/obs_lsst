@@ -74,9 +74,7 @@ def assemble_raw(dataId, componentInfo, cls):
     md = componentInfo['raw_hdu'].obj
     exposure.setMetadata(md)
 
-    if not attachRawWcsFromBoresight(exposure):
-        logger = lsst.log.Log.getLogger("LsstCamMapper")
-        logger.warn("Unable to set WCS for %s from header as RA/Dec/Angle are unavailable", dataId)
+    attachRawWcsFromBoresight(exposure, dataId)
 
     return exposure
 

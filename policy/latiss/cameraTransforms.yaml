@@ -26,7 +26,7 @@
 #
 # Provide transformations *from* the nativeSys *to* the specified system (e.g. FieldAngle)
 #
-plateScale : 10.112                      # plate scale, in arcseconds on sky/mm; f/17, 1.2m
+plateScale : 9.5695  # as measured from median of 450 fitted images
 
 transforms :
   nativeSys : FocalPlane

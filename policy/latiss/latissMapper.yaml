@@ -36,6 +36,16 @@ datasets:
     template: calibrations/linearizers/linearize-squared-det%(detector)03d_%(calibDate)s.fits
   linearizePolynomial:
     template: calibrations/linearizers/linearize-polynomial-det%(detector)03d_%(calibDate)s.fits
+  icSrc:
+    template: icSrc/%(expId)013d-%(filter)s/icSrc_%(expId)013d-%(filter)s-det%(detector)03d.fits
+  src:
+    template: src/%(expId)013d-%(filter)s/src_%(expId)013d-%(filter)s-det%(detector)03d.fits
+  srcMatch:
+    template: srcMatch/%(expId)013d-%(filter)s/srcMatch_%(expId)013d-%(filter)s-det%(detector)03d.fits
+  calexpBackground:
+    template: calexp/%(expId)013d-%(filter)s/bkgd_%(expId)013d-%(filter)s-det%(detector)03d.fits
+  processCcd_metadata:
+    template: processCcd_metadata/%(expId)013d-%(filter)s/processCcdMetadata_%(expId)013d-%(filter)s-det%(detector)03d.yaml
 
 exposures:
   _raw:
@@ -46,3 +56,5 @@ exposures:
     template: postISRCCD/%(dayObs)s/postISRCCD_%(expId)013d-%(filter)s-det%(detector)03d.fits
   calexp:
     template: calexp/%(dayObs)s/calexp_%(expId)013d-%(filter)s-det%(detector)03d.fits
+  icExp:
+    template: icExp/%(expId)013d-%(filter)s/icExp_%(expId)013d-%(filter)s-det%(detector)03d.fits

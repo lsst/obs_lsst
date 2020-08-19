@@ -27,11 +27,12 @@ import lsst.afw.image as afwImage
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
+from astro_metadata_translator import ObservationInfo
 
-logger = lsst.log.Log.getLogger("LsstCamAssembler")
+logger = lsst.log.Log.getLogger("obs.lsst.assembly")
 
 
-def attachRawWcsFromBoresight(exposure):
+def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
     """Attach a WCS by extracting boresight, rotation, and camera geometry from
     an Exposure.
 
@@ -49,13 +50,22 @@ def attachRawWcsFromBoresight(exposure):
     md = exposure.getMetadata()
     # Use the generic version since we do not have a mapper available to
     # tell us a specific translator to use.
-    visitInfo = MakeRawVisitInfoViaObsInfo(logger)(md)
+    obsInfo = ObservationInfo(md)
+    visitInfo = MakeRawVisitInfoViaObsInfo.observationInfo2visitInfo(obsInfo, log=logger)
     exposure.getInfo().setVisitInfo(visitInfo)
 
+    # LATISS (and likely others) need flipping, DC2 etc do not
+    flipX = False
+    if obsInfo.instrument in ("LATISS",):
+        flipX = True
+
     if visitInfo.getBoresightRaDec().isFinite():
-        exposure.setWcs(createInitialSkyWcs(visitInfo, exposure.getDetector()))
+        exposure.setWcs(createInitialSkyWcs(visitInfo, exposure.getDetector(), flipX=flipX))
         return True
 
+    if obsInfo.observation_type == "science":
+        logger.warn("Unable to set WCS from header as RA/Dec/Angle are unavailable",
+                    ("" if dataIdForErrMsg is None else "for dataId %s" % dataIdForErrMsg))
     return False
 
 
