@@ -1,0 +1,424 @@
+funcs:
+    objectId: # the index of deepCoadd_obj IS the objectId
+        functor: Index
+    parentObjectId:
+        functor: Column
+        args: parent
+        dataset: ref
+    coord_ra:
+        # reference position for merged "ref" cat. Required by db. Not in DPDD
+        functor: RAColumn
+        dataset: ref
+    coord_dec:
+        # reference position for merged "ref" cat. Required by db. Not in DPDD
+        # coord_dec because "dec" is reserved in most SQL DBs
+        functor: DecColumn
+        dataset: ref
+    Ra:
+        functor: CoordColumn
+        args: coord_ra
+        dataset: meas
+    Decl:
+        functor: CoordColumn
+        args: coord_dec
+        dataset: meas
+    # raErr:  not available yet DM-15180
+    # decErr: not available yet DM-15180
+    # Reference band is same for all measurements
+    refBand:
+        functor: ReferenceBand
+        dataset: ref
+    # TODO DM-22241: Evaluate moving point source model
+    #  - current plan requires matching to Source Table
+    # psRadecTai: No moving point source model yet
+    # psRadec: No moving point source model yet
+    # psPm: No moving point source model yet
+    # psParallax: No moving point source model yet
+    PsFlux:
+        functor: NanoJansky
+        dataset: forced_src  # recommend including meas too
+        args: slot_PsfFlux_instFlux
+    PsFluxErr:
+        functor: NanoJanskyErr
+        dataset: forced_src
+        args:
+            - slot_PsfFlux_instFlux
+            - slot_PsfFlux_instFluxErr
+    # Assume the database will provide UDFs for Mags
+    # psCov:
+    #     Flux should be somewhere in the name?
+    #     How best to store cov matrix?
+
+    # Replace multifit-predicted parameters with other goodness-of-fit parameters
+    # e.g. number of iterations, chi2/dof, derivative of objective function
+    # psLnL:  No moving point source model yet
+    # psChi2:  No moving point source model yet
+    # psNdata: No moving point source model yet
+
+    # DRP is working the the Bulge-Disk model fluxes
+    # In the meantime, CModel is the best
+    # CModel fluxes have alias slot_ModelFlux
+    # bdRadec: # Same as SdssCentroid
+    BdE1:
+        functor: E1
+        dataset: meas
+        args:
+            - modelfit_CModel_ellipse_xx
+            - modelfit_CModel_ellipse_xy
+            - modelfit_CModel_ellipse_yy
+    # rBdE1Err:  Not computed
+    BdE2:
+        functor: E2
+        dataset: meas
+        args:
+            - modelfit_CModel_ellipse_xx
+            - modelfit_CModel_ellipse_xy
+            - modelfit_CModel_ellipse_yy
+    # rBdE2Err:  Not computed
+    BdReB:
+        functor: RadiusFromQuadrupole
+        dataset: meas
+        args:
+            - modelfit_CModel_dev_ellipse_xx
+            - modelfit_CModel_dev_ellipse_xy
+            - modelfit_CModel_dev_ellipse_yy
+    BdReD:
+        functor: RadiusFromQuadrupole
+        dataset: meas
+        args:
+            - modelfit_CModel_exp_ellipse_xx
+            - modelfit_CModel_exp_ellipse_xy
+            - modelfit_CModel_exp_ellipse_yy
+    # bdCov: Not computed
+    # DM-22251: We need a total galaxy model (BD) flux column:
+    # with either a total and fraction in Bulge or Disk
+    # We should change the name BD, it assumes algorithm choice
+    BdChi2:
+        functor: Column
+        dataset: meas
+        args: modelfit_CModel_objective
+    # bdSamples: DM-22242 Remove from the DPDD and
+    # replace with other shear estimation parameters. e.g. How e1 and e2 respond to shear.
+    BdFluxB:
+        functor: NanoJansky
+        dataset: meas
+        args: modelfit_CModel_dev_instFlux
+    BdFluxBErr:
+        functor: NanoJanskyErr
+        dataset: meas
+        args:
+            - modelfit_CModel_dev_instFlux
+            - modelfit_CModel_dev_instFluxErr
+    BdFluxD:
+        functor: NanoJansky
+        dataset: meas
+        args: modelfit_CModel_exp_instFlux
+    BdFluxDErr:
+        functor: NanoJanskyErr
+        dataset: meas
+        args:
+            - modelfit_CModel_exp_instFlux
+            - modelfit_CModel_exp_instFluxErr
+    # DM-22243: Replace these with g, r, i, z, y and the blessed fluxes to use for colors
+    # Need a new name like "gModelColorFlux", "gMatchedApertureGalaxyFlux", or
+    # "gMatchedApertureFlux"
+        # HSC users still debating between
+        #  1) PSF convolved undeblended aperture fluxes?
+        #  2) Scarlet outputs?
+        # In the meantime use forced CModel
+    grStd:
+        functor: Color
+        dataset: forced_src
+        args: slot_ModelFlux
+        filt1: HSC-G
+        filt2: HSC-R
+    riStd:
+        functor: Color
+        dataset: forced_src
+        args: slot_ModelFlux
+        filt1: HSC-R
+        filt2: HSC-I
+    izStd:
+        functor: Color
+        dataset: forced_src
+        args: slot_ModelFlux
+        filt1: HSC-I
+        filt2: HSC-Z
+    zyStd:
+        functor: Color
+        dataset: forced_src
+        args: slot_ModelFlux
+        filt1: HSC-Z
+        filt2: HSC-Y
+    # Taking Shape from meas
+    Ixx:
+        functor: Column
+        args: slot_Shape_xx
+        dataset: meas
+    Iyy:
+        functor: Column
+        args: slot_Shape_yy
+        dataset: meas
+    Ixy:
+        functor: Column
+        args: slot_Shape_xy
+        dataset: meas
+    # Icov: # need to compute
+    # DM-22249 Evaluate whether we want to replace IxxPSF/IyyPSF/IxyPSF w/ FWHM
+    IxxPsf:
+        functor: Column
+        args: slot_PsfShape_xx
+        dataset: meas
+    IyyPsf:
+        functor: Column
+        args: slot_PsfShape_yy
+        dataset: meas
+    IxyPsf:
+        functor: Column
+        args: slot_PsfShape_xy
+        dataset: meas
+    # m4: Request removal from DPDD (DM-22250)
+    # Petrosian magnitudes not yet implemented. Planning pacakge DMBP-116
+    # Redefine Kron (DM-22245) and Petrosian (DM-22244) columns to report in DPDD
+    # petroRad:
+    # petroRadErr:
+    # petroBand:
+    # petroFlux:
+    # petroFluxErr:
+    # petroRad50:
+    # petroRad50Err:
+    # petroRad90:
+    # petroRad90Err:
+    KronRad:
+        # Convert to sky coords
+        functor: Column
+        args: ext_photometryKron_KronFlux_radius
+        dataset: meas  # or forced_src?
+    # kronRadErr: # Not computed
+    # kronBand: replaced with `refBand`
+    KronFlux:
+        functor: NanoJansky
+        dataset: meas  # or forced_src?
+        args: ext_photometryKron_KronFlux_instFlux
+    KronFluxErr:
+        functor: NanoJanskyErr
+        dataset: meas  # or forced_src?
+        args:
+            - ext_photometryKron_KronFlux_instFlux
+            - ext_photometryKron_KronFlux_instFluxErr
+    # kronRad50: Need to compute DM-16313
+    # kronRad50Err: Need to compute DM-16313
+    # kronRad90: Need to compute DM-16313
+    # kronRad90Err: Need to compute DM-16313
+    ApFlux:
+        functor: NanoJansky
+        dataset: meas
+        args: slot_CalibFlux_instFlux
+    ApFluxErr:
+        functor: NanoJanskyErr
+        dataset: meas
+        args:
+            - slot_CalibFlux_instFlux
+            - slot_CalibFlux_instFluxErr
+    # Not in DPDD. Used for QA
+    Ap25Flux:
+        functor: NanoJansky
+        dataset: forced
+        args: base_CircularApertureFlux_25_0_instFlux
+    Ap25FluxErr:
+        functor: NanoJanskyErr
+        dataset: forced
+        args:
+            - base_CircularApertureFlux_25_0_instFlux
+            - base_CircularApertureFlux_25_0_instFluxErr
+    # DM-22246: Change Ap surface brightness to fluxes in DPDD
+    # i.e. remove apNann, apMeanSb, apMeanSbSigma
+    # DM-22247: Replace Extendedness with a view or paragraph in docs on how to compute
+    refExtendedness:
+        functor: Column
+        args: base_ClassificationExtendedness_value
+        dataset: ref
+    Extendedness:
+        functor: Column
+        args: base_ClassificationExtendedness_value
+        dataset: meas
+    # lcPeriodic:  # Not computed. Need multi-epoch forced phot S19
+    # lcNonPeriodic:  # Not computed. Need without multi-epoch forced phot S19
+    # photoZ:  # Not computed yet
+
+    # COLUMNS ADDED (not in the DPDD)
+    x:
+        functor: Column
+        args: slot_Centroid_x
+        dataset: ref
+    y:
+        functor: Column
+        args: slot_Centroid_y
+        dataset: ref
+    xErr:
+        functor: Column
+        args: slot_Centroid_xErr
+        dataset: ref
+    yErr:
+        functor: Column
+        args: slot_Centroid_yErr
+        dataset: ref
+    xy_flag:
+        functor: Column
+        args: slot_Centroid_flag
+        dataset: ref
+    # Not in DPDD
+    Blendedness:
+        functor: Column
+        args: base_Blendedness_abs_flux
+        dataset: meas
+    # DM-22249: Make FWHM a view of IxxPsf IxyPsf IyyPsf
+    # Or remove ixxPsf, IxyPsf, IyyPsf.
+    Fwhm:
+        functor: HsmFwhm
+        dataset: meas
+    refFwhm:
+        functor: HsmFwhm
+    CModelFlux:
+        functor: NanoJansky
+        dataset: meas
+        args: modelfit_CModel_instFlux
+    CModelFluxErr:
+        functor: NanoJanskyErr
+        dataset: meas
+        args:
+            - modelfit_CModel_instFlux
+            - modelfit_CModel_instFluxErr
+    # exp, dev, total, fracdev
+    # We need different ellipticities for shear measurement:
+    HsmShapeRegauss_e1:
+        functor: Column
+        args: ext_shapeHSM_HsmShapeRegauss_e1
+        dataset: meas
+    HsmShapeRegauss_e2:
+        functor: Column
+        args: ext_shapeHSM_HsmShapeRegauss_e2
+        dataset: meas
+    HsmShapeRegauss_flag:
+        functor: Column
+        args: ext_shapeHSM_HsmShapeRegauss_flag
+        dataset: meas
+    InputCount:
+        functor: Column
+        args: base_InputCount_value
+        dataset: meas
+    # DM-22247: Add Star/Galaxy sep olumns
+    #     - Morphological Star Galaxy Classifier (Names? float 0-1)]
+    #     - Morphological + Color (SED-based) Star Galaxy Classifier (Names? float 0-1)]
+    # DM-22248: Need to add per object Galactic extinction to post-processing
+refFlags:
+    # refFlags are columns taken without translation from the ref table
+    - tractId
+    - patchId
+    - detect_isPatchInner
+    - detect_isPrimary
+    - detect_isTractInner
+    - calib_psf_used
+flags:
+    # flags are columns taken and exploded per-band from the meas tables
+    - deblend_nChild
+    - deblend_skipped
+    - base_Blendedness_flag
+    - base_PixelFlags_flag
+    - base_PixelFlags_flag_bad
+    - base_PixelFlags_flag_bright_object
+    - base_PixelFlags_flag_bright_objectCenter
+    - base_PixelFlags_flag_clipped
+    - base_PixelFlags_flag_clippedCenter
+    - base_PixelFlags_flag_cr
+    - base_PixelFlags_flag_crCenter
+    - base_PixelFlags_flag_edge
+    - base_PixelFlags_flag_inexact_psf
+    - base_PixelFlags_flag_inexact_psfCenter
+    - base_PixelFlags_flag_interpolated
+    - base_PixelFlags_flag_interpolatedCenter
+    - base_PixelFlags_flag_offimage
+    - base_PixelFlags_flag_saturated
+    - base_PixelFlags_flag_saturatedCenter
+    - base_PixelFlags_flag_sensor_edge
+    - base_PixelFlags_flag_sensor_edgeCenter
+    - base_PixelFlags_flag_suspect
+    - base_PixelFlags_flag_suspectCenter
+    - base_ClassificationExtendedness_flag
+    - base_InputCount_flag
+    - base_InputCount_flag_noInputs
+    - calib_astrometry_used
+    - calib_photometry_reserved
+    - calib_photometry_used
+    - calib_psf_candidate
+    - calib_psf_reserved
+    - calib_psf_used
+    - slot_ApFlux_flag
+    - slot_ApFlux_flag_apertureTruncated
+    - slot_ApFlux_flag_sincCoeffsTruncated
+    - slot_CalibFlux_flag
+    - slot_CalibFlux_flag_apertureTruncated
+    - slot_CalibFlux_flag_sincCoeffsTruncated
+    - slot_Centroid_flag_almostNoSecondDerivative
+    - slot_Centroid_flag_edge
+    - slot_Centroid_flag_noSecondDerivative
+    - slot_Centroid_flag_notAtMaximum
+    - slot_Centroid_flag_resetToPeak
+    - slot_ShapeRound_flag
+    - slot_ShapeRound_flag_no_pixels
+    - slot_ShapeRound_flag_not_contained
+    - slot_ShapeRound_flag_parent_source
+    - slot_ShapeRound_Flux
+    - slot_ShapeRound_x
+    - slot_ShapeRound_xx
+    - slot_ShapeRound_xy
+    - slot_ShapeRound_y
+    - slot_ShapeRound_yy
+    # - forced source
+    - slot_PsfFlux_apCorr
+    - slot_PsfFlux_apCorrErr
+    - slot_PsfFlux_area
+    - slot_PsfFlux_flag
+    - slot_PsfFlux_flag_apCorr
+    - slot_PsfFlux_flag_edge
+    - slot_PsfFlux_flag_noGoodPixels
+    - ext_photometryKron_KronFlux_apCorr
+    - ext_photometryKron_KronFlux_apCorrErr
+    - ext_photometryKron_KronFlux_flag
+    - ext_photometryKron_KronFlux_flag_apCorr
+    - ext_photometryKron_KronFlux_flag_bad_radius
+    - ext_photometryKron_KronFlux_flag_bad_shape
+    - ext_photometryKron_KronFlux_flag_bad_shape_no_psf
+    - ext_photometryKron_KronFlux_flag_edge
+    - ext_photometryKron_KronFlux_flag_no_fallback_radius
+    - ext_photometryKron_KronFlux_flag_no_minimum_radius
+    - ext_photometryKron_KronFlux_flag_small_radius
+    - ext_photometryKron_KronFlux_flag_used_minimum_radius
+    - ext_photometryKron_KronFlux_flag_used_psf_radius
+    - slot_PsfShape_flag
+    - slot_PsfShape_flag_no_pixels
+    - slot_PsfShape_flag_not_contained
+    - slot_PsfShape_flag_parent_source
+    - slot_Shape_flag
+    - slot_Shape_flag_no_pixels
+    - slot_Shape_flag_not_contained
+    - slot_Shape_flag_parent_source
+
+flag_rename_rules:
+    # Taken from db-meas-forced
+    - ['ext_photometryKron_', '']
+    - ['modelfit_', '']
+    - ['base_PixelFlags_flag', 'PixelFlags']
+    - ['base_Classification', '']
+    - ['base_Sdss', '']
+    - ['base_CircularApertureFlux', 'ApFlux']
+    - ['ext_shapeHSM_', '']
+    - ['ext_convolved_', '']
+    - ['undeblended_base', 'undeblended']
+    - ['undeblended_ext_photometryKron', 'undeblended']
+    - ['ext_photometryKron_', '']
+    - ['base_', '']
+    - ['slot_', '']
+    - ['calib_', 'Calib_']
+    - ['deblend_', 'Deblend_']
+    - ['blendedness', 'Blendedness']
