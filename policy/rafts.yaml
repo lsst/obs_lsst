@@ -3,11 +3,11 @@
 #
 rafts :
   R00 :
-    offset : [-254., -254.0]
+    offset : [-254.0, -254.0]
     id0 : 189
     yaw : 180.
   R00W :
-    offset : [-254., -254.0]
+    offset : [-254.0, -254.0]
     id0 : 191
     yaw : 180.
   R04 :
@@ -33,65 +33,65 @@ rafts :
     offset : [254.0, 254.0]
     id0 : 203
   R01 :
-    offset : [-127.6, -253.8]           # offset of centre of raft, mm
+    offset : [-127.0, -254.0]           # offset of centre of raft, mm
     id0 : 0                             # id for S00, incrementing uniformly
   R02 :
-    offset : [  -0.5, -254.1]
+    offset : [   0.0, -254.0]
     id0 : 9
   R03 :
-    offset : [ 126.6, -254.4]
+    offset : [ 127.0, -254.0]
     id0 : 18
   R10 :
-    offset : [-254.4, -126.6]
+    offset : [-254.0, -127.0]
     id0 : 27
   R11 :
-    offset : [-127.3, -126.8]
+    offset : [-127.0, -127.0]
     id0 : 36
   R12 :
-    offset : [  -0.2, -127.0]
+    offset : [   0.0, -127.0]
     id0 : 45
   R13 :
-    offset : [ 126.8, -127.4]
+    offset : [ 127.0, -127.0]
     id0 : 54
   R14 :
-    offset : [ 253.9, -127.6]
+    offset : [ 254.0, -127.0]
     id0 : 63
   R20 :
-    offset : [-254.1,    0.6]
+    offset : [-254.0,    0.0]
     id0 : 72
   R21 :
-    offset : [-127.1,    0.2]
+    offset : [-127.0,    0.0]
     id0 : 81
   R22 :
     offset : [   0.0,    0.0]
     id0 : 90
   R23 :
-    offset : [ 127.1,   -0.3]
+    offset : [ 127.0,    0.0]
     id0 : 99
   R24 :
-    offset : [ 254.2,   -0.5]
+    offset : [254.0,    0.0]
     id0 : 108
   R30 :
-    offset : [-253.9,  127.6]
+    offset : [-254.0,  127.0]
     id0 : 117
   R31 :
-    offset : [-126.8,  127.4]
+    offset : [-127.0,  127.0]
     id0 : 126
   R32 :
-    offset : [   0.3,  127.1]
+    offset : [   0.0,  127.0]
     id0 : 135
   R33 :
-    offset : [ 127.4,  126.8]
+    offset : [ 127.0,  127.0]
     id0 : 144
   R34 :
-    offset : [ 254.4,  126.5]
+    offset : [ 254.0,  127.0]
     id0 : 153
   R41 :
-    offset : [-126.5,  254.5]
+    offset : [-127.0,  254.0]
     id0 : 162
   R42 :
-    offset : [   0.6,  254.1]
+    offset : [   0.0,  254.0]
     id0 : 171
   R43 :
-    offset : [ 127.6,  253.9]
+    offset : [ 127.0,  254.0]
     id0 : 180
