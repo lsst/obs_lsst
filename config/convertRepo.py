@@ -9,7 +9,5 @@ config.ccdKey = "detector"
 # Ignore these special dataset types
 config.datasetIgnorePatterns.extend(["_raw", "raw_hdu", "raw_amp"])
 
-config.curatedCalibrations.extend(["defects", "qe_curve"])
-
 import os
 config.defineVisits.load(os.path.join(os.path.dirname(__file__), "defineVisits.py"))
