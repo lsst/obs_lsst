@@ -86,7 +86,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum'))
+                    'dayObs', 'seqNum', 'subdir',))
         query_format = ["expId", "filter"]
         queryMetadata = (({'expId': 3019053000001}, [(3019053000001, 'NONE')]),
                          ({'filter': 'NONE'}, [(3019053000001, 'NONE')]),
