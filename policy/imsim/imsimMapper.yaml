@@ -86,9 +86,9 @@ datasets:
   imageDifferenceDriver_metadata:
     template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   plotVisit:
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/plot-v%(visit)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d%(subdir)s/plot-v%(visit)d-%(description)s-%(style)s.png
   plotCompareVisit:
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d%(subdir)s/compareVisit-v%(visit)d-%(description)s-%(style)s.png
   # Focal plane summary plots
   focal_plane_fits:
     template: focal_plane/%(dstype)s-v%(visit)08d.fits

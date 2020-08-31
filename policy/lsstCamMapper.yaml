@@ -529,7 +529,7 @@ datasets:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/plot-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d%(subdir)s/plot-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
   plotSky:
     persistable: None
     python: None
@@ -539,22 +539,22 @@ datasets:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/color/tract-%(tract)d/plot-t%(tract)d-%(description)s-%(style)s.png
+    template: plots/color/tract-%(tract)d%(subdir)s/plot-t%(tract)d-%(description)s-%(style)s.png
   plotVisit:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/plot-v%(expId)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d%(subdir)s/plot-v%(expId)d-%(description)s-%(style)s.png
   plotCompareCoadd:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/compare-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d%(subdir)s/compare-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
   plotCompareVisit:
     persistable: None
     python: None
     storage: MatplotlibStorage
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d/compareVisit-v%(expId)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(expId)d%(subdir)s/compareVisit-v%(expId)d-%(description)s-%(style)s.png
   # ISR stage thumbnails
   ossThumb:
     template: thumbs/%(expId)013d-%(filter)s/%(raftName)s/ossThumb_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.png
