@@ -301,6 +301,10 @@ class LsstCamParseTask(ParseTask):
     def translate_obsid(self, md):
         return self.observationInfo.observation_id
 
+    def translate_testType(self, md):
+        # Gen2 prefers upper case
+        return self.observationInfo.observation_reason.upper()
+
     def translate_expGroup(self, md):
         return self.observationInfo.exposure_group
 
