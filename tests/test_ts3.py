@@ -81,7 +81,7 @@ class TestTs3(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum',))
+                    'dayObs', 'seqNum', 'subdir',))
         query_format = ["expId", "filter"]
         queryMetadata = (({'expId': 201607220607067}, [(201607220607067, '550CutOn')]),
                          ({'detector': 71}, [(201607220607067, '550CutOn')]),

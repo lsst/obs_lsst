@@ -82,7 +82,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'seqNum'))
+                    'seqNum', 'subdir',))
         query_format = ["expId", "seqNum", "dayObs"]
         queryMetadata = (({'expId': 3018092000065}, [(3018092000065, 65, '2018-09-20')]),
                          ({'detector': 0}, [(3018092000065, 65, '2018-09-20')]),

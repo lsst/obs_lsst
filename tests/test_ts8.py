@@ -79,7 +79,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
                     'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum',))
+                    'dayObs', 'seqNum', 'subdir',))
         query_format = ["expId", "filter"]
         queryMetadata = (({'expId': 201807241028453}, [(201807241028453, 'z')]),
                          ({'detector': 67}, [(201807241028453, 'z')]),
