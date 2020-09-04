@@ -21,55 +21,41 @@
 
 __all__ = ()
 
+import re
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
 from .translators.lsst import FILTER_DELIMITER
 
+"""
+        SDSSu~empty             u
+        SDSSg~empty             g
+        SDSSr~empty             r
+        SDSSi~empty             i
+        SDSSz~empty             z
+        SDSSY~empty             y
+        480nm~empty             480nm
+        650nm~empty             650nm
+        750nm~empty             750nm
+        870nm~empty             870nm
+        950nm~empty             950nm
+        970nm~empty             970nm
+        grid~empty              grid
+        spot~empty              spot
+        empty3~empty            empty
+        empty4~empty            empty
+        empty5~empty            empty
+        empty6~empty            empty
+"""
+
+# The LSST Filters from L. Jones 05/14/2020 - "Edges" = 5% of peak throughput
+# See https://github.com/rhiannonlynne/notebooks/blob/master/Filter%20Characteristics.ipynb # noqa: W505
+#
+# N.b. DM-26623 requests that these physical names be updated once
+# the camera team has decided upon the final values (CAP-617)
 
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     FilterDefinition(physical_filter="NONE",
                      lambdaEff=0.0,
                      alias={"no_filter", "OPEN"}),
-    FilterDefinition(physical_filter="275CutOn",
-                     lambdaEff=0.0),
-    FilterDefinition(physical_filter="550CutOn",
-                     lambdaEff=0.0),
-    # Filters for BOT data
-    FilterDefinition(physical_filter='480nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='480nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='650nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='650nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='750nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='750nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='870nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='870nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='950nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='950nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='970nm+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='970nm+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSu+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSu+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSu+ND_OD4.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSg+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSg+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+ND_OD0.3', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+ND_OD0.4', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+ND_OD4.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSr+ND_OD1.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+NONE', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD0.3', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD0.5', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD1.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD2.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD3.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSi+ND_OD4.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSz+ND_OD3.0', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSz+ND_OD0.1', lambdaEff=0.0),
-    FilterDefinition(physical_filter='SDSSY+ND_OD0.1', lambdaEff=0.0),
-    # The LSST Filters from L. Jones 05/14/2020 - "Edges" = 5% of peak throughput
-    # See https://github.com/rhiannonlynne/notebooks/blob/master/Filter%20Characteristics.ipynb
     FilterDefinition(physical_filter="u", abstract_filter="u",
                      lambdaEff=368.48, lambdaMin=320.00, lambdaMax=408.60),
     FilterDefinition(physical_filter="g", abstract_filter="g",
@@ -81,7 +67,110 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     FilterDefinition(physical_filter="z", abstract_filter="z",
                      lambdaEff=869.05, lambdaMin=803.00, lambdaMax=938.60),
     FilterDefinition(physical_filter="y", abstract_filter="y",
-                     lambdaEff=973.64, lambdaMin=908.40, lambdaMax=1099.00)
+                     lambdaEff=973.64, lambdaMin=908.40, lambdaMax=1099.00),
+)
+
+#
+# Define the filters present in the BOT.
+# According to Tony Johnson the possible physical filters are
+#   ColorFWheel    [SDSSu,SDSSg,SDSSr,SDSSi,SDSSz,SDSSY,
+#                   480nm,650nm,750nm,870nm,950nm,970nm]
+#   SpotProjFWheel [grid,spot,empty3,empty4,empty5,empty6]
+#   NeutralFWheel  [ND_OD1.0,ND_OD0.5,ND_OD0.3,empty,ND_OD2.0,ND_OD0.7]
+# where:
+#   ColorFWheel and SpotProjFWheel are mutually exclusive and
+#                                            both appear in FILTER,
+#   NeutralFWheel appears in FILTER2
+#
+# The abstract_filter names are not yet defined, so I'm going to invent them
+
+if True:
+    BOTFilters = []
+    for physical_filter in [
+            "SDSSu",
+            "SDSSg",
+            "SDSSr",
+            "SDSSi",
+            "SDSSz",
+            "SDSSY",
+            "480nm",
+            "650nm",
+            "750nm",
+            "870nm",
+            "950nm",
+            "970nm",
+            "grid",
+            "spot",
+    ]:
+        mat = re.search(r"^SDSS(.)$", physical_filter)
+        if mat:
+            abstract_filter = mat.group(1).lower()
+
+            lsstCamFilter = [f for f in LSSTCAM_FILTER_DEFINITIONS if f.abstract_filter == abstract_filter][0]
+            lambdaEff = lsstCamFilter.lambdaEff
+        else:
+            abstract_filter = physical_filter
+            lambdaEff = 0.0
+
+        BOTFilters.append(FilterDefinition(abstract_filter=abstract_filter,
+                                           physical_filter=physical_filter,
+                                           lambdaEff=lambdaEff,
+                                           )
+                          )
+
+        for nd in ["ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]:
+            BOTFilters.append(FilterDefinition(abstract_filter=f"{abstract_filter}~{nd.replace('.', '_')}",
+                                               physical_filter=f"{physical_filter}~{nd}",
+                                               lambdaEff=lambdaEff,
+                                               )
+                              )
+
+else:
+    # Filters for BOT data
+    BOTfilters = [
+        FilterDefinition(physical_filter='480nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='480nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='650nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='650nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='750nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='750nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='870nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='870nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='950nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='950nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='970nm+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='970nm+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSu+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSu+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSu+ND_OD4.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSg+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSg+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+ND_OD0.3', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+ND_OD0.4', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+ND_OD4.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSr+ND_OD1.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+NONE', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD0.3', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD0.5', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD1.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD2.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD3.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSi+ND_OD4.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSz+ND_OD3.0', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSz+ND_OD0.1', lambdaEff=0.0),
+        FilterDefinition(physical_filter='SDSSY+ND_OD0.1', lambdaEff=0.0),
+    ]
+
+LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    FilterDefinition(physical_filter="275CutOn",
+                     lambdaEff=0.0),
+    FilterDefinition(physical_filter="550CutOn",
+                     lambdaEff=0.0),
+    *BOTFilters,
+    *LSSTCAM_FILTER_DEFINITIONS,
 )
 
 # LATISS filters include a grating in the name so we need to construct
