@@ -24,8 +24,7 @@ from lsst.obs.lsst.latiss import LatissParseTask
 
 config.parse.retarget(LatissParseTask)
 
-del config.parse.translation['testType']
-
+del config.parse.translators['testType']
 del config.parse.translators['run']
 del config.parse.translators['raftName']
 del config.parse.translators['lsstSerial']

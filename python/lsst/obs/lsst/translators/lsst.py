@@ -488,6 +488,16 @@ class LsstBaseTranslator(FitsTranslator):
         return obstype
 
     @cache_translation
+    def to_observation_reason(self):
+        # Docstring will be inherited. Property defined in properties.py
+        if self.is_key_ok("TESTTYPE"):
+            reason = self._header["TESTTYPE"]
+            self._used_these_cards("TESTTYPE")
+            return reason.lower()
+        # no specific header present so use the default translation
+        return super().to_observation_reason()
+
+    @cache_translation
     def to_dark_time(self):
         """Calculate the dark time.
 
