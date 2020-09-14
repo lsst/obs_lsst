@@ -190,7 +190,7 @@ _latiss_filters = (
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="EMPTY",
                      lambdaEff=0.0),
-    FilterDefinition(physical_filter="????",
+    FilterDefinition(physical_filter="UNKNOWN",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="BG40",
                      # abstract_filter="g",  # afw only allows one g filter
@@ -202,7 +202,7 @@ _latiss_filters = (
 )
 
 # Form a new set of filter definitions from all the explicit filters
-_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "EMPTY", "????", "NONE")
+_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "EMPTY", "NONE", "UNKNOWN")
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name

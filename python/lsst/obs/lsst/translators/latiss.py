@@ -471,16 +471,16 @@ class LatissTranslator(LsstBaseTranslator):
             headers joined by a "~".  The filter and grating are always
             combined.  The filter or grating part will be "NONE" if no value
             is specified.  Uses "EMPTY" if any of the filters or gratings
-            indicate an "empty_N" name. "????" indicates that the filter is
+            indicate an "empty_N" name. "UNKNOWN" indicates that the filter is
             not defined anywhere but we think it should be.  "NONE" indicates
             that the filter was not defined but the observation is a dark
             or bias.
         """
 
         # If there is no filter defined we want to report this as a special
-        # filter. ???? indicates that we think it should be set.
+        # filter, "UNKNOWN".  We think it should be set.
         obstype = self.to_observation_type()
-        undefined_filter = "????"
+        undefined_filter = "UNKNOWN"
         log_undefined = True
         if obstype in ("bias", "dark"):
             undefined_filter = "NONE"
