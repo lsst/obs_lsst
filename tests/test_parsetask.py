@@ -119,7 +119,7 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                           date='2018-09-21T06:12:18.210',
                           dayObs='2018-09-20',
                           detector=0,
-                          filter='????~????',
+                          filter='UNKNOWN~UNKNOWN',
                           seqNum=65,
                           visit=3018092000065,
                           expId=3018092000065,
