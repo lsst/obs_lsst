@@ -478,9 +478,9 @@ class LatissTranslator(LsstBaseTranslator):
         """
 
         # If there is no filter defined we want to report this as a special
-        # filter. ???? indicates that we think it should be set.
+        # filter, "UNKNOWN".  We think it should be set.
         obstype = self.to_observation_type()
-        undefined_filter = "????"
+        undefined_filter = "UNKNOWN"
         log_undefined = True
         if obstype in ("bias", "dark"):
             undefined_filter = "NONE"
