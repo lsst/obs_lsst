@@ -13,8 +13,10 @@ for instrument in *; do
   echo
   echo $instrument
 
-  rm "${instrument}/registry.sqlite3"
-  mv "${instrument}/raw" "${instrument}/old"
+  rm -f "${instrument}/registry.sqlite3"
+  if [ -d "${instrument}/raw" ]; then
+      mv "${instrument}/raw" "${instrument}/old"
+  fi
 
   ingest_files=$(find "${instrument}/old" -type f)
   echo ingestImages.py "${instrument}" --mode=copy ${ingest_files}
