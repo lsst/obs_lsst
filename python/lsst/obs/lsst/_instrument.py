@@ -30,7 +30,8 @@ from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument
 from lsst.obs.base.gen2to3 import TranslatorFactory
 from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS, \
-    LSST_IMSIM_FILTER_DEFINITIONS
+    LSST_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS, TS8_FILTER_DEFINITIONS, \
+    COMCAM_FILTER_DEFINITIONS
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
@@ -162,6 +163,7 @@ class LsstComCam(LsstCam):
     """Gen3 Butler specialization for ComCam data.
     """
 
+    filterDefinitions = COMCAM_FILTER_DEFINITIONS
     instrument = "LSSTComCam"
     policyName = "comCam"
     translatorClass = LsstComCamTranslator
@@ -205,6 +207,7 @@ class LsstTS8(LsstCam):
     """Gen3 Butler specialization for raft test stand data.
     """
 
+    filterDefinitions = TS8_FILTER_DEFINITIONS
     instrument = "LSST-TS8"
     policyName = "ts8"
     translatorClass = LsstTS8Translator
@@ -233,6 +236,7 @@ class LsstTS3(LsstCam):
     """Gen3 Butler specialization for TS3 test stand data.
     """
 
+    filterDefinitions = TS3_FILTER_DEFINITIONS
     instrument = "LSST-TS3"
     policyName = "ts3"
     translatorClass = LsstTS3Translator

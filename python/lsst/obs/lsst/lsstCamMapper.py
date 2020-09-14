@@ -26,10 +26,12 @@ import os
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
+import lsst.pex.exceptions as pexExceptions
 import lsst.afw.image as afwImage
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo
 import lsst.obs.base.yamlCamera as yamlCamera
 import lsst.daf.persistence as dafPersist
+from astro_metadata_translator import ObservationInfo
 from .translators import LsstCamTranslator
 from ._fitsHeader import readRawFitsHeader
 from ._instrument import LsstCam
@@ -422,9 +424,28 @@ class LsstCamBaseMapper(CameraMapper):
         """Standardize a raw dataset by converting it to an
         `~lsst.afw.image.Exposure` instead of an `~lsst.afw.image.Image`."""
 
-        return self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
-                                         setVisitInfo=False,  # it's already set, and the metadata's stripped
-                                         filter=filter)
+        exp = self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
+                                        setVisitInfo=False,  # it's already set, and the metadata's stripped
+                                        filter=False)
+
+        if filter:
+            obsInfo = ObservationInfo(exp.getMetadata())
+            try:
+                filt = afwImage.Filter(obsInfo.physical_filter)
+            except pexExceptions.NotFoundError:
+                unknownName = "UNKNOWN"
+
+                logger = lsst.log.Log.getLogger("LsstCamMapper")
+                logger.warn('Unknown physical_filter "%s" for %s %s; replacing with "%s"',
+                            obsInfo.physical_filter,
+                            obsInfo.observation_id, obsInfo.detector_unique_name,
+                            unknownName)
+
+                filt = afwImage.Filter(unknownName)
+
+            exp.setFilter(filt)
+
+        return exp
 
 
 class LsstCamMapper(LsstCamBaseMapper):
