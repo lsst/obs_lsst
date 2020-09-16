@@ -51,6 +51,26 @@ class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     dataIds = [dict(instrument="LSST-TS3", exposure=201811151255111, detector=433)]
 
 
+class ComCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+
+    curatedCalibrationDatasetTypes = ("camera",)
+    instrumentClassName = "lsst.obs.lsst.LsstComCam"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "comCam", "raw", "2019-05-30",
+                        "3019053000001", "3019053000001-R22-S00-det000.fits")
+    dataIds = [dict(instrument="LSSTComCam", exposure=3019053000001, detector=0)]
+
+
+class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+
+    curatedCalibrationDatasetTypes = ("camera",)
+    instrumentClassName = "lsst.obs.lsst.LsstCam"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "lsstCam", "raw", "2019-03-19",
+                        "3019031900001", "3019031900001-R10-S02-det029.fits")
+    dataIds = [dict(instrument="LSSTCam", exposure=3019031900001, detector=29)]
+
+
 def setup_module(module):
     lsst.utils.tests.init()
 
