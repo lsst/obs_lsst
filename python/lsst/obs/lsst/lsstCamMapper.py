@@ -26,7 +26,6 @@ import os
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
-import lsst.pex.exceptions as pexExceptions
 import lsst.afw.image as afwImage
 from lsst.obs.base import CameraMapper, MakeRawVisitInfoViaObsInfo
 import lsst.obs.base.yamlCamera as yamlCamera
@@ -429,10 +428,10 @@ class LsstCamBaseMapper(CameraMapper):
                                         filter=False)
 
         if filter:
-            obsInfo = ObservationInfo(exp.getMetadata())
+            obsInfo = ObservationInfo(exp.getMetadata(), translator_class=self.translatorClass)
             try:
                 filt = afwImage.Filter(obsInfo.physical_filter)
-            except pexExceptions.NotFoundError:
+            except LookupError:
                 unknownName = "UNKNOWN"
 
                 logger = lsst.log.Log.getLogger("LsstCamMapper")

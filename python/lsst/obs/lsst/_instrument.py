@@ -29,9 +29,10 @@ from lsst.daf.butler.core.utils import getFullTypeName
 from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument
 from lsst.obs.base.gen2to3 import TranslatorFactory
-from .filters import LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS, \
-    LSST_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS, TS8_FILTER_DEFINITIONS, \
-    COMCAM_FILTER_DEFINITIONS
+from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
+                      LSST_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
+                      TS8_FILTER_DEFINITIONS, COMCAM_FILTER_DEFINITIONS,
+                      )
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \

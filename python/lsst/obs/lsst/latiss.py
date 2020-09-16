@@ -46,6 +46,7 @@ class LatissMapper(LsstCamMapper):
     _cameraName = "latiss"
     yamlFileList = ["latiss/latissMapper.yaml"] + list(LsstCamMapper.yamlFileList)
     filterDefinitions = LATISS_FILTER_DEFINITIONS
+    translatorClass = LatissTranslator
 
     def _extractDetectorName(self, dataId):
         return f"{LatissTranslator.DETECTOR_GROUP_NAME}_{LatissTranslator.DETECTOR_NAME}"

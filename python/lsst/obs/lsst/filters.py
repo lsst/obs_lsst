@@ -44,7 +44,7 @@ def addFilter(filter_dict, abstract_filter, physical_filter, lambdaEff=0.0):
 # N.b. DM-26623 requests that these physical names be updated once
 # the camera team has decided upon the final values (CAP-617)
 
-LsstCamFilters0 = FilterDefinitionCollection(
+LsstCamFiltersBaseline = FilterDefinitionCollection(
     FilterDefinition(physical_filter="NONE", abstract_filter="NONE",
                      lambdaEff=0.0,
                      alias={"no_filter", "OPEN"}),
@@ -103,7 +103,7 @@ for physical_filter in [
     if mat:
         abstract_filter = mat.group(1).lower()
 
-        lsstCamFilter = [f for f in LsstCamFilters0 if f.abstract_filter == abstract_filter][0]
+        lsstCamFilter = [f for f in LsstCamFiltersBaseline if f.abstract_filter == abstract_filter][0]
         lambdaEff = lsstCamFilter.lambdaEff
     else:
         if re.search(r"^empty[3-6]$", physical_filter):
@@ -114,9 +114,15 @@ for physical_filter in [
 
     addFilter(BOTFilters_dict, abstract_filter, physical_filter, lambdaEff=lambdaEff)
 
-    for nd in ["empty", "ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]:
-        pf = f"{physical_filter}~{nd}"  # fully qualified physical filter
+    ndFilters = ["empty", "ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
+    for nd in ndFilters:
+        pf = f"{physical_filter}{FILTER_DELIMITER}{nd}"  # fully qualified physical filter
 
+        # When one of the filters is empty we can just use the real filter
+        # (e.g. "u" not "u~empty");  but we always need at least one "empty"
+        #
+        # Don't use . in abstract filter names, it's just asking for trouble
+        # if they ever end up in filenames
         if nd == "empty":
             if abstract_filter == "empty":
                 af = "empty"
@@ -126,10 +132,9 @@ for physical_filter in [
             pf = nd
             af = f"{nd.replace('.', '_')}"
         else:
-            af = f"{abstract_filter}~{nd.replace('.', '_')}"
+            af = f"{abstract_filter}{FILTER_DELIMITER}{nd.replace('.', '_')}"
 
-        addFilter(BOTFilters_dict,
-                  abstract_filter=af, physical_filter=pf, lambdaEff=lambdaEff)
+        addFilter(BOTFilters_dict, abstract_filter=af, physical_filter=pf, lambdaEff=lambdaEff)
 
 BOTFilters = [
     FilterDefinition(abstract_filter="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
@@ -143,28 +148,32 @@ for abstract_filter, filt in BOTFilters_dict.items():
 # The filters that we might see in the real LSSTCam (including in SLAC)
 #
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    *LsstCamFilters0,
+    *LsstCamFiltersBaseline,
     *BOTFilters,
 )
 
 #
 # Filters in SLAC's Test Stand 3
 #
-TS3Filters = [FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
-              FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
+TS3Filters = [
+    FilterDefinition(abstract_filter="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
+    FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
 
 TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    *LsstCamFilters0,
+    *LsstCamFiltersBaseline,
     *TS3Filters,
 )
 #
 # Filters in SLAC's Test Stand 8
 #
-TS8Filters = [FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
-              FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
+TS8Filters = [
+    FilterDefinition(abstract_filter="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
+    FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
 
 TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    *LsstCamFilters0,
+    *LsstCamFiltersBaseline,
     *TS8Filters,
 )
 
@@ -261,19 +270,16 @@ for abstract_filter, sn in [("u", "SN-05"),
                             ("u", "SN-02"),  # not yet coated
                             ("u", "SN-06"),  # not yet coated
                             ("g", "SN-07"),
-                            ("g", "SN-01 "),
-                            ("r", "SN-03 "),
+                            ("g", "SN-01"),
+                            ("r", "SN-03"),
                             ("i", "SN-06"),
                             ("z", "SN-03"),
-                            ("z", "SN-02 "),
+                            ("z", "SN-02"),
                             ("y", "SN-04"),
                             ]:
     physical_filter = f"{abstract_filter}_{sn[3:]}"
-    if abstract_filter == "clear":
-        lambdaEff = 0.0
-    else:
-        lsstCamFilter = [f for f in LsstCamFilters0 if f.abstract_filter == abstract_filter][0]
-        lambdaEff = lsstCamFilter.lambdaEff
+    lsstCamFilter = [f for f in LsstCamFiltersBaseline if f.abstract_filter == abstract_filter][0]
+    lambdaEff = lsstCamFilter.lambdaEff
 
     addFilter(ComCamFilters_dict, abstract_filter, physical_filter, lambdaEff=lambdaEff)
 
