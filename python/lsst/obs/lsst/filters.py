@@ -74,6 +74,9 @@ LsstCamFiltersBaseline = FilterDefinitionCollection(
 #                                            both appear in FILTER,
 #   NeutralFWheel appears in FILTER2
 #
+# Experimentally we also see FILTER2 values of:
+#    ['ND_OD0.01', 'ND_OD0.05', 'ND_OD0.4', 'ND_OD3.0', 'ND_OD4.0']
+#
 # The abstract_filter names are not yet defined, so I'm going to invent them
 
 
@@ -97,7 +100,7 @@ for physical_filter in [
         "empty3",
         "empty4",
         "empty5",
-        # "empty6",  # if uncommented, set LsstCamMapper._nbit_filter = 8
+        "empty6",
 ]:
     mat = re.search(r"^SDSS(.)$", physical_filter)
     if mat:
@@ -115,6 +118,9 @@ for physical_filter in [
     addFilter(BOTFilters_dict, abstract_filter, physical_filter, lambdaEff=lambdaEff)
 
     ndFilters = ["empty", "ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
+    # We found these additional filters in BOT data files:
+    ndFilters += ['ND_OD0.01', 'ND_OD0.05', 'ND_OD0.4', 'ND_OD3.0', 'ND_OD4.0']
+
     for nd in ndFilters:
         pf = f"{physical_filter}{FILTER_DELIMITER}{nd}"  # fully qualified physical filter
 
@@ -146,6 +152,10 @@ for abstract_filter, filt in BOTFilters_dict.items():
                                        alias=filt["alias"]))
 #
 # The filters that we might see in the real LSSTCam (including in SLAC)
+#
+# Note that the filters we'll use on the sky, LsstCamFiltersBaseline, must
+# come first as we're not allocating enough bits in _computeCoaddExposureId
+# for all the BOT composite filters (i.e. "u~ND_OD1.0")
 #
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *LsstCamFiltersBaseline,

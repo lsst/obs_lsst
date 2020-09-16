@@ -143,10 +143,28 @@ class LsstCamBaseMapper(CameraMapper):
 
         LsstCamMapper._nbit_id = 64 - (LsstCamMapper._nbit_tract + 2*LsstCamMapper._nbit_patch
                                        + LsstCamMapper._nbit_filter)
+        #
+        # The BOT has many ND filters in a second filter wheel, resulting in
+        # more than 128 composite filters.  However, we're never going to
+        # build coadds with the BOT.  So let's ignore the qualifier after
+        # the ~ in filter names when we're calculating the number of filters
+        #
+        # Because the first filter wheel can be empty some of baseFilters are
+        # actually in the second wheel, but that's OK -- we still easily fit
+        # in 7 bits (5 would actually be enough)
 
-        if len(afwImage.Filter.getNames()) >= 2**LsstCamMapper._nbit_filter:
-            raise RuntimeError("You have more filters defined than fit into the %d bits allocated" %
-                               LsstCamMapper._nbit_filter)
+        baseFilters = set()
+        for n in afwImage.Filter.getNames():
+            i = n.find('~')
+            if i >= 0:
+                n = n[:i]
+
+            baseFilters.add(n)
+
+        nFilter = len(baseFilters)
+        if nFilter >= 2**LsstCamMapper._nbit_filter:
+            raise RuntimeError("You have more filters (%d) defined than fit into the %d bits allocated" %
+                               (nFilter, LsstCamMapper._nbit_filter))
 
     @classmethod
     def getCameraName(cls):
@@ -250,6 +268,12 @@ class LsstCamBaseMapper(CameraMapper):
                 raise RuntimeError('patch component not in range [0, %d)' % 2**LsstCamMapper._nbit_patch)
         oid = (((tract << LsstCamMapper._nbit_patch) + patchX) << LsstCamMapper._nbit_patch) + patchY
         if singleFilter:
+            if afwImage.Filter(dataId['filter']).getId() >= 2**LsstCamMapper._nbit_filter:
+                raise RuntimeError("Filter %s has too high an ID (%d) to fit in %d bits",
+                                   afwImage.Filter(dataId['filter']),
+                                   afwImage.Filter(dataId['filter']).getId(),
+                                   LsstCamMapper._nbit_filter)
+
             return (oid << LsstCamMapper._nbit_filter) + afwImage.Filter(dataId['filter']).getId()
         return oid
 
