@@ -40,6 +40,7 @@ class Ts3Mapper(LsstCamMapper):
     _gen3instrument = LsstTS3
     _cameraName = "ts3"
     yamlFileList = ["ts3/ts3Mapper.yaml"] + list(LsstCamMapper.yamlFileList)
+    filterDefinitions = LsstTS3.filterDefinitions
 
     def _computeCcdExposureId(self, dataId):
         """Compute the 64-bit (long) identifier for a CCD exposure.

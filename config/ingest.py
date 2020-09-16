@@ -25,9 +25,9 @@ from lsst.obs.lsst.ingest import LsstCamParseTask
 config.parse.retarget(LsstCamParseTask)
 
 config.parse.translation = {
-    'testType': 'TESTTYPE',
 }
 config.parse.translators = {
+    'testType': 'translate_testType',
     'expTime': 'translate_expTime',
     'object': 'translate_object',
     'imageType': 'translate_imageType',

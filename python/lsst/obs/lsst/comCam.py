@@ -39,6 +39,7 @@ class LsstComCamMapper(LsstCamMapper):
     MakeRawVisitInfoClass = LsstComCamMakeRawVisitInfo
     _gen3instrument = LsstComCam
     _cameraName = "comCam"
+    filterDefinitions = LsstComCam.filterDefinitions
 
 
 class LsstComCamParseTask(LsstCamParseTask):
