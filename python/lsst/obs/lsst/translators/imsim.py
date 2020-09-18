@@ -27,11 +27,11 @@ log = logging.getLogger(__name__)
 class LsstImSimTranslator(LsstSimTranslator):
     """Metadata translation class for ImSim headers"""
 
-    name = "LSST-ImSim"
+    name = "LSSTCam-imSim"
     """Name of this translation class"""
 
     _const_map = {
-        "instrument": "LSST-ImSim",
+        "instrument": "LSSTCam-imSim",
         "boresight_rotation_coord": "sky",
         "object": "UNKNOWN",
         "pressure": None,

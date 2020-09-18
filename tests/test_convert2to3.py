@@ -81,7 +81,7 @@ class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
 
 class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
-    instrumentName = "LSST-ImSim"
+    instrumentName = "LSSTCam-imSim"
     instrumentDir = "imsim"
     instrumentClassName = "lsst.obs.lsst.LsstImSim"
     biases = [{"detector": 42, "calibration_label": "gen2/bias_2022-01-01_042",
