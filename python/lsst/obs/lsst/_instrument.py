@@ -194,7 +194,7 @@ class LsstPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "LSST-PhoSim"
+    instrument = "LSSTCam-PhoSim"
     policyName = "phosim"
     translatorClass = LsstPhoSimTranslator
 

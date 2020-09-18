@@ -31,11 +31,11 @@ class LsstPhoSimTranslator(LsstSimTranslator):
     """Metadata translator for LSST PhoSim data.
     """
 
-    name = "LSST-PhoSim"
+    name = "LSSTCam-PhoSim"
     """Name of this translation class"""
 
     _const_map = {
-        "instrument": "LSST-PhoSim",
+        "instrument": "LSSTCam-PhoSim",
         "boresight_rotation_coord": "sky",
         "observation_type": "science",
         "object": "UNKNOWN",

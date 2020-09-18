@@ -191,7 +191,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
     def test_phosim_translator(self):
         test_data = (("phosim-lsst_a_204595_f3_R11_S02_E000.yaml",
                       dict(telescope="Simonyi Survey Telescope",
-                           instrument="LSST-PhoSim",
+                           instrument="LSSTCam-PhoSim",
                            boresight_rotation_coord="sky",
                            dark_time=30.0*u.s,
                            detector_exposure_id=204595038,
