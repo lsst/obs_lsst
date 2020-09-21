@@ -179,7 +179,7 @@ class LsstImSim(LsstCam):
     """Gen3 Butler specialization for ImSim simulations.
     """
 
-    instrument = "LSST-ImSim"
+    instrument = "LSSTCam-imSim"
     policyName = "imsim"
     translatorClass = LsstImSimTranslator
     filterDefinitions = LSST_IMSIM_FILTER_DEFINITIONS
@@ -194,7 +194,7 @@ class LsstPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
-    instrument = "LSST-PhoSim"
+    instrument = "LSSTCam-PhoSim"
     policyName = "phosim"
     translatorClass = LsstPhoSimTranslator
 
