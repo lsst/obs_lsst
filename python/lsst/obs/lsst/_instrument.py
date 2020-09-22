@@ -101,7 +101,7 @@ class LsstCam(Instrument):
         camera = yamlCamera.makeCamera(cameraYamlFile)
         if camera.getName() != cls.getName():
             raise RuntimeError(f"Expected to read camera geometry for {cls.instrument}"
-                               f" but instead got geometry for {cls._camera.getName()}")
+                               f" but instead got geometry for {camera.getName()}")
         return camera
 
     def getRawFormatter(self, dataId):
