@@ -4,3 +4,4 @@
 config.skyMaps = {}
 config.rootSkyMapName = None
 config.refCats = []
+config.datasetIgnorePatterns.append("processCcd_metadata")

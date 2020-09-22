@@ -62,20 +62,36 @@ class TS8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.LsstTS8"
     biases = [{"detector": 67, "instrument": instrumentName}]
 
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
+
 
 class TS3Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "ts3"
     instrumentClassName = "lsst.obs.lsst.LsstTS3"
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 class UCDCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "ucd"
     instrumentClassName = "lsst.obs.lsst.LsstUCDCam"
 
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
+
 
 class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "phosim"
     instrumentClassName = "lsst.obs.lsst.LsstPhoSim"
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
@@ -85,6 +101,10 @@ class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     biases = [{"detector": 42, "instrument": instrumentName}]
     darks = [{"detector": 42, "instrument": instrumentName}]
     flats = [{"detector": 42, "instrument": instrumentName, "physical_filter": "i_sim_1.4"}]
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 def setup_module(module):
