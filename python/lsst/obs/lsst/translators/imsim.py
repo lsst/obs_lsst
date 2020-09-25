@@ -87,6 +87,9 @@ class LsstImSimTranslator(LsstSimTranslator):
     @cache_translation
     def to_boresight_airmass(self):
         # Docstring will be inherited. Property defined in properties.py
+        for key in ("AIRMASS", "AMSTART"):
+            if self.is_key_ok(key):
+                return self._header[key]
         altaz = self.to_altaz_begin()
         if altaz is not None:
             return altaz.secz.to_value()
