@@ -30,7 +30,7 @@ tasks:
     class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpDarkProc'
-      connections.outputData: 'darkProposal'
+      connections.outputData: 'dark'
       calibrationType: 'dark'
       exposureScaling: "DarkTime"
       python: config.mask.append("CR")
