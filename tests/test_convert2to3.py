@@ -53,43 +53,58 @@ class LatissGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LATISS"
     instrumentDir = "latiss"
     instrumentClassName = "lsst.obs.lsst.Latiss"
-    biases = [{"detector": 0, "calibration_label": "gen2/bias_2018-09-21_000",
-               "instrument": instrumentName}]
+    biases = [{"detector": 0, "instrument": instrumentName}]
 
 
 class TS8Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LSST-TS8"
     instrumentDir = "ts8"
     instrumentClassName = "lsst.obs.lsst.LsstTS8"
-    biases = [{"detector": 67, "calibration_label": "gen2/bias_2018-07-24_067",
-               "instrument": instrumentName}]
+    biases = [{"detector": 67, "instrument": instrumentName}]
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 class TS3Gen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "ts3"
     instrumentClassName = "lsst.obs.lsst.LsstTS3"
 
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
+
 
 class UCDCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "ucd"
     instrumentClassName = "lsst.obs.lsst.LsstUCDCam"
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "phosim"
     instrumentClassName = "lsst.obs.lsst.LsstPhoSim"
 
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
+
 
 class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LSSTCam-imSim"
     instrumentDir = "imsim"
     instrumentClassName = "lsst.obs.lsst.LsstImSim"
-    biases = [{"detector": 42, "calibration_label": "gen2/bias_2022-01-01_042",
-               "instrument": instrumentName}]
-    darks = [{"detector": 42, "calibration_label": "gen2/dark_2022-01-01_042",
-              "instrument": instrumentName}]
-    flats = [{"detector": 42, "calibration_label": "gen2/flat_2022-08-06_042_i_sim_1.4",
-              "instrument": instrumentName, "physical_filter": "i_sim_1.4"}]
+    biases = [{"detector": 42, "instrument": instrumentName}]
+    darks = [{"detector": 42, "instrument": instrumentName}]
+    flats = [{"detector": 42, "instrument": instrumentName, "physical_filter": "i_sim_1.4"}]
+
+    def check_defects(self, gen3Butler, detectors):
+        # Disable defects tests, because there are no defects.
+        pass
 
 
 def setup_module(module):

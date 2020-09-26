@@ -37,7 +37,7 @@ tasks:
     config:
       connections.inputExps: 'cpFlatProc'
       connections.inputScales: 'cpFlatNormScales'
-      connections.outputData: 'flatProposal'
+      connections.outputData: 'flat'
       calibrationType: 'flat'
       calibrationDimensions: ['physical_filter']
       exposureScaling: InputList

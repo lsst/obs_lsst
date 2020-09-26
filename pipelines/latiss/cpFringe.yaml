@@ -29,7 +29,7 @@ tasks:
     class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpFringeProc'
-      connections.outputData: 'fringeProposal'
+      connections.outputData: 'fringe'
       calibrationType: 'fringe'
       calibrationDimensions: ['physical_filter']
       exposureScaling: "None"
