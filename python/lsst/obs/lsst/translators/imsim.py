@@ -14,7 +14,12 @@ __all__ = ("LsstImSimTranslator", )
 
 import logging
 import astropy.units as u
-from astropy.coordinates import Angle
+from astropy.coordinates import Angle, AltAz
+
+try:
+    import erfa
+except ImportError:
+    import astropy._erfa as erfa
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers
@@ -87,6 +92,9 @@ class LsstImSimTranslator(LsstSimTranslator):
     @cache_translation
     def to_boresight_airmass(self):
         # Docstring will be inherited. Property defined in properties.py
+        for key in ("AIRMASS", "AMSTART"):
+            if self.is_key_ok(key):
+                return self._header[key]
         altaz = self.to_altaz_begin()
         if altaz is not None:
             return altaz.secz.to_value()
@@ -113,3 +121,25 @@ class LsstImSimTranslator(LsstSimTranslator):
                         self.to_observation_id(), self._header["FILTER"])
             return self._header["FILTER"]
         return "_".join((self._header["FILTER"], "sim", throughputs_version))
+
+    @cache_translation
+    def to_altaz_begin(self):
+        # Calculate from the hour angle if available
+        if self.to_observation_type() != "science":
+            return None
+
+        if not self.are_keys_ok(["HASTART", "DECTEL"]):
+            # Fallback to slow method
+            return super().to_altaz_begin()
+
+        location = self.to_location()
+        ha = Angle(self._header["HASTART"], unit=u.deg)
+
+        # For speed over accuracy, assume this is apparent Dec not ICRS
+        dec = Angle(self._header["DECTEL"], unit=u.deg)
+
+        # Use erfa directly
+        az, el = erfa.hd2ae(ha.radian, dec.radian, location.lat.radian)
+
+        return AltAz(az*u.radian, el*u.radian,
+                     obstime=self.to_datetime_begin(), location=location)
