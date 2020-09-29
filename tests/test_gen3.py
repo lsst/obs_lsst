@@ -28,7 +28,7 @@ from pstats import Stats
 
 import numpy as np
 
-from lsst.obs.lsst import (LsstCam, LsstComCam, LsstImSim, LsstPhoSim,
+from lsst.obs.lsst import (LsstCam, LsstComCam, LsstCamImSim, LsstCamPhoSim,
                            LsstTS8, LsstTS3, LsstUCDCam, Latiss)
 
 from lsst.daf.butler import (Butler, DatasetType, FileDescriptor, Location,
@@ -138,11 +138,11 @@ class TestInstruments(unittest.TestCase):
         self.checkInstrumentWithRegistry(LsstComCam, testFpath)
 
     def testImSim(self):
-        self.checkInstrumentWithRegistry(LsstImSim,
+        self.checkInstrumentWithRegistry(LsstCamImSim,
                                          "imsim/raw/204595/R11/00204595-R11-S20-det042.fits")
 
     def testPhoSim(self):
-        self.checkInstrumentWithRegistry(LsstPhoSim,
+        self.checkInstrumentWithRegistry(LsstCamPhoSim,
                                          "phosim/raw/204595/R11/00204595-R11-S20-det042.fits")
 
     def testTs8(self):

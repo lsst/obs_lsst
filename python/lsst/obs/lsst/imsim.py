@@ -22,27 +22,27 @@
 #
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import LsstImSimTranslator
-from ._instrument import LsstImSim
-from .filters import LSST_IMSIM_FILTER_DEFINITIONS
+from .translators import LsstCamImSimTranslator
+from ._instrument import LsstCamImSim
+from .filters import LSSTCAM_IMSIM_FILTER_DEFINITIONS
 
 __all__ = ["ImsimMapper", "ImsimParseTask"]
 
 
 class ImsimMakeRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = LsstImSimTranslator
+    metadataTranslator = LsstCamImSimTranslator
 
 
 class ImsimMapper(LsstCamMapper):
     """The Mapper for the imsim simulations of the LsstCam."""
-    translatorClass = LsstImSimTranslator
+    translatorClass = LsstCamImSimTranslator
     MakeRawVisitInfoClass = ImsimMakeRawVisitInfo
-    _gen3instrument = LsstImSim
+    _gen3instrument = LsstCamImSim
 
     _cameraName = "imsim"
     yamlFileList = ["imsim/imsimMapper.yaml"] + list(LsstCamMapper.yamlFileList)
-    filterDefinitions = LSST_IMSIM_FILTER_DEFINITIONS
+    filterDefinitions = LSSTCAM_IMSIM_FILTER_DEFINITIONS
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
@@ -54,7 +54,7 @@ class ImsimParseTask(LsstCamParseTask):
     """
 
     _mapperClass = ImsimMapper
-    _translatorClass = LsstImSimTranslator
+    _translatorClass = LsstCamImSimTranslator
 
     def translate_controller(self, md):
         """Always return Simulation as controller for imsim data."""

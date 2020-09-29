@@ -87,7 +87,7 @@ class UCDCamGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 
 class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentDir = "phosim"
-    instrumentClassName = "lsst.obs.lsst.LsstPhoSim"
+    instrumentClassName = "lsst.obs.lsst.LsstCamPhoSim"
 
     def check_defects(self, gen3Butler, detectors):
         # Disable defects tests, because there are no defects.
@@ -97,7 +97,7 @@ class PhoSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
 class ImSimGen2To3TestCase(ConvertGen2To3TestCase, lsst.utils.tests.TestCase):
     instrumentName = "LSSTCam-imSim"
     instrumentDir = "imsim"
-    instrumentClassName = "lsst.obs.lsst.LsstImSim"
+    instrumentClassName = "lsst.obs.lsst.LsstCamImSim"
     biases = [{"detector": 42, "instrument": instrumentName}]
     darks = [{"detector": 42, "instrument": instrumentName}]
     flats = [{"detector": 42, "instrument": instrumentName, "physical_filter": "i_sim_1.4"}]
