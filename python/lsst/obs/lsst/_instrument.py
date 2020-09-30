@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ("LsstCam", "LsstImSim", "LsstPhoSim", "LsstTS8",
+__all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
            "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
 
 import os.path
@@ -30,13 +30,13 @@ from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument
 from lsst.obs.base.gen2to3 import TranslatorFactory
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
-                      LSST_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
+                      LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
                       TS8_FILTER_DEFINITIONS, COMCAM_FILTER_DEFINITIONS,
                       )
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -175,33 +175,33 @@ class LsstComCam(LsstCam):
         return LsstComCamRawFormatter
 
 
-class LsstImSim(LsstCam):
+class LsstCamImSim(LsstCam):
     """Gen3 Butler specialization for ImSim simulations.
     """
 
     instrument = "LSSTCam-imSim"
     policyName = "imsim"
-    translatorClass = LsstImSimTranslator
-    filterDefinitions = LSST_IMSIM_FILTER_DEFINITIONS
+    translatorClass = LsstCamImSimTranslator
+    filterDefinitions = LSSTCAM_IMSIM_FILTER_DEFINITIONS
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import LsstImSimRawFormatter
-        return LsstImSimRawFormatter
+        from .rawFormatter import LsstCamImSimRawFormatter
+        return LsstCamImSimRawFormatter
 
 
-class LsstPhoSim(LsstCam):
+class LsstCamPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
     """
 
     instrument = "LSSTCam-PhoSim"
     policyName = "phosim"
-    translatorClass = LsstPhoSimTranslator
+    translatorClass = LsstCamPhoSimTranslator
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import LsstPhoSimRawFormatter
-        return LsstPhoSimRawFormatter
+        from .rawFormatter import LsstCamPhoSimRawFormatter
+        return LsstCamPhoSimRawFormatter
 
 
 class LsstTS8(LsstCam):

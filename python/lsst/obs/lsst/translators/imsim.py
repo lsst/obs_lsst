@@ -8,9 +8,9 @@
 # Use of this source code is governed by a 3-clause BSD-style
 # license that can be found in the LICENSE file.
 
-"""Metadata translation code for ImSim headers"""
+"""Metadata translation code for LSSTCam imSim headers"""
 
-__all__ = ("LsstImSimTranslator", )
+__all__ = ("LsstCamImSimTranslator", )
 
 import logging
 import astropy.units as u
@@ -29,8 +29,8 @@ from .lsstsim import LsstSimTranslator
 log = logging.getLogger(__name__)
 
 
-class LsstImSimTranslator(LsstSimTranslator):
-    """Metadata translation class for ImSim headers"""
+class LsstCamImSimTranslator(LsstSimTranslator):
+    """Metadata translation class for LSSTCam imSim headers"""
 
     name = "LSSTCam-imSim"
     """Name of this translation class"""

@@ -22,7 +22,16 @@
 """Gen3 Butler Formatters for LSST raw data.
 """
 
-__all__ = ("LsstCamRawFormatter", "LatissRawFormatter")
+__all__ = (
+    "LsstCamRawFormatter",
+    "LatissRawFormatter",
+    "LsstCamImSimRawFormatter",
+    "LsstCamPhoSimRawFormatter",
+    "LsstTS8RawFormatter",
+    "LsstTS3RawFormatter",
+    "LsstComCamRawFormatter",
+    "LsstUCDCamRawFormatter",
+)
 
 from astro_metadata_translator import fix_header, merge_headers
 
@@ -30,11 +39,11 @@ import lsst.afw.fits
 from lsst.obs.base import FitsRawFormatterBase
 
 from ._instrument import LsstCam, Latiss, \
-    LsstImSim, LsstPhoSim, LsstTS8, \
+    LsstCamImSim, LsstCamPhoSim, LsstTS8, \
     LsstTS3, LsstUCDCam, LsstComCam
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstPhoSimTranslator, LsstTS8Translator, LsstImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
 from .assembly import fixAmpsAndAssemble, readRawAmps
 
 
@@ -126,16 +135,16 @@ class LatissRawFormatter(LsstCamRawFormatter):
     wcsFlipX = True
 
 
-class LsstImSimRawFormatter(LsstCamRawFormatter):
-    translatorClass = LsstImSimTranslator
-    _instrument = LsstImSim
-    filterDefinitions = LsstImSim.filterDefinitions
+class LsstCamImSimRawFormatter(LsstCamRawFormatter):
+    translatorClass = LsstCamImSimTranslator
+    _instrument = LsstCamImSim
+    filterDefinitions = LsstCamImSim.filterDefinitions
 
 
-class LsstPhoSimRawFormatter(LsstCamRawFormatter):
-    translatorClass = LsstPhoSimTranslator
-    _instrument = LsstPhoSim
-    filterDefinitions = LsstPhoSim.filterDefinitions
+class LsstCamPhoSimRawFormatter(LsstCamRawFormatter):
+    translatorClass = LsstCamPhoSimTranslator
+    _instrument = LsstCamPhoSim
+    filterDefinitions = LsstCamPhoSim.filterDefinitions
 
 
 class LsstTS8RawFormatter(LsstCamRawFormatter):

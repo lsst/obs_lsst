@@ -20,24 +20,24 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
+__all__ = ["PhosimMapper", "PhosimParseTask", "PhosimEimgParseTask"]
+
 from . import LsstCamMapper, LsstCamMakeRawVisitInfo
 from .ingest import LsstCamParseTask
-from .translators import LsstPhoSimTranslator
-from ._instrument import LsstPhoSim
-
-__all__ = ["PhosimMapper", "PhosimParseTask", "PhosimEimgParseTask"]
+from .translators import LsstCamPhoSimTranslator
+from ._instrument import LsstCamPhoSim
 
 
 class PhosimRawVisitInfo(LsstCamMakeRawVisitInfo):
     """Make a VisitInfo from the FITS header of a raw image."""
-    metadataTranslator = LsstPhoSimTranslator
+    metadataTranslator = LsstCamPhoSimTranslator
 
 
 class PhosimMapper(LsstCamMapper):
     """The Mapper for the phosim simulations of the LsstCam."""
-    translatorClass = LsstPhoSimTranslator
+    translatorClass = LsstCamPhoSimTranslator
     MakeRawVisitInfoClass = PhosimRawVisitInfo
-    _gen3instrument = LsstPhoSim
+    _gen3instrument = LsstCamPhoSim
 
     _cameraName = "phosim"
     yamlFileList = ["imsim/imsimMapper.yaml"] + list(LsstCamMapper.yamlFileList)
@@ -52,7 +52,7 @@ class PhosimParseTask(LsstCamParseTask):
     """
 
     _mapperClass = PhosimMapper
-    _translatorClass = LsstPhoSimTranslator
+    _translatorClass = LsstCamPhoSimTranslator
 
     def translate_controller(self, md):
         """Always return Simulation as controller for imsim data."""

@@ -19,7 +19,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ()
+__all__ = (
+    "LSSTCAM_FILTER_DEFINITIONS",
+    "LATISS_FILTER_DEFINITIONS",
+    "LSSTCAM_IMSIM_FILTER_DEFINITIONS",
+    "TS3_FILTER_DEFINITIONS",
+    "TS8_FILTER_DEFINITIONS",
+    "COMCAM_FILTER_DEFINITIONS",
+)
 
 import re
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
@@ -246,7 +253,7 @@ for filter in _latiss_filters:
 LATISS_FILTER_DEFINITIONS = FilterDefinitionCollection(*_latiss_filter_and_grating)
 
 
-LSST_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
+LSSTCAM_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     # These were computed using throughputs 1.4 and
     # lsst.sims.photUtils.BandpassSet.
     FilterDefinition(physical_filter="u_sim_1.4",

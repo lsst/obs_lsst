@@ -8,9 +8,9 @@
 # Use of this source code is governed by a 3-clause BSD-style
 # license that can be found in the LICENSE file.
 
-"""Metadata translation code for LSST PhoSim FITS headers"""
+"""Metadata translation code for LSSTCam PhoSim FITS headers"""
 
-__all__ = ("LsstPhoSimTranslator", )
+__all__ = ("LsstCamPhoSimTranslator", )
 
 import logging
 
@@ -27,8 +27,8 @@ from .lsstsim import LsstSimTranslator
 log = logging.getLogger(__name__)
 
 
-class LsstPhoSimTranslator(LsstSimTranslator):
-    """Metadata translator for LSST PhoSim data.
+class LsstCamPhoSimTranslator(LsstSimTranslator):
+    """Metadata translator for LSSTCam PhoSim data.
     """
 
     name = "LSSTCam-PhoSim"
