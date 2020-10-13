@@ -665,6 +665,24 @@ class LsstBaseTranslator(FitsTranslator):
             return exposure_group
         return super().to_exposure_group()
 
+    @staticmethod
+    def _is_filter_empty(filter):
+        """Return true if the supplied filter indicates an empty filter slot
+
+        Parameters
+        ----------
+        filter : `str`
+            The filter string to check.
+
+        Returns
+        -------
+        is_empty : `bool`
+            `True` if the filter string looks like it is referring to an
+            empty filter slot. For example this can be if the filter is
+            "empty" or "empty_2".
+        """
+        return bool(re.match(r"empty_?\d*$", filter.lower()))
+
     def _determine_primary_filter(self):
         """Determine the primary filter from the ``FILTER`` header.
 
@@ -679,7 +697,7 @@ class LsstBaseTranslator(FitsTranslator):
             physical_filter = self._header["FILTER"]
             self._used_these_cards("FILTER")
 
-            if physical_filter.lower().startswith("empty"):
+            if self._is_filter_empty(physical_filter):
                 physical_filter = "EMPTY"
         else:
             # Be explicit about having no knowledge of the filter

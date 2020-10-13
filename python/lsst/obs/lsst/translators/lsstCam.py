@@ -121,7 +121,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         if self.is_key_ok("FILTER2"):
             self._used_these_cards("FILTER2")
             filter2 = self._header["FILTER2"]
-            if filter2.lower().startswith("empty"):
+            if self._is_filter_empty(filter2):
                 filter2 = None
 
         if filter2:
