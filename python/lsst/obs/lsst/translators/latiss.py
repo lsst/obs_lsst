@@ -477,27 +477,7 @@ class LatissTranslator(LsstBaseTranslator):
             or bias.
         """
 
-        # If there is no filter defined we want to report this as a special
-        # filter, "UNKNOWN".  We think it should be set.
-        obstype = self.to_observation_type()
-        undefined_filter = "UNKNOWN"
-        log_undefined = True
-        if obstype in ("bias", "dark"):
-            undefined_filter = "NONE"
-            log_undefined = False
-
-        if self.is_key_ok("FILTER"):
-            physical_filter = self._header["FILTER"]
-            self._used_these_cards("FILTER")
-
-            if physical_filter.lower().startswith("empty"):
-                physical_filter = "EMPTY"
-        else:
-            # Be explicit about having no knowledge of the filter
-            physical_filter = undefined_filter
-            if log_undefined:
-                log.warning("%s: Unable to determine the filter",
-                            self.to_observation_id())
+        physical_filter = self._determine_primary_filter()
 
         if self.is_key_ok("GRATING"):
             grating = self._header["GRATING"]
@@ -507,7 +487,7 @@ class LatissTranslator(LsstBaseTranslator):
                 grating = "EMPTY"
         else:
             # Be explicit about having no knowledge of the grating
-            grating = undefined_filter
+            grating = "UNKNOWN"
 
         physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 

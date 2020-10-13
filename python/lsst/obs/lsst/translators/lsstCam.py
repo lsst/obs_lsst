@@ -15,10 +15,10 @@ __all__ = ("LsstCamTranslator", )
 import logging
 import astropy.units as u
 
-# from astro_metadata_translator import cache_translation
+from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
 
-from .lsst import LsstBaseTranslator, SIMONYI_TELESCOPE
+from .lsst import LsstBaseTranslator, SIMONYI_TELESCOPE, FILTER_DELIMITER
 
 log = logging.getLogger(__name__)
 
@@ -103,3 +103,28 @@ class LsstCamTranslator(LsstBaseTranslator):
             if instrume == cls.supported_instrument.lower():
                 return True
         return False
+
+    @cache_translation
+    def to_physical_filter(self):
+        """Calculate the physical filter name.
+
+        Returns
+        -------
+        filter : `str`
+            Name of filter. Can be a combination of FILTER and FILTER2
+            headers joined by a "~" if FILTER2 is set and not empty.
+            Returns "UNKNOWN" if no filter is declared.
+        """
+        physical_filter = self._determine_primary_filter()
+
+        filter2 = None
+        if self.is_key_ok("FILTER2"):
+            self._used_these_cards("FILTER2")
+            filter2 = self._header["FILTER2"]
+            if self._is_filter_empty(filter2):
+                filter2 = None
+
+        if filter2:
+            physical_filter = f"{physical_filter}{FILTER_DELIMITER}{filter2}"
+
+        return physical_filter
