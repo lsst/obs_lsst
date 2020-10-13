@@ -158,7 +158,7 @@ calibrations:
     level: Ccd
     obsTimeName: dateObs
     persistable: DefectsList
-    python: lsst.meas.algorithms.Defects
+    python: lsst.ip.isr.Defects
     refCols:
     - visit
     - detector
