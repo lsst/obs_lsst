@@ -664,3 +664,32 @@ class LsstBaseTranslator(FitsTranslator):
             self._used_these_cards("GROUPID")
             return exposure_group
         return super().to_exposure_group()
+
+    def _determine_primary_filter(self):
+        """Determine the primary filter from the ``FILTER`` header.
+
+        Returns
+        -------
+        filter : `str`
+            The contents of the ``FILTER`` header with some appropriate
+            defaulting.
+        """
+
+        if self.is_key_ok("FILTER"):
+            physical_filter = self._header["FILTER"]
+            self._used_these_cards("FILTER")
+
+            if physical_filter.lower().startswith("empty"):
+                physical_filter = "EMPTY"
+        else:
+            # Be explicit about having no knowledge of the filter
+            # by setting it to "UNKNOWN". It should always have a value.
+            physical_filter = "UNKNOWN"
+
+            # Warn if the filter being unknown is important
+            obstype = self.to_observation_type()
+            if obstype not in ("bias", "dark"):
+                log.warning("%s: Unable to determine the filter",
+                            self.to_observation_id())
+
+        return physical_filter
