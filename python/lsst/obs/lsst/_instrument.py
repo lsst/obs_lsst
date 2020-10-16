@@ -115,18 +115,21 @@ class LsstCam(Instrument):
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
         obsMax = self.translatorClass.max_detector_exposure_id()
-        registry.insertDimensionData("instrument",
-                                     {"name": self.getName(),
-                                      "detector_max": self.translatorClass.DETECTOR_MAX,
-                                      "visit_max": obsMax,
-                                      "exposure_max": obsMax,
-                                      "class_name": getFullTypeName(self),
-                                      })
+        with registry.transaction():
+            registry.syncDimensionData(
+                "instrument",
+                {
+                    "name": self.getName(),
+                    "detector_max": self.translatorClass.DETECTOR_MAX,
+                    "visit_max": obsMax,
+                    "exposure_max": obsMax,
+                    "class_name": getFullTypeName(self),
+                }
+            )
+            for detector in self.getCamera():
+                registry.syncDimensionData("detector", self.extractDetectorRecord(detector))
 
-        records = [self.extractDetectorRecord(detector) for detector in self.getCamera()]
-        registry.insertDimensionData("detector", *records)
-
-        self._registerFilters(registry)
+            self._registerFilters(registry)
 
     def extractDetectorRecord(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
