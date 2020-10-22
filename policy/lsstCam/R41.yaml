@@ -125,7 +125,7 @@ R41 :
       C11 : { gain : 0.983948, readNoise : 7.067636, saturation : 211364.750000 }
       C12 : { gain : 0.980378, readNoise : 7.129422, saturation : 210996.375000 }
       C13 : { gain : 0.992452, readNoise : 7.266650, saturation : 212877.718750 }
-      C14 : { gain : 0.977743, readNoise : 7.292330, saturation : 215165.546875 }
+      C14 : { gain : 0.977743, readNoise : 25.0, saturation : 215165.546875 }
       C15 : { gain : 0.989526, readNoise : 7.647843, saturation : 216625.937500 }
       C16 : { gain : 0.985142, readNoise : 7.042727, saturation : 216956.750000 }
       C17 : { gain : 0.986705, readNoise : 6.578331, saturation : 215621.390625 }
