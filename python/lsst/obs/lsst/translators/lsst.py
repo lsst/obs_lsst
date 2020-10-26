@@ -10,7 +10,7 @@
 
 """Metadata translation support code for LSST headers"""
 
-__all__ = ("ROLLOVERTIME", "TZERO", "SIMONYI_LOCATION", "read_detector_ids",
+__all__ = ("TZERO", "SIMONYI_LOCATION", "read_detector_ids",
            "compute_detector_exposure_id_generic", "LsstBaseTranslator",
            "SIMONYI_TELESCOPE")
 
@@ -32,8 +32,7 @@ from astro_metadata_translator import cache_translation, FitsTranslator
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
     altaz_from_degree_headers
 
-# LSST day clock starts at UTC+8
-ROLLOVERTIME = TimeDelta(8*60*60, scale="tai", format="sec")
+
 TZERO = Time("2015-01-01T00:00", format="isot", scale="utc")
 TZERO_DATETIME = TZERO.to_datetime()
 
@@ -161,6 +160,10 @@ class LsstBaseTranslator(FitsTranslator):
 
     _DEFAULT_LOCATION = SIMONYI_LOCATION
     """Default telescope location in absence of relevant FITS headers."""
+
+    _ROLLOVER_TIME = TimeDelta(12*60*60, scale="tai", format="sec")
+    """Time delta for the definition of a Rubin Observatory start of day.
+    Used when the header is missing. See LSE-400 for details."""
 
     @classmethod
     def __init_subclass__(cls, **kwargs):
@@ -711,3 +714,44 @@ class LsstBaseTranslator(FitsTranslator):
                             self.to_observation_id())
 
         return physical_filter
+
+    @cache_translation
+    def to_observing_day(self):
+        """Return the day of observation as YYYYMMDD integer.
+
+        For LSSTCam and other compliant instruments this is the value
+        of the DAYOBS header.
+
+        Returns
+        -------
+        obs_day : `int`
+            The day of observation.
+        """
+        if self.is_key_ok("DAYOBS"):
+            self._used_these_cards("DAYOBS")
+            return int(self._header["DAYOBS"])
+
+        # Calculate it ourselves correcting for the Rubin offset
+        date = self.to_datetime_begin().tai
+        date -= self._ROLLOVER_TIME
+        return int(date.strftime("%Y%m%d"))
+
+    @cache_translation
+    def to_observation_counter(self):
+        """Return the sequence number within the observing day.
+
+        Returns
+        -------
+        counter : `int`
+            The sequence number for this day.
+        """
+        if self.is_key_ok("SEQNUM"):
+            # Some older LATISS data may not have the header
+            # but this is corrected in fix_header for LATISS.
+            self._used_these_cards("SEQNUM")
+            return int(self._header["SEQNUM"])
+
+        # This indicates a problem so we warn and return a 0
+        log.warning("%s: Unable to determine the observation counter so returning 0",
+                    self.to_observation_id())
+        return 0

@@ -16,7 +16,7 @@ import logging
 import re
 
 import astropy.units as u
-from astropy.time import Time
+from astropy.time import Time, TimeDelta
 
 from astro_metadata_translator import cache_translation
 
@@ -58,6 +58,9 @@ class LsstTS8Translator(LsstBaseTranslator):
     detector_exposure_id."""
 
     cameraPolicyFile = "policy/ts8.yaml"
+
+    _ROLLOVER_TIME = TimeDelta(8*60*60, scale="tai", format="sec")
+    """Time delta for the definition of a Rubin Test Stand start of day."""
 
     @classmethod
     def can_translate(cls, header, filename=None):

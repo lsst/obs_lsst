@@ -28,8 +28,11 @@ class LsstSimTranslator(LsstBaseTranslator):
     """Shared routines for LSST Simulated Data.
     """
 
-    # No constant or trivial mappings defined
-    _const_map = {}
+    # Reset mappings
+    _const_map = {
+        # neither phosim nor imsim report a counter
+        "observation_counter": 0,
+    }
     _trivial_map = {}
 
     @classmethod

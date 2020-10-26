@@ -24,7 +24,6 @@ from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
 import lsst.log as lsstLog
-from .translators.lsst import ROLLOVERTIME
 from .translators import LsstCamTranslator
 from .lsstCamMapper import LsstCamMapper
 from ._fitsHeader import readRawFitsHeader
@@ -195,20 +194,8 @@ class LsstCamParseTask(ParseTask):
         dayObs : `str`
             The day that the data was taken, e.g. ``1958-02-05``.
         """
-        # Trust DAYOBS if it is there
-        if "DAYOBS" in md:
-            dayObs = str(md.getScalar("DAYOBS"))
-
-            if re.match(r"^\d{8}$", dayObs):
-                dateObs = f"{dayObs[:4]}-{dayObs[4:6]}-{dayObs[6:8]}"
-                return dateObs
-
-        # Try to work it out from date of observation
-        dateObs = self.observationInfo.datetime_begin
-        dateObs -= ROLLOVERTIME
-        dateObs.format = "iso"
-        dateObs.out_subfmt = "date"  # YYYY-MM-DD format
-        return str(dateObs)
+        dayObs = str(self.observationInfo.observing_day)
+        return "-".join([dayObs[:4], dayObs[4:6], dayObs[6:]])
 
     def translate_snap(self, md):
         """Extract snap number from metadata.
