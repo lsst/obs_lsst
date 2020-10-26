@@ -41,12 +41,6 @@ config.detection.doTempLocalBackground=True
 # PSF determination
 config.measurePsf.reserve.fraction = 0.2
 config.measurePsf.starSelector["objectSize"].sourceFluxField = 'base_PsfFlux_instFlux'
-import lsst.meas.extensions.psfex.psfexPsfDeterminer
-config.measurePsf.psfDeterminer["psfex"].spatialOrder = 2
-config.measurePsf.psfDeterminer["psfex"].psfexBasis = 'PIXEL_AUTO'
-config.measurePsf.psfDeterminer["psfex"].samplingSize = 0.5
-config.measurePsf.psfDeterminer["psfex"].kernelSize = 81
-config.measurePsf.psfDeterminer.name = "psfex"
 
 # Astrometry
 config.refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
