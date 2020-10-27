@@ -80,6 +80,23 @@ class LsstCamTranslator(LsstBaseTranslator):
     cameraPolicyFile = "policy/lsstCam.yaml"
 
     @classmethod
+    def fix_header(cls, header):
+        """See https://astro-metadata-translator.lsst.io/py-api/astro_metadata_translator.FitsTranslator.html#astro_metadata_translator.FitsTranslator.fix_header"""  # noqa: E501, W505
+
+        if "FILTER" not in header and header.get("FILTER2") is not None:
+            obsid = header.get("OBSID", "unknown")
+            ccdslot = header.get("CCDSLOT", "unknown")
+            raftbay = header.get("RAFTBAY", "unknown")
+
+            log.warn("%s %s_%s: No FILTER key found but FILTER2=\"%s\" (removed)",
+                     obsid, raftbay, ccdslot, header["FILTER2"])
+            header["FILTER2"] = None
+
+            return True
+
+        return False
+
+    @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
         supplied header.
