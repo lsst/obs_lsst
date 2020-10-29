@@ -19,6 +19,3 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
-
-# reassert upstream default as main LSST config sets assertSameRun=True
-config.assertSameRun = False
