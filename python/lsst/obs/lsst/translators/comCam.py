@@ -80,7 +80,7 @@ class LsstComCamTranslator(LsstCamTranslator):
         return False
 
     @classmethod
-    def fix_header(cls, header):
+    def fix_header(cls, header, instrument, obsid, filename=None):
         """Fix ComCam headers.
 
         Notes
@@ -91,16 +91,20 @@ class LsstComCamTranslator(LsstCamTranslator):
           value and assuming that the ComCam detectors are fixed.
 
         Corrections are reported as debug level log messages.
+
+        See `~astro_metadata_translator.fix_header` for details of the general
+        process.
         """
         modified = False
 
-        obsid = header.get("OBSID", "unknown")
+        # Prefer filename to obsid for log messages
+        log_label = filename or obsid
 
         if "LSST_NUM" not in header:
             slot = header.get("CCDSLOT", None)
             if slot in DETECTOR_SERIALS:
                 header["LSST_NUM"] = DETECTOR_SERIALS[slot]
                 modified = True
-                log.debug("%s: Set LSST_NUM to %s", obsid, header["LSST_NUM"])
+                log.debug("%s: Set LSST_NUM to %s", log_label, header["LSST_NUM"])
 
         return modified
