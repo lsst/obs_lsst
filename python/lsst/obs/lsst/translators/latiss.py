@@ -89,7 +89,7 @@ def is_non_science_or_lab(self):
 
     # This is a science observation on the mountain so we should not
     # use defaults
-    raise KeyError("Required key is missing and this is a mountain science observation")
+    raise KeyError(f"{self._log_prefix}: Required key is missing and this is a mountain science observation")
 
 
 class LatissTranslator(LsstBaseTranslator):
@@ -167,13 +167,21 @@ class LatissTranslator(LsstBaseTranslator):
         return False
 
     @classmethod
-    def fix_header(cls, header):
+    def fix_header(cls, header, instrument, obsid, filename=None):
         """Fix an incorrect LATISS header.
 
         Parameters
         ----------
         header : `dict`
             The header to update.  Updates are in place.
+        instrument : `str`
+            The name of the instrument.
+        obsid : `str`
+            Unique observation identifier associated with this header.
+            Will always be provided.
+        filename : `str`, optional
+            Filename associated with this header. May not be set since headers
+            can be fixed independently of any filename being known.
 
         Returns
         -------
@@ -196,16 +204,23 @@ class LatissTranslator(LsstBaseTranslator):
         * SHUTTIME is always forced to be `None`.
 
         Corrections are reported as debug level log messages.
+
+        See `~astro_metadata_translator.fix_header` for details of the general
+        process.
         """
         modified = False
 
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
+
         if "OBSID" not in header:
             # Very old data used IMGNAME
-            header["OBSID"] = header.get("IMGNAME", "unknown")
+            header["OBSID"] = obsid
             modified = True
-            log.debug("Assigning OBSID to a value of '%s'", header["OBSID"])
-
-        obsid = header["OBSID"]
+            # We are reporting the OBSID so no need to repeat it at start
+            # of log message. Use filename if we have it.
+            log_prefix = f"{filename}: " if filename else ""
+            log.debug("%sAssigning OBSID to a value of '%s'", log_prefix, header["OBSID"])
 
         if "DAYOBS" not in header:
             # OBS-NITE could have the value for DAYOBS but it is safer
@@ -219,9 +234,9 @@ class LatissTranslator(LsstBaseTranslator):
                 pass
             if dayObs is None or len(dayObs) != 8:
                 dayObs = header["OBS-NITE"]
-                log.debug("%s: Setting DAYOBS to '%s' from OBS-NITE header", obsid, dayObs)
+                log.debug("%s: Setting DAYOBS to '%s' from OBS-NITE header", log_label, dayObs)
             else:
-                log.debug("%s: Setting DAYOBS to '%s' from OBSID", obsid, dayObs)
+                log.debug("%s: Setting DAYOBS to '%s' from OBSID", log_label, dayObs)
             header["DAYOBS"] = dayObs
             modified = True
 
@@ -234,7 +249,7 @@ class LatissTranslator(LsstBaseTranslator):
             else:
                 header["SEQNUM"] = int(seqnum)
                 modified = True
-                log.debug("%s: Extracting SEQNUM of '%s' from OBSID", obsid, header["SEQNUM"])
+                log.debug("%s: Extracting SEQNUM of '%s' from OBSID", log_label, header["SEQNUM"])
 
         # The DATE-OBS / MJD-OBS keys can be 1970
         if header["DATE-OBS"].startswith("1970"):
@@ -250,7 +265,7 @@ class LatissTranslator(LsstBaseTranslator):
             header["DATE-END"] = None
             header["MJD-END"] = None
 
-            log.debug("%s: Forcing 1970 dates to '%s'", obsid, header["DATE"])
+            log.debug("%s: Forcing 1970 dates to '%s'", log_label, header["DATE"])
             modified = True
 
         # Create a translator since we need the date
@@ -258,7 +273,7 @@ class LatissTranslator(LsstBaseTranslator):
         date = translator.to_datetime_begin()
         if date > DETECTOR_068_DATE:
             header["LSST_NUM"] = "ITL-3800C-068"
-            log.debug("%s: Forcing detector serial to %s", obsid, header["LSST_NUM"])
+            log.debug("%s: Forcing detector serial to %s", log_label, header["LSST_NUM"])
             modified = True
 
         if date < DATE_END_IS_BAD:
@@ -268,7 +283,7 @@ class LatissTranslator(LsstBaseTranslator):
                 header["DATE-END"] = None
                 header["MJD-END"] = None
 
-                log.debug("%s: Clearing DATE-END as being untrustworthy", obsid)
+                log.debug("%s: Clearing DATE-END as being untrustworthy", log_label)
                 modified = True
 
         # Up until a certain date GROUPID was the IMGTYPE
@@ -289,7 +304,7 @@ class LatissTranslator(LsstBaseTranslator):
                     else:
                         header["GROUPID"] = None
                     header["IMGTYPE"] = groupId
-                    log.debug("%s: Setting IMGTYPE to '%s' from GROUPID", obsid, header["IMGTYPE"])
+                    log.debug("%s: Setting IMGTYPE to '%s' from GROUPID", log_label, header["IMGTYPE"])
                     modified = True
                 else:
                     # Someone could be fixing headers in old data
@@ -304,29 +319,29 @@ class LatissTranslator(LsstBaseTranslator):
             if imgType == "OBJECT":
                 header["IMGTYPE"] = "ENGTEST"
                 log.debug("%s: Changing OBJECT observation type to %s",
-                          obsid, header["IMGTYPE"])
+                          log_label, header["IMGTYPE"])
                 modified = True
 
         # Early on the RA/DEC headers were stored in radians
         if date < RADEC_IS_RADIANS:
             if header.get("RA") is not None:
                 header["RA"] *= RAD2DEG
-                log.debug("%s: Changing RA header to degrees", obsid)
+                log.debug("%s: Changing RA header to degrees", log_label)
                 modified = True
             if header.get("DEC") is not None:
                 header["DEC"] *= RAD2DEG
-                log.debug("%s: Changing DEC header to degrees", obsid)
+                log.debug("%s: Changing DEC header to degrees", log_label)
                 modified = True
 
         if header.get("SHUTTIME"):
-            log.debug("%s: Forcing SHUTTIME header to be None", obsid)
+            log.debug("%s: Forcing SHUTTIME header to be None", log_label)
             header["SHUTTIME"] = None
             modified = True
 
         if "OBJECT" not in header:
             # Only patch OBJECT IMGTYPE
             if "IMGTYPE" in header and header["IMGTYPE"] == "OBJECT":
-                log.debug("%s: Forcing OBJECT header to exist", obsid)
+                log.debug("%s: Forcing OBJECT header to exist", log_label)
                 header["OBJECT"] = "NOTSET"
                 modified = True
 
@@ -334,7 +349,7 @@ class LatissTranslator(LsstBaseTranslator):
             if header["RADESYS"] == "":
                 # Default to ICRS
                 header["RADESYS"] = "ICRS"
-                log.debug("%s: Forcing blank RADESYS to '%s'", obsid, header["RADESYS"])
+                log.debug("%s: Forcing blank RADESYS to '%s'", log_label, header["RADESYS"])
                 modified = True
 
         if date < RASTART_IS_BAD:
@@ -342,7 +357,7 @@ class LatissTranslator(LsstBaseTranslator):
             # the RA/DEC demand headers to be used instead.
             for h in ("RASTART", "DECSTART", "RAEND", "DECEND"):
                 header[h] = None
-            log.debug("%s: Forcing derived RA/Dec headers to undefined", obsid)
+            log.debug("%s: Forcing derived RA/Dec headers to undefined", log_label)
 
         return modified
 
@@ -394,7 +409,7 @@ class LatissTranslator(LsstBaseTranslator):
             reason = "Dark time not defined."
 
         log.warning("%s: %s Setting dark time to the exposure time.",
-                    self.to_observation_id(), reason)
+                    self._log_prefix, reason)
         return exptime
 
     @cache_translation
@@ -409,7 +424,7 @@ class LatissTranslator(LsstBaseTranslator):
         # A missing or undefined EXPTIME is problematic. Set to -1
         # to indicate that none was found.
         log.warning("%s: Insufficient information to derive exposure time. Setting to -1.0s",
-                    self.to_observation_id())
+                    self._log_prefix)
         return -1.0 * u.s
 
     @cache_translation
@@ -457,7 +472,7 @@ class LatissTranslator(LsstBaseTranslator):
         else:
             obstype = "unknown"
         log.warning("%s: Unable to determine observation type. Guessing '%s'",
-                    self.to_observation_id(), obstype)
+                    self._log_prefix, obstype)
         return obstype
 
     @cache_translation
@@ -533,5 +548,5 @@ class LatissTranslator(LsstBaseTranslator):
             return altaz.secz.to_value()
 
         log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
-                    self.to_observation_id())
+                    self._log_prefix)
         return 1.0

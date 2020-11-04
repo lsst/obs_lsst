@@ -819,7 +819,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         from astro_metadata_translator.tests import read_test_file
         from astro_metadata_translator import ObservationInfo
         header = read_test_file(filename, self.datadir)
-        obsInfo = ObservationInfo(header, pedantic=True)
+        obsInfo = ObservationInfo(header, pedantic=True, filename=filename)
         self.assertTrue(obsInfo)
 
 
