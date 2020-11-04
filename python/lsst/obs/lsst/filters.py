@@ -52,7 +52,7 @@ def addFilter(filter_dict, band, physical_filter, lambdaEff=0.0):
 # the camera team has decided upon the final values (CAP-617)
 
 LsstCamFiltersBaseline = FilterDefinitionCollection(
-    FilterDefinition(physical_filter="NONE", band="NONE",
+    FilterDefinition(physical_filter="empty", band="white",
                      lambdaEff=0.0,
                      alias={"no_filter", "OPEN"}),
     FilterDefinition(physical_filter="u", band="u",
@@ -117,12 +117,15 @@ for physical_filter in [
         lambdaEff = lsstCamFilter.lambdaEff
     else:
         if re.search(r"^empty[3-6]$", physical_filter):
-            band = "empty"
+            band = "white"
         else:
             band = physical_filter
         lambdaEff = 0.0
 
-    addFilter(BOTFilters_dict, band, physical_filter, lambdaEff=lambdaEff)
+    if physical_filter == "empty":
+        pass                            # already in LsstCamFiltersBaseline
+    else:
+        addFilter(BOTFilters_dict, band, physical_filter, lambdaEff=lambdaEff)
 
     ndFilters = ["empty", "ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
     # We found these additional filters in BOT data files:
@@ -137,11 +140,11 @@ for physical_filter in [
         # Don't use . in band names, it's just asking for trouble
         # if they ever end up in filenames
         if nd == "empty":
-            if band == "empty":
-                af = "empty"
+            if band == "white":
+                af = "white"
             else:
                 af = f"{band}"
-        elif band == "empty":
+        elif band == "white":
             pf = nd
             af = f"{nd.replace('.', '_')}"
         else:
@@ -198,7 +201,7 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # LATISS filters include a grating in the name so we need to construct
 # filters for each combination of filter+grating.
 _latiss_filters = (
-    FilterDefinition(physical_filter="NONE",
+    FilterDefinition(physical_filter="EMPTY",
                      lambdaEff=0.0,
                      alias={"no_filter", "OPEN"}),
     FilterDefinition(physical_filter="blank_bk7_wg05",
@@ -283,15 +286,15 @@ LSSTCAM_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # See https://jira.lsstcorp.org/browse/DM-21706
 
 ComCamFilters_dict = {}
-for band, sn in [("u", "SN-05"),
+for band, sn in [("u", "SN-05"),  # incorrect sub thickness
                  ("u", "SN-02"),  # not yet coated
                  ("u", "SN-06"),  # not yet coated
-                 ("g", "SN-07"),
+                 ("g", "SN-07"),  # bad cosmetics
                  ("g", "SN-01"),
                  ("r", "SN-03"),
                  ("i", "SN-06"),
                  ("z", "SN-03"),
-                 ("z", "SN-02"),
+                 ("z", "SN-02"),  # failed specs
                  ("y", "SN-04"),
                  ]:
     physical_filter = f"{band}_{sn[3:]}"
@@ -302,6 +305,7 @@ for band, sn in [("u", "SN-05"),
 
 
 ComCamFilters = [
+    FilterDefinition(band="white", physical_filter="EMPTY", lambdaEff=0.0),
     FilterDefinition(band="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
 ]
 for band, filt in ComCamFilters_dict.items():
