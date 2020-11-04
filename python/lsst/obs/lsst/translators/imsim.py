@@ -118,7 +118,7 @@ class LsstCamImSimTranslator(LsstSimTranslator):
                 break
         if throughputs_version is None:
             log.warning("%s: throughputs version not found.  Using FILTER keyword value '%s'.",
-                        self.to_observation_id(), self._header["FILTER"])
+                        self._log_prefix, self._header["FILTER"])
             return self._header["FILTER"]
         return "_".join((self._header["FILTER"], "sim", throughputs_version))
 

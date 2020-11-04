@@ -97,8 +97,8 @@ class LsstComCamTranslator(LsstCamTranslator):
         """
         modified = False
 
-        # Prefer filename to obsid for log messages
-        log_label = filename or obsid
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
 
         if "LSST_NUM" not in header:
             slot = header.get("CCDSLOT", None)

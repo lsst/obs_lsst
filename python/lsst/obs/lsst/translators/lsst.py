@@ -517,7 +517,7 @@ class LsstBaseTranslator(FitsTranslator):
             self._used_these_cards("DARKTIME")
         else:
             log.warning("%s: Unable to determine dark time. Setting from exposure time.",
-                        self.to_observation_id())
+                        self._log_prefix)
             darktime = self.to_exposure_time()
         return darktime
 
@@ -711,7 +711,7 @@ class LsstBaseTranslator(FitsTranslator):
             obstype = self.to_observation_type()
             if obstype not in ("bias", "dark"):
                 log.warning("%s: Unable to determine the filter",
-                            self.to_observation_id())
+                            self._log_prefix)
 
         return physical_filter
 
@@ -753,5 +753,5 @@ class LsstBaseTranslator(FitsTranslator):
 
         # This indicates a problem so we warn and return a 0
         log.warning("%s: Unable to determine the observation counter so returning 0",
-                    self.to_observation_id())
+                    self._log_prefix)
         return 0

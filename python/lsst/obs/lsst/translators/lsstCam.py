@@ -39,7 +39,7 @@ def is_non_science_or_lab(self):
         return
     if not self._is_on_mountain():
         return
-    raise KeyError("Required key is missing and this is a mountain science observation")
+    raise KeyError(f"{self._log_prefix}: Required key is missing and this is a mountain science observation")
 
 
 class LsstCamTranslator(LsstBaseTranslator):
@@ -91,8 +91,8 @@ class LsstCamTranslator(LsstBaseTranslator):
 
         modified = False
 
-        # Prefer filename to obsid for log messages
-        log_label = filename or obsid
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
 
         if "FILTER" not in header and header.get("FILTER2") is not None:
             ccdslot = header.get("CCDSLOT", "unknown")

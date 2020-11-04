@@ -159,7 +159,7 @@ class LsstTS8Translator(LsstBaseTranslator):
         match = re.search(r"(RTM-\d\d\d)", raft_name)
         if match:
             return match.group(0)
-        raise ValueError(f"RAFTNAME has unexpected form of '{raft_name}'")
+        raise ValueError(f"{self._log_prefix}: RAFTNAME has unexpected form of '{raft_name}'")
 
     @cache_translation
     def to_detector_serial(self):
@@ -206,7 +206,7 @@ class LsstTS8Translator(LsstBaseTranslator):
             self._used_these_cards("FILTPOS")
         except KeyError:
             log.warning("%s: FILTPOS key not found in header (assuming NONE)",
-                        self.to_observation_id())
+                        self._log_prefix)
             return "NONE"
 
         try:
@@ -219,7 +219,7 @@ class LsstTS8Translator(LsstBaseTranslator):
             }[filter_pos]
         except KeyError:
             log.warning("%s: Unknown filter position (assuming NONE): %d",
-                        self.to_observation_id(), filter_pos)
+                        self._log_prefix, filter_pos)
             return "NONE"
 
     def to_exposure_id(self):

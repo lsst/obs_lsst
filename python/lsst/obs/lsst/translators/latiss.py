@@ -89,7 +89,7 @@ def is_non_science_or_lab(self):
 
     # This is a science observation on the mountain so we should not
     # use defaults
-    raise KeyError("Required key is missing and this is a mountain science observation")
+    raise KeyError(f"{self._log_prefix}: Required key is missing and this is a mountain science observation")
 
 
 class LatissTranslator(LsstBaseTranslator):
@@ -210,14 +210,17 @@ class LatissTranslator(LsstBaseTranslator):
         """
         modified = False
 
-        # Prefer filename to obsid for log messages
-        log_label = filename or obsid
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
 
         if "OBSID" not in header:
             # Very old data used IMGNAME
             header["OBSID"] = obsid
             modified = True
-            log.debug("Assigning OBSID to a value of '%s'", header["OBSID"])
+            # We are reporting the OBSID so no need to repeat it at start
+            # of log message. Use filename if we have it.
+            log_prefix = f"{filename}: " if filename else ""
+            log.debug("%sAssigning OBSID to a value of '%s'", log_prefix, header["OBSID"])
 
         if "DAYOBS" not in header:
             # OBS-NITE could have the value for DAYOBS but it is safer
@@ -406,7 +409,7 @@ class LatissTranslator(LsstBaseTranslator):
             reason = "Dark time not defined."
 
         log.warning("%s: %s Setting dark time to the exposure time.",
-                    self.to_observation_id(), reason)
+                    self._log_prefix, reason)
         return exptime
 
     @cache_translation
@@ -421,7 +424,7 @@ class LatissTranslator(LsstBaseTranslator):
         # A missing or undefined EXPTIME is problematic. Set to -1
         # to indicate that none was found.
         log.warning("%s: Insufficient information to derive exposure time. Setting to -1.0s",
-                    self.to_observation_id())
+                    self._log_prefix)
         return -1.0 * u.s
 
     @cache_translation
@@ -469,7 +472,7 @@ class LatissTranslator(LsstBaseTranslator):
         else:
             obstype = "unknown"
         log.warning("%s: Unable to determine observation type. Guessing '%s'",
-                    self.to_observation_id(), obstype)
+                    self._log_prefix, obstype)
         return obstype
 
     @cache_translation
@@ -545,5 +548,5 @@ class LatissTranslator(LsstBaseTranslator):
             return altaz.secz.to_value()
 
         log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
-                    self.to_observation_id())
+                    self._log_prefix)
         return 1.0
