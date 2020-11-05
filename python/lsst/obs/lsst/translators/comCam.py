@@ -14,6 +14,7 @@ __all__ = ("LsstComCamTranslator", )
 
 import logging
 
+from astropy.time import Time
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
 
@@ -30,6 +31,9 @@ DETECTOR_SERIALS = {
     "S21": "ITL-3800C-209",
     "S22": "ITL-3800C-206",
 }
+
+# Date ComCam left Tucson bound for Chile
+COMCAM_TO_CHILE_DATE = Time("2020-03-13T00:00", format="isot", scale="utc")
 
 
 class LsstComCamTranslator(LsstCamTranslator):
@@ -99,6 +103,26 @@ class LsstComCamTranslator(LsstCamTranslator):
 
         # Calculate the standard label to use for log messages
         log_label = cls._construct_log_prefix(obsid, filename)
+
+        physical_filter = header.get("FILTER")
+        if physical_filter in (None, "r", ""):
+            # Create a translator since we need the date
+            translator = cls(header)
+            if physical_filter is None:
+                header["FILTER"] = "unknown"
+                physical_filter_str = "None"
+            else:
+                date = translator.to_datetime_begin()
+                if date > COMCAM_TO_CHILE_DATE:
+                    header["FILTER"] = "empty"
+                else:
+                    header["FILTER"] = "r_03"  # it's currently 'r', which is a band not a physical_filter
+
+                physical_filter_str = f'"{physical_filter}"'
+
+            log.warning("%s: replaced FILTER %s with \"%s\"",
+                        log_label, physical_filter_str, header["FILTER"])
+            modified = True
 
         if "LSST_NUM" not in header:
             slot = header.get("CCDSLOT", None)

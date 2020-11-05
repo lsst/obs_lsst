@@ -229,7 +229,7 @@ class LatissTranslator(LsstBaseTranslator):
             dayObs = None
             try:
                 dayObs = obsid.split("_", 3)[2]
-            except ValueError:
+            except (AttributeError, ValueError):
                 # did not split as expected
                 pass
             if dayObs is None or len(dayObs) != 8:
@@ -243,7 +243,7 @@ class LatissTranslator(LsstBaseTranslator):
         if "SEQNUM" not in header:
             try:
                 seqnum = obsid.split("_", 3)[3]
-            except ValueError:
+            except (AttributeError, ValueError):
                 # did not split as expected
                 pass
             else:

@@ -59,7 +59,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       }
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor'}, 3),
-                       ({'level': 'sensor', 'filter': 'UNKNOWN'}, 2),
+                       ({'level': 'sensor', 'filter': 'unknown'}, 2),
                        ({'level': 'sensor', 'filter': 'foo'}, 0),
                        ({'level': 'sensor', 'expId': 3019031900001}, 2),
                        ({'level': 'sensor', 'expId': 3019032200002}, 1),
@@ -68,7 +68,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                        ({'level': 'filter', 'expId': 3019031900001}, 1),
                        ({'level': 'filter', 'expId': 3019032200002}, 1),
                        ({'level': 'expId'}, 2),
-                       ({'level': 'expId', 'filter': 'UNKNOWN'}, 1),
+                       ({'level': 'expId', 'filter': 'unknown'}, 1),
                        ({'level': 'expId', 'filter': 'SDSSi~ND_OD0.5'}, 1),
                        ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
@@ -93,15 +93,15 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                     'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter',
                     'dayObs', 'seqNum', 'subdir',))
         query_format = ["expId", "filter"]
-        queryMetadata = (({'expId': 3019031900001}, [(3019031900001, 'UNKNOWN')]),
-                         ({'filter': 'UNKNOWN'}, [(3019031900001, 'UNKNOWN')]),
+        queryMetadata = (({'expId': 3019031900001}, [(3019031900001, 'unknown')]),
+                         ({'filter': 'unknown'}, [(3019031900001, 'unknown')]),
                          )
         map_python_type = lsst.afw.image.DecoratedImageF
         map_python_std_type = lsst.afw.image.ExposureF
         map_cpp_type = 'DecoratedImageF'
         map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join("processCcd_metadata/3019031900001-UNKNOWN/R10",
-                                            "processCcdMetadata_3019031900001-UNKNOWN-R10-S02-det029.yaml")
+        metadata_output_path = os.path.join("processCcd_metadata/3019031900001-unknown/R10",
+                                            "processCcdMetadata_3019031900001-unknown-R10-S02-det029.yaml")
         raw_filename = '3019031900001-R10-S02-det029.fits'
         default_level = 'sensor'
         raw_levels = (('sensor', set(['expId', 'detector', 'dayObs', 'detectorName', 'raftName'])),
