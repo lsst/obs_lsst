@@ -54,7 +54,7 @@ def addFilter(filter_dict, band, physical_filter, lambdaEff=0.0):
 LsstCamFiltersBaseline = FilterDefinitionCollection(
     FilterDefinition(physical_filter="empty", band="white",
                      lambdaEff=0.0,
-                     alias={"no_filter", "OPEN"}),
+                     alias={"no_filter", "open"}),
     FilterDefinition(physical_filter="u", band="u",
                      lambdaEff=368.48, lambdaMin=320.00, lambdaMax=408.60),
     FilterDefinition(physical_filter="g", band="g",
@@ -153,7 +153,7 @@ for physical_filter in [
         addFilter(BOTFilters_dict, band=af, physical_filter=pf, lambdaEff=lambdaEff)
 
 BOTFilters = [
-    FilterDefinition(band="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
 ]
 for band, filt in BOTFilters_dict.items():
     BOTFilters.append(FilterDefinition(band=band,
@@ -176,7 +176,7 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # Filters in SLAC's Test Stand 3
 #
 TS3Filters = [
-    FilterDefinition(band="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
     FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
     FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
 
@@ -188,7 +188,7 @@ TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # Filters in SLAC's Test Stand 8
 #
 TS8Filters = [
-    FilterDefinition(band="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
     FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
     FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
 
@@ -201,9 +201,9 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # LATISS filters include a grating in the name so we need to construct
 # filters for each combination of filter+grating.
 _latiss_filters = (
-    FilterDefinition(physical_filter="EMPTY",
+    FilterDefinition(physical_filter="empty",
                      lambdaEff=0.0,
-                     alias={"no_filter", "OPEN"}),
+                     alias={"no_filter", "open"}),
     FilterDefinition(physical_filter="blank_bk7_wg05",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="KPNO_1111_436nm",
@@ -217,9 +217,9 @@ _latiss_filters = (
                      lambdaEff=828.0, lambdaMin=738.5, lambdaMax=917.5),
     FilterDefinition(physical_filter="diffuser",
                      lambdaEff=0.0),
-    FilterDefinition(physical_filter="EMPTY",
+    FilterDefinition(physical_filter="empty",
                      lambdaEff=0.0),
-    FilterDefinition(physical_filter="UNKNOWN",
+    FilterDefinition(physical_filter="unknown",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="BG40",
                      # band="g",  # afw only allows one g filter
@@ -231,7 +231,7 @@ _latiss_filters = (
 )
 
 # Form a new set of filter definitions from all the explicit filters
-_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "EMPTY", "NONE", "UNKNOWN")
+_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "none", "unknown")
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name
@@ -305,8 +305,8 @@ for band, sn in [("u", "SN-05"),  # incorrect sub thickness
 
 
 ComCamFilters = [
-    FilterDefinition(band="white", physical_filter="EMPTY", lambdaEff=0.0),
-    FilterDefinition(band="unknown", physical_filter="UNKNOWN", lambdaEff=0.0),
+    FilterDefinition(band="white", physical_filter="empty", lambdaEff=0.0),
+    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
 ]
 for band, filt in ComCamFilters_dict.items():
     ComCamFilters.append(FilterDefinition(band=band,

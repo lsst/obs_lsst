@@ -44,7 +44,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3019031900001029,
                        }
-        filters = {'raw': 'UNKNOWN',
+        filters = {'raw': 'unknown',
                    }
         exptimes = {'raw': 0.0,
                     }

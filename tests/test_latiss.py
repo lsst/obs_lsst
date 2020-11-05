@@ -44,7 +44,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3018092000065, 'bias': 3018092000065}
-        filters = {'raw': 'UNKNOWN~UNKNOWN', 'bias': '_unknown_'}
+        filters = {'raw': 'unknown~unknown', 'bias': '_unknown_'}
         exptimes = {'raw': 27.0, 'bias': 0}
         detectorIds = {'raw': 0, 'bias': 0}
         detector_names = {'raw': 'RXX_S00', 'bias': 'RXX_S00'}
@@ -53,7 +53,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
         raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'UNKNOWN~UNKNOWN'}, 1),
+                       ({'level': 'sensor', 'filter': 'unknown~unknown'}, 1),
                        ({'level': 'sensor', 'filter': 'foo'}, 0),
                        ({'level': 'sensor', 'dayObs': '2018-09-20'}, 1),
                        ({'level': 'sensor', 'expId': 3018092000065}, 1),
@@ -61,7 +61,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                        ({'level': 'filter'}, 1),
                        ({'level': 'filter', 'expId': 3018092000065}, 1),
                        ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'UNKNOWN~UNKNOWN'}, 1),
+                       ({'level': 'expId', 'filter': 'unknown~unknown'}, 1),
                        ({'level': 'expId', 'filter': 'foo'}, 0)
                        )
         linearizer_type = unittest.SkipTest
