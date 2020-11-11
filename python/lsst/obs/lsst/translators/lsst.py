@@ -614,11 +614,11 @@ class LsstBaseTranslator(FitsTranslator):
         -------
         filter : `str`
             Name of filter. Can be a combination of FILTER, FILTER1 and FILTER2
-            headers joined by a "~". Returns "UNKNOWN" if no filter is declared
+            headers joined by a "~". Returns "unknown" if no filter is declared
         """
         joined = self._join_keyword_values(["FILTER", "FILTER1", "FILTER2"], delim=FILTER_DELIMITER)
         if not joined:
-            joined = "UNKNOWN"
+            joined = "unknown"
 
         return joined
 
@@ -701,11 +701,11 @@ class LsstBaseTranslator(FitsTranslator):
             self._used_these_cards("FILTER")
 
             if self._is_filter_empty(physical_filter):
-                physical_filter = "EMPTY"
+                physical_filter = "empty"
         else:
             # Be explicit about having no knowledge of the filter
-            # by setting it to "UNKNOWN". It should always have a value.
-            physical_filter = "UNKNOWN"
+            # by setting it to "unknown". It should always have a value.
+            physical_filter = "unknown"
 
             # Warn if the filter being unknown is important
             obstype = self.to_observation_type()

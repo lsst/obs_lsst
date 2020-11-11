@@ -229,7 +229,7 @@ class LatissTranslator(LsstBaseTranslator):
             dayObs = None
             try:
                 dayObs = obsid.split("_", 3)[2]
-            except ValueError:
+            except (AttributeError, ValueError):
                 # did not split as expected
                 pass
             if dayObs is None or len(dayObs) != 8:
@@ -243,7 +243,7 @@ class LatissTranslator(LsstBaseTranslator):
         if "SEQNUM" not in header:
             try:
                 seqnum = obsid.split("_", 3)[3]
-            except ValueError:
+            except (AttributeError, ValueError):
                 # did not split as expected
                 pass
             else:
@@ -484,10 +484,10 @@ class LatissTranslator(LsstBaseTranslator):
         filter : `str`
             Name of filter. A combination of FILTER and GRATING
             headers joined by a "~".  The filter and grating are always
-            combined.  The filter or grating part will be "NONE" if no value
-            is specified.  Uses "EMPTY" if any of the filters or gratings
-            indicate an "empty_N" name. "UNKNOWN" indicates that the filter is
-            not defined anywhere but we think it should be.  "NONE" indicates
+            combined.  The filter or grating part will be "none" if no value
+            is specified.  Uses "empty" if any of the filters or gratings
+            indicate an "empty_N" name. "unknown" indicates that the filter is
+            not defined anywhere but we think it should be.  "none" indicates
             that the filter was not defined but the observation is a dark
             or bias.
         """
@@ -499,10 +499,10 @@ class LatissTranslator(LsstBaseTranslator):
             self._used_these_cards("GRATING")
 
             if not grating or grating.lower().startswith("empty"):
-                grating = "EMPTY"
+                grating = "empty"
         else:
             # Be explicit about having no knowledge of the grating
-            grating = "UNKNOWN"
+            grating = "unknown"
 
         physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 
