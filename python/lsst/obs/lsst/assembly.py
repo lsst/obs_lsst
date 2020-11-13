@@ -271,7 +271,7 @@ def readRawAmps(fileName, detector):
        All the individual amps read from the file.
     """
     amps = []
-    for hdu in range(1, 16+1):
+    for hdu in range(1, len(detector)+1):
         exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
         exp.setDetector(detector)
         amps.append(exp)
