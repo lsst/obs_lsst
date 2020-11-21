@@ -67,6 +67,12 @@ datasets:
     template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
   src:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  source:
+    template: src/%(visit)08d-%(filter)s/%(raftName)s/source_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.parq
+  sourceTable:
+    template: src/%(visit)08d-%(filter)s/%(raftName)s/sourceTable_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.parq
+  sourceTable_visit:
+    template: src/%(visit)08d-%(filter)s/sourceTable_%(visit)08d-%(filter)s.parq
   srcMatch:
     template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
