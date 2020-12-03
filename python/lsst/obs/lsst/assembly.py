@@ -64,8 +64,8 @@ def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
         return True
 
     if obsInfo.observation_type == "science":
-        logger.warn("Unable to set WCS from header as RA/Dec/Angle are unavailable",
-                    ("" if dataIdForErrMsg is None else "for dataId %s" % dataIdForErrMsg))
+        logger.warn("Unable to set WCS from header as RA/Dec/Angle are unavailable%s",
+                    ("" if dataIdForErrMsg is None else " for dataId %s" % dataIdForErrMsg))
     return False
 
 
