@@ -398,8 +398,12 @@ class LsstBaseTranslator(FitsTranslator):
                 # Add 1000 to the year component
                 dayobs = int(dayobs)
                 dayobs += 1000_00_00
+            elif controller == "P":
+                # Add 2000 to the year component
+                dayobs = int(dayobs)
+                dayobs += 2000_00_00
             else:
-                raise ValueError(f"Supplied controller, '{controller}' is neither 'O' nor 'C'")
+                raise ValueError(f"Supplied controller, '{controller}' is neither 'O' nor 'C' nor 'P'")
 
         # Form the number as a string zero padding the sequence number
         idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
