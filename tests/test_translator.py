@@ -144,6 +144,39 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_phoSimLsstCam_translator(self):
+        test_data = (("lsstCam-MC_H_20000217_000032_R22_S00.yaml",
+                      dict(telescope="Simonyi Survey Telescope",
+                           instrument="LSSTCam",
+                           boresight_rotation_coord="unknown",
+                           dark_time=15.0*u.s,
+                           detector_exposure_id=4000021700032090,
+                           detector_group="R22",
+                           detector_name="S00",
+                           detector_num=90,
+                           detector_serial="E2V-CCD250-369",
+                           detector_unique_name="R22_S00",
+                           exposure_group="4000021700032",
+                           exposure_id=4000021700032,
+                           exposure_time=15.0*u.s,
+                           object="UNKNOWN",
+                           observation_counter=32,
+                           observation_id="MC_H_20000217_000032",
+                           observation_reason="phosim",
+                           observation_type="science",
+                           observing_day=20000217,
+                           physical_filter="g",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="9006001",
+                           temperature=None,
+                           visit_id=4000021700032)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir,
+                                                   check_wcs=False, **expected)
+
     def test_comCam_translator(self):
         test_data = (("comCam-CC_C_20190530_000001_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
