@@ -681,13 +681,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                # ImSim data are in the future and Astropy complains
-                # about astrometry errors.
-                if expected["observation_type"] == "science":
-                    with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
-                        self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
-                else:
-                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ts3_translator(self):
         test_data = (("ts3-E2V-CCD250-411_lambda_flat_1000_025_20181115075559.yaml",
