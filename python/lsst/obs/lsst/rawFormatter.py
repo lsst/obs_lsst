@@ -119,7 +119,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
             exposure.setVariance(variance)
 
         info = exposure.getInfo()
-        info.setFilter(self.makeFilter())
+        info.setFilterLabel(self.makeFilterLabel())
         info.setVisitInfo(self.makeVisitInfo())
         info.setWcs(self.makeWcs(info.getVisitInfo(), info.getDetector()))
 
