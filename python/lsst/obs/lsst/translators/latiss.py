@@ -233,12 +233,16 @@ class LatissTranslator(LsstBaseTranslator):
                 # did not split as expected
                 pass
             if dayObs is None or len(dayObs) != 8:
-                dayObs = header["OBS-NITE"]
-                log.debug("%s: Setting DAYOBS to '%s' from OBS-NITE header", log_label, dayObs)
+                if "OBS-NITE" in header:
+                    dayObs = header["OBS-NITE"]
+                    log.debug("%s: Setting DAYOBS to '%s' from OBS-NITE header", log_label, dayObs)
+                else:
+                    log.debug("%s: Unable to determine DAYOBS from header", log_label)
             else:
                 log.debug("%s: Setting DAYOBS to '%s' from OBSID", log_label, dayObs)
-            header["DAYOBS"] = dayObs
-            modified = True
+            if dayObs:
+                header["DAYOBS"] = dayObs
+                modified = True
 
         if "SEQNUM" not in header:
             try:
@@ -252,7 +256,7 @@ class LatissTranslator(LsstBaseTranslator):
                 log.debug("%s: Extracting SEQNUM of '%s' from OBSID", log_label, header["SEQNUM"])
 
         # The DATE-OBS / MJD-OBS keys can be 1970
-        if header["DATE-OBS"].startswith("1970"):
+        if "DATE-OBS" in header and header["DATE-OBS"].startswith("1970"):
             # Copy the headers from the DATE and MJD since we have no other
             # choice.
             header["DATE-OBS"] = header["DATE"]
