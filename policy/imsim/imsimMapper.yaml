@@ -9,6 +9,8 @@ exposures:
     template: postISRCCD/%(expId)08d-%(filter)s/%(raftName)s/postISRCCD_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
   calexp:
     template: calexp/%(visit)08d-%(filter)s/%(raftName)s/calexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  fakes_calexp:
+    template: calexp/%(visit)013d-%(filter)s/%(raftName)s/tract%(tract)d/fakes_calexp_%(visit)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icExp:
     template: icExp/%(visit)08d-%(filter)s/%(raftName)s/icExp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   wcs:
@@ -69,10 +71,14 @@ datasets:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   source:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/source_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.parq
+  fakes_source:
+    template: src/%(visit)08d-%(filter)s/%(raftName)s/fakes_source_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.parq
   sourceTable:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/sourceTable_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.parq
   sourceTable_visit:
     template: src/%(visit)08d-%(filter)s/sourceTable_%(visit)08d-%(filter)s.parq
+  fakes_src:
+    template: src/%(visit)08d-%(filter)s/%(raftName)s/tract%(tract)d/fakes_src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   srcMatch:
     template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
