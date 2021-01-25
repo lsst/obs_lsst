@@ -1,12 +1,12 @@
 exposures:
   _raw:
-    template: raw/%(run)s/%(raftName)s/%(expId)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
+    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
   raw_amp:
-    template: raw/%(run)s/%(raftName)s/%(expId)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[%(channel)d]
+    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[%(channel)d]
   postISRCCD:
-    template: postISRCCD/%(expId)08d-%(filter)s/%(raftName)s/postISRCCD_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   postISRCCD_uninterpolated:
-    template: postISRCCD/%(expId)08d-%(filter)s/%(raftName)s/postISRCCD_%(expId)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
+    template: postISRCCD/%(visit)08d-%(filter)s/%(raftName)s/postISRCCD_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d-preInterp.fits
   calexp:
     template: calexp/%(visit)08d-%(filter)s/%(raftName)s/calexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   fakes_calexp:
@@ -22,7 +22,7 @@ exposures:
   deepCoadd_psfMatchedWarp:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
   dcrCoadd_directWarp:
-    template: dcrCoadd/%(filter)s%(subfilter)d/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)d-%(tract)d-%(patch)s-%(visit)d.fits
+    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(visit)d.fits
   deepDiff_differenceExp:
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_matchedExp:
@@ -31,14 +31,13 @@ exposures:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_matchedExp:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
-
 datasets:
   apCorr:
     template: apCorr/%(visit)08d-%(filter)s/%(raftName)s/apCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
   calexpBackground:
     template: calexp/%(visit)08d-%(filter)s/%(raftName)s/bkgd_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   calexp_camera:
-    template: calexp_camera/%(visit)08d-%(filter)s/calexp_camera_%(visit)08d-%(filter)s.fits
+    template: calexp_camera/%(visit)08d-%(filter)s/%(raftName)s/calexp_camera_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   skyCorr:
     template: skyCorr/%(visit)08d-%(filter)s/%(raftName)s/skyCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_diaSrc:
@@ -66,7 +65,7 @@ datasets:
   processCcd_metadata:
     template: processCcd_metadata/%(visit)08d-%(filter)s/%(raftName)s/processCcdMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   raw_hdu:
-    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits[0]
+    template: raw/%(run)s/%(raftName)s/%(visit)08d-%(raftName)s-%(detectorName)s-det%(detector)03d-%(snap)03d.fits[0]
   src:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   source:
@@ -96,12 +95,11 @@ datasets:
   deepDiff_forced_diaSrc:
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   imageDifferenceDriver_metadata:
-    template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+    template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)-%(detectorName)s-det%(detector)03d.yaml
   plotVisit:
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d%(subdir)s/plot-v%(visit)d-%(description)s-%(style)s.png
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/plot-v%(visit)d-%(description)s-%(style)s.png
   plotCompareVisit:
-    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d%(subdir)s/compareVisit-v%(visit)d-%(description)s-%(style)s.png
-  # Focal plane summary plots
+    template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/compareVisit-v%(visit)d-%(description)s-%(style)s.png
   focal_plane_fits:
     template: focal_plane/%(dstype)s-v%(visit)08d.fits
   focal_plane_png:
