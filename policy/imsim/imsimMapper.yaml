@@ -22,7 +22,7 @@ exposures:
   deepCoadd_psfMatchedWarp:
     template: deepCoadd/%(filter)s/%(tract)d/%(patch)s/psfMatchedWarp-%(filter)s-%(tract)d-%(patch)s-%(visit)d.fits
   dcrCoadd_directWarp:
-    template: dcrCoadd/%(filter)s%(subfilter)s/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)s-%(tract)d-%(patch)s-%(visit)d.fits
+    template: dcrCoadd/%(filter)s%(subfilter)d/%(tract)d/%(patch)s/warp-%(filter)s%(subfilter)d-%(tract)d-%(patch)s-%(visit)d.fits
   deepDiff_differenceExp:
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   deepDiff_matchedExp:
@@ -31,6 +31,8 @@ exposures:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diffexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   dcrDiff_matchedExp:
     template: dcrDiff/v%(visit)08d-f%(filter)s/%(raftName)s/matchexp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  eimage:
+    template: eimage/%(visit)d/E%(snap)03d/%(raftName)s/eimage_%(visit)08d_%(raftName)s_%(detectorName)s_E%(snap)03d.fits.gz
 datasets:
   apCorr:
     template: apCorr/%(visit)08d-%(filter)s/%(raftName)s/apCorr_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
@@ -79,7 +81,7 @@ datasets:
   fakes_src:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/tract%(tract)d/fakes_src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   srcMatch:
-    template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: srcMatch/%(filter)s/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
     template: transformSrcMeasurement_metadata/%(visit)08d-%(filter)s/%(raftName)s/transformSrcMeasurementMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   transformed_src:
@@ -95,7 +97,7 @@ datasets:
   deepDiff_forced_diaSrc:
     template: deepDiff/v%(visit)08d-f%(filter)s/%(raftName)s/diaForced_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   imageDifferenceDriver_metadata:
-    template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)-%(detectorName)s-det%(detector)03d.yaml
+    template: imageDifferenceDriver_metadata/%(visit)08d-%(filter)s/%(tract)d/%(patch)s/imageDifferenceDriverMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   plotVisit:
     template: plots/%(filter)s/tract-%(tract)d/visit-%(visit)d/plot-v%(visit)d-%(description)s-%(style)s.png
   plotCompareVisit:
@@ -108,3 +110,100 @@ datasets:
     template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s.fits
   binned_sensor_fits_halves:
     template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s_%(half)s.fits
+  ampExposureId:
+    template: ignored
+  ampExposureId_bits:
+    template: ignored
+  cal_ref_cat:
+    template: photo_astro_ref/%(pixel_id)s.fits
+  ccdExposureId:
+    template: ignored
+  ccdExposureId_bits:
+    template: ignored
+  chiSquaredCoaddId:
+    template: ignored
+  chiSquaredCoaddId_bits:
+    template: ignored
+  goodSeeingCoaddId:
+    template: ignored
+  goodSeeingCoaddId_bits:
+    template: ignored
+  refcat:
+    template: refcat.fits
+  jointcal_wcs:
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_wcs-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  jointcal_photoCalib:
+    template: jointcal-results/%(filter)s/%(tract)04d/jointcal_photoCalib-%(visit)07d-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+  singleFrameDriver_metadata:
+    template: singleFrameDriver_metadata/%(visit)06d-%(filter)s/%(raftName)s/singleFrameDriverMetadata_%(visit)06d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
+  eotest_gain:
+    template: gain/%(run)s/gain_%(run)s-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
+  brighterFatterKernel:
+    template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.pickle
+  brighterFatterGain:
+    template: calibrations/bfGain-%(detector)03d.pickle
+  plotBrighterFatterPtc:
+    template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
+  measurePhotonTransferCurve_metadata:
+    template: measurePhotonTransferCurves_metadata/%(detector)03d.yaml
+  measurePhotonTransferCurveGainAndNoise:
+    template: calibrations/ptc/ptcDataGainAndNoise-det%(detector)03d.pickle
+  measurePhotonTransferCurveDatasetAll:
+    template: calibrations/ptc/ptcDataAll-det%(detector)03d.pickle
+  plotCoadd:
+    template: plots/%(filter)s/tract-%(tract)d/plot-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
+  plotSky:
+    template: plots/%(filter)s/sky/plot-%(filter)s-%(description)s-%(style)s.png
+  plotColor:
+    template: plots/color/tract-%(tract)d/plot-t%(tract)d-%(description)s-%(style)s.png
+  plotCompareCoadd:
+    template: plots/%(filter)s/tract-%(tract)d/compare-t%(tract)d-%(filter)s-%(description)s-%(style)s.png
+  deepDiff_diaObject:
+    template: deepDiff/diaObject/%(tract)d/%(patch)s/diaObject-%(tract)d-%(patch)s.fits
+  deepDiff_diaObject_schema:
+    template: schema/deepDiff_diaObject.fits
+  deepDiff_forced_diaSrc_schema:
+    template: schema/deepDiff_forced_dia_src.fits
+  deepDiff_forced_diaObject:
+    template: deepDiff/%(filter)s/%(tract)d/%(patch)s/diaObject-%(filter)s-%(tract)d-%(patch)s.fits
+  deepDiff_forced_diaObject_schema:
+    template: schema/deepDiff_forced_dia_object.fits
+  deepDiff_diaObjectId:
+    template: deepDiff/diaObject/%(tract)d/%(patch)s/diaObjectId-%(tract)d-%(patch)s.parq
+  imageDifferenceDriver_config:
+    template: config/imageDifferenceDriver.py
+  associationDriver_config:
+    template: config/associationDriver.py
+  forcedPhotCcdDiaDriver_config:
+    template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCoaddDiaDriver_config:
+    template: config/forcedPhotCoaddDiaDriver.py
+  forcedPhotCcdDia_config:
+    template: config/forcedPhotCcdDiaDriver.py
+  forcedPhotCoaddDia_config:
+    template: config/forcedPhotCoaddDia.py
+  newDefects:
+    template: calibrations/defects/defects-det%(detector)03d.fits
+calibrations:
+  defects:
+    template: defects/%(calibDate)s/defects-%(calibDate)s-%(detectorName)s.fits
+  bias:
+    template: bias/%(calibDate)s/bias-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  dark:
+    template: dark/%(calibDate)s/dark-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  flat:
+    template: flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  fringe:
+    template: fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  bias_camera:
+    template: focalplane/bias/%(calibDate)s/bias_%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  dark_camera:
+    template: focalplane/dark/%(calibDate)s/dark_%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  flat_camera:
+    template: focalplane/flat/%(filter)s/%(calibDate)s/flat_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  fringe_camera:
+    template: focalplane/fringe/%(filter)s/%(calibDate)s/fringe_%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  sky:
+    template: SKY/%(calibDate)s/%(filter)s/SKY-%(calibDate)s-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d_%(calibDate)s.fits
+  sky_camera:
+    template: focalplane/SKY/%(calibDate)s/%(filter)s/SKY-%(filter)s_%(calibDate)s.fits
