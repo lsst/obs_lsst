@@ -54,730 +54,730 @@ R42 :
   amplifiers :
     S00 :
       C10 : {
-        gain : 0.95917,
-        readNoise : 6.727,
-        saturation : 192688,
+        gain : 1.40712,
+        readNoise : 6.376,
+        saturation : 69793,
       }
       C11 : {
-        gain : 0.96849,
-        readNoise : 6.864,
-        saturation : 197608,
+        gain : 1.42047,
+        readNoise : 6.965,
+        saturation : 69301,
       }
       C12 : {
-        gain : 0.98186,
-        readNoise : 6.801,
-        saturation : 192793,
+        gain : 1.44540,
+        readNoise : 7.532,
+        saturation : 68524,
       }
       C13 : {
-        gain : 0.96167,
-        readNoise : 6.804,
-        saturation : 193899,
+        gain : 1.41409,
+        readNoise : 7.668,
+        saturation : 81730,
       }
       C14 : {
-        gain : 0.95954,
-        readNoise : 6.893,
-        saturation : 197937,
+        gain : 1.40984,
+        readNoise : 7.612,
+        saturation : 69967,
       }
       C15 : {
-        gain : 0.95852,
-        readNoise : 6.808,
-        saturation : 190247,
+        gain : 1.40567,
+        readNoise : 7.067,
+        saturation : 81012,
       }
       C16 : {
-        gain : 0.96239,
-        readNoise : 6.645,
-        saturation : 193437,
+        gain : 1.41382,
+        readNoise : 6.626,
+        saturation : 69961,
       }
       C17 : {
-        gain : 0.96180,
-        readNoise : 7.465,
-        saturation : 198871,
+        gain : 1.41461,
+        readNoise : 7.594,
+        saturation : 31871,
       }
       C07 : {
-        gain : 0.94068,
-        readNoise : 10.494,
-        saturation : 90417,
+        gain : 1.38458,
+        readNoise : 10.344,
+        saturation : 66953,
       }
       C06 : {
-        gain : 0.98277,
-        readNoise : 8.107,
-        saturation : 193973,
+        gain : 1.44594,
+        readNoise : 7.933,
+        saturation : 64385,
       }
       C05 : {
-        gain : 0.97788,
-        readNoise : 8.526,
-        saturation : 197970,
+        gain : 1.43726,
+        readNoise : 9.009,
+        saturation : 72284,
       }
       C04 : {
-        gain : 0.99417,
-        readNoise : 8.525,
-        saturation : 201325,
+        gain : 1.47301,
+        readNoise : 9.828,
+        saturation : 71029,
       }
       C03 : {
-        gain : 0.98967,
-        readNoise : 8.475,
-        saturation : 203156,
+        gain : 1.46242,
+        readNoise : 9.968,
+        saturation : 71216,
       }
       C02 : {
-        gain : 0.99670,
-        readNoise : 8.626,
-        saturation : 205638,
+        gain : 1.47564,
+        readNoise : 9.924,
+        saturation : 70664,
       }
       C01 : {
-        gain : 0.99216,
-        readNoise : 8.234,
-        saturation : 208465,
+        gain : 1.46331,
+        readNoise : 9.026,
+        saturation : 79572,
       }
       C00 : {
-        gain : 0.99216,
-        readNoise : 7.885,
-        saturation : 205460,
+        gain : 1.45853,
+        readNoise : 7.843,
+        saturation : 70836,
       }
     S01 :
       C10 : {
-        gain : 0.91981,
-        readNoise : 6.326,
-        saturation : 181722,
+        gain : 1.34477,
+        readNoise : 6.096,
+        saturation : 65188,
       }
       C11 : {
-        gain : 0.94017,
-        readNoise : 6.155,
-        saturation : 179337,
+        gain : 1.38372,
+        readNoise : 6.341,
+        saturation : 63591,
       }
       C12 : {
-        gain : 0.94421,
-        readNoise : 6.196,
-        saturation : 177594,
+        gain : 1.38811,
+        readNoise : 6.072,
+        saturation : 63198,
       }
       C13 : {
-        gain : 0.94806,
-        readNoise : 6.220,
-        saturation : 175272,
+        gain : 1.39419,
+        readNoise : 6.139,
+        saturation : 72723,
       }
       C14 : {
-        gain : 0.94300,
-        readNoise : 6.294,
-        saturation : 175125,
+        gain : 1.38591,
+        readNoise : 6.088,
+        saturation : 62978,
       }
       C15 : {
-        gain : 0.93710,
-        readNoise : 6.185,
-        saturation : 172117,
+        gain : 1.37606,
+        readNoise : 6.138,
+        saturation : 63188,
       }
       C16 : {
-        gain : 0.93995,
-        readNoise : 6.097,
-        saturation : 168036,
+        gain : 1.38584,
+        readNoise : 5.970,
+        saturation : 56070,
       }
       C17 : {
-        gain : 0.93304,
-        readNoise : 5.719,
-        saturation : 160231,
+        gain : 1.37317,
+        readNoise : 5.879,
+        saturation : 56216,
       }
       C07 : {
-        gain : 0.91086,
-        readNoise : 5.891,
-        saturation : 108221,
+        gain : 1.34771,
+        readNoise : 6.078,
+        saturation : 48301,
       }
       C06 : {
-        gain : 0.92394,
-        readNoise : 6.181,
-        saturation : 173244,
+        gain : 1.35704,
+        readNoise : 6.064,
+        saturation : 71001,
       }
       C05 : {
-        gain : 0.92760,
-        readNoise : 6.400,
-        saturation : 176780,
+        gain : 1.36492,
+        readNoise : 6.230,
+        saturation : 66818,
       }
       C04 : {
-        gain : 0.94207,
-        readNoise : 6.329,
-        saturation : 183636,
+        gain : 1.38409,
+        readNoise : 6.370,
+        saturation : 82443,
       }
       C03 : {
-        gain : 0.94745,
-        readNoise : 6.434,
-        saturation : 178421,
+        gain : 1.38931,
+        readNoise : 6.435,
+        saturation : 79096,
       }
       C02 : {
-        gain : 0.95570,
-        readNoise : 6.449,
-        saturation : 179358,
+        gain : 1.40677,
+        readNoise : 6.404,
+        saturation : 58552,
       }
       C01 : {
-        gain : 0.95255,
-        readNoise : 6.312,
-        saturation : 176427,
+        gain : 1.39902,
+        readNoise : 6.290,
+        saturation : 58868,
       }
       C00 : {
-        gain : 0.95535,
-        readNoise : 6.550,
-        saturation : 179410,
+        gain : 1.40602,
+        readNoise : 6.229,
+        saturation : 65730,
       }
     S02 :
       C10 : {
-        gain : 0.92125,
-        readNoise : 12.426,
-        saturation : 190218,
+        gain : 1.36455,
+        readNoise : 12.101,
+        saturation : 70923,
       }
       C11 : {
-        gain : 0.91616,
-        readNoise : 13.436,
-        saturation : 179766,
+        gain : 1.35924,
+        readNoise : 13.061,
+        saturation : 79440,
       }
       C12 : {
-        gain : 0.91997,
-        readNoise : 14.217,
-        saturation : 181387,
+        gain : 1.36403,
+        readNoise : 13.886,
+        saturation : 78748,
       }
       C13 : {
-        gain : 0.92941,
-        readNoise : 14.408,
-        saturation : 182196,
+        gain : 1.38487,
+        readNoise : 13.992,
+        saturation : 77644,
       }
       C14 : {
-        gain : 0.93198,
-        readNoise : 13.819,
-        saturation : 185710,
+        gain : 1.37801,
+        readNoise : 13.329,
+        saturation : 77206,
       }
       C15 : {
-        gain : 0.93405,
-        readNoise : 12.665,
-        saturation : 187894,
+        gain : 1.38135,
+        readNoise : 12.531,
+        saturation : 76529,
       }
       C16 : {
-        gain : 0.93265,
-        readNoise : 11.204,
-        saturation : 191370,
+        gain : 1.38365,
+        readNoise : 11.025,
+        saturation : 76099,
       }
       C17 : {
-        gain : 0.91663,
-        readNoise : 9.341,
-        saturation : 185845,
+        gain : 1.35331,
+        readNoise : 9.146,
+        saturation : 77094,
       }
       C07 : {
-        gain : 0.94237,
-        readNoise : 10.323,
-        saturation : 182356,
+        gain : 1.38907,
+        readNoise : 9.761,
+        saturation : 87881,
       }
       C06 : {
-        gain : 0.98562,
-        readNoise : 14.085,
-        saturation : 190320,
+        gain : 1.46415,
+        readNoise : 13.613,
+        saturation : 84620,
       }
       C05 : {
-        gain : 0.98264,
-        readNoise : 15.872,
-        saturation : 182867,
+        gain : 1.45816,
+        readNoise : 15.689,
+        saturation : 119647,
       }
       C04 : {
-        gain : 0.98904,
-        readNoise : 16.977,
-        saturation : 180638,
+        gain : 1.45809,
+        readNoise : 16.394,
+        saturation : 85545,
       }
       C03 : {
-        gain : 0.98843,
-        readNoise : 17.884,
-        saturation : 180697,
+        gain : 1.45083,
+        readNoise : 17.034,
+        saturation : 86266,
       }
       C02 : {
-        gain : 0.98354,
-        readNoise : 17.416,
-        saturation : 181898,
+        gain : 1.45410,
+        readNoise : 16.751,
+        saturation : 86669,
       }
       C01 : {
-        gain : 0.98317,
-        readNoise : 16.360,
-        saturation : 180416,
+        gain : 1.45561,
+        readNoise : 15.683,
+        saturation : 87312,
       }
       C00 : {
-        gain : 0.97502,
-        readNoise : 14.281,
-        saturation : 176578,
+        gain : 1.44747,
+        readNoise : 13.806,
+        saturation : 98874,
       }
     S10 :
       C10 : {
-        gain : 1.00741,
-        readNoise : 6.348,
-        saturation : 211400,
+        gain : 1.47364,
+        readNoise : 6.280,
+        saturation : 94736,
       }
       C11 : {
-        gain : 1.01285,
-        readNoise : 6.380,
-        saturation : 205057,
+        gain : 1.48448,
+        readNoise : 6.290,
+        saturation : 84227,
       }
       C12 : {
-        gain : 1.00723,
-        readNoise : 6.476,
-        saturation : 205352,
+        gain : 1.47388,
+        readNoise : 6.326,
+        saturation : 84668,
       }
       C13 : {
-        gain : 1.00975,
-        readNoise : 6.420,
-        saturation : 207581,
+        gain : 1.47482,
+        readNoise : 6.362,
+        saturation : 84795,
       }
       C14 : {
-        gain : 1.00512,
-        readNoise : 6.576,
-        saturation : 207962,
+        gain : 1.46928,
+        readNoise : 6.356,
+        saturation : 85100,
       }
       C15 : {
-        gain : 1.00823,
-        readNoise : 6.511,
-        saturation : 207718,
+        gain : 1.47114,
+        readNoise : 6.262,
+        saturation : 95098,
       }
       C16 : {
-        gain : 1.00219,
-        readNoise : 6.434,
-        saturation : 202724,
+        gain : 1.46290,
+        readNoise : 6.155,
+        saturation : 95639,
       }
       C17 : {
-        gain : 0.98597,
-        readNoise : 5.873,
-        saturation : 200689,
+        gain : 1.43895,
+        readNoise : 6.006,
+        saturation : 97080,
       }
       C07 : {
-        gain : 1.01822,
-        readNoise : 5.995,
-        saturation : 220967,
+        gain : 1.47822,
+        readNoise : 6.161,
+        saturation : 89856,
       }
       C06 : {
-        gain : 1.00379,
-        readNoise : 6.491,
-        saturation : 209806,
+        gain : 1.46027,
+        readNoise : 6.393,
+        saturation : 90460,
       }
       C05 : {
-        gain : 1.00124,
-        readNoise : 6.338,
-        saturation : 206051,
+        gain : 1.45541,
+        readNoise : 6.215,
+        saturation : 90814,
       }
       C04 : {
-        gain : 1.01659,
-        readNoise : 6.309,
-        saturation : 210704,
+        gain : 1.47679,
+        readNoise : 6.283,
+        saturation : 89556,
       }
       C03 : {
-        gain : 1.04182,
-        readNoise : 6.412,
-        saturation : 211072,
+        gain : 1.51559,
+        readNoise : 6.442,
+        saturation : 87655,
       }
       C02 : {
-        gain : 1.01807,
-        readNoise : 6.410,
-        saturation : 214748,
+        gain : 1.48336,
+        readNoise : 6.323,
+        saturation : 89244,
       }
       C01 : {
-        gain : 1.01567,
-        readNoise : 6.428,
-        saturation : 217721,
+        gain : 1.48237,
+        readNoise : 6.542,
+        saturation : 89147,
       }
       C00 : {
-        gain : 1.03872,
-        readNoise : 6.594,
-        saturation : 219952,
+        gain : 1.50985,
+        readNoise : 6.291,
+        saturation : 87229,
       }
     S11 :
       C10 : {
-        gain : 0.98917,
-        readNoise : 6.356,
-        saturation : 210061,
+        gain : 1.45209,
+        readNoise : 6.284,
+        saturation : 96764,
       }
       C11 : {
-        gain : 0.97881,
-        readNoise : 6.496,
-        saturation : 211550,
+        gain : 1.43645,
+        readNoise : 6.561,
+        saturation : 97431,
       }
       C12 : {
-        gain : 0.98359,
-        readNoise : 6.668,
-        saturation : 205518,
+        gain : 1.44572,
+        readNoise : 6.573,
+        saturation : 86494,
       }
       C13 : {
-        gain : 0.99139,
-        readNoise : 6.647,
-        saturation : 206078,
+        gain : 1.45897,
+        readNoise : 6.954,
+        saturation : 95922,
       }
       C14 : {
-        gain : 0.99069,
-        readNoise : 6.661,
-        saturation : 208949,
+        gain : 1.45479,
+        readNoise : 6.598,
+        saturation : 95868,
       }
       C15 : {
-        gain : 0.98694,
-        readNoise : 6.545,
-        saturation : 210552,
+        gain : 1.44765,
+        readNoise : 6.422,
+        saturation : 96008,
       }
       C16 : {
-        gain : 0.97028,
-        readNoise : 6.334,
-        saturation : 210217,
+        gain : 1.42518,
+        readNoise : 6.223,
+        saturation : 97227,
       }
       C17 : {
-        gain : 0.95907,
-        readNoise : 5.912,
-        saturation : 205996,
+        gain : 1.40711,
+        readNoise : 6.022,
+        saturation : 98219,
       }
       C07 : {
-        gain : 0.99846,
-        readNoise : 5.979,
-        saturation : 214174,
+        gain : 1.46547,
+        readNoise : 6.233,
+        saturation : 79556,
       }
       C06 : {
-        gain : 0.96699,
-        readNoise : 6.209,
-        saturation : 205783,
+        gain : 1.42020,
+        readNoise : 6.112,
+        saturation : 91867,
       }
       C05 : {
-        gain : 0.96398,
-        readNoise : 6.353,
-        saturation : 202942,
+        gain : 1.41158,
+        readNoise : 6.392,
+        saturation : 92431,
       }
       C04 : {
-        gain : 0.97472,
-        readNoise : 6.230,
-        saturation : 198170,
+        gain : 1.42722,
+        readNoise : 6.183,
+        saturation : 91873,
       }
       C03 : {
-        gain : 0.99377,
-        readNoise : 6.346,
-        saturation : 203166,
+        gain : 1.45604,
+        readNoise : 6.356,
+        saturation : 90477,
       }
       C02 : {
-        gain : 0.98825,
-        readNoise : 6.353,
-        saturation : 202406,
+        gain : 1.44554,
+        readNoise : 6.333,
+        saturation : 91001,
       }
       C01 : {
-        gain : 0.97868,
-        readNoise : 6.343,
-        saturation : 208679,
+        gain : 1.43456,
+        readNoise : 6.281,
+        saturation : 91710,
       }
       C00 : {
-        gain : 0.99745,
-        readNoise : 6.545,
-        saturation : 208938,
+        gain : 1.45981,
+        readNoise : 6.284,
+        saturation : 90401,
       }
     S12 :
       C10 : {
-        gain : 0.98772,
-        readNoise : 6.702,
-        saturation : 200009,
+        gain : 1.45404,
+        readNoise : 6.565,
+        saturation : 92786,
       }
       C11 : {
-        gain : 0.99999,
-        readNoise : 6.904,
-        saturation : 202662,
+        gain : 1.47171,
+        readNoise : 7.245,
+        saturation : 91317,
       }
       C12 : {
-        gain : 0.99167,
-        readNoise : 7.044,
-        saturation : 195073,
+        gain : 1.45526,
+        readNoise : 7.627,
+        saturation : 91672,
       }
       C13 : {
-        gain : 0.98642,
-        readNoise : 7.169,
-        saturation : 194559,
+        gain : 1.44722,
+        readNoise : 8.065,
+        saturation : 91681,
       }
       C14 : {
-        gain : 0.98328,
-        readNoise : 7.184,
-        saturation : 196292,
+        gain : 1.44239,
+        readNoise : 7.729,
+        saturation : 91636,
       }
       C15 : {
-        gain : 0.97666,
-        readNoise : 7.065,
-        saturation : 192499,
+        gain : 1.43263,
+        readNoise : 7.269,
+        saturation : 103253,
       }
       C16 : {
-        gain : 0.97048,
-        readNoise : 6.737,
-        saturation : 186934,
+        gain : 1.42286,
+        readNoise : 6.653,
+        saturation : 103650,
       }
       C17 : {
-        gain : 0.83089,
-        readNoise : 6.974,
-        saturation : 163984,
+        gain : 1.21417,
+        readNoise : 6.903,
+        saturation : 105311,
       }
       C07 : {
-        gain : 0.97604,
-        readNoise : 7.339,
-        saturation : 147180,
+        gain : 1.42645,
+        readNoise : 7.302,
+        saturation : 96230,
       }
       C06 : {
-        gain : 0.97808,
-        readNoise : 6.512,
-        saturation : 178178,
+        gain : 1.43299,
+        readNoise : 6.430,
+        saturation : 96576,
       }
       C05 : {
-        gain : 0.97123,
-        readNoise : 6.711,
-        saturation : 165886,
+        gain : 1.42003,
+        readNoise : 7.197,
+        saturation : 87125,
       }
       C04 : {
-        gain : 0.96763,
-        readNoise : 6.814,
-        saturation : 162175,
+        gain : 1.42023,
+        readNoise : 7.527,
+        saturation : 87665,
       }
       C03 : {
-        gain : 0.96410,
-        readNoise : 6.858,
-        saturation : 162342,
+        gain : 1.41646,
+        readNoise : 7.494,
+        saturation : 88195,
       }
       C02 : {
-        gain : 0.96915,
-        readNoise : 6.763,
-        saturation : 176254,
+        gain : 1.41873,
+        readNoise : 7.540,
+        saturation : 98931,
       }
       C01 : {
-        gain : 0.98100,
-        readNoise : 6.820,
-        saturation : 186520,
+        gain : 1.43980,
+        readNoise : 6.906,
+        saturation : 98411,
       }
       C00 : {
-        gain : 0.97569,
-        readNoise : 6.654,
-        saturation : 184698,
+        gain : 1.42813,
+        readNoise : 6.345,
+        saturation : 99300,
       }
     S20 :
       C10 : {
-        gain : 0.97177,
-        readNoise : 8.609,
-        saturation : 211736,
+        gain : 1.43044,
+        readNoise : 8.364,
+        saturation : 88452,
       }
       C11 : {
-        gain : 0.97530,
-        readNoise : 8.865,
-        saturation : 211725,
+        gain : 1.43981,
+        readNoise : 8.536,
+        saturation : 78787,
       }
       C12 : {
-        gain : 0.96912,
-        readNoise : 8.934,
-        saturation : 205202,
+        gain : 1.43249,
+        readNoise : 8.609,
+        saturation : 79087,
       }
       C13 : {
-        gain : 0.97688,
-        readNoise : 8.897,
-        saturation : 210872,
+        gain : 1.44201,
+        readNoise : 8.563,
+        saturation : 78624,
       }
       C14 : {
-        gain : 0.96667,
-        readNoise : 8.890,
-        saturation : 200980,
+        gain : 1.42614,
+        readNoise : 8.434,
+        saturation : 79316,
       }
       C15 : {
-        gain : 0.98036,
-        readNoise : 8.373,
-        saturation : 203050,
+        gain : 1.44454,
+        readNoise : 7.994,
+        saturation : 78340,
       }
       C16 : {
-        gain : 0.97439,
-        readNoise : 7.866,
-        saturation : 194350,
+        gain : 1.43672,
+        readNoise : 7.625,
+        saturation : 70366,
       }
       C17 : {
-        gain : 0.94389,
-        readNoise : 8.664,
-        saturation : 182364,
+        gain : 1.38854,
+        readNoise : 8.612,
+        saturation : 72348,
       }
       C07 : {
-        gain : 0.79548,
-        readNoise : 8.724,
-        saturation : 140305,
+        gain : 1.16371,
+        readNoise : 8.406,
+        saturation : 99661,
       }
       C06 : {
-        gain : 0.95691,
-        readNoise : 7.050,
-        saturation : 196358,
+        gain : 1.41121,
+        readNoise : 6.799,
+        saturation : 75294,
       }
       C05 : {
-        gain : 0.94309,
-        readNoise : 7.445,
-        saturation : 182113,
+        gain : 1.38939,
+        readNoise : 7.079,
+        saturation : 68036,
       }
       C04 : {
-        gain : 0.93422,
-        readNoise : 7.537,
-        saturation : 191534,
+        gain : 1.37697,
+        readNoise : 7.182,
+        saturation : 76964,
       }
       C03 : {
-        gain : 0.94364,
-        readNoise : 7.684,
-        saturation : 184776,
+        gain : 1.39552,
+        readNoise : 7.567,
+        saturation : 67961,
       }
       C02 : {
-        gain : 0.94174,
-        readNoise : 7.721,
-        saturation : 194233,
+        gain : 1.38619,
+        readNoise : 7.434,
+        saturation : 76224,
       }
       C01 : {
-        gain : 0.94268,
-        readNoise : 7.649,
-        saturation : 199243,
+        gain : 1.38796,
+        readNoise : 7.345,
+        saturation : 76122,
       }
       C00 : {
-        gain : 0.94362,
-        readNoise : 7.918,
-        saturation : 200447,
+        gain : 1.39209,
+        readNoise : 7.388,
+        saturation : 75946,
       }
     S21 :
       C10 : {
-        gain : 0.97048,
-        readNoise : 6.332,
-        saturation : 196582,
+        gain : 1.43288,
+        readNoise : 6.569,
+        saturation : 78197,
       }
       C11 : {
-        gain : 0.97409,
-        readNoise : 6.525,
-        saturation : 202275,
+        gain : 1.43493,
+        readNoise : 6.299,
+        saturation : 77872,
       }
       C12 : {
-        gain : 0.96876,
-        readNoise : 6.272,
-        saturation : 203565,
+        gain : 1.42924,
+        readNoise : 6.297,
+        saturation : 77882,
       }
       C13 : {
-        gain : 0.97248,
-        readNoise : 6.380,
-        saturation : 202712,
+        gain : 1.43209,
+        readNoise : 6.382,
+        saturation : 77566,
       }
       C14 : {
-        gain : 0.96876,
-        readNoise : 6.386,
-        saturation : 200815,
+        gain : 1.42805,
+        readNoise : 6.401,
+        saturation : 77582,
       }
       C15 : {
-        gain : 0.97084,
-        readNoise : 6.348,
-        saturation : 207426,
+        gain : 1.43224,
+        readNoise : 6.544,
+        saturation : 77295,
       }
       C16 : {
-        gain : 0.96959,
-        readNoise : 6.228,
-        saturation : 205147,
+        gain : 1.42849,
+        readNoise : 6.211,
+        saturation : 77258,
       }
       C17 : {
-        gain : 0.95622,
-        readNoise : 5.842,
-        saturation : 206422,
+        gain : 1.40820,
+        readNoise : 6.067,
+        saturation : 78028,
       }
       C07 : {
-        gain : 0.86784,
-        readNoise : 5.803,
-        saturation : 191272,
+        gain : 1.30534,
+        readNoise : 5.885,
+        saturation : 113910,
       }
       C06 : {
-        gain : 0.98524,
-        readNoise : 6.233,
-        saturation : 203293,
+        gain : 1.45006,
+        readNoise : 6.099,
+        saturation : 79718,
       }
       C05 : {
-        gain : 0.98518,
-        readNoise : 6.288,
-        saturation : 191525,
+        gain : 1.45068,
+        readNoise : 6.184,
+        saturation : 71404,
       }
       C04 : {
-        gain : 0.98288,
-        readNoise : 6.213,
-        saturation : 191382,
+        gain : 1.44613,
+        readNoise : 6.172,
+        saturation : 71674,
       }
       C03 : {
-        gain : 0.98720,
-        readNoise : 6.283,
-        saturation : 184535,
+        gain : 1.45918,
+        readNoise : 6.279,
+        saturation : 63819,
       }
       C02 : {
-        gain : 0.98921,
-        readNoise : 6.315,
-        saturation : 182360,
+        gain : 1.46264,
+        readNoise : 6.224,
+        saturation : 63835,
       }
       C01 : {
-        gain : 0.99109,
-        readNoise : 6.370,
-        saturation : 191239,
+        gain : 1.45866,
+        readNoise : 6.183,
+        saturation : 71627,
       }
       C00 : {
-        gain : 0.98784,
-        readNoise : 6.424,
-        saturation : 196517,
+        gain : 1.45714,
+        readNoise : 6.103,
+        saturation : 72000,
       }
     S22 :
       C10 : {
-        gain : 1.01716,
-        readNoise : 6.330,
-        saturation : 225118,
+        gain : 1.47733,
+        readNoise : 6.146,
+        saturation : 84863,
       }
       C11 : {
-        gain : 1.00871,
-        readNoise : 6.400,
-        saturation : 220565,
+        gain : 1.46631,
+        readNoise : 6.136,
+        saturation : 85329,
       }
       C12 : {
-        gain : 1.00144,
-        readNoise : 6.396,
-        saturation : 219137,
+        gain : 1.45475,
+        readNoise : 6.215,
+        saturation : 85544,
       }
       C13 : {
-        gain : 1.01336,
-        readNoise : 6.372,
-        saturation : 222102,
+        gain : 1.47200,
+        readNoise : 6.466,
+        saturation : 84448,
       }
       C14 : {
-        gain : 0.99653,
-        readNoise : 6.512,
-        saturation : 221490,
+        gain : 1.44525,
+        readNoise : 6.164,
+        saturation : 85035,
       }
       C15 : {
-        gain : 1.01211,
-        readNoise : 6.417,
-        saturation : 224527,
+        gain : 1.46763,
+        readNoise : 6.262,
+        saturation : 84140,
       }
       C16 : {
-        gain : 0.99077,
-        readNoise : 6.265,
-        saturation : 218937,
+        gain : 1.43802,
+        readNoise : 6.010,
+        saturation : 95945,
       }
       C17 : {
-        gain : 0.99883,
-        readNoise : 5.941,
-        saturation : 222215,
+        gain : 1.45349,
+        readNoise : 5.997,
+        saturation : 94660,
       }
       C07 : {
-        gain : 0.98582,
-        readNoise : 5.802,
-        saturation : 208342,
+        gain : 1.43318,
+        readNoise : 6.017,
+        saturation : 98864,
       }
       C06 : {
-        gain : 1.00718,
-        readNoise : 6.299,
-        saturation : 207703,
+        gain : 1.46942,
+        readNoise : 6.178,
+        saturation : 97529,
       }
       C05 : {
-        gain : 1.01403,
-        readNoise : 6.443,
-        saturation : 213204,
+        gain : 1.47712,
+        readNoise : 6.302,
+        saturation : 97519,
       }
       C04 : {
-        gain : 1.02121,
-        readNoise : 6.378,
-        saturation : 210901,
+        gain : 1.48670,
+        readNoise : 6.382,
+        saturation : 97193,
       }
       C03 : {
-        gain : 1.03092,
-        readNoise : 6.679,
-        saturation : 204919,
+        gain : 1.50438,
+        readNoise : 6.582,
+        saturation : 96634,
       }
       C02 : {
-        gain : 1.01711,
-        readNoise : 6.437,
-        saturation : 203065,
+        gain : 1.47947,
+        readNoise : 6.237,
+        saturation : 87480,
       }
       C01 : {
-        gain : 1.01442,
-        readNoise : 6.499,
-        saturation : 205664,
+        gain : 1.47722,
+        readNoise : 6.256,
+        saturation : 87988,
       }
       C00 : {
-        gain : 1.02635,
-        readNoise : 6.502,
-        saturation : 206940,
+        gain : 1.49615,
+        readNoise : 6.376,
+        saturation : 98439,
       }
