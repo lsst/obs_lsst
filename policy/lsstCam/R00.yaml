@@ -6,14 +6,14 @@ R00 :
     SG0 : ITL-3800C-397
     SG1 : ITL-3800C-337
 
-  geometryWithinRaft:
+  geometryWithinRaft :
     SG0 : {
-      offset : [0.49,4.74],
-      yaw : 270.0
+      offset : [0.49, 4.74],
+      yaw : 270.0,
     }
     SG1 : {
       offset : [4.74, 0.49],
-      yaw : 0.0
+      yaw : 0.0,
     }
 
   sensorTypes :
@@ -22,36 +22,132 @@ R00 :
 
   amplifiers :
     SG0 :
-      C10 : { gain : 1.629, readNoise : 4.21 }
-      C11 : { gain : 1.796, readNoise : 3.86 }
-      C12 : { gain : 1.623, readNoise : 4.27 }
-      C13 : { gain : 1.751, readNoise : 3.90 }
-      C14 : { gain : 1.665, readNoise : 4.23 }
-      C15 : { gain : 1.659, readNoise : 4.18 }
-      C16 : { gain : 1.644, readNoise : 4.34 }
-      C17 : { gain : 1.697, readNoise : 4.07 }
-      C07 : { gain : 1.722, readNoise : 3.95 }
-      C06 : { gain : 1.645, readNoise : 4.35 }
-      C05 : { gain : 1.621, readNoise : 4.13 }
-      C04 : { gain : 1.619, readNoise : 4.24 }
-      C03 : { gain : 1.690, readNoise : 4.26 }
-      C02 : { gain : 1.739, readNoise : 3.78 }
-      C01 : { gain : 1.742, readNoise : 4.16 }
-      C00 : { gain : 1.711, readNoise : 4.13 }
+      C10 : {
+        gain : 1.62900,
+        readNoise : 4.210,
+      }
+      C11 : {
+        gain : 1.79600,
+        readNoise : 3.860,
+      }
+      C12 : {
+        gain : 1.62300,
+        readNoise : 4.270,
+      }
+      C13 : {
+        gain : 1.75100,
+        readNoise : 3.900,
+      }
+      C14 : {
+        gain : 1.66500,
+        readNoise : 4.230,
+      }
+      C15 : {
+        gain : 1.65900,
+        readNoise : 4.180,
+      }
+      C16 : {
+        gain : 1.64400,
+        readNoise : 4.340,
+      }
+      C17 : {
+        gain : 1.69700,
+        readNoise : 4.070,
+      }
+      C07 : {
+        gain : 1.72200,
+        readNoise : 3.950,
+      }
+      C06 : {
+        gain : 1.64500,
+        readNoise : 4.350,
+      }
+      C05 : {
+        gain : 1.62100,
+        readNoise : 4.130,
+      }
+      C04 : {
+        gain : 1.61900,
+        readNoise : 4.240,
+      }
+      C03 : {
+        gain : 1.69000,
+        readNoise : 4.260,
+      }
+      C02 : {
+        gain : 1.73900,
+        readNoise : 3.780,
+      }
+      C01 : {
+        gain : 1.74200,
+        readNoise : 4.160,
+      }
+      C00 : {
+        gain : 1.71100,
+        readNoise : 4.130,
+      }
     SG1 :
-      C10 : { gain : 1.668, readNoise : 4.22 }
-      C11 : { gain : 1.699, readNoise : 4.01 }
-      C12 : { gain : 1.667, readNoise : 4.43 }
-      C13 : { gain : 1.711, readNoise : 4.15 }
-      C14 : { gain : 1.786, readNoise : 3.88 }
-      C15 : { gain : 1.713, readNoise : 4.12 }
-      C16 : { gain : 1.727, readNoise : 4.29 }
-      C17 : { gain : 1.700, readNoise : 4.12 }
-      C07 : { gain : 1.683, readNoise : 4.13 }
-      C06 : { gain : 1.726, readNoise : 4.12 }
-      C05 : { gain : 1.753, readNoise : 4.04 }
-      C04 : { gain : 1.713, readNoise : 4.17 }
-      C03 : { gain : 1.716, readNoise : 3.95 }
-      C02 : { gain : 1.671, readNoise : 4.16 }
-      C01 : { gain : 1.654, readNoise : 4.31 }
-      C00 : { gain : 1.702, readNoise : 4.28 }
+      C10 : {
+        gain : 1.66800,
+        readNoise : 4.220,
+      }
+      C11 : {
+        gain : 1.69900,
+        readNoise : 4.010,
+      }
+      C12 : {
+        gain : 1.66700,
+        readNoise : 4.430,
+      }
+      C13 : {
+        gain : 1.71100,
+        readNoise : 4.150,
+      }
+      C14 : {
+        gain : 1.78600,
+        readNoise : 3.880,
+      }
+      C15 : {
+        gain : 1.71300,
+        readNoise : 4.120,
+      }
+      C16 : {
+        gain : 1.72700,
+        readNoise : 4.290,
+      }
+      C17 : {
+        gain : 1.70000,
+        readNoise : 4.120,
+      }
+      C07 : {
+        gain : 1.68300,
+        readNoise : 4.130,
+      }
+      C06 : {
+        gain : 1.72600,
+        readNoise : 4.120,
+      }
+      C05 : {
+        gain : 1.75300,
+        readNoise : 4.040,
+      }
+      C04 : {
+        gain : 1.71300,
+        readNoise : 4.170,
+      }
+      C03 : {
+        gain : 1.71600,
+        readNoise : 3.950,
+      }
+      C02 : {
+        gain : 1.67100,
+        readNoise : 4.160,
+      }
+      C01 : {
+        gain : 1.65400,
+        readNoise : 4.310,
+      }
+      C00 : {
+        gain : 1.70200,
+        readNoise : 4.280,
+      }
