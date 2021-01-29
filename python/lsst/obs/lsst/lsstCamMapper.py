@@ -453,20 +453,8 @@ class LsstCamBaseMapper(CameraMapper):
 
         if filter:
             obsInfo = ObservationInfo(exp.getMetadata(), translator_class=self.translatorClass)
-            try:
-                filt = afwImage.Filter(obsInfo.physical_filter)
-            except LookupError:
-                unknownName = "UNKNOWN"
-
-                logger = lsst.log.Log.getLogger("LsstCamMapper")
-                logger.warn('Unknown physical_filter "%s" for %s %s; replacing with "%s"',
-                            obsInfo.physical_filter,
-                            obsInfo.observation_id, obsInfo.detector_unique_name,
-                            unknownName)
-
-                filt = afwImage.Filter(unknownName)
-
-            exp.setFilter(filt)
+            filt = afwImage.FilterLabel(physical=obsInfo.physical_filter)
+            exp.setFilterLabel(filt)
 
         return exp
 
