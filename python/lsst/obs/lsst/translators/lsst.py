@@ -637,7 +637,7 @@ class LsstBaseTranslator(FitsTranslator):
         if self._header["DATE-OBS"] == self._header["DATE"]:
             # A fixed up date -- use AZEL as source of truth
             altaz = self.to_altaz_begin()
-            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS),
+            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS()),
                                                  obstime=altaz.obstime,
                                                  location=altaz.location)
         else:
