@@ -21,7 +21,6 @@
 
 import os.path
 import unittest
-import astropy
 import astropy.units as u
 import astropy.units.cds as cds
 import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
@@ -148,7 +147,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         test_data = (("lsstCam-MC_H_20000217_000032_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
                            instrument="LSSTCam",
-                           boresight_rotation_coord="unknown",
+                           boresight_rotation_coord="sky",
                            dark_time=15.0*u.s,
                            detector_exposure_id=4000021700032090,
                            detector_group="R22",
@@ -263,10 +262,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                # PhoSim data are in the future and Astropy complains
-                # about astrometry errors.
-                with self.assertWarns(astropy.utils.exceptions.AstropyWarning):
-                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_latiss_translator(self):
         test_data = (("latiss-2018-09-20-05700065-det000.yaml",

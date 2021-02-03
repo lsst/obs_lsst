@@ -56,10 +56,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         "telescope": SIMONYI_TELESCOPE,
         # Migrate these to full translations once test data appears that
         # includes them
-        "boresight_rotation_coord": "unknown",
-        "boresight_rotation_angle": None,
-        "boresight_airmass": None,
-        "tracking_radec": None,
         "altaz_begin": None,
         "object": "UNKNOWN",
         "relative_humidity": None,
@@ -73,7 +69,9 @@ class LsstCamTranslator(LsstBaseTranslator):
         "observation_id": "OBSID",
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
-        "science_program": ("RUNNUM", dict(default="unknown"))
+        "science_program": ("RUNNUM", dict(default="unknown")),
+        "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
+                                                                 default=float("nan"), unit=u.deg)),
     }
 
     # Use Imsim raft definitions until a true lsstCam definition exists
