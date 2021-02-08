@@ -245,10 +245,13 @@ for filter in _latiss_filters:
         # Also need to update aliases
         new_aliases = {FILTER_DELIMITER.join([a, grating]) for a in filter.alias}
 
+        # For gratings set the band to the band of the filter
         combo = FilterDefinition(physical_filter=new_name,
+                                 band=filter.band,
                                  lambdaEff=filter.lambdaEff,
                                  lambdaMin=filter.lambdaMin,
                                  lambdaMax=filter.lambdaMax,
+                                 afw_name=filter.afw_name,
                                  alias=new_aliases)
         _latiss_filter_and_grating.append(combo)
 
