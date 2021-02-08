@@ -27,7 +27,6 @@ __all__ = ("main", "writeRXXFile")
 import argparse
 import glob
 import os
-import re
 import shutil
 import sys
 import json
@@ -90,9 +89,12 @@ def writeRXXFile(fileName, raftName, raftNameData, gains=None, readNoises=None, 
         iprint()
         iprint("amplifiers :")
 
+        # The yaml files treat e.g. R00 and R00W separately for technical
+        # reasons but cameraGeom/EOTest itself has no such constraint.
+        raftName_real = raftName[:3] if raftName.endswith("W") else raftName
         indent += 1
         for ccdName in ccdNames:
-            fullCcdName = f'{raftName}_{ccdName}'
+            fullCcdName = f'{raftName_real}_{ccdName}'
             iprint(f"{ccdName} :")
 
             indent += 1
@@ -134,9 +136,11 @@ def updateFromEOTest(RXXDir, raftNames, updatedData):
 
         # the corner rafts are a nuisance, and we have to handle them as two
         # .yaml files, e.g. R00.yaml and R00W.yaml, whereas the raft names
-        # don't need to worry about this.  Consequently, we need to strip the
-        # "W" to be able to look up values
-        raftName = re.sub(r"W$", "", raftName)
+        # don't need to worry about this.  Consequently, we may need to remove
+        # a "W" to be able to look up values
+        if raftName in ["R00W", "R04W", "R40W", "R44W"]:
+            raftNameData[raftName] = raftNameData[raftName[:3]]
+
         writeRXXFile(RXXFile, raftName, raftNameData[raftName],
                      gains=updatedData["gain"],
                      readNoises=updatedData["readNoise"],
