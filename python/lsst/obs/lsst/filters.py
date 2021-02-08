@@ -231,7 +231,7 @@ _latiss_filters = (
 )
 
 # Form a new set of filter definitions from all the explicit filters
-_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "none", "unknown")
+_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "unknown")
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name
