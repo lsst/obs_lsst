@@ -202,9 +202,11 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # filters for each combination of filter+grating.
 _latiss_filters = (
     FilterDefinition(physical_filter="empty",
+                     band="white",
                      lambdaEff=0.0,
                      alias={"no_filter", "open"}),
     FilterDefinition(physical_filter="blank_bk7_wg05",
+                     band="opaque",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="KPNO_1111_436nm",
                      band="g",
