@@ -218,18 +218,22 @@ _latiss_filters = (
                      band="z",
                      lambdaEff=828.0, lambdaMin=738.5, lambdaMax=917.5),
     FilterDefinition(physical_filter="diffuser",
-                     lambdaEff=0.0),
-    FilterDefinition(physical_filter="empty",
+                     band="diffuser",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="unknown",
+                     band="unknown",
                      lambdaEff=0.0),
     FilterDefinition(physical_filter="BG40",
-                     # band="g",  # afw only allows one g filter
+                     band="g",
+                     afw_name="bg",
                      lambdaEff=472.0, lambdaMin=334.5, lambdaMax=609.5),
     FilterDefinition(physical_filter="quadnotch1",
-                     lambdaEff=0.0),
+                     lambdaEff=0.0,
+                     band="notch"),
     FilterDefinition(physical_filter="RG610",
-                     lambdaEff=0.0),
+                     lambdaEff=0.0,
+                     band="r",
+                     afw_name="rg"),
 )
 
 # Form a new set of filter definitions from all the explicit filters
