@@ -233,6 +233,11 @@ _latiss_filter_and_grating = [f for f in _latiss_filters]
 
 for filter in _latiss_filters:
     for grating in _latiss_gratings:
+        # The diffuser "filter" was never used with gratings
+        # so skip it
+        if filter.physical_filter == "diffuser":
+            continue
+
         # FilterDefinition is a frozen dataclass
         new_name = FILTER_DELIMITER.join([filter.physical_filter, grating])
 
