@@ -36,13 +36,14 @@ from .translators.lsst import FILTER_DELIMITER
 def addFilter(filter_dict, band, physical_filter, lambdaEff=0.0):
     """Define a filter in filter_dict, to be converted to a Filter later"""
 
+    # index by band but keep distinct physical filters by band
+    # since there can be many physical filters for a single band
     if band not in filter_dict:
-        filter_dict[band] = dict(physical_filter=physical_filter,
-                                 lambdaEff=lambdaEff, alias=[])
-    else:
-        assert filter_dict[band]["lambdaEff"] == lambdaEff
+        filter_dict[band] = {}
 
-        filter_dict[band]["alias"].append(physical_filter)
+    filter_dict[band][physical_filter] = dict(physical_filter=physical_filter,
+                                              band=band, lambdaEff=lambdaEff, alias=[],
+                                              )
 
 
 # The LSST Filters from L. Jones 05/14/2020 - "Edges" = 5% of peak throughput
@@ -86,80 +87,67 @@ LsstCamFiltersBaseline = FilterDefinitionCollection(
 #
 # The band names are not yet defined, so I'm going to invent them
 
+# Map the BOT filters to corresponding band explicitly
+BOT_filter_map = {
+    "empty": "white",
+    "SDSSu": "u",
+    "SDSSg": "g",
+    "SDSSr": "r",
+    "SDSSi": "i",
+    "SDSSz": "z",
+    "SDSSY": "y",
+    "480nm": "g",
+    "650nm": "r",
+    "750nm": "i",
+    "870nm": "z",
+    "950nm": "y",
+    "970nm": "y",
+    "grid": "grid",
+    "spot": "spot",
+}
 
 BOTFilters_dict = {}
-for physical_filter in [
-        "empty",
-        "SDSSu",
-        "SDSSg",
-        "SDSSr",
-        "SDSSi",
-        "SDSSz",
-        "SDSSY",
-        "480nm",
-        "650nm",
-        "750nm",
-        "870nm",
-        "950nm",
-        "970nm",
-        "grid",
-        "spot",
-        "empty3",
-        "empty4",
-        "empty5",
-        "empty6",
-]:
-    mat = re.search(r"^SDSS(.)$", physical_filter)
-    if mat:
-        band = mat.group(1).lower()
+for physical_filter, band in BOT_filter_map.items():
+    lambdaEff = 0.0
+    lsstCamFilterMatches = [f for f in LsstCamFiltersBaseline if f.band == band]
+    if lsstCamFilterMatches:
+        lambdaEff = lsstCamFilterMatches[0].lambdaEff
 
-        lsstCamFilter = [f for f in LsstCamFiltersBaseline if f.band == band][0]
-        lambdaEff = lsstCamFilter.lambdaEff
-    else:
-        if re.search(r"^empty[3-6]$", physical_filter):
-            band = "white"
-        else:
-            band = physical_filter
-        lambdaEff = 0.0
+    if mat := re.match(r"(\d+)nm$", physical_filter):
+        lambdaEff = float(mat.group(1))
 
     if physical_filter == "empty":
-        pass                            # already in LsstCamFiltersBaseline
+        pass  # Already defined above
     else:
         addFilter(BOTFilters_dict, band, physical_filter, lambdaEff=lambdaEff)
 
-    ndFilters = ["empty", "ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
+    # Empty ND is removed by metadata translator so is not needed here
+    ndFilters = ["ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
     # We found these additional filters in BOT data files:
     ndFilters += ['ND_OD0.01', 'ND_OD0.05', 'ND_OD0.4', 'ND_OD3.0', 'ND_OD4.0']
 
     for nd in ndFilters:
-        pf = f"{physical_filter}{FILTER_DELIMITER}{nd}"  # fully qualified physical filter
+        # fully qualified physical filter
+        phys_plus_nd = f"{physical_filter}{FILTER_DELIMITER}{nd}"
 
         # When one of the filters is empty we can just use the real filter
         # (e.g. "u" not "u~empty");  but we always need at least one "empty"
-        #
-        # Don't use . in band names, it's just asking for trouble
-        # if they ever end up in filenames
-        if nd == "empty":
-            if band == "white":
-                af = "white"
-            else:
-                af = f"{band}"
-        elif band == "white":
-            pf = nd
-            af = f"{nd.replace('.', '_')}"
-        else:
-            af = f"{band}{FILTER_DELIMITER}{nd.replace('.', '_')}"
+        if band == "white":
+            # Use the ND on its own
+            phys_plus_nd = nd
 
-        addFilter(BOTFilters_dict, band=af, physical_filter=pf, lambdaEff=lambdaEff)
+        # Use a generic ND modifier for the band
+        ndband = f"{band}{FILTER_DELIMITER}nd"
+
+        addFilter(BOTFilters_dict, band=ndband, physical_filter=phys_plus_nd, lambdaEff=lambdaEff)
 
 BOTFilters = [
     FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
 ]
-for band, filt in BOTFilters_dict.items():
-    BOTFilters.append(FilterDefinition(band=band,
-                                       physical_filter=filt["physical_filter"],
-                                       lambdaEff=filt["lambdaEff"],
-                                       alias=filt["alias"]))
+for band, physical_filters in BOTFilters_dict.items():
+    for physical_filter, filter_defn in physical_filters.items():
+        BOTFilters.append(FilterDefinition(**filter_defn))
+
 #
 # The filters that we might see in the real LSSTCam (including in SLAC)
 #
@@ -317,11 +305,9 @@ ComCamFilters = [
     FilterDefinition(band="white", physical_filter="empty", lambdaEff=0.0),
     FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
 ]
-for band, filt in ComCamFilters_dict.items():
-    ComCamFilters.append(FilterDefinition(band=band,
-                                          physical_filter=filt["physical_filter"],
-                                          lambdaEff=filt["lambdaEff"],
-                                          alias=filt["alias"]))
+for band, physical_filters in ComCamFilters_dict.items():
+    for physical_filter, filter_defn in physical_filters.items():
+        ComCamFilters.append(FilterDefinition(**filter_defn))
 
 COMCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *ComCamFilters,
