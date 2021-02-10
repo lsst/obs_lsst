@@ -31,8 +31,16 @@ import numpy as np
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstCamImSim, LsstCamPhoSim,
                            LsstTS8, LsstTS3, LsstUCDCam, Latiss)
 
-from lsst.daf.butler import (Butler, DatasetType, FileDescriptor, Location,
-                             StorageClass, StorageClassFactory)
+from lsst.daf.butler import (
+    Butler,
+    DataCoordinate,
+    DatasetType,
+    DimensionUniverse,
+    FileDescriptor,
+    Location,
+    StorageClass,
+    StorageClassFactory,
+)
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
@@ -74,10 +82,22 @@ class TestInstruments(unittest.TestCase):
         instrument = cls()
         scFactory = StorageClassFactory()
 
+        # Make up a data ID to pass to the formatter's constructor.  This is
+        # NOT a legal data ID for any of the files, and we're relying on the
+        # fact that we don't _happen_ to use any of the formatter functionality
+        # that cares about the data ID.  But this is still evil, see DM-28698.
+        dataId = DataCoordinate.standardize(universe=DimensionUniverse(),
+                                            instrument=instrument.getName(),
+                                            detector=0,
+                                            exposure=0,
+                                            physical_filter="something-r",
+                                            band="r")
+
         # Check instrument class and metadata translator agree on
         # instrument name -- use the raw formatter to do the file reading
         rawFormatterClass = instrument.getRawFormatter({})
-        formatter = rawFormatterClass(FileDescriptor(Location(DATAROOT, testRaw), StorageClass("x")))
+        formatter = rawFormatterClass(FileDescriptor(Location(DATAROOT, testRaw), StorageClass("x")),
+                                      dataId)
         obsInfo = formatter.observationInfo
         self.assertEqual(instrument.getName(), obsInfo.instrument)
 
