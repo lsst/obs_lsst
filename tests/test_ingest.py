@@ -40,7 +40,7 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     ingestDir = TESTDIR
     file = os.path.join(DATAROOT, "latiss", "raw", "2018-09-20", "3018092000065-det000.fits")
     dataIds = [dict(instrument="LATISS", exposure=3018092000065, detector=0)]
-    filterLabel = lsst.afw.image.FilterLabel(physical="unknown~unknown")
+    filterLabel = lsst.afw.image.FilterLabel(band="unknown", physical="unknown~unknown")
 
 
 class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
