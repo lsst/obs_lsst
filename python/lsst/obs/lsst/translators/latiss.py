@@ -58,6 +58,10 @@ RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 # in mount coordinates, so off by pointing model.
 RASTART_IS_BAD = Time("2020-05-01T00:00", format="isot", scale="utc")
 
+# Between RASTART_IS_BAD and this time the RASTART header uses hours
+# instead of degrees.
+RASTART_IS_HOURS = Time("2021-02-11T18:45", format="isot", scale="utc")
+
 # DATE-END is not to be trusted before this date
 DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 
@@ -356,12 +360,22 @@ class LatissTranslator(LsstBaseTranslator):
                 log.debug("%s: Forcing blank RADESYS to '%s'", log_label, header["RADESYS"])
                 modified = True
 
-        if date < RASTART_IS_BAD:
-            # The wrong telescope position was used. Unsetting these will force
-            # the RA/DEC demand headers to be used instead.
-            for h in ("RASTART", "DECSTART", "RAEND", "DECEND"):
-                header[h] = None
-            log.debug("%s: Forcing derived RA/Dec headers to undefined", log_label)
+        if date < RASTART_IS_HOURS:
+            # Avoid two checks for case where RASTART is fine
+            if date < RASTART_IS_BAD:
+                # The wrong telescope position was used. Unsetting these will
+                # force the RA/DEC demand headers to be used instead.
+                for h in ("RASTART", "DECSTART", "RAEND", "DECEND"):
+                    header[h] = None
+                log.debug("%s: Forcing derived RA/Dec headers to undefined", log_label)
+                modified = True
+            else:
+                # Correct hours to degrees
+                for h in ("RASTART", "RAEND"):
+                    if header[h]:
+                        header[h] *= 15.0
+                log.debug("%s: Correcting RASTART/END from hours to degrees", log_label)
+                modified = True
 
         return modified
 
