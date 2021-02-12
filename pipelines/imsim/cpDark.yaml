@@ -1,0 +1,40 @@
+description: obs_lsst/latiss dark calibration construction
+instrument: lsst.obs.lsst.LsstCamImSim
+# Do not inherit until defect/linearize/ct work
+# inherits:
+#  location: $CP_PIPE_DIR/pipelines/cpDark.yaml
+tasks:
+  isr:
+    class: lsst.ip.isr.isrTask.IsrTask
+    config:
+      connections.ccdExposure: 'raw'
+      connections.outputExposure: 'cpDarkIsr'
+      doBias: True
+      doVariance: True
+      doLinearize: False
+      doCrosstalk: False
+      doDefect: False
+      doNanMasking: True
+      doInterpolate: True
+      doBrighterFatter: False
+      doDark: False
+      doFlat: False
+      doApplyGains: False
+      doFringe: False
+  cpDark:
+    class: lsst.cp.pipe.cpDarkTask.CpDarkTask
+    config:
+      connections.inputExp: 'cpDarkIsr'
+      connections.outputExp: 'cpDarkProc'
+  cpCombine:
+    class: lsst.cp.pipe.cpCombine.CalibCombineTask
+    config:
+      connections.inputExps: 'cpDarkProc'
+      connections.outputData: 'dark'
+      calibrationType: 'dark'
+      exposureScaling: "DarkTime"
+      python: config.mask.append("CR")
+contracts:
+  - isr.doDark == False
+  - cpCombine.calibrationType == "dark"
+  - cpCombine.exposureScaling == "DarkTime"
