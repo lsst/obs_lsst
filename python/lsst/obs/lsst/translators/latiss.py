@@ -377,6 +377,16 @@ class LatissTranslator(LsstBaseTranslator):
                 log.debug("%s: Correcting RASTART/END from hours to degrees", log_label)
                 modified = True
 
+        # RASTART/END headers have a TAI/UTC confusion causing an offset
+        # of 37 seconds. Once this is fixed in the acquisition system
+        # the correction will have an upper date bound.
+        if date > RASTART_IS_BAD:
+            offset = (37.0 / 3600.0) * 15.0
+            for epoch in ("START", "END"):
+                h = "RA" + epoch
+                if header[h]:
+                    header[h] += offset
+
         return modified
 
     def _is_on_mountain(self):
