@@ -637,7 +637,7 @@ class LsstBaseTranslator(FitsTranslator):
         if self._header["DATE-OBS"] == self._header["DATE"]:
             # A fixed up date -- use AZEL as source of truth
             altaz = self.to_altaz_begin()
-            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS),
+            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS()),
                                                  obstime=altaz.obstime,
                                                  location=altaz.location)
         else:
@@ -760,3 +760,46 @@ class LsstBaseTranslator(FitsTranslator):
         log.warning("%s: Unable to determine the observation counter so returning 0",
                     self._log_prefix)
         return 0
+
+    @cache_translation
+    def to_boresight_rotation_coord(self):
+        """Boresight rotation angle.
+
+        Only relevant for science observations.
+        """
+        unknown = "unknown"
+        if not self.is_on_sky():
+            return unknown
+
+        self._used_these_cards("ROTCOORD")
+        coord = self._header.get("ROTCOORD", unknown)
+        if coord is None:
+            coord = unknown
+        return coord
+
+    @cache_translation
+    def to_boresight_airmass(self):
+        """Calculate airmass at boresight at start of observation.
+
+        Notes
+        -----
+        Early data are missing AMSTART header so we fall back to calculating
+        it from ELSTART.
+        """
+        if not self.is_on_sky():
+            return None
+
+        # This observation should have AMSTART
+        amkey = "AMSTART"
+        if self.is_key_ok(amkey):
+            self._used_these_cards(amkey)
+            return self._header[amkey]
+
+        # Instead we need to look at azel
+        altaz = self.to_altaz_begin()
+        if altaz is not None:
+            return altaz.secz.to_value()
+
+        log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
+                    self._log_prefix)
+        return 1.0

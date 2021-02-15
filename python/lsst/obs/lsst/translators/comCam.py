@@ -44,6 +44,10 @@ class LsstComCamTranslator(LsstCamTranslator):
 
     _const_map = {
         "instrument": "LSSTComCam",
+        "boresight_rotation_coord": "unknown",
+        "boresight_rotation_angle": None,
+        "boresight_airmass": None,
+        "tracking_radec": None,
     }
 
     # Use the comCam raft definition

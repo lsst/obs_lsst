@@ -81,9 +81,9 @@ class LsstSimTranslator(LsstBaseTranslator):
             # Derive from RADec in absence of any other information
             radec = self.to_tracking_radec()
             if radec is not None:
-                # This triggers warnings because of the future dates
+                # This can trigger warnings because of the future dates
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", category=astropy.utils.exceptions.AstropyWarning)
-                    altaz = radec.transform_to(AltAz)
+                    altaz = radec.transform_to(AltAz())
                 return altaz
         return None

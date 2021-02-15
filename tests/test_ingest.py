@@ -40,6 +40,7 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     ingestDir = TESTDIR
     file = os.path.join(DATAROOT, "latiss", "raw", "2018-09-20", "3018092000065-det000.fits")
     dataIds = [dict(instrument="LATISS", exposure=3018092000065, detector=0)]
+    filterLabel = lsst.afw.image.FilterLabel(band="unknown", physical="unknown~unknown")
 
 
 class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
@@ -49,6 +50,7 @@ class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     ingestDir = TESTDIR
     file = os.path.join(DATAROOT, "ts3", "raw", "2018-11-15", "201811151255111-R433-S00-det433.fits")
     dataIds = [dict(instrument="LSST-TS3", exposure=201811151255111, detector=433)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="550CutOn")
 
 
 class ComCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
@@ -59,6 +61,7 @@ class ComCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     file = os.path.join(DATAROOT, "comCam", "raw", "2019-05-30",
                         "3019053000001", "3019053000001-R22-S00-det000.fits")
     dataIds = [dict(instrument="LSSTComCam", exposure=3019053000001, detector=0)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
 
 
 class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
@@ -69,6 +72,7 @@ class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     file = os.path.join(DATAROOT, "lsstCam", "raw", "2019-03-19",
                         "3019031900001", "3019031900001-R10-S02-det029.fits")
     dataIds = [dict(instrument="LSSTCam", exposure=3019031900001, detector=29)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
 
 
 def setup_module(module):
