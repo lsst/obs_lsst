@@ -113,7 +113,8 @@ for physical_filter, band in BOT_filter_map.items():
     if lsstCamFilterMatches:
         lambdaEff = lsstCamFilterMatches[0].lambdaEff
 
-    if mat := re.match(r"(\d+)nm$", physical_filter):
+    mat = re.match(r"(\d+)nm$", physical_filter)
+    if mat:
         lambdaEff = float(mat.group(1))
 
     if physical_filter == "empty":
