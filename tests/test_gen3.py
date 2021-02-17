@@ -28,17 +28,13 @@ from pstats import Stats
 
 import numpy as np
 
+from astro_metadata_translator import ObservationInfo
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstCamImSim, LsstCamPhoSim,
-                           LsstTS8, LsstTS3, LsstUCDCam, Latiss)
+                           LsstTS8, LsstTS3, LsstUCDCam, Latiss, readRawFitsHeader)
 
 from lsst.daf.butler import (
     Butler,
-    DataCoordinate,
     DatasetType,
-    DimensionUniverse,
-    FileDescriptor,
-    Location,
-    StorageClass,
     StorageClassFactory,
 )
 
@@ -82,23 +78,11 @@ class TestInstruments(unittest.TestCase):
         instrument = cls()
         scFactory = StorageClassFactory()
 
-        # Make up a data ID to pass to the formatter's constructor.  This is
-        # NOT a legal data ID for any of the files, and we're relying on the
-        # fact that we don't _happen_ to use any of the formatter functionality
-        # that cares about the data ID.  But this is still evil, see DM-28698.
-        dataId = DataCoordinate.standardize(universe=DimensionUniverse(),
-                                            instrument=instrument.getName(),
-                                            detector=0,
-                                            exposure=0,
-                                            physical_filter="something-r",
-                                            band="r")
-
         # Check instrument class and metadata translator agree on
-        # instrument name -- use the raw formatter to do the file reading
-        rawFormatterClass = instrument.getRawFormatter({})
-        formatter = rawFormatterClass(FileDescriptor(Location(DATAROOT, testRaw), StorageClass("x")),
-                                      dataId)
-        obsInfo = formatter.observationInfo
+        # instrument name, using readRawFitsHeader to read the metadata.
+        filename = os.path.join(DATAROOT, testRaw)
+        md = readRawFitsHeader(filename, translator_class=cls.translatorClass)
+        obsInfo = ObservationInfo(md, translator_class=cls.translatorClass, filename=filename)
         self.assertEqual(instrument.getName(), obsInfo.instrument)
 
         # Add Instrument, Detector, and PhysicalFilter entries to the
