@@ -224,8 +224,8 @@ _latiss_filters = (
                      afw_name="rg"),
 )
 
-# Form a new set of filter definitions from all the explicit filters
-_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "unknown")
+# Form a new set of filter definitions from all the explicit gratings
+_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "unknown", "holo4_003")
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name

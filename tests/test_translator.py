@@ -845,6 +845,24 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         obsInfo = ObservationInfo(header, pedantic=True, filename=filename)
         self.assertTrue(obsInfo)
 
+    def test_fix_header(self):
+        from astro_metadata_translator import fix_header
+        from astro_metadata_translator.tests import read_test_file
+        # Test that header fix up is working
+        # Not all headers are used in metadata translation
+        test_data = (
+            ("latiss-AT_O_20210212_000006.yaml",
+             dict(RASTART=260.1785517385836)),
+            ("latiss-AT_O_20210210_000011.yaml",
+             dict(RASTART=355.41750341182313)),
+        )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                header = read_test_file(filename, dir=self.datadir)
+                fix_header(header)
+                for k, v in expected.items():
+                    self.assertEqual(header[k], v, f"Testing {k} in {filename}")
+
 
 if __name__ == "__main__":
     unittest.main()
