@@ -28,11 +28,15 @@ from pstats import Stats
 
 import numpy as np
 
+from astro_metadata_translator import ObservationInfo
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstCamImSim, LsstCamPhoSim,
-                           LsstTS8, LsstTS3, LsstUCDCam, Latiss)
+                           LsstTS8, LsstTS3, LsstUCDCam, Latiss, readRawFitsHeader)
 
-from lsst.daf.butler import (Butler, DatasetType, FileDescriptor, Location,
-                             StorageClass, StorageClassFactory)
+from lsst.daf.butler import (
+    Butler,
+    DatasetType,
+    StorageClassFactory,
+)
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
@@ -75,10 +79,10 @@ class TestInstruments(unittest.TestCase):
         scFactory = StorageClassFactory()
 
         # Check instrument class and metadata translator agree on
-        # instrument name -- use the raw formatter to do the file reading
-        rawFormatterClass = instrument.getRawFormatter({})
-        formatter = rawFormatterClass(FileDescriptor(Location(DATAROOT, testRaw), StorageClass("x")))
-        obsInfo = formatter.observationInfo
+        # instrument name, using readRawFitsHeader to read the metadata.
+        filename = os.path.join(DATAROOT, testRaw)
+        md = readRawFitsHeader(filename, translator_class=cls.translatorClass)
+        obsInfo = ObservationInfo(md, translator_class=cls.translatorClass, filename=filename)
         self.assertEqual(instrument.getName(), obsInfo.instrument)
 
         # Add Instrument, Detector, and PhysicalFilter entries to the
