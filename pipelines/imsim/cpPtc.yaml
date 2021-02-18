@@ -1,0 +1,50 @@
+description: cp_pipe PTC calibration construction.
+instrument: lsst.obs.lsst.LsstCamImSim
+parameters:
+    exposureName: cpPtcProc
+    measuredCovariances: cpCovariances
+tasks:
+  isr:
+    class: lsst.ip.isr.isrTask.IsrTask
+    config:
+      connections.ccdExposure: raw
+      connections.outputExposure: parameters.exposureName
+      doWrite: true
+      doOverscan: true
+      doAssembleCcd: true
+      doBias: true
+      doVariance: true
+      doLinearize: false
+      doCrosstalk: False
+      doBrighterFatter: false
+      doDark: true
+      doStrayLight: false
+      doFlat: true
+      doFringe: false
+      doApplyGains: false
+      doDefect: False
+      doNanMasking: true
+      doInterpolate: false
+      doSaturation: false
+      doSaturationInterpolation: false
+      growSaturationFootprintSize: 0
+  ptcExtract:
+    class: lsst.cp.pipe.ptc.PhotonTransferCurveExtractTask
+    config:
+      connections.inputExp: parameters.exposureName
+      connections.outputCovariances: parameters.measuredCovariances
+      matchByExposureId: True
+  ptcSolve:
+    class: lsst.cp.pipe.ptc.PhotonTransferCurveSolveTask
+    config:
+      connections.inputCovariances: parameters.measuredCovariances
+      connections.outputPtcDataset: ptc
+      ptcFitType: FULLCOVARIANCE
+      initialNonLinearityExclusionThresholdPositive: 0.999
+      initialNonLinearityExclusionThresholdNegative: 0.999
+      minVarPivotSearch: 250000
+      minMeanRatioTest: 150000
+      sigmaCutPtcOutliers: 10
+      sigmaClipFullFitCovariancesAstier: 10
+contracts:
+  - ptcSolve.maximumRangeCovariancesAstier == ptcExtract.maximumRangeCovariancesAstier
