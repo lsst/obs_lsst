@@ -81,7 +81,7 @@ datasets:
   fakes_src:
     template: src/%(visit)08d-%(filter)s/%(raftName)s/tract%(tract)d/fakes_src_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   srcMatch:
-    template: srcMatch/%(filter)s/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: srcMatch/%(visit)08d-%(filter)s/%(raftName)s/srcMatch_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   transformSrcMeasurement_metadata:
     template: transformSrcMeasurement_metadata/%(visit)08d-%(filter)s/%(raftName)s/transformSrcMeasurementMetadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   transformed_src:
