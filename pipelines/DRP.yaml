@@ -1,0 +1,5 @@
+description: DRP pipeline applicable to all cameras in obs_lsst
+imports:
+  - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
+    exclude:
+      - sourceTable
