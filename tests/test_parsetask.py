@@ -34,7 +34,7 @@ from lsst.obs.lsst.phosim import PhosimParseTask, PhosimEimgParseTask
 from lsst.obs.lsst.imsim import ImsimParseTask
 from lsst.obs.lsst.ucd import UcdParseTask
 from lsst.obs.lsst.comCam import LsstComCamParseTask
-from lsst.obs.lsst.ingest import LsstCamParseTask
+from lsst.obs.lsst.ingest import LsstCamParseTask, LsstCamEimgParseTask
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 ROOTDIR = os.path.normpath(os.path.join(TESTDIR, os.path.pardir))
@@ -485,6 +485,35 @@ class LsstCamParseTaskTestCase(unittest.TestCase):
                       )),
                      )
         self.assertParseCompare(DATADIR, CONFIGDIR, "comCam", LsstComCamParseTask, test_data)
+
+    def test_parsetask_lsstCamEimg_translator(self):
+        """Run the gen2 metadata extraction code for lsstCam e-image"""
+        test_data = (("eimage/4000021706001/E000/R22/eimage_4000021706001_R22_S00_E000.fits.gz",
+                      dict(
+                          controller='H',
+                          date='2000-02-17T02:14:40.319',
+                          dateObs='2000-02-17T02:14:40.319',
+                          dayObs='2000-02-17',
+                          detector=90,
+                          detectorName='S00',
+                          expGroup='4000021706001',
+                          expId=4000021706001,
+                          expTime=1.0,
+                          filter='g',
+                          imageType='SKYEXP',
+                          lsstSerial='E2V-CCD250-369',
+                          object='UNKNOWN',
+                          obsid='MC_H_20000217_006001',
+                          raftName='R22',
+                          run='9006001',
+                          seqNum=6001,
+                          snap=0,
+                          testType='PHOSIM',
+                          visit=4000021706001,
+                          wavelength=-666,
+                      )),
+                     )
+        self.assertParseCompare(DATADIR, CONFIGDIR, "lsstCam", LsstCamEimgParseTask, test_data)
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ from ._fitsHeader import readRawFitsHeader
 
 EXTENSIONS = ["fits", "gz", "fz"]  # Filename extensions to strip off
 
-__all__ = ["LsstCamParseTask"]
+__all__ = ["LsstCamParseTask", "LsstCamEimgParseTask"]
 
 
 class LsstCamParseTask(ParseTask):
@@ -342,3 +342,33 @@ class LsstCamCalibsParseTask(CalibsParseTask):
 
     def translate_calibDate(self, md):
         return self._translateFromCalibId("calibDate", md)
+
+
+class LsstCamEimgParseTask(LsstCamParseTask):
+    """Parser suitable for phosim LsstCam eimage data.
+    """
+
+    def getDestination(self, butler, info, filename):
+        """Get destination for the file.
+
+        Parameters
+        ----------
+        butler : `lsst.daf.persistence.Butler`
+            Data butler
+        info : data ID
+            File properties, used as dataId for the butler.
+        filename : `str`
+            Input filename.
+
+        Returns
+        -------
+        `str`
+            Destination filename.
+        """
+
+        eimage = butler.get("eimage_filename", info)[0]
+        # Ensure filename is devoid of cfitsio directions about HDUs
+        c = eimage.find("[")
+        if c > 0:
+            eimage = eimage[:c]
+        return eimage
