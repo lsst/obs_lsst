@@ -23,6 +23,8 @@
 """The LsstCam Mapper."""  # necessary to suppress D100 flake8 warning.
 
 import os
+import warnings
+
 import lsst.log
 import lsst.geom
 import lsst.utils as utils
@@ -153,13 +155,17 @@ class LsstCamBaseMapper(CameraMapper):
         # actually in the second wheel, but that's OK -- we still easily fit
         # in 7 bits (5 would actually be enough)
 
-        baseFilters = set()
-        for n in afwImage.Filter.getNames():
-            i = n.find('~')
-            if i >= 0:
-                n = n[:i]
+        with warnings.catch_warnings():
+            # surpress Filter warnings; we already know getNames is deprecated
+            warnings.simplefilter('ignore', category=FutureWarning)
 
-            baseFilters.add(n)
+            baseFilters = set()
+            for n in afwImage.Filter.getNames():
+                i = n.find('~')
+                if i >= 0:
+                    n = n[:i]
+
+                baseFilters.add(n)
 
         nFilter = len(baseFilters)
         if nFilter >= 2**LsstCamMapper._nbit_filter:
