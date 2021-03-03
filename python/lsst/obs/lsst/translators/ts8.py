@@ -53,10 +53,6 @@ class LsstTS8Translator(LsstBaseTranslator):
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
     }
 
-    DETECTOR_MAX = 250
-    """Maximum number of detectors to use when calculating the
-    detector_exposure_id."""
-
     cameraPolicyFile = "policy/ts8.yaml"
 
     _ROLLOVER_TIME = TimeDelta(8*60*60, scale="tai", format="sec")

@@ -94,7 +94,7 @@ def read_detector_ids(policyFile):
     return mapping
 
 
-def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000, mode="concat"):
+def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000):
     """Compute the detector_exposure_id from the exposure id and the
     detector number.
 
@@ -106,12 +106,6 @@ def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000
         The detector number.
     max_num : `int`, optional
         Maximum number of detectors to make space for. Defaults to 1000.
-    mode : `str`, optional
-        Computation mode. Defaults to "concat".
-        - concat : Concatenate the exposure ID and detector number, making
-                   sure that there is space for max_num and zero padding.
-        - multiply : Multiply the exposure ID by the maximum detector
-                     number and add the detector number.
 
     Returns
     -------
@@ -129,13 +123,7 @@ def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000
     if detector_num >= max_num or detector_num < 0:
         raise ValueError(f"Detector number out of range 0 <= {detector_num} < {max_num}")
 
-    if mode == "concat":
-        npad = len(str(max_num - 1))
-        return int(f"{exposure_id}{detector_num:0{npad}d}")
-    elif mode == "multiply":
-        return max_num*exposure_id + detector_num
-    else:
-        raise ValueError(f"Computation mode of '{mode}' is not understood")
+    return max_num*exposure_id + detector_num
 
 
 class LsstBaseTranslator(FitsTranslator):
@@ -215,9 +203,7 @@ class LsstBaseTranslator(FitsTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num,
-                                                    max_num=cls.DETECTOR_MAX,
-                                                    mode="concat")
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
 
     @classmethod
     def max_detector_exposure_id(cls):
