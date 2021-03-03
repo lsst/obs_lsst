@@ -94,7 +94,7 @@ def read_detector_ids(policyFile):
     return mapping
 
 
-def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000):
+def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num):
     """Compute the detector_exposure_id from the exposure id and the
     detector number.
 
@@ -104,8 +104,8 @@ def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000
         The exposure ID.
     detector_num : `int`
         The detector number.
-    max_num : `int`, optional
-        Maximum number of detectors to make space for. Defaults to 1000.
+    max_num : `int`
+        Maximum number of detectors to make space for.
 
     Returns
     -------
