@@ -63,10 +63,6 @@ class LsstTS3Translator(LsstBaseTranslator):
     DETECTOR_NAME = _DETECTOR_NAME
     """Fixed name of single sensor."""
 
-    DETECTOR_MAX = 999
-    """Maximum number of detectors to use when calculating the
-    detector_exposure_id."""
-
     cameraPolicyFile = "policy/ts3.yaml"
 
     _ROLLOVER_TIME = TimeDelta(8*60*60, scale="tai", format="sec")

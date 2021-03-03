@@ -126,11 +126,11 @@ def compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=1000
 
     if detector_num is None:
         raise ValueError("Detector number must be defined.")
-    if detector_num > max_num or detector_num < 0:
-        raise ValueError(f"Detector number out of range 0 <= {detector_num} <= {max_num}")
+    if detector_num >= max_num or detector_num < 0:
+        raise ValueError(f"Detector number out of range 0 <= {detector_num} < {max_num}")
 
     if mode == "concat":
-        npad = len(str(max_num))
+        npad = len(str(max_num - 1))
         return int(f"{exposure_id}{detector_num:0{npad}d}")
     elif mode == "multiply":
         return max_num*exposure_id + detector_num
@@ -154,9 +154,16 @@ class LsstBaseTranslator(FitsTranslator):
     detectorSerials = None
     """Mapping of detector serial number to raft, number, and name."""
 
-    DETECTOR_MAX = 999
+    DETECTOR_MAX = 1000
     """Maximum number of detectors to use when calculating the
-    detector_exposure_id."""
+    detector_exposure_id.
+
+    Note that because this is the maximum number *of* detectors, for
+    zero-based ``detector_num`` values this is one greater than the maximum
+    ``detector_num``.  It is also often rounded up to the nearest power of
+    10 anyway, to allow ``detector_exposure_id`` values to be easily decoded by
+    humans.
+    """
 
     _DEFAULT_LOCATION = SIMONYI_LOCATION
     """Default telescope location in absence of relevant FITS headers."""
@@ -223,7 +230,10 @@ class LsstBaseTranslator(FitsTranslator):
             The maximum value.
         """
         max_exposure_id = cls.max_exposure_id()
-        return cls.compute_detector_exposure_id(max_exposure_id, cls.DETECTOR_MAX)
+        # We subtract 1 from DETECTOR_MAX because LSST detector_num values are
+        # zero-based, and detector_max is the maximum number *of* detectors,
+        # while this returns the (inclusive) maximum ID value.
+        return cls.compute_detector_exposure_id(max_exposure_id, cls.DETECTOR_MAX - 1)
 
     @classmethod
     def max_exposure_id(cls):
