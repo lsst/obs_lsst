@@ -129,9 +129,6 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                                               "detectorName": "S00"})
         self.assertEqual(exposureId, 11)
 
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 4})
-
         with self.assertRaises(KeyError):
             self.butler.get('ccdExposureId', dataId={"visit": 1})
 

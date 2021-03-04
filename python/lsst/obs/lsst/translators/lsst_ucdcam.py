@@ -75,9 +75,12 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
     """Map detector serial to raft and detector number.  Eventually the
     detector number will come out of the policy camera definition."""
 
-    DETECTOR_MAX = 3
+    DETECTOR_MAX = 10
     """Maximum number of detectors to use when calculating the
-    detector_exposure_id."""
+    detector_exposure_id.
+
+    This is rounded up to a power of ten to make those IDs human-decodable.
+    """
 
     _ROLLOVER_TIME = TimeDelta(8*60*60, scale="tai", format="sec")
     """Time delta for the definition of a Rubin Test Stand start of day."""
