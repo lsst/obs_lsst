@@ -852,14 +852,15 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         # Not all headers are used in metadata translation
         test_data = (
             ("latiss-AT_O_20210212_000006.yaml",
-             dict(RASTART=260.1785517385836)),
+             dict(RASTART=260.024385071917)),
             ("latiss-AT_O_20210210_000011.yaml",
              dict(RASTART=355.41750341182313)),
         )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
                 header = read_test_file(filename, dir=self.datadir)
-                fix_header(header)
+                modified = fix_header(header)
+                self.assertTrue(modified)
                 for k, v in expected.items():
                     self.assertEqual(header[k], v, f"Testing {k} in {filename}")
 
