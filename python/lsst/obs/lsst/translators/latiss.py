@@ -57,6 +57,7 @@ RADEC_IS_RADIANS = Time("2020-01-28T22:00", format="isot", scale="utc")
 # 2020-02-01T00:00 we fixed the telescope location, but RASTART is still
 # in mount coordinates, so off by pointing model.
 RASTART_IS_BAD = Time("2020-05-01T00:00", format="isot", scale="utc")
+RASTART_IS_OKAY = Time("2021-02-12T00:00", format="isot", scale="utc")
 
 # Between RASTART_IS_BAD and this time the RASTART header uses hours
 # instead of degrees.
@@ -380,7 +381,7 @@ class LatissTranslator(LsstBaseTranslator):
         # RASTART/END headers have a TAI/UTC confusion causing an offset
         # of 37 seconds. Once this is fixed in the acquisition system
         # the correction will have an upper date bound.
-        if date > RASTART_IS_BAD:
+        if RASTART_IS_BAD < date < RASTART_IS_OKAY:
             offset = (37.0 / 3600.0) * 15.0
             for epoch in ("START", "END"):
                 h = "RA" + epoch
