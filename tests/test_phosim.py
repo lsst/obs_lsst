@@ -32,6 +32,13 @@ from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
+def _clean_metadata_provenance(hdr):
+    """Remove metadata fix up provenance."""
+    for k in hdr:
+        if k.startswith("HIERARCH ASTRO METADATA"):
+            del hdr[k]
+
+
 class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
 
@@ -147,6 +154,10 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             # Check that corrections are applied if we do assembly
             raw = self.butler.get("raw", dataId)
             raw_md = raw.getMetadata()
+
+            _clean_metadata_provenance(raw_md)
+            _clean_metadata_provenance(md_md)
+
             self.assertEqual(raw_md, md_md)
 
             # And finally ensure that visitInfo gets corrections
