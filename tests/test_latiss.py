@@ -48,7 +48,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         exptimes = {'raw': 27.0, 'bias': 0}
         detectorIds = {'raw': 0, 'bias': 0}
         detector_names = {'raw': 'RXX_S00', 'bias': 'RXX_S00'}
-        detector_serials = {'raw': 'ITL-3800C-098', 'bias': 'ITL-3800C-098'}
+        detector_serials = {'raw': 'ITL-3800C-068', 'bias': 'ITL-3800C-098'}
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
