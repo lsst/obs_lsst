@@ -62,6 +62,9 @@ RASTART_IS_BAD = Time("2020-05-01T00:00", format="isot", scale="utc")
 # instead of degrees.
 RASTART_IS_HOURS = Time("2021-02-11T18:45", format="isot", scale="utc")
 
+# From this date RASTART is correct as-is.
+RASTART_IS_OKAY = Time("2021-02-12T00:00", format="isot", scale="utc")
+
 # DATE-END is not to be trusted before this date
 DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 
@@ -378,9 +381,9 @@ class LatissTranslator(LsstBaseTranslator):
                 modified = True
 
         # RASTART/END headers have a TAI/UTC confusion causing an offset
-        # of 37 seconds. Once this is fixed in the acquisition system
-        # the correction will have an upper date bound.
-        if date > RASTART_IS_BAD:
+        # of 37 seconds for a period of time.
+        if RASTART_IS_BAD < date < RASTART_IS_OKAY:
+            modified = True
             offset = (37.0 / 3600.0) * 15.0
             for epoch in ("START", "END"):
                 h = "RA" + epoch
