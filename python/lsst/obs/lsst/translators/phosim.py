@@ -10,7 +10,7 @@
 
 """Metadata translation code for LSSTCam PhoSim FITS headers"""
 
-__all__ = ("LsstCamPhoSimTranslator", )
+__all__ = ("LsstCamPhoSimTranslator",)
 
 import logging
 
@@ -19,8 +19,10 @@ import astropy.units.cds as cds
 from astropy.coordinates import Angle
 
 from astro_metadata_translator import cache_translation
-from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
-    altaz_from_degree_headers
+from astro_metadata_translator.translators.helpers import (
+    tracking_from_degree_headers,
+    altaz_from_degree_headers,
+)
 
 from .lsstsim import LsstSimTranslator
 
@@ -28,8 +30,7 @@ log = logging.getLogger(__name__)
 
 
 class LsstCamPhoSimTranslator(LsstSimTranslator):
-    """Metadata translator for LSSTCam PhoSim data.
-    """
+    """Metadata translator for LSSTCam PhoSim data."""
 
     name = "LSSTCam-PhoSim"
     """Name of this translation class"""
@@ -81,14 +82,25 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
             `True` if the header is recognized by this class. `False`
             otherwise.
         """
-        return cls.can_translate_with_options(header, {"CREATOR": "PHOSIM", "TESTTYPE": "PHOSIM"},
-                                              filename=filename)
+        # Generic PhoSim data does not have an INSTRUME header.
+        # If an INSTRUME header is present this translator class
+        # is not suitable.
+        if "INSTRUME" in header:
+            return False
+        else:
+            return cls.can_translate_with_options(
+                header, {"CREATOR": "PHOSIM", "TESTTYPE": "PHOSIM"}, filename=filename
+            )
 
     @cache_translation
     def to_tracking_radec(self):
         # Docstring will be inherited. Property defined in properties.py
         radecsys = ("RADESYS",)
-        radecpairs = (("RATEL", "DECTEL"), ("RA_DEG", "DEC_DEG"), ("BORE-RA", "BORE-DEC"))
+        radecpairs = (
+            ("RATEL", "DECTEL"),
+            ("RA_DEG", "DEC_DEG"),
+            ("BORE-RA", "BORE-DEC"),
+        )
         return tracking_from_degree_headers(self, radecsys, radecpairs)
 
     @cache_translation
@@ -96,13 +108,19 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
         # Docstring will be inherited. Property defined in properties.py
         # Fallback to the "derive from ra/dec" if keys are missing
         if self.are_keys_ok(["ZENITH", "AZIMUTH"]):
-            return altaz_from_degree_headers(self, (("ZENITH", "AZIMUTH"),),
-                                             self.to_datetime_begin(), is_zd=set(["ZENITH"]))
+            return altaz_from_degree_headers(
+                self,
+                (("ZENITH", "AZIMUTH"),),
+                self.to_datetime_begin(),
+                is_zd=set(["ZENITH"]),
+            )
         else:
             return super().to_altaz_begin()
 
     @cache_translation
     def to_boresight_rotation_angle(self):
-        angle = Angle(90.*u.deg) - Angle(self.quantity_from_card(["ROTANGZ", "ROTANGLE"], u.deg))
+        angle = Angle(90.0 * u.deg) - Angle(
+            self.quantity_from_card(["ROTANGZ", "ROTANGLE"], u.deg)
+        )
         angle = angle.wrap_at("360d")
         return angle
