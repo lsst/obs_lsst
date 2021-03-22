@@ -14,11 +14,12 @@ __all__ = ("LsstCamPhoSimTranslator",)
 
 import logging
 
+import astropy.io.fits as fits
 import astropy.units as u
 import astropy.units.cds as cds
 from astropy.coordinates import Angle
 
-from astro_metadata_translator import cache_translation
+from astro_metadata_translator import cache_translation, merge_headers
 from astro_metadata_translator.translators.helpers import (
     tracking_from_degree_headers,
     altaz_from_degree_headers,
@@ -124,3 +125,39 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
         )
         angle = angle.wrap_at("360d")
         return angle
+
+    @classmethod
+    def determine_translatable_headers(cls, filename, primary=None):
+        """Given a file return all the headers usable for metadata translation.
+
+        Phosim splits useful metadata between the primary header and the
+        amplifier headers. A single header is returned as a merge of the
+        first two.
+
+        Parameters
+        ----------
+        filename : `str`
+            Path to a file in a format understood by this translator.
+        primary : `dict`-like, optional
+            The primary header obtained by the caller. This is sometimes
+            already known, for example if a system is trying to bootstrap
+            without already knowing what data is in the file. Will be
+            ignored.
+
+        Yields
+        ------
+        headers : iterator of `dict`-like
+            The primary header merged with the secondary header.
+
+        Notes
+        -----
+        This translator class is specifically tailored to raw PhoSim data
+        and is not designed to work with general FITS files. The normal
+        paradigm is for the caller to have read the first header and then
+        called `determine_translator()` on the result to work out which
+        translator class to then call to obtain the real headers to be used for
+        translation.
+        """
+        with fits.open(filename) as fits_file:
+            yield merge_headers([fits_file[0].header, fits_file[1].header],
+                                mode="overwrite")
