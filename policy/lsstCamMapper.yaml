@@ -425,11 +425,7 @@ datasets:
     tables: raw
     template: ignored
   icExpBackground:
-    persistable: PurePythonClass
-    python: lsst.afw.math.BackgroundList
-    storage: FitsCatalogStorage
-    tables: raw
-    template: icExp/%(expId)013d-%(filter)s/%(raftName)s/icExp_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: icExp/%(expId)013d-%(filter)s/%(raftName)s/bkgd_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icSrc:
     persistable: SourceCatalog
     python: lsst.afw.table.SourceCatalog

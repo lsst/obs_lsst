@@ -46,6 +46,8 @@ datasets:
     template: calexp/%(expId)013d-%(filter)s/bkgd_%(expId)013d-%(filter)s-det%(detector)03d.fits
   processCcd_metadata:
     template: processCcd_metadata/%(expId)013d-%(filter)s/processCcdMetadata_%(expId)013d-%(filter)s-det%(detector)03d.yaml
+  icExpBackground:
+    template: icExp/%(expId)013d-%(filter)s/bkgd_%(expId)013d-%(filter)s-det%(detector)03d.fits
 
 exposures:
   _raw:
