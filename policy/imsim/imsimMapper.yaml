@@ -60,7 +60,7 @@ datasets:
   forcedPhotCcd_metadata:
     template: forcedPhotCcd_metadata/%(visit)08d-%(filter)s/%(raftName)s/forcedPhotCcd_metadata_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   icExpBackground:
-    template: icExp/%(visit)08d-%(filter)s/%(raftName)s/icExp_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
+    template: icExp/%(visit)08d-%(filter)s/%(raftName)s/bkgd_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   icSrc:
     template: icSrc/%(visit)08d-%(filter)s/%(raftName)s/icSrc_%(visit)08d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   processCcd_metadata:
