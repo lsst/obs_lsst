@@ -27,8 +27,8 @@ tasks:
       connections.inputExps: 'cpBiasProc'
       connections.outputData: 'bias'
       calibrationType: 'bias'
-      exposureScaling: "None"
+      exposureScaling: "Unity"
 contracts:
   - isr.doBias == False
   - cpCombine.calibrationType == "bias"
-  - cpCombine.exposureScaling == "None"
+  - cpCombine.exposureScaling == "Unity"

@@ -32,8 +32,8 @@ tasks:
       connections.outputData: 'fringe'
       calibrationType: 'fringe'
       calibrationDimensions: ['physical_filter']
-      exposureScaling: "None"
+      exposureScaling: "Unity"
 contracts:
   - isr.doFringe == False
   - cpCombine.calibrationType == "fringe"
-  - cpCombine.exposureScaling == "None"
+  - cpCombine.exposureScaling == "Unity"
