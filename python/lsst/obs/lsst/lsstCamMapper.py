@@ -459,7 +459,8 @@ class LsstCamBaseMapper(CameraMapper):
 
         if filter:
             obsInfo = ObservationInfo(exp.getMetadata(), translator_class=self.translatorClass)
-            filt = afwImage.FilterLabel(physical=obsInfo.physical_filter)
+            band = self.filterDefinitions.physical_to_band[obsInfo.physical_filter]
+            filt = afwImage.FilterLabel(physical=obsInfo.physical_filter, band=band)
             exp.setFilterLabel(filt)
 
         return exp
