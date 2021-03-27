@@ -232,6 +232,38 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_phoSimComCam_translator(self):
+        test_data = (("comCam-CC_H_20000217_006001_R22_S00.yaml",
+                      dict(telescope="Simonyi Survey Telescope",
+                           instrument="LSSTComCam",
+                           boresight_rotation_coord="sky",
+                           dark_time=1.0*u.s,
+                           detector_exposure_id=4000021706001000,
+                           detector_group="R22",
+                           detector_name="S00",
+                           detector_num=0,
+                           detector_serial="ITL-3800C-229",
+                           exposure_id=4000021706001,
+                           exposure_group="4000021706001",
+                           exposure_time=1.0*u.s,
+                           object="UNKNOWN",
+                           observation_counter=6001,
+                           observation_id="CC_H_20000217_006001",
+                           observation_type="science",
+                           observation_reason="test",
+                           observing_day=20000217,
+                           physical_filter="g_01",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="9006001",
+                           temperature=None,
+                           visit_id=4000021706001)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir,
+                                                   check_wcs=False, **expected)
+
     def test_phosim_translator(self):
         test_data = (("phosim-lsst_a_204595_f3_R11_S02_E000.yaml",
                       dict(telescope="Simonyi Survey Telescope",

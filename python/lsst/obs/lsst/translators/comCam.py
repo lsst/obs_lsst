@@ -44,10 +44,6 @@ class LsstComCamTranslator(LsstCamTranslator):
 
     _const_map = {
         "instrument": "LSSTComCam",
-        "boresight_rotation_coord": "unknown",
-        "boresight_rotation_angle": None,
-        "boresight_airmass": None,
-        "tracking_radec": None,
     }
 
     # Use the comCam raft definition
@@ -134,5 +130,10 @@ class LsstComCamTranslator(LsstCamTranslator):
                 header["LSST_NUM"] = DETECTOR_SERIALS[slot]
                 modified = True
                 log.debug("%s: Set LSST_NUM to %s", log_label, header["LSST_NUM"])
+
+        if "ROTPA" not in header:
+            header["ROTPA"] = 0.0
+            log.warning("Missing ROTPA in header - replacing with 0.0")
+            modified = True
 
         return modified
