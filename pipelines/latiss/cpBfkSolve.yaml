@@ -1,0 +1,9 @@
+description: cp_pipe PTC calibration construction.
+instrument: lsst.obs.lsst.Latiss
+tasks:
+  bfkSolve:
+    class: lsst.cp.pipe.BrighterFatterKernelSolveTask
+    config:
+      connections.inputPtc: ptc
+      connections.outputBFK: bfk
+

@@ -499,9 +499,7 @@ datasets:
   runIsr_metadata:
     template: runIsr_metadata/%(expId)013d-%(filter)s/%(raftName)s/runIsrMetadata_%(expId)013d-%(filter)s-%(raftName)s-%(detectorName)s-det%(detector)03d.yaml
   brighterFatterKernel:
-    template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.pkl
-  brighterFatterGain:
-    template: calibrations/bfGain-%(detector)03d.pkl
+    template: calibrations/bfKernel-%(raftName)s-%(detectorName)s-det%(detector)03d.fits
   plotBrighterFatterPtc:
     template: plots/bfPtc-ccd-%(detector)03d-amp-%(amp)s.png
   measurePhotonTransferCurve_metadata:
