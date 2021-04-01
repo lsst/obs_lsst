@@ -3,3 +3,4 @@ imports:
   - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
     exclude:
       - sourceTable
+      - objectTable
