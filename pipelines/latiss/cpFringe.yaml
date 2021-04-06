@@ -25,7 +25,7 @@ tasks:
     config:
       connections.inputExp: 'cpFringeIsr'
       connections.outputExp: 'cpFringeProc'
-  cpCombine:
+  cpFringeCombine:
     class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpFringeProc'
@@ -35,5 +35,5 @@ tasks:
       exposureScaling: "Unity"
 contracts:
   - isr.doFringe == False
-  - cpCombine.calibrationType == "fringe"
-  - cpCombine.exposureScaling == "Unity"
+  - cpFringeCombine.calibrationType == "fringe"
+  - cpFringeCombine.exposureScaling == "Unity"

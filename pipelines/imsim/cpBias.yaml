@@ -21,7 +21,7 @@ tasks:
       doFlat: False
       doApplyGains: False
       doFringe: False
-  cpCombine:
+  cpBiasCombine:
     class: lsst.cp.pipe.cpCombine.CalibCombineTask
     config:
       connections.inputExps: 'cpBiasProc'
@@ -30,5 +30,5 @@ tasks:
       exposureScaling: "Unity"
 contracts:
   - isr.doBias == False
-  - cpCombine.calibrationType == "bias"
-  - cpCombine.exposureScaling == "Unity"
+  - cpBiasCombine.calibrationType == "bias"
+  - cpBiasCombine.exposureScaling == "Unity"
