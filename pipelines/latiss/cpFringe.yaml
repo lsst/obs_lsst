@@ -26,12 +26,11 @@ tasks:
       connections.inputExp: 'cpFringeIsr'
       connections.outputExp: 'cpFringeProc'
   cpFringeCombine:
-    class: lsst.cp.pipe.cpCombine.CalibCombineTask
+    class: lsst.cp.pipe.cpCombine.CalibCombineByFilterTask
     config:
       connections.inputExps: 'cpFringeProc'
       connections.outputData: 'fringe'
       calibrationType: 'fringe'
-      calibrationDimensions: ['physical_filter']
       exposureScaling: "Unity"
 contracts:
   - isr.doFringe == False
