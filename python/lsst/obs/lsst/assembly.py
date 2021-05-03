@@ -23,6 +23,7 @@ __all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd"
            "fixAmpsAndAssemble", "readRawAmps")
 
 from contextlib import contextmanager
+import numpy as np
 import lsst.log
 import lsst.afw.image as afwImage
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
@@ -295,7 +296,10 @@ def readRawAmps(fileName, detector):
     """
     amps = []
     for hdu in range(1, len(detector)+1):
-        exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
+        reader = afwImage.ImageFitsReader(fileName, hdu=hdu)
+        exp = afwImage.makeExposure(afwImage.makeMaskedImage(reader.read(dtype=np.dtype(np.int32),
+                                                                         allowUnsafe=True)))
         exp.setDetector(detector)
+        exp.setMetadata(reader.readMetadata())
         amps.append(exp)
     return amps
