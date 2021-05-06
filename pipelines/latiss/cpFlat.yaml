@@ -33,13 +33,12 @@ tasks:
       connections.inputMDs: 'flatStats'
       connections.outputScales: 'cpFlatNormScales'
   cpFlatCombine:
-    class: lsst.cp.pipe.cpCombine.CalibCombineTask
+    class: lsst.cp.pipe.cpCombine.CalibCombineByFilterTask
     config:
       connections.inputExps: 'cpFlatProc'
       connections.inputScales: 'cpFlatNormScales'
       connections.outputData: 'flat'
       calibrationType: 'flat'
-      calibrationDimensions: ['physical_filter']
       exposureScaling: InputList
       scalingLevel: AMP
 contracts:
