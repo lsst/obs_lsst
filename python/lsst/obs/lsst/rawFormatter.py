@@ -33,10 +33,12 @@ __all__ = (
     "LsstUCDCamRawFormatter",
 )
 
+import numpy as np
 from astro_metadata_translator import fix_header, merge_headers
 
 import lsst.afw.fits
 from lsst.obs.base import FitsRawFormatterBase
+from lsst.obs.base.formatters.fitsExposure import standardizeAmplifierParameters
 from lsst.afw.cameraGeom import makeUpdatedDetector
 
 from ._instrument import LsstCam, Latiss, \
@@ -114,10 +116,82 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
     def readFull(self):
         # Docstring inherited.
         rawFile = self.fileDescriptor.location.path
-        # Can't call getDetector(), because that's the post-assembly detector.
-        ccd = self._instrument.getCamera()[self.observationInfo.detector_num]
-        ampExps = readRawAmps(rawFile, ccd)
-        exposure = fixAmpsAndAssemble(ampExps, rawFile)
+        amplifier, detector, _ = standardizeAmplifierParameters(
+            self.checked_parameters,
+            self._instrument.getCamera()[self.observationInfo.detector_num],
+        )
+        if amplifier is not None:
+            # LSST raws are already per-amplifier on disk, and in a different
+            # assembly state than all of the other images we see in
+            # DM-maintained formatters.  And we also need to deal with the
+            # on-disk image having different overscans from our nominal
+            # detector.  So we can't use afw.cameraGeom.AmplifierIsolator for
+            # most of the implementation (as other formatters do), but we can
+            # call most of the same underlying code to do the work.
+
+            def findAmpHdu(name):
+                """Find the HDU for the amplifier with the given name,
+                according to cameraGeom.
+                """
+                for hdu, amp in enumerate(detector):
+                    if amp.getName() == name:
+                        return hdu + 1
+                raise LookupError(f"Could not find HDU for amp with name {name}.")
+
+            reader = lsst.afw.image.ImageFitsReader(rawFile, hdu=findAmpHdu(amplifier.getName()))
+            image = reader.read(dtype=np.dtype(np.int32), allowUnsafe=True)
+            with warn_once(rawFile) as logCmd:
+                # Extract an amplifier from the on-disk detector and fix its
+                # overscan bboxes as necessary to match the on-disk bbox.
+                adjusted_amplifier_builder, _ = fixAmpGeometry(
+                    detector[amplifier.getName()],
+                    bbox=image.getBBox(),
+                    metadata=reader.readMetadata(),
+                    logCmd=logCmd,
+                )
+                on_disk_amplifier = adjusted_amplifier_builder.finish()
+            # We've now got two Amplifier objects in play:
+            # A) 'amplifier' is what the user wants
+            # B) 'on_disk_amplifier' represents the subimage we have.
+            # The one we want has the orientation/shift state of (A) with
+            # the overscan regions of (B).
+            comparison = amplifier.compareGeometry(on_disk_amplifier)
+            # If the flips or origins differ, we need to modify the image
+            # itself.
+            if comparison & comparison.FLIPPED:
+                from lsst.afw.math import flipImage
+                image = flipImage(
+                    image,
+                    comparison & comparison.FLIPPED_X,
+                    comparison & comparison.FLIPPED_Y,
+                )
+            if comparison & comparison.SHIFTED:
+                image.setXY0(amplifier.getRawBBox().getMin())
+            # Make a single-amplifier detector that reflects the image we're
+            # returning.
+            detector_builder = detector.rebuild()
+            detector_builder.clear()
+            detector_builder.unsetCrosstalk()
+            if comparison & comparison.REGIONS_DIFFER:
+                # We can't just install the amplifier the user gave us, because
+                # that has the wrong overscan regions; instead we transform the
+                # on-disk amplifier to have the same orientation and offsets as
+                # the given one.
+                adjusted_amplifier_builder.transform(
+                    outOffset=amplifier.getRawXYOffset(),
+                    outFlipX=amplifier.getRawFlipX(),
+                    outFlipY=amplifier.getRawFlipY(),
+                )
+                detector_builder.append(adjusted_amplifier_builder)
+                detector_builder.setBBox(adjusted_amplifier_builder.getBBox())
+            else:
+                detector_builder.append(amplifier.rebuild())
+                detector_builder.setBBox(amplifier.getBBox())
+            exposure = lsst.afw.image.makeExposure(lsst.afw.image.makeMaskedImage(image))
+            exposure.setDetector(detector_builder.finish())
+        else:
+            ampExps = readRawAmps(rawFile, detector)
+            exposure = fixAmpsAndAssemble(ampExps, rawFile)
         self.attachComponentsFromMetadata(exposure)
         return exposure
 
