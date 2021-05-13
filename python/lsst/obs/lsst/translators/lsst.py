@@ -48,6 +48,12 @@ SIMONYI_LOCATION = EarthLocation.from_geodetic(-70.749417, -30.244639, 2663.0)
 # Name of the main survey telescope
 SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 
+# Supported controller codes.
+# The order here directly relates to the resulting exposure ID
+# calculation. Do not reorder. Add new ones to the end.
+# OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS.
+CONTROLLERS = "OCHPQ"
+
 obs_lsst_packageDir = getPackageDir("obs_lsst")
 
 log = logging.getLogger(__name__)
@@ -232,7 +238,8 @@ class LsstBaseTranslator(FitsTranslator):
         """
         max_date = "2050-12-31T23:59.999"
         max_seqnum = 99_999
-        max_controller = "C"  # This controller triggers the largest numbers
+        # This controller triggers the largest numbers
+        max_controller = CONTROLLERS[-1]
         return cls.compute_exposure_id(max_date, max_seqnum, max_controller)
 
     @classmethod
@@ -364,7 +371,7 @@ class LsstBaseTranslator(FitsTranslator):
             Controller to use. If this is "O", no change is made to the
             exposure ID. If it is "C" a 1000 is added to the year component
             of the exposure ID. If it is "H" a 2000 is added to the year
-            component.
+            component. This sequence continues with "P" and "Q" controllers.
             `None` indicates that the controller is not relevant to the
             exposure ID calculation (generally this is the case for test
             stand data).
@@ -389,18 +396,13 @@ class LsstBaseTranslator(FitsTranslator):
 
         # Camera control changes the exposure ID
         if controller is not None:
-            if controller == "O":
-                pass
-            elif controller == "C":
-                # Add 1000 to the year component
-                dayobs = int(dayobs)
-                dayobs += 1000_00_00
-            elif controller == "H":
-                # Add 2000 to the year component for pHosim
-                dayobs = int(dayobs)
-                dayobs += 2000_00_00
-            else:
-                raise ValueError(f"Supplied controller, '{controller}' is neither 'O' nor 'C' nor 'H'")
+            index = CONTROLLERS.find(controller)
+            if index == -1:
+                raise ValueError(f"Supplied controller, '{controller}' is not "
+                                 f"in supported list: {CONTROLLERS}")
+            dayobs = int(dayobs)
+            # Increment a thousand years per controller
+            dayobs += 1000_00_00 * index
 
         # Form the number as a string zero padding the sequence number
         idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
