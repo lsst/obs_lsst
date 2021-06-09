@@ -23,3 +23,4 @@
 imsim-specific overrides for IsrTask
 """
 config.doCrosstalk = True
+config.doBrighterFatter = True
