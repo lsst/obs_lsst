@@ -1,9 +1,0 @@
-description: cp_pipe PTC calibration construction.
-instrument: lsst.obs.lsst.LsstCamImSim
-tasks:
-  bfkSolve:
-    class: lsst.cp.pipe.BrighterFatterKernelSolveTask
-    config:
-#      connections.inputPTC: ptc
-      connections.outputBFK: bfk
-
