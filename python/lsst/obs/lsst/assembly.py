@@ -22,6 +22,8 @@
 __all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd",
            "fixAmpsAndAssemble", "readRawAmps")
 
+from contextlib import contextmanager
+import numpy as np
 import lsst.log
 import lsst.afw.image as afwImage
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
@@ -85,8 +87,10 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
     metadata : `lsst.daf.base.PropertyList`
         FITS header metadata from the amplifier HDU.
     logCmd : `function`, optional
-        Call back to use to issue log messages.  Arguments to this function
-        should match arguments to be accepted by normal logging functions.
+        Call back to use to issue log messages about patching.  Arguments to
+        this function should match arguments to be accepted by normal logging
+        functions.  Warnings about bad EXTNAMES are always sent directly to
+        the module-level logger.
 
     Return
     ------
@@ -104,6 +108,12 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
         # Define a null log command
         def logCmd(*args):
             return
+
+    # check that the book-keeping worked and we got the correct EXTNAME
+    extname = metadata.get("EXTNAME")
+    predictedExtname = f"Segment{inAmp.getName()[1:]}"
+    if extname is not None and predictedExtname != extname:
+        logger.warning('expected to see EXTNAME == "%s", but saw "%s"', predictedExtname, extname)
 
     modified = False
 
@@ -192,6 +202,35 @@ def assembleUntrimmedCcd(ccd, exposures):
     return assembleTask.assembleCcd(ampDict)
 
 
+@contextmanager
+def warn_once(msg):
+    """Return a context manager around a log-like object that emits a warning
+    the first time it is used and a debug message all subsequent times.
+
+    Parameters
+    ----------
+    msg : `str`
+        Message to prefix all log messages with.
+
+    Returns
+    -------
+    logger
+        A log-like object that takes a %-style format string and positional
+        substition args.
+    """
+    warned = False
+
+    def logCmd(s, *args):
+        nonlocal warned
+        if warned:
+            logger.debug(f"{msg}: {s}", *args)
+        else:
+            logger.warn(f"{msg}: {s}", *args)
+            warned = True
+
+    yield logCmd
+
+
 def fixAmpsAndAssemble(ampExps, msg):
     """Fix amp geometry and assemble into exposure.
 
@@ -219,33 +258,18 @@ def fixAmpsAndAssemble(ampExps, msg):
     #
     # Check that the geometry in the metadata matches cameraGeom
     #
-    warned = False
-
-    def logCmd(s, *args):
-        nonlocal warned
-        if warned:
-            logger.debug(f"{msg}: {s}", *args)
-        else:
-            logger.warn(f"{msg}: {s}", *args)
-            warned = True
-
-    # Rebuild the detector and the amplifiers to use their corrected geometry.
-    tempCcd = ccd.rebuild()
-    tempCcd.clear()
-    for amp, ampExp in zip(ccd, ampExps):
-        # check that the book-keeping worked and we got the correct EXTNAME
-        extname = ampExp.getMetadata().get("EXTNAME")
-        predictedExtname = f"Segment{amp.getName()[1:]}"
-        if extname is not None and predictedExtname != extname:
-            logger.warn('%s: expected to see EXTNAME == "%s", but saw "%s"', msg, predictedExtname, extname)
-
-        outAmp, modified = fixAmpGeometry(amp,
-                                          bbox=ampExp.getBBox(),
-                                          metadata=ampExp.getMetadata(),
-                                          logCmd=logCmd)
-        tempCcd.append(outAmp)
-
-    ccd = tempCcd.finish()
+    with warn_once(msg) as logCmd:
+        # Rebuild the detector and the amplifiers to use their corrected
+        # geometry.
+        tempCcd = ccd.rebuild()
+        tempCcd.clear()
+        for amp, ampExp in zip(ccd, ampExps):
+            outAmp, _ = fixAmpGeometry(amp,
+                                       bbox=ampExp.getBBox(),
+                                       metadata=ampExp.getMetadata(),
+                                       logCmd=logCmd)
+            tempCcd.append(outAmp)
+        ccd = tempCcd.finish()
 
     # Update the data to be combined to point to the newly rebuilt detector.
     for ampExp in ampExps:
@@ -272,7 +296,10 @@ def readRawAmps(fileName, detector):
     """
     amps = []
     for hdu in range(1, len(detector)+1):
-        exp = afwImage.makeExposure(afwImage.makeMaskedImage(afwImage.ImageF(fileName, hdu=hdu)))
+        reader = afwImage.ImageFitsReader(fileName, hdu=hdu)
+        exp = afwImage.makeExposure(afwImage.makeMaskedImage(reader.read(dtype=np.dtype(np.int32),
+                                                                         allowUnsafe=True)))
         exp.setDetector(detector)
+        exp.setMetadata(reader.readMetadata())
         amps.append(exp)
     return amps

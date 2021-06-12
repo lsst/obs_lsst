@@ -26,7 +26,11 @@ import unittest
 import os
 import lsst.utils.tests
 
+from lsst.afw.math import flipImage
+from lsst.afw.cameraGeom import AmplifierGeometryComparison
+from lsst.daf.butler import Butler
 from lsst.obs.base.ingest_tests import IngestTestBase
+import lsst.afw.cameraGeom.testUtils  # for injected test asserts
 import lsst.obs.lsst
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -41,6 +45,56 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     file = os.path.join(DATAROOT, "latiss", "raw", "2018-09-20", "3018092000065-det000.fits")
     dataIds = [dict(instrument="LATISS", exposure=3018092000065, detector=0)]
     filterLabel = lsst.afw.image.FilterLabel(band="unknown", physical="unknown~unknown")
+
+    def checkRepo(self, files=None):
+        # Test amp parameter implementation for the LSST raw formatter.  This
+        # is the same for all instruments, so repeating it in other test cases
+        # is wasteful.
+        butler = Butler(self.root, run=self.outputRun)
+        ref = butler.registry.findDataset("raw", self.dataIds[0])
+        full_assembled = butler.getDirect(ref)
+        unassembled_detector = self.instrumentClass().getCamera()[ref.dataId["detector"]]
+        assembled_detector = full_assembled.getDetector()
+        for unassembled_amp, assembled_amp in zip(unassembled_detector, assembled_detector):
+            # Check that we're testing what we think we're testing: these
+            # amps should differ in assembly state (offsets, flips), and they
+            # _may_ differ in fundamental geometry if we had to patch the
+            # overscan region sizes.
+            comparison = unassembled_amp.compareGeometry(assembled_amp)
+            self.assertTrue(comparison & AmplifierGeometryComparison.ASSEMBLY_DIFFERS)
+            assembled_subimage = butler.getDirect(ref, parameters={"amp": assembled_amp})
+            unassembled_subimage = butler.getDirect(ref, parameters={"amp": unassembled_amp.getName()})
+            self.assertEqual(len(assembled_subimage.getDetector()), 1)
+            self.assertEqual(len(unassembled_subimage.getDetector()), 1)
+            self.assertEqual(len(assembled_subimage.getDetector()), 1)
+            self.assertEqual(len(unassembled_subimage.getDetector()), 1)
+            self.assertImagesEqual(assembled_subimage.image, full_assembled.image[assembled_amp.getRawBBox()])
+            self.assertImagesEqual(
+                unassembled_subimage.image,
+                flipImage(
+                    full_assembled.image[assembled_amp.getRawBBox()],
+                    flipLR=unassembled_amp.getRawFlipX(),
+                    flipTB=unassembled_amp.getRawFlipY(),
+                ),
+            )
+            self.assertAmplifiersEqual(assembled_subimage.getDetector()[0], assembled_amp)
+            if comparison & comparison.REGIONS_DIFFER:
+                # We needed to patch overscans, but unassembled_amp (which
+                # comes straight from the camera) won't have those patches, so
+                # we can't compare it to the amp attached to
+                # unassembled_subimage (which does have those patches).
+                # Instead we test that these two have the same
+                # assembly/orientation:
+                comparison2 = unassembled_subimage.getDetector()[0].compareGeometry(unassembled_amp)
+                self.assertFalse(comparison2 & AmplifierGeometryComparison.ASSEMBLY_DIFFERS)
+                self.assertTrue(comparison2 & AmplifierGeometryComparison.REGIONS_DIFFER)
+                # ...and that unassembled_subimage's amp has the same regions
+                # (after accounting for assembly/orientation) as assembled_amp.
+                comparison3 = unassembled_subimage.getDetector()[0].compareGeometry(assembled_amp)
+                self.assertTrue(comparison3 & AmplifierGeometryComparison.ASSEMBLY_DIFFERS)
+                self.assertFalse(comparison3 & AmplifierGeometryComparison.REGIONS_DIFFER)
+            else:
+                self.assertAmplifiersEqual(unassembled_subimage.getDetector()[0], unassembled_amp)
 
 
 class Ts3IngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
