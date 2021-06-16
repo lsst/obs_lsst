@@ -110,3 +110,11 @@ datasets:
     template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s.fits
   binned_sensor_fits_halves:
     template: binned_sensor/%(dstype)s-v%(visit)08d/%(raftName)s/%(detectorName)s_%(half)s.fits
+
+calibrations:
+  bfKernel:
+    level: None
+    persistable: ignored
+    python: lsst.ip.isr.brighterFatterKernel.BrighterFatterKernel
+    storage: FitsStorage
+    template: bfk/bfKernel-%(raftName)s_%(detectorName)s.fits
