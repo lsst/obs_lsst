@@ -331,8 +331,6 @@ flags:
     - base_Blendedness_flag
     - base_PixelFlags_flag
     - base_PixelFlags_flag_bad
-    - base_PixelFlags_flag_bright_object
-    - base_PixelFlags_flag_bright_objectCenter
     - base_PixelFlags_flag_clipped
     - base_PixelFlags_flag_clippedCenter
     - base_PixelFlags_flag_cr

@@ -31,9 +31,6 @@ config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
 
 config.measurement.slots.gaussianFlux = None
 
-config.measurement.plugins['base_PixelFlags'].masksFpCenter.append('BRIGHT_OBJECT')
-config.measurement.plugins['base_PixelFlags'].masksFpAnywhere.append('BRIGHT_OBJECT')
-
 config.catalogCalculation.plugins.names = ["base_ClassificationExtendedness"]
 config.measurement.slots.psfFlux = "base_PsfFlux"
 
