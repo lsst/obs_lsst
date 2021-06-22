@@ -46,7 +46,7 @@ class ImsimMapper(LsstCamMapper):
 
     def bypass_ccdExposureId_bits(self, datasetType, pythonType, location, dataId):
         """How many bits are required for the maximum exposure ID"""
-        return 38  # max detector_exposure_id ~ 60000000205
+        return 34  # To match the value computed in gen3
 
 
 class ImsimParseTask(LsstCamParseTask):
