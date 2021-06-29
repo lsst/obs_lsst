@@ -33,3 +33,5 @@ config.astrometry.referenceSelector.unresolved.maximum = 0.5
 configDir = os.path.dirname(__file__)
 config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
+
+config.astrometry.doMagnitudeOutlierRejection=True
