@@ -57,6 +57,7 @@ config.load(os.path.join(obsConfigDir, "cmodel.py"))
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
 config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
 config.measurement.load(os.path.join(obsConfigDir, "convolvedFluxes.py"))
+config.measurement.load(os.path.join(obsConfigDir, "gaap.py"))
 config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done
@@ -71,6 +72,10 @@ config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 # Convolved fluxes can fail for small target seeing if the observation seeing is larger
 if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
     names = config.measurement.plugins["ext_convolved_ConvolvedFlux"].getAllResultNames()
+    config.measureApCorr.allowFailure += names
+
+if "ext_gaap_GaapFlux" in config.measurement.plugins:
+    names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames()
     config.measureApCorr.allowFailure += names
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
