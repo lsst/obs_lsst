@@ -1,4 +1,5 @@
 import os
-from lsst.utils import getPackageDir
 
-config.functorFile = os.path.join(getPackageDir('obs_lsst'), 'policy', 'imsim', 'Source.yaml')
+# Use the environment variable to prevent hardcoding of paths
+# into quantum graphs.
+config.functorFile = os.path.join('$OBS_LSST_DIR', 'policy', 'imsim', 'Source.yaml')
