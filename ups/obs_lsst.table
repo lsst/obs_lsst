@@ -8,6 +8,7 @@ setupRequired(pipe_tasks)
 setupRequired(astro_metadata_translator)
 setupRequired(obs_lsst_data)
 setupRequired(daf_butler)
+setupOptional(meas_extensions_gaap)
 
 envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)
