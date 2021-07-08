@@ -27,4 +27,66 @@ tasks:
             match.refObjLoader.ref_dataset_name: 'cal_ref_cat_2_2'
             python: >
                 config.match.refObjLoader.filterMap = {band: 'lsst_%s_smeared' % (band) for band in 'ugrizy'};
+subsets:
+    step1:
+        subset:
+        - isr
+        - characterizeImage
+        - calibrate
+        - writeSourceTable
+        - transformSourceTable
+        description: >
+            Per-detector tasks that can be run together to start the DRP pipeline.
 
+            These may or may not be run with 'tract' or 'patch' as part of the data ID
+            expression. This specific pipeline contains no tasks that require full
+            visits. Running with 'tract' (and 'patch') constraints will select
+            partial visits that overlap that region.
+
+            In data release processing, operators should stop to address unexpected
+            failures before continuing on to step2.
+    step2:
+        subset:
+        - consolidateSourceTable
+        - consolidateVisitSummary
+        description: >
+            Per-visit tasks that can be run together, but only after the 'step1'.
+
+            These may or may not be run with 'tract' or 'patch' as part of the data ID
+            expression.  Running with 'tract' (and 'patch') constraints will select
+            partial visits that overlap that region.
+            This specific pipeline contains no tasks that require full visits.
+
+            This subset is considered a workaround for missing middleware and task
+            functionality.  It may be removed in the future.
+    step3:
+        subset:
+        - makeWarp
+        - assembleCoadd
+        - detection
+        - mergeDetections
+        - deblend
+        - measure
+        - mergeMeasurements
+        - forcedPhotCcd
+        - forcedPhotCoadd
+        - transformObjectTable
+        - writeObjectTable
+        - consolidateObjectTable
+        - healSparsePropertyMaps
+        description: >
+            Tasks that can be run together, but only after the 'step1' and 'step2'
+            subsets.
+
+            These should be run with explicit 'tract' constraints essentially all the
+            time, because otherwise quanta will be created for jobs with only partial
+            visit coverage.
+
+            It is expected that many forcedPhotCcd quanta will "normally" fail when
+            running this subset, but this isn't a problem right now because there
+            are no tasks downstream of it.  If other tasks regularly fail or we add
+            tasks downstream of forcedPhotCcd, these subsets or the tasks will need
+            additional changes.
+
+            This subset is considered a workaround for missing middleware and task
+            functionality.  It may be removed in the future.
