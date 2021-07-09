@@ -75,7 +75,7 @@ if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
     config.measureApCorr.allowFailure += names
 
 if "ext_gaap_GaapFlux" in config.measurement.plugins:
-    names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames()
+    names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames("ext_gaap_GaapFlux")
     config.measureApCorr.allowFailure += names
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
