@@ -20,23 +20,12 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 """
-imsim-specific overrides for CalibrateTask
+imsim-specific overrides for CharacterizeImageTask
 """
-import os.path
-
-# Additional configs for star+galaxy ref cats post DM-17917
-config.astrometry.referenceSelector.doUnresolved = True
-config.astrometry.referenceSelector.unresolved.name = 'resolved'
-config.astrometry.referenceSelector.unresolved.minimum = None
-config.astrometry.referenceSelector.unresolved.maximum = 0.5
-
-configDir = os.path.dirname(__file__)
-config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-
-config.astrometry.doMagnitudeOutlierRejection = True
 
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
+config.background.approxOrderX = 1
 config.detection.background.approxOrderX = 1
 config.detection.tempLocalBackground.approxOrderX = 1
 config.detection.tempWideBackground.approxOrderX = 1
+config.repair.cosmicray.background.approxOrderX = 1
