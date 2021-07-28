@@ -162,7 +162,7 @@ def processPhosimData(ids, visit, inputDir, outputDir):
 
         dataId["detector"] = detector   # more of the butler stupidity
 
-        logger.warn("Processing data from detector %s_%s", raftName, detectorName)
+        logger.warning("Processing data from detector %s_%s", raftName, detectorName)
 
         if raftName not in raftData:
             raftData[raftName] = {}
