@@ -96,8 +96,8 @@ class LsstCamTranslator(LsstBaseTranslator):
             ccdslot = header.get("CCDSLOT", "unknown")
             raftbay = header.get("RAFTBAY", "unknown")
 
-            log.warn("%s %s_%s: No FILTER key found but FILTER2=\"%s\" (removed)",
-                     log_label, raftbay, ccdslot, header["FILTER2"])
+            log.warning("%s %s_%s: No FILTER key found but FILTER2=\"%s\" (removed)",
+                        log_label, raftbay, ccdslot, header["FILTER2"])
             header["FILTER2"] = None
             modified = True
 

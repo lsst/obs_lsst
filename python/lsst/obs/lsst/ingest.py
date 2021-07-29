@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import logging
 import re
 from lsst.pipe.tasks.ingest import ParseTask
 from lsst.pipe.tasks.ingestCalibs import CalibsParseTask
 from astro_metadata_translator import ObservationInfo
-import lsst.log as lsstLog
 from .translators import LsstCamTranslator
 from .lsstCamMapper import LsstCamMapper
 from ._fitsHeader import readRawFitsHeader
@@ -155,8 +155,8 @@ class LsstCamParseTask(ParseTask):
 
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
-            logger = lsstLog.Log.getLogger('obs.lsst.ingest')
-            logger.warn(
+            logger = logging.getLogger('obs.lsst.ingest')
+            logger.warning(
                 'Translated significantly non-integer wavelength; '
                 '%s is more than 0.1nm from an integer value', raw_wl)
         return wl

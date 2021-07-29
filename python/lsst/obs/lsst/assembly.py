@@ -22,16 +22,16 @@
 __all__ = ("attachRawWcsFromBoresight", "fixAmpGeometry", "assembleUntrimmedCcd",
            "fixAmpsAndAssemble", "readRawAmps")
 
+import logging
 from contextlib import contextmanager
 import numpy as np
-import lsst.log
 import lsst.afw.image as afwImage
 from lsst.obs.base import bboxFromIraf, MakeRawVisitInfoViaObsInfo, createInitialSkyWcs
 from lsst.geom import Box2I, Extent2I
 from lsst.ip.isr import AssembleCcdTask
 from astro_metadata_translator import ObservationInfo
 
-logger = lsst.log.Log.getLogger("obs.lsst.assembly")
+logger = logging.getLogger("obs.lsst.assembly")
 
 
 def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
@@ -66,8 +66,8 @@ def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
         return True
 
     if obsInfo.observation_type == "science":
-        logger.warn("Unable to set WCS from header as RA/Dec/Angle are unavailable%s",
-                    ("" if dataIdForErrMsg is None else " for dataId %s" % dataIdForErrMsg))
+        logger.warning("Unable to set WCS from header as RA/Dec/Angle are unavailable%s",
+                       ("" if dataIdForErrMsg is None else " for dataId %s" % dataIdForErrMsg))
     return False
 
 
@@ -223,9 +223,9 @@ def warn_once(msg):
     def logCmd(s, *args):
         nonlocal warned
         if warned:
-            logger.debug(f"{msg}: {s}", *args)
+            logger.debug("%s: %s", *args)
         else:
-            logger.warn(f"{msg}: {s}", *args)
+            logger.warning("%s: %s", *args)
             warned = True
 
     yield logCmd
