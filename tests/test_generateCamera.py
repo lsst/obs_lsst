@@ -36,7 +36,7 @@ POLICYDIR = os.path.normpath(os.path.join(TESTDIR, os.path.pardir, 'policy'))
 
 
 class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
-    """Test the phosimToRafts.py utility script."""
+    """Test the generateCamera.py utility script."""
 
     def setUp(self):
         self.testdir = mkdtemp(dir=TESTDIR)

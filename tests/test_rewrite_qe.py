@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Test the phosimToRafts.py script in bin.src."""
+"""Test the rewrite_ts8_qe_files.py script in bin.src."""
 
 import unittest
 import os
@@ -36,7 +36,7 @@ DATADIR = lsst.utils.getPackageDir('obs_lsst_data')
 
 
 class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
-    """Test the phosimToRasfts.py utility script."""
+    """Test the rewrite_ts8_qe_files.py utility script."""
 
     def testRewriteQe(self):
         failed = False
