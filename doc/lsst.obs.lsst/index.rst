@@ -33,10 +33,6 @@ Command Line Scripts
   :prog: generateCamera.py
   :groups:
 
-.. autoprogram:: lsst.obs.lsst.script.phosimToRafts:build_argparser()
-  :prog: phossimToRafts.py
-  :groups:
-
 .. autoprogram:: lsst.obs.lsst.script.rewrite_ts8_qe_files:build_argparser()
   :prog: rewrite_ts8_qe_files.py
   :groups:
