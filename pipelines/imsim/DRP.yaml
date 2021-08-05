@@ -49,6 +49,8 @@ subsets:
         subset:
         - consolidateSourceTable
         - consolidateVisitSummary
+        - makeCcdVisitTable
+        - makeVisitTable
         description: >
             Per-visit tasks that can be run together, but only after the 'step1'.
 
