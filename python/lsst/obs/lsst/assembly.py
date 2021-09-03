@@ -222,10 +222,11 @@ def warn_once(msg):
 
     def logCmd(s, *args):
         nonlocal warned
+        log_msg = f"{msg}: {s}"
         if warned:
-            logger.debug("%s: %s", *args)
+            logger.debug(log_msg, *args)
         else:
-            logger.warning("%s: %s", *args)
+            logger.warning(log_msg, *args)
             warned = True
 
     yield logCmd
