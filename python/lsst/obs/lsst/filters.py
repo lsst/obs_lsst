@@ -222,6 +222,10 @@ _latiss_filters = (
                      lambdaEff=0.0,
                      band="r",
                      afw_name="rg"),
+    FilterDefinition(physical_filter="FELH0600",
+                     lambdaEff=0.0,
+                     band="r",
+                     afw_name="rg"),
 )
 
 # Form a new set of filter definitions from all the explicit gratings
