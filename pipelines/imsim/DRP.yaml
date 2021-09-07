@@ -97,6 +97,7 @@ subsets:
         subset:
         - forcedPhotCcd
         - forcedPhotDiffim
+        - getTemplate
         - imageDifference
         - transformDiaSourceCat
         description: >
