@@ -178,7 +178,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
                 # on-disk amplifier to have the same orientation and offsets as
                 # the given one.
                 adjusted_amplifier_builder.transform(
-                    outOffset=amplifier.getRawXYOffset(),
+                    outOffset=adjusted_amplifier_builder.getRawXYOffset(),
                     outFlipX=amplifier.getRawFlipX(),
                     outFlipY=amplifier.getRawFlipY(),
                 )
