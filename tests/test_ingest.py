@@ -83,10 +83,8 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
                 # comes straight from the camera) won't have those patches, so
                 # we can't compare it to the amp attached to
                 # unassembled_subimage (which does have those patches).
-                # Instead we test that these two have the same
-                # assembly/orientation:
                 comparison2 = unassembled_subimage.getDetector()[0].compareGeometry(unassembled_amp)
-                self.assertFalse(comparison2 & AmplifierGeometryComparison.ASSEMBLY_DIFFERS)
+
                 self.assertTrue(comparison2 & AmplifierGeometryComparison.REGIONS_DIFFER)
                 # ...and that unassembled_subimage's amp has the same regions
                 # (after accounting for assembly/orientation) as assembled_amp.
