@@ -226,6 +226,15 @@ _latiss_filters = (
                      lambdaEff=0.0,
                      band="r",
                      afw_name="rg"),
+    FilterDefinition(physical_filter="SDSSg",
+                     lambdaEff=477.0,
+                     band="g"),
+    FilterDefinition(physical_filter="SDSSr",
+                     lambdaEff=623.1,
+                     band="r"),
+    FilterDefinition(physical_filter="SDSSi",
+                     lambdaEff=762.5,
+                     band="i"),
 )
 
 # Form a new set of filter definitions from all the explicit gratings
