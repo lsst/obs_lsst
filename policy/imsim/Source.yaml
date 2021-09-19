@@ -39,14 +39,14 @@ funcs:
     # declErr: not available yet DM-15180
     # ra_decl_Cov: not available yet
     # One calibrated Calib flux is important:
-    ApFlux:
+    apFlux:
         functor: LocalNanojansky
         args:
             - slot_CalibFlux_instFlux
             - slot_CalibFlux_instFluxErr
             - base_LocalPhotoCalib
             - base_LocalPhotoCalibErr
-    ApFluxErr:
+    apFluxErr:
         functor: LocalNanojanskyErr
         args:
             - slot_CalibFlux_instFlux
@@ -70,14 +70,14 @@ funcs:
             - base_LocalBackground_instFluxErr
             - base_LocalPhotoCalib
             - base_LocalPhotoCalibErr
-    PsFlux:
+    psfFlux:
         functor: LocalNanojansky
         args:
             - slot_PsfFlux_instFlux
             - slot_PsfFlux_instFluxErr
             - base_LocalPhotoCalib
             - base_LocalPhotoCalibErr
-    PsFluxErr:
+    psfFluxErr:
         functor: LocalNanojanskyErr
         args:
             - slot_PsfFlux_instFlux
@@ -104,23 +104,23 @@ funcs:
     # psFlux_psDecl_Cov
 
 
-    Ixx:
+    ixx:
         functor: Column
         args: slot_Shape_xx
-    Iyy:
+    iyy:
         functor: Column
         args: slot_Shape_yy
-    Ixy:
+    ixy:
         functor: Column
         args: slot_Shape_xy
     # DPDD should include Psf Shape
-    IxxPsf:
+    ixxPSF:
         functor: Column
         args: slot_PsfShape_xx
-    IyyPsf:
+    iyyPSF:
         functor: Column
         args: slot_PsfShape_yy
-    IxyPsf:
+    ixyPSF:
         functor: Column
         args: slot_PsfShape_xy
     # apNann: Replaced by raw Aperture instFluxes in flags section below
@@ -196,7 +196,6 @@ flags:
    - base_LocalBackground_flag
    - base_LocalBackground_flag_noGoodPixels
    - base_LocalBackground_flag_noPsf
-   - base_PixelFlags_flag
    - base_PixelFlags_flag_bad
    - base_PixelFlags_flag_cr
    - base_PixelFlags_flag_crCenter
@@ -256,18 +255,20 @@ flags:
 flag_rename_rules:
     # Taken from db-meas-forced
     - ['ext_photometryKron_', '']
-    - ['base_PixelFlags_flag', 'PixelFlags']
-    - ['base_Classification', '']
-    - ['base_Sdss', '']
-    - ['base_CircularApertureFlux', 'ApFlux']
-    - ['ext_shapeHSM_', '']
+    - ['base_Blendedness', 'base_blendedness']
+    - ['base_Local', 'local']
+    - ['base_PixelFlags_flag', 'pixelFlags']
+    - ['base_ClassificationE', 'e']
+    - ['base_SdssCentroid', 'centroid']
+    - ['base_Variance', 'variance']
+    - ['base_Psf', 'psf']
+    - ['base_CircularApertureFlux', 'apFlux']
+    - ['base_FootprintArea', 'footprintArea']
+    - ['base_Jacobian', 'jacobian']
+    - ['ext_shapeHSM_Hsm', 'hsm']
     - ['ext_convolved_', '']
     - ['undeblended_base', 'undeblended']
     - ['undeblended_ext_photometryKron', 'undeblended']
     - ['ext_photometryKron_', '']
     - ['base_', '']
     - ['slot_', '']
-    - ['calib_', 'Calib_']
-    - ['deblend_', 'Deblend_']
-    - ['blendedness', 'Blendedness']
-
