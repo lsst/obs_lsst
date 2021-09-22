@@ -153,7 +153,7 @@ subsets:
         - consolidateForcedSourceOnDiaObjectTable
         - TE1
         - TE2
-        - stellar_locus_width_wPerp
+        - wPerp
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2',
             'step3', and 'step4' subsets
