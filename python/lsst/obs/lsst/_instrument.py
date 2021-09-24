@@ -110,7 +110,7 @@ class LsstCam(Instrument):
         from .rawFormatter import LsstCamRawFormatter
         return LsstCamRawFormatter
 
-    def register(self, registry):
+    def register(self, registry, update=False):
         # Docstring inherited from Instrument.register
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
@@ -124,12 +124,13 @@ class LsstCam(Instrument):
                     "visit_max": obsMax,
                     "exposure_max": obsMax,
                     "class_name": getFullTypeName(self),
-                }
+                },
+                update=update
             )
             for detector in self.getCamera():
-                registry.syncDimensionData("detector", self.extractDetectorRecord(detector))
+                registry.syncDimensionData("detector", self.extractDetectorRecord(detector), update=update)
 
-            self._registerFilters(registry)
+            self._registerFilters(registry, update=update)
 
     def extractDetectorRecord(self, camGeomDetector):
         """Create a Gen3 Detector entry dict from a cameraGeom.Detector.
