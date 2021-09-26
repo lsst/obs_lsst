@@ -13,7 +13,7 @@ funcs:
         dataset: calexp
         args: coord_ra
     coord_dec:
-         # reference position required by database. Not in DPDD
+        # reference position required by database. Not in DPDD
         functor: CoordColumn
         dataset: calexp
         args: coord_dec
@@ -41,7 +41,7 @@ funcs:
             - base_PsfFlux_instFluxErr
             - base_LocalPhotoCalib
             - base_LocalPhotoCalibErr
-    psfFluxFlag:
+    psfFlux_flag:
         functor: Column
         dataset: calexp
         args: base_PsfFlux_flag
@@ -61,7 +61,7 @@ funcs:
             - base_PsfFlux_instFluxErr
             - base_LocalPhotoCalib
             - base_LocalPhotoCalibErr
-    psfDiffFluxFlag:
+    psfDiffFlux_flag:
         functor: Column
         dataset: diff
         args: base_PsfFlux_flag
