@@ -151,88 +151,88 @@ funcs:
         filt1: z
         filt2: y
     #  PSF GAaP flux
-    GaapFlux_Psf:
+    gaapPsfFlux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_PsfFlux_instFlux
-    GaapFluxErr_Psf:
+    gaapPsfFluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_PsfFlux_instFlux
             - ext_gaap_GaapFlux_1_15x_PsfFlux_instFluxErr
     # 0.5 arcsec sigma GAaP flux
-    gaapFlux_0_5:
+    gaap0p5Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_0_5_instFlux
-    gaapFluxErr_0_5:
+    gaap0p5FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_0_5_instFlux
             - ext_gaap_GaapFlux_1_15x_0_5_instFluxErr
     # 0.7 arcsec sigma GAaP flux
-    GaapFlux_0_7:
+    gaap0p7Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_0_7_instFlux
-    GaapFluxErr_0_7:
+    gaap0p7FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_0_7_instFlux
             - ext_gaap_GaapFlux_1_15x_0_7_instFluxErr
     # 1.0 arcsec sigma GAaP flux
-    GaapFlux_1_0:
+    gaap1p0Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_1_0_instFlux
-    GaapFluxErr_1_0:
+    gaap1p0FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_1_0_instFlux
             - ext_gaap_GaapFlux_1_15x_1_0_instFluxErr
     # 1.5 arcsec sigma GAaP flux
-    gaapFlux_1_5:
+    gaap1p5Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_1_5_instFlux
-    gaapFluxErr_1_5:
+    gaap1p5FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_1_5_instFlux
             - ext_gaap_GaapFlux_1_15x_1_5_instFluxErr
     # 2.5 arcsec sigma GAaP flux
-    gaapFlux_2_5:
+    gaap2p5Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_2_5_instFlux
-    gaapFluxErr_2_5:
+    gaap2p5FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_2_5_instFlux
             - ext_gaap_GaapFlux_1_15x_2_5_instFluxErr
     # 3.0 arcsec sigma GAaP flux
-    gaapFlux_3_0:
+    gaap3p0Flux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_0_5_instFlux
-    gaapFluxErr_3_0:
+    gaap3p0FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
             - ext_gaap_GaapFlux_1_15x_3_0_instFlux
             - ext_gaap_GaapFlux_1_15x_3_0_instFluxErr
     #  Optimal GAaP flux
-    GaapFlux_Optimal:
+    gaapOptimalFlux:
         functor: NanoJansky
         dataset: forced_src
         args: ext_gaap_GaapFlux_1_15x_Optimal_instFlux
-    GaapFluxErr_Optimal:
+    gaapOptimalFluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
         args:
