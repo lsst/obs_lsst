@@ -235,10 +235,6 @@ funcs:
         args:
             - ext_gaap_GaapFlux_1_15x_Optimal_instFlux
             - ext_gaap_GaapFlux_1_15x_Optimal_instFluxErr
-    gaapFlux_optimal_flag_bigPsf:
-        functor: Column
-        dataset: forced_src
-        args: ext_gaap_GaapFlux_1_15x_Optimal_flag_bigPsf
     # Taking Shape from meas
     ixx:
         functor: Column
