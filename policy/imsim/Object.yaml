@@ -694,6 +694,7 @@ flag_rename_rules:
     - ['ext_gaap_GaapFlux_1_15x_1_5', 'gaap1p5Flux']
     - ['ext_gaap_GaapFlux_1_15x_2_5', 'gaap2p5Flux']
     - ['ext_gaap_GaapFlux_1_15x_3_0', 'gaap3p0Flux']
+    - ['ext_gaap_GaapFlux_1_15x_Optimal', 'gaapOptimalFlux']
     - ['ext_gaap_GaapFlux_1_15x', 'gaapFlux']
     - ['ext_gaap_GaapFlux', 'gaapFlux']
     - ['undeblended_base', 'undeblended']
