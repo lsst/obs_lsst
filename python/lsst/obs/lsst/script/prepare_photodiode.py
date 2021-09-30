@@ -45,9 +45,8 @@ def build_argparser():
     parser.add_argument("repository", help="Repository containing raw data to use to construct metadata.")
     parser.add_argument("input_directory", help="Directory to scan for photodiode data.")
     parser.add_argument("output_directory", help="Directory to write the reformatted photodiode data.")
-    parser.add_argument("--file_extension", type=str, default=".txt",
-                        help="File extension matching photodiode data.")
-    parser.add_argument("--reformat", type=bool, default=True, help="Should photodiode data be reformatted?")
+    parser.add_argument("--pattern", type=str, default="*.txt",
+                        help="Glob pattern matching photodiode data.")
     parser.add_argument("--instrument", type=str, default='LSSTCam',
                         help="Instrument to use for these photodiode data.")
     return parser
@@ -65,7 +64,7 @@ def main():
         os.makedirs(args.output_directory)
 
     # Determine what files we have to work on.
-    globPath = os.path.join(args.input_directory, "*" + args.file_extension)
+    globPath = os.path.join(args.input_directory, args.pattern)
     inputFiles = glob.glob(globPath)
     print(globPath, len(inputFiles))
 
