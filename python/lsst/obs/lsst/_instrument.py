@@ -25,7 +25,7 @@ __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
 import os.path
 
 import lsst.obs.base.yamlCamera as yamlCamera
-from lsst.daf.butler.core.utils import getFullTypeName
+from lsst.utils.introspection import get_full_type_name
 from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument
 from lsst.obs.base.gen2to3 import TranslatorFactory
@@ -123,7 +123,7 @@ class LsstCam(Instrument):
                     "detector_max": self.translatorClass.DETECTOR_MAX,
                     "visit_max": obsMax,
                     "exposure_max": obsMax,
-                    "class_name": getFullTypeName(self),
+                    "class_name": get_full_type_name(self),
                 },
                 update=update
             )
