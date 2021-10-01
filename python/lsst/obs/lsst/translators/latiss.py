@@ -68,6 +68,10 @@ RASTART_IS_OKAY = Time("2021-02-12T00:00", format="isot", scale="utc")
 # DATE-END is not to be trusted before this date
 DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 
+# The convention for the reporting of ROTPA changed by 180 here
+ROTPA_CONVENTION_180_SWITCH1 = Time("2020-11-19T00:00", format="isot", scale="utc")
+ROTPA_CONVENTION_180_SWITCH2 = Time("2021-10-29T00:00", format="isot", scale="utc")
+
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
 
@@ -389,6 +393,10 @@ class LatissTranslator(LsstBaseTranslator):
                 h = "RA" + epoch
                 if header[h]:
                     header[h] += offset
+
+        if date < ROTPA_CONVENTION_180_SWITCH2 and date > ROTPA_CONVENTION_180_SWITCH1:
+            header['ROTPA'] = header['ROTPA'] - 180
+            modified = True
 
         return modified
 
