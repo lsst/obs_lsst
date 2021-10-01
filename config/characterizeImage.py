@@ -58,6 +58,7 @@ config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
 config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
 config.measurement.load(os.path.join(obsConfigDir, "convolvedFluxes.py"))
 config.measurement.load(os.path.join(obsConfigDir, "gaap.py"))
+config.measurement.load(os.path.join(obsConfigDir, "ksigmamom.py"))
 config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done
@@ -77,6 +78,12 @@ if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
 if "ext_gaap_GaapFlux" in config.measurement.plugins:
     names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames()
     config.measureApCorr.allowFailure += names
+
+if "ext_ksigmamom_KSigmaMomFlux" in config.measurement.plugins:
+    # config.measurement.plugins["ext_ksigmamom_KSigmaMomFlux"].
+    # names = config.measurement.plugins["ext_ksigmamom_KSigmaMomFlux"].getAllKSigmaMomResultNames('ext_ksigmamom_KSigmaMomFlux')
+    # config.measureApCorr.allowFailure += names
+    pass
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
 
