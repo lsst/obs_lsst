@@ -55,13 +55,19 @@ funcs:
             - base_LocalPhotoCalibErr
    # Not in DPDD. Used for QA
     ksigmamomFlux:
-        functor: NanoJansky
-        args: ext_ksigmamom_KSigmaMomFlux_instFlux
-    ksigmamomFluxErr:
-        functor: NanoJanskyErr
+        functor: LocalNanojansky
         args:
             - ext_ksigmamom_KSigmaMomFlux_instFlux
             - ext_ksigmamom_KSigmaMomFlux_instFluxErr
+            - base_LocalPhotoCalib
+            - base_LocalPhotoCalibErr
+    ksigmamomFluxErr:
+        functor: LocalNanojanskyErr
+        args:
+            - ext_ksigmamom_KSigmaMomFlux_instFlux
+            - ext_ksigmamom_KSigmaMomFlux_instFluxErr
+            - base_LocalPhotoCalib
+            - base_LocalPhotoCalibErr
     ap03Flux:
         functor: NanoJansky
         args: base_CircularApertureFlux_3_0_instFlux

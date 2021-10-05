@@ -67,6 +67,7 @@ config.detection.isotropicGrow = True
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
 config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
 config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
+config.measurement.load(os.path.join(obsConfigDir, "ksigmamom.py"))
 
 # Deblender
 config.deblend.maxFootprintSize = 0
