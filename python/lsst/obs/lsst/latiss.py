@@ -75,7 +75,7 @@ class LatissMapper(LsstCamMapper):
             if "controller" in dataId:
                 controller = dataId["controller"]
             else:
-                logging.getLogger("LsstLatissMapper").warning("Controller unknown, using 'C'")
+                logging.getLogger("lsst.LsstLatissMapper").warning("Controller unknown, using 'C'")
                 controller = "C"
             visit = LatissTranslator.compute_exposure_id(dataId['dayObs'], dataId["seqNum"],
                                                          controller)
@@ -83,8 +83,8 @@ class LatissMapper(LsstCamMapper):
         if "detector" in dataId:
             detector = dataId["detector"]
             if detector != 0:
-                logging.getLogger("LatissMapper").warning("Got detector %d for LATISS when it should"
-                                                          " always be 0", detector)
+                logging.getLogger("lsst.LsstLatissMapper").warning("Got detector %d for LATISS when it should"
+                                                                   " always be 0", detector)
         else:
             detector = 0
 
@@ -132,7 +132,7 @@ class LatissParseTask(LsstCamParseTask):
                 break
 
         if seqNum == 0:
-            logger = logging.getLogger('obs.lsst.LatissParseTask')
+            logger = logging.getLogger('lsst.obs.lsst.LatissParseTask')
             logger.warning(
                 'Could not determine sequence number. Assuming %d ', seqNum)
 
