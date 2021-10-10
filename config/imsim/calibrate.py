@@ -35,6 +35,8 @@ config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 
 config.astrometry.doMagnitudeOutlierRejection = True
+# Set threshold above which astrometry will be considered a failure (DM-32129)
+config.astrometry.maxMeanDistanceArcsec = 0.05
 
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
 config.detection.background.approxOrderX = 1
