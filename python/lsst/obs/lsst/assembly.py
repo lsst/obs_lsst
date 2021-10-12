@@ -55,6 +55,7 @@ def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
     obsInfo = ObservationInfo(md)
     visitInfo = MakeRawVisitInfoViaObsInfo.observationInfo2visitInfo(obsInfo, log=logger)
     exposure.getInfo().setVisitInfo(visitInfo)
+    exposure.info.id = obsInfo.detector_exposure_id
 
     # LATISS (and likely others) need flipping, DC2 etc do not
     flipX = False
