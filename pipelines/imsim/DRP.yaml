@@ -168,7 +168,7 @@ subsets:
         - consolidateDiaSourceTable
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2',
-            'step3', and 'step4' subsets
+            'step3', 'step4', and 'step5' subsets
 
             This step includes visit-level aggregation tasks. Running without
             tract or patch in the data query is recommended, otherwise the
