@@ -68,6 +68,10 @@ config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
 config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
 config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 
+if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
+    # no deblending has been done
+    config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
+
 # Deblender
 config.deblend.maxFootprintSize = 0
 config.deblend.maskLimits["NO_DATA"] = 0.25 # Ignore sources that are in the vignetted region
