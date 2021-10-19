@@ -51,7 +51,7 @@ config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio =
 # No color term in simulation at the moment
 config.photoCal.applyColorTerms = False
 config.photoCal.match.referenceSelection.doMagLimit = True
-config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
+config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
 config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
 # select only stars for photometry calibration
 config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
