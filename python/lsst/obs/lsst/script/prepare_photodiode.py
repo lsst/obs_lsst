@@ -57,7 +57,7 @@ def main():
 
     # Create output directory or stop.
     if os.path.exists(args.output_directory):
-        print(f"Output directory {args.output_directory} exists.  Exiting.")
+        print(f"Output directory {args.output_directory} exists. Exiting.")
         sys.exit(1)
     else:
         print(f"Creating output directory {args.output_directory}")
@@ -66,7 +66,9 @@ def main():
     # Determine what files we have to work on.
     globPath = os.path.join(args.input_directory, args.pattern)
     inputFiles = glob.glob(globPath)
-    print(globPath, len(inputFiles))
+    print(f"Found {len(inputFiles)} in {globPath}.")
+    if len(inputFiles) == 0:
+        exit()
 
     butler = Butler(args.repository)
 
@@ -74,21 +76,20 @@ def main():
     ingestInstrument = []
     ingestExposureId = []
     for rawPhotodiode in inputFiles:
-        photodiode = PhotodiodeCalib.readSummitPhotodiode(rawPhotodiode)
-        day_obs = photodiode.getMetadata()['day_obs']
-        seq_num = photodiode.getMetadata()['seq_num']
+        calib = PhotodiodeCalib.readTwoColumnPhotodiode(rawPhotodiode)
+        day_obs = calib.getMetadata()['day_obs']
+        seq_num = calib.getMetadata()['seq_num']
 
-        records = [rec for rec in
-                   butler.registry.queryDimensionRecords("exposure", instrument=args.instrument,
+        records = [butler.registry.queryDimensionRecords("exposure", instrument=args.instrument,
                                                          where=f"exposure.day_obs={day_obs} AND "
                                                          f"exposure.seq_num={seq_num}")]
         if len(records) != 1:
             print(f"Found {len(records)} for day_obs {day_obs} seq_num {seq_num}! Skipping!")
             continue
         exposureId = records[0].id
-        photodiode.updateMetadata(camera=None, detector=None, filterName=None,
-                                  setCalibId=False, setCalibInfo=True, setDate=True,
-                                  EXPOSURE=exposureId, INSTRUME=args.instrument)
+        calib.updateMetadata(camera=None, detector=None, filterName=None,
+                             setCalibId=False, setCalibInfo=True, setDate=True,
+                             EXPOSURE=exposureId, INSTRUME=args.instrument)
 
         photodiodeSubDirectory = os.path.join(args.output_directory, args.instrument,
                                               "photodiode", f"{day_obs}")
@@ -97,7 +98,7 @@ def main():
 
         outputFilename = os.path.join(photodiodeSubDirectory,
                                       f"photodiode_{args.instrument}_{exposureId}.fits")
-        photodiode.writeFits(outputFilename)
+        calib.writeFits(outputFilename)
 
         ingestFilenames.append(outputFilename)
         ingestInstrument.append(args.instrument)
