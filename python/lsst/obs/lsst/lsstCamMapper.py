@@ -285,7 +285,7 @@ class LsstCamBaseMapper(CameraMapper):
 
     def bypass_deepCoaddId_bits(self, *args, **kwargs):
         """The number of bits used up for patch ID bits."""
-        return 64 - LsstCamMapper._nbit_id
+        return LsstCamMapper._nbit_id
 
     def bypass_deepCoaddId(self, datasetType, pythonType, location, dataId):
         return self._computeCoaddExposureId(dataId, True)
@@ -298,7 +298,7 @@ class LsstCamBaseMapper(CameraMapper):
 
     def bypass_deepMergedCoaddId_bits(self, *args, **kwargs):
         """The number of bits used up for patch ID bits."""
-        return 64 - LsstCamMapper._nbit_id
+        return LsstCamMapper._nbit_id
 
     def bypass_deepMergedCoaddId(self, datasetType, pythonType, location, dataId):
         return self._computeCoaddExposureId(dataId, False)
