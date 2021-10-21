@@ -69,6 +69,8 @@ class LatissMapper(LsstCamMapper):
 
         if 'visit' in dataId:
             visit = dataId['visit']
+        elif 'expId' in dataId:
+            visit = dataId['expId']
         else:
             if "controller" in dataId:
                 controller = dataId["controller"]
