@@ -36,8 +36,8 @@ from lsst.utils import getPackageDir
 from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
 from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 
-# REFCAT_NAME = 'gaia'
-REFCAT_NAME = 'ps1'
+REFCAT_NAME = 'gaia'
+# REFCAT_NAME = 'ps1'
 
 if REFCAT_NAME == 'gaia':
     REFCAT = "gaia_dr2_20191105"
