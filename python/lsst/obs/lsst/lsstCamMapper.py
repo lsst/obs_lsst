@@ -455,6 +455,7 @@ class LsstCamBaseMapper(CameraMapper):
 
         exp = self._standardizeExposure(self.exposures['raw'], item, dataId, trimmed=False,
                                         setVisitInfo=False,  # it's already set, and the metadata's stripped
+                                        setExposureId=False,
                                         filter=False)
 
         if filter:
