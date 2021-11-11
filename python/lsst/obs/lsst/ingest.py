@@ -155,7 +155,7 @@ class LsstCamParseTask(ParseTask):
 
         wl = int(round(raw_wl))
         if abs(raw_wl-wl) >= 0.1:
-            logger = logging.getLogger('obs.lsst.ingest')
+            logger = logging.getLogger(__name__)
             logger.warning(
                 'Translated significantly non-integer wavelength; '
                 '%s is more than 0.1nm from an integer value', raw_wl)

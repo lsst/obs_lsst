@@ -127,7 +127,7 @@ class LsstCamBaseMapper(CameraMapper):
                     kwargs['calibRoot'] = calibRoot
                     break
             if not kwargs.get('calibRoot', None):
-                lsst.log.Log.getLogger("LsstCamMapper").warn("Unable to find valid calib root directory")
+                lsst.log.Log.getLogger("lsst.LsstCamMapper").warn("Unable to find valid calib root directory")
 
         super().__init__(policy, os.path.dirname(policyFile), **kwargs)
         #
@@ -344,7 +344,7 @@ class LsstCamBaseMapper(CameraMapper):
             else:
                 raise RuntimeError('Unable to find detector %s in camera' % detector)
         else:
-            logger = lsst.log.Log.getLogger("LsstCamMapper")
+            logger = lsst.log.Log.getLogger("lsst.LsstCamMapper")
             logger.debug('Unable to lookup either "detectorName" or "detector" in the dataId')
             detectorName = "unknown"
 
