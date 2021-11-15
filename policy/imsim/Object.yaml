@@ -217,7 +217,7 @@ funcs:
     gaap3p0Flux:
         functor: NanoJansky
         dataset: forced_src
-        args: ext_gaap_GaapFlux_1_15x_0_5_instFlux
+        args: ext_gaap_GaapFlux_1_15x_3_0_instFlux
     gaap3p0FluxErr:
         functor: NanoJanskyErr
         dataset: forced_src
