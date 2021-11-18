@@ -26,7 +26,7 @@ import os.path
 
 # Additional configs for star+galaxy ref cats post DM-17917
 config.astrometry.referenceSelector.doUnresolved = True
-config.astrometry.referenceSelector.unresolved.name = 'resolved'
+config.astrometry.referenceSelector.unresolved.name = "resolved"
 config.astrometry.referenceSelector.unresolved.minimum = None
 config.astrometry.referenceSelector.unresolved.maximum = 0.5
 
@@ -42,3 +42,15 @@ config.astrometry.maxMeanDistanceArcsec = 0.05
 config.detection.background.approxOrderX = 1
 config.detection.tempLocalBackground.approxOrderX = 1
 config.detection.tempWideBackground.approxOrderX = 1
+
+# Make sure galaxies are not used for zero-point calculation.
+config.photoCal.match.referenceSelection.doUnresolved = True
+config.photoCal.match.referenceSelection.unresolved.name = "resolved"
+config.photoCal.match.referenceSelection.unresolved.minimum = None
+config.photoCal.match.referenceSelection.unresolved.maximum = 0.5
+
+# S/N cuts for zero-point calculation source selection
+config.photoCal.match.sourceSelection.doSignalToNoise = True
+config.photoCal.match.sourceSelection.signalToNoise.minimum = 150
+config.photoCal.match.sourceSelection.signalToNoise.fluxField = "base_PsfFlux_instFlux"
+config.photoCal.match.sourceSelection.signalToNoise.errField = "base_PsfFlux_instFluxErr"
