@@ -67,7 +67,7 @@ if REFCAT_NAME == 'gaia':
         filtMap[filt.band] = 'phot_g_mean'
 
 else:  # Pan-STARRS:
-    # add a mag limit here - it's super slow without it
+    # TODO: add a mag limit here - it's super slow without it
     for filt in filts._filters:
         if len(filt.band) == 1:  # skip 'white' etc
             filtMap[filt.band] = filt.band
