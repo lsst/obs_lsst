@@ -26,9 +26,9 @@ import os.path
 
 ObsConfigDir = os.path.dirname(__file__)
 
+# this avoids having to either have the wrong filenames, or have stub files
+# which just load the other file, which we should to stop doing in Gen3.
 configMap = {'isr': 'isr',
-              # this avoids having to either have the wrong filename, or
-              # put weird things like this into Gen3
              'charImage': 'characterizeImage',
              'calibrate': 'calibrate'}
 
