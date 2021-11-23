@@ -19,7 +19,6 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
-
 """
 LSST Cam-specific overrides for CalibrateTask
 """
@@ -40,10 +39,10 @@ for refObjLoader in (config.astromRefObjLoader,
                      config.photoRefObjLoader,
                      ):
     refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
-    refObjLoader.ref_dataset_name = 'cal_ref_cat'
+#     refObjLoader.ref_dataset_name = 'cal_ref_cat'
 
-config.connections.astromRefCat = "cal_ref_cat"
-config.connections.photoRefCat = "cal_ref_cat"
+# config.connections.astromRefCat = "cal_ref_cat"
+# config.connections.photoRefCat = "cal_ref_cat"
 
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95

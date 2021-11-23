@@ -1,6 +1,105 @@
 description: DRP pipeline applicable to all cameras in obs_lsst
-imports:
-  - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
-    exclude:
-      - sourceTable
-      - objectTable
+instrument: lsst.obs.lsst.Latiss
+# imports:
+#   - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
+#     exclude:
+#       - sourceTable
+#       - objectTable
+tasks:
+  isr: 
+    class: lsst.ip.isr.IsrTask
+    config:
+      doDark: False
+      doFlat: False
+      doFringe: False
+      doDefect: True
+      doLinearize: False
+      doCrosstalk: False
+      doSaturationInterpolation: False
+      overscan.fitType: 'MEDIAN_PER_ROW'
+      doBias: True
+  characterizeImage:
+    class: lsst.pipe.tasks.characterizeImage.CharacterizeImageTask
+    config:
+      repair.doCosmicRay: False
+      doApCorr: False
+      doMeasurePsf: False
+      detection.includeThresholdMultiplier: 3
+      # python: |
+      #   from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
+
+      #   REFCAT_NAME = 'gaia'
+      #   # REFCAT_NAME = 'ps1'
+
+      #   if REFCAT_NAME == 'gaia':
+      #       REFCAT = "gaia_dr2_20200414"
+      #   else:
+      #       REFCAT = "ps1_pv3_3pi_20170110"
+
+      #   # for refObjLoader in (config.charImage.refObjLoader,
+      #   #                      config.calibrate.astromRefObjLoader,
+      #   #                      config.calibrate.photoRefObjLoader):
+      #   config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+      #   config.refObjLoader.ref_dataset_name = REFCAT
+
+      #   config.doDeblend = False
+
+  calibrate:
+    class: lsst.pipe.tasks.calibrate.CalibrateTask
+    # config:
+    #   python: |
+    #     import os
+    #     from lsst.utils import getPackageDir
+    #     from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
+    #     from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
+
+    #     REFCAT_NAME = 'gaia'
+    #     # REFCAT_NAME = 'ps1'
+
+    #     if REFCAT_NAME == 'gaia':
+    #         REFCAT = "gaia_dr2_20200414"
+    #         config.doPhotoCal = False
+    #     else:
+    #         REFCAT = "ps1_pv3_3pi_20170110"
+
+
+    #     # Reference catalog
+    #     # config.calibrate.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+    #     # config.calibrate.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filterMap.py"))
+
+    #     # config.calibrate.refObjLoader.ref_dataset_name="cal_ref_cat"
+    #     config.connections.astromRefCat = REFCAT
+    #     config.connections.photoRefCat = REFCAT
+
+    #     for refObjLoader in (
+    #                         config.astromRefObjLoader,
+    #                         config.photoRefObjLoader):
+    #         refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+    #         refObjLoader.ref_dataset_name = REFCAT
+
+    #     filtMap = {}
+    #     filts = LATISS_FILTER_DEFINITIONS
+    #     if REFCAT_NAME == 'gaia':
+    #         for filt in filts._filters:
+    #             filtMap[filt.band] = 'phot_g_mean'
+
+    #     else:  # Pan-STARRS:
+    #         # TODO: add a mag limit here - it's super slow without it
+    #         for filt in filts._filters:
+    #             if len(filt.band) == 1:  # skip 'white' etc
+    #                 filtMap[filt.band] = filt.band
+
+
+    #     config.astromRefObjLoader.filterMap = filtMap
+    #     config.photoRefObjLoader.filterMap = filtMap
+
+    #     config.doDeblend = False
+
+    #     ###########
+
+
+    #     config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
+
+    #     if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
+    #         # no deblending has been done
+    #         config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
