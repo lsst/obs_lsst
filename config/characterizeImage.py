@@ -43,7 +43,6 @@ config.measurePsf.starSelector["objectSize"].sourceFluxField = 'base_PsfFlux_ins
 
 # Astrometry
 config.refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
-# config.refObjLoader.ref_dataset_name = 'cal_ref_cat'
 
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
