@@ -12,12 +12,6 @@ if REFCAT_NAME == 'gaia':
 else:
     REFCAT = "ps1_pv3_3pi_20170110"
 
-
-# Reference catalog
-# config.calibrate.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
-# config.calibrate.refObjLoader.load(os.path.join(getPackageDir("obs_lsst"), "config", "filterMap.py"))
-
-# config.calibrate.refObjLoader.ref_dataset_name="cal_ref_cat"
 config.connections.astromRefCat = REFCAT
 config.connections.photoRefCat = REFCAT
 
