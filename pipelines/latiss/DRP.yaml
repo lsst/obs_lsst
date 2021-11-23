@@ -1,0 +1,4 @@
+description: DRP specialized for LATISS
+instrument: lsst.obs.lsst.Latiss
+imports:
+  - location: $OBS_LSST_DIR/pipelines/DRP.yaml

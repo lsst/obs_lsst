@@ -8,9 +8,6 @@ if REFCAT_NAME == 'gaia':
 else:
     REFCAT = "ps1_pv3_3pi_20170110"
 
-# for refObjLoader in (config.charImage.refObjLoader,
-#                      config.calibrate.astromRefObjLoader,
-#                      config.calibrate.photoRefObjLoader):
 config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.refObjLoader.ref_dataset_name = REFCAT
 

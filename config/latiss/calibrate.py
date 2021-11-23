@@ -21,8 +21,7 @@ else:
 config.connections.astromRefCat = REFCAT
 config.connections.photoRefCat = REFCAT
 
-for refObjLoader in (
-                     config.astromRefObjLoader,
+for refObjLoader in (config.astromRefObjLoader,
                      config.photoRefObjLoader):
     refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
     refObjLoader.ref_dataset_name = REFCAT
@@ -44,9 +43,6 @@ config.astromRefObjLoader.filterMap = filtMap
 config.photoRefObjLoader.filterMap = filtMap
 
 config.doDeblend = False
-
-###########
-
 
 config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
 
