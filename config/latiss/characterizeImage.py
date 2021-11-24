@@ -12,3 +12,6 @@ config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.refObjLoader.ref_dataset_name = REFCAT
 
 config.doDeblend = False
+
+config.measurePsf.psfDeterminer = 'pca'
+config.measurePsf.psfDeterminer['pca'].spatialOrder = 0
