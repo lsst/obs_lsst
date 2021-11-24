@@ -4,6 +4,10 @@ imports:
   # Inherits directly from pipe_tasks to avoid redefining sourceTable subset
   - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
   - $FARO_DIR/pipelines/metrics_pipeline.yaml
+    exclude:
+      - sourceTable
+      - objectTable
+
 tasks:
     isr:
         class: lsst.ip.isr.IsrTask
