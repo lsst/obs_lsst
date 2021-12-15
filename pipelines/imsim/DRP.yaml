@@ -28,6 +28,35 @@ tasks:
             match.refObjLoader.ref_dataset_name: 'cal_ref_cat_2_2'
             python: >
                 config.match.refObjLoader.filterMap = {band: 'lsst_%s_smeared' % (band) for band in 'ugrizy'};
+    matchObjectToTruth:
+        class: lsst.pipe.tasks.match_tract_catalog.MatchTractCatalogTask
+        config:
+            python: |
+                # Target settings are likely common to all object tables
+                from lsst.pipe.tasks.match_tract_catalog_probabilistic import MatchTractCatalogProbabilisticTask
+                config.match_tract_catalog.retarget(MatchTractCatalogProbabilisticTask)
+                config.match_tract_catalog.columns_ref_flux = [
+                    'flux_u', 'flux_g', 'flux_r',
+                    'flux_i', 'flux_z', 'flux_y',
+                ]
+                config.match_tract_catalog.columns_ref_meas = [
+                    'ra', 'dec',
+                    'flux_u', 'flux_g', 'flux_r',
+                    'flux_i', 'flux_z', 'flux_y',
+                ]
+                config.match_tract_catalog.columns_target_meas = [
+                    'x', 'y',
+                    'u_cModelFlux', 'g_cModelFlux', 'r_cModelFlux',
+                    'i_cModelFlux', 'z_cModelFlux', 'y_cModelFlux',
+                ]
+                config.match_tract_catalog.columns_target_err = [
+                    'xErr', 'yErr',
+                    'u_cModelFluxErr', 'g_cModelFluxErr', 'r_cModelFluxErr',
+                    'i_cModelFluxErr', 'z_cModelFluxErr', 'y_cModelFluxErr',
+                ]
+                config.match_tract_catalog.coords_ref_to_convert = {'ra': 'x', 'dec': 'y'}
+                # Might need adjusting for different survey depths
+                config.match_tract_catalog.mag_faintest_ref = 27.0;
 subsets:
     step1:
         subset:
@@ -76,6 +105,7 @@ subsets:
         - transformObjectTable
         - writeObjectTable
         - consolidateObjectTable
+        - matchObjectToTruth
         - healSparsePropertyMaps
         - selectGoodSeeingVisits
         - templateGen
