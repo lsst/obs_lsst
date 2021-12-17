@@ -1,0 +1,6 @@
+# The dates here glitched into the future so setting to
+# 1970 to trigger the fixup logic in the translator
+# as for previous seqnums taken on this day_obs
+DATE-OBS : '1970-01-01T00:00:01.000'
+DATE-BEG : '1970-01-01T00:00:01.000'
+DATE-END : '1970-01-01T00:00:01.000'
