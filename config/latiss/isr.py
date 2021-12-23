@@ -23,3 +23,4 @@
 latiss-specific overrides for IsrTask
 """
 config.doCrosstalk=False
+config.doDefect=True
