@@ -121,7 +121,6 @@ class LatissTranslator(LsstBaseTranslator):
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "science_program": "unknown",
         "relative_humidity": None,
         "pressure": None,
         "temperature": None,
@@ -133,6 +132,7 @@ class LatissTranslator(LsstBaseTranslator):
         "object": ("OBJECT", dict(checker=is_non_science_or_lab, default="UNKNOWN")),
         "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
                                                                  default=float("nan"), unit=u.deg)),
+        "science_program": ("PROGRAM", dict(default="unknown")),
     }
 
     DETECTOR_GROUP_NAME = _DETECTOR_GROUP_NAME
