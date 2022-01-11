@@ -117,9 +117,6 @@ class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
         coaddId = self.butler.get(idName, dataId={"tract": 9813, "patch": "3,4",
                                                   "filter": self.butler_get_data.filters["raw"]})
         self.assertIsInstance(coaddId, int)
-        maxbits = self.butler.get(f"{idName}_bits")
-        self.assertLess(maxbits, 64)
-        self.assertLess(coaddId.bit_length(), maxbits, f"compare bit length for {idName}")
 
         # Check failure modes
         with self.assertRaises(RuntimeError):

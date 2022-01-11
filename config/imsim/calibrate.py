@@ -30,10 +30,6 @@ config.astrometry.referenceSelector.unresolved.name = "resolved"
 config.astrometry.referenceSelector.unresolved.minimum = None
 config.astrometry.referenceSelector.unresolved.maximum = 0.5
 
-configDir = os.path.dirname(__file__)
-config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-
 config.astrometry.doMagnitudeOutlierRejection = True
 # Set threshold above which astrometry will be considered a failure (DM-32129)
 config.astrometry.maxMeanDistanceArcsec = 0.05
