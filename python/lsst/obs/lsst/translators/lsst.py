@@ -496,10 +496,11 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_observation_reason(self):
         # Docstring will be inherited. Property defined in properties.py
-        if self.is_key_ok("TESTTYPE"):
-            reason = self._header["TESTTYPE"]
-            self._used_these_cards("TESTTYPE")
-            return reason.lower()
+        for key in ("REASON", "TESTTYPE"):
+            if self.is_key_ok(key):
+                reason = self._header[key]
+                self._used_these_cards(key)
+                return reason.lower()
         # no specific header present so use the default translation
         return super().to_observation_reason()
 
