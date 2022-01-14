@@ -4,38 +4,27 @@ from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask, MagnitudeLimit
 from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 from lsst.meas.astrom import FitAffineWcsTask
 
-REFCAT_NAME = 'gaia'
-# REFCAT_NAME = 'ps1'
+ASTROM_REFCAT_NAME = 'gaia_dr2_20200414'
+PHOTO_REFCAT_NAME = 'ps1_pv3_3pi_20170110'
 
-if REFCAT_NAME == 'gaia':
-    REFCAT = "gaia_dr2_20200414"
-    config.doPhotoCal = False
-else:
-    REFCAT = "ps1_pv3_3pi_20170110"
+config.connections.astromRefCat = ASTROM_REFCAT_NAME
+config.astromRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+config.astromRefObjLoader.ref_dataset_name = ASTROM_REFCAT_NAME
 
-config.connections.astromRefCat = REFCAT
-config.connections.photoRefCat = REFCAT
+config.connections.photoRefCat = PHOTO_REFCAT_NAME
+config.photoRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+config.photoRefObjLoader.ref_dataset_name = PHOTO_REFCAT_NAME
 
-for refObjLoader in (config.astromRefObjLoader,
-                     config.photoRefObjLoader):
-    refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
-    refObjLoader.ref_dataset_name = REFCAT
-
-filtMap = {}
+gaiaFiltMap = {}
+psFiltMap = {}
 filts = LATISS_FILTER_DEFINITIONS
-if REFCAT_NAME == 'gaia':
-    for filt in filts._filters:
-        filtMap[filt.band] = 'phot_g_mean'
+for filt in filts._filters:
+    gaiaFiltMap[filt.band] = 'phot_g_mean'
+    if len(filt.band) == 1:  # skip 'white' etc
+        psFiltMap[filt.band] = filt.band
 
-else:  # Pan-STARRS:
-    # TODO: add a mag limit here - it's super slow without it
-    for filt in filts._filters:
-        if len(filt.band) == 1:  # skip 'white' etc
-            filtMap[filt.band] = filt.band
-
-
-config.astromRefObjLoader.filterMap = filtMap
-config.photoRefObjLoader.filterMap = filtMap
+config.astromRefObjLoader.filterMap = gaiaFiltMap
+config.photoRefObjLoader.filterMap = psFiltMap
 
 config.doDeblend = False
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
@@ -44,7 +33,7 @@ if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
 
 config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
 
-####### new today
+
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
 # should these ever differ, or should we tie them together like this?
