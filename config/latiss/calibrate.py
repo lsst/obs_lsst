@@ -10,20 +10,19 @@ PHOTO_REFCAT_NAME = 'ps1_pv3_3pi_20170110'
 config.connections.astromRefCat = ASTROM_REFCAT_NAME
 config.astromRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.astromRefObjLoader.ref_dataset_name = ASTROM_REFCAT_NAME
+config.astromRefObjLoader.anyFilterMapsToThis = 'phot_g_mean'
+config.astromRefObjLoader.filterMap = {}  # TODO: remove after DM-33270
 
 config.connections.photoRefCat = PHOTO_REFCAT_NAME
 config.photoRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.photoRefObjLoader.ref_dataset_name = PHOTO_REFCAT_NAME
 
-gaiaFiltMap = {}
 psFiltMap = {}
 filts = LATISS_FILTER_DEFINITIONS
 for filt in filts._filters:
-    gaiaFiltMap[filt.band] = 'phot_g_mean'
     if len(filt.band) == 1:  # skip 'white' etc
         psFiltMap[filt.band] = filt.band
 
-config.astromRefObjLoader.filterMap = gaiaFiltMap
 config.photoRefObjLoader.filterMap = psFiltMap
 
 config.doDeblend = False
