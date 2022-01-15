@@ -29,4 +29,3 @@ import os.path
 config.processCcd.load(os.path.join(os.path.dirname(__file__), "processCcd.py"))
 config.doMakeSourceTable = True
 config.doSaveWideSourceTable = True
-config.transformSourceTable.load(os.path.join(os.path.dirname(__file__), "transformSourceTable.py"))
