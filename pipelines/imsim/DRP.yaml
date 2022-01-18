@@ -1,9 +1,9 @@
 description: DRP specialized for LSSTImSim
 instrument: lsst.obs.lsst.LsstCamImSim
 imports:
-  # Inherits directly from pipe_tasks to avoid redefining sourceTable subset
-  - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
-  - $FARO_DIR/pipelines/metrics_pipeline.yaml
+    # Inherits directly from pipe_tasks to avoid redefining sourceTable subset
+    - location: $PIPE_TASKS_DIR/pipelines/DRP.yaml
+    - $FARO_DIR/pipelines/metrics_pipeline.yaml
 tasks:
     isr:
         class: lsst.ip.isr.IsrTask
@@ -60,11 +60,11 @@ tasks:
 subsets:
     step1:
         subset:
-        - isr
-        - characterizeImage
-        - calibrate
-        - writeSourceTable
-        - transformSourceTable
+            - isr
+            - characterizeImage
+            - calibrate
+            - writeSourceTable
+            - transformSourceTable
         description: >
             Per-detector tasks that can be run together to start the DRP pipeline.
 
@@ -77,11 +77,11 @@ subsets:
             failures before continuing on to step2.
     step2:
         subset:
-        - consolidateSourceTable
-        - consolidateVisitSummary
-        - nsrcMeasVisit
-        - TE3
-        - TE4
+            - consolidateSourceTable
+            - consolidateVisitSummary
+            - nsrcMeasVisit
+            - TE3
+            - TE4
         description: >
             Per-visit tasks that can be run together, but only after the 'step1'.
 
@@ -94,48 +94,48 @@ subsets:
             functionality.  It may be removed in the future.
     step3:
         subset:
-        - makeWarp
-        - assembleCoadd
-        - detection
-        - mergeDetections
-        - deblend
-        - measure
-        - mergeMeasurements
-        - forcedPhotCoadd
-        - transformObjectTable
-        - writeObjectTable
-        - consolidateObjectTable
-        - matchObjectToTruth
-        - healSparsePropertyMaps
-        - selectGoodSeeingVisits
-        - templateGen
-        - matchCatalogsTract
-        - matchCatalogsPatch
-        - matchCatalogsPatchMultiBand
-        - PA1
-        - PF1_design
-        - AM1
-        - AM2
-        - AM3
-        - AD1_design
-        - AD2_design
-        - AD3_design
-        - AF1_design
-        - AF2_design
-        - AF3_design
-        - AB1
-        - modelPhotRepGal1
-        - modelPhotRepGal2
-        - modelPhotRepGal3
-        - modelPhotRepGal4
-        - modelPhotRepStar1
-        - modelPhotRepStar2
-        - modelPhotRepStar3
-        - modelPhotRepStar4
-        - psfPhotRepStar1
-        - psfPhotRepStar2
-        - psfPhotRepStar3
-        - psfPhotRepStar4
+            - makeWarp
+            - assembleCoadd
+            - detection
+            - mergeDetections
+            - deblend
+            - measure
+            - mergeMeasurements
+            - forcedPhotCoadd
+            - transformObjectTable
+            - writeObjectTable
+            - consolidateObjectTable
+            - matchObjectToTruth
+            - healSparsePropertyMaps
+            - selectGoodSeeingVisits
+            - templateGen
+            - matchCatalogsTract
+            - matchCatalogsPatch
+            - matchCatalogsPatchMultiBand
+            - PA1
+            - PF1_design
+            - AM1
+            - AM2
+            - AM3
+            - AD1_design
+            - AD2_design
+            - AD3_design
+            - AF1_design
+            - AF2_design
+            - AF3_design
+            - AB1
+            - modelPhotRepGal1
+            - modelPhotRepGal2
+            - modelPhotRepGal3
+            - modelPhotRepGal4
+            - modelPhotRepStar1
+            - modelPhotRepStar2
+            - modelPhotRepStar3
+            - modelPhotRepStar4
+            - psfPhotRepStar1
+            - psfPhotRepStar2
+            - psfPhotRepStar3
+            - psfPhotRepStar4
         description: >
             Tasks that can be run together, but only after the 'step1' and 'step2'
             subsets.
@@ -154,12 +154,12 @@ subsets:
             functionality.  It may be removed in the future.
     step4:
         subset:
-        - forcedPhotCcd
-        - forcedPhotDiffim
-        - getTemplate
-        - imageDifference
-        - transformDiaSourceCat
-        - writeForcedSourceTable
+            - forcedPhotCcd
+            - forcedPhotDiffim
+            - getTemplate
+            - imageDifference
+            - transformDiaSourceCat
+            - writeForcedSourceTable
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2'
             and 'step3' subsets
@@ -170,20 +170,20 @@ subsets:
             detector-level quanta are desired.
     step5:
         subset:
-        - drpAssociation
-        - drpDiaCalculation
-        - forcedPhotCcdOnDiaObjects
-        - forcedPhotDiffOnDiaObjects
-        - transformForcedSourceTable
-        - consolidateForcedSourceTable
-        - consolidateAssocDiaSourceTable
-        - consolidateFullDiaObjectTable
-        - writeForcedSourceOnDiaObjectTable
-        - transformForcedSourceOnDiaObjectTable
-        - consolidateForcedSourceOnDiaObjectTable
-        - TE1
-        - TE2
-        - wPerp
+            - drpAssociation
+            - drpDiaCalculation
+            - forcedPhotCcdOnDiaObjects
+            - forcedPhotDiffOnDiaObjects
+            - transformForcedSourceTable
+            - consolidateForcedSourceTable
+            - consolidateAssocDiaSourceTable
+            - consolidateFullDiaObjectTable
+            - writeForcedSourceOnDiaObjectTable
+            - transformForcedSourceOnDiaObjectTable
+            - consolidateForcedSourceOnDiaObjectTable
+            - TE1
+            - TE2
+            - wPerp
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2',
             'step3', and 'step4' subsets
@@ -195,7 +195,7 @@ subsets:
             patches and should be rerun if any of the patches fail.
     step6:
         subset:
-        - consolidateDiaSourceTable
+            - consolidateDiaSourceTable
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2',
             'step3', and 'step4' subsets
@@ -211,9 +211,9 @@ subsets:
             one or more of the expected inputs is missing.
     step7:
         subset:
-        - makeCcdVisitTable
-        - makeVisitTable
-        - consolidateHealSparsePropertyMaps
+            - makeCcdVisitTable
+            - makeVisitTable
+            - consolidateHealSparsePropertyMaps
         description: >
             Tasks that should be run as the final step that require global
             inputs, and can be run after the 'step3' subset.
