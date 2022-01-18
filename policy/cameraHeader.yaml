@@ -33,7 +33,7 @@ name : "LSSTCam"
 #
 AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a CCD has not been checked
                                         # in detail (e.g. off by one errors)
-    perAmpData : True                   # data is provided independently for each amplifier
+    perAmpData : true                   # data is provided independently for each amplifier
     # trimmed
     dataExtent : [512, 2002]
     readCorner : LL
@@ -63,7 +63,7 @@ AMP_E2V : &AMP_E2V                      # N.b. the assembly of E2V amps into a C
     linearityCoeffs : [0, 142857]        # == [linearityThreshold, linearityMax]
 
 AMP_ITL : &AMP_ITL
-    perAmpData : True                   # data is provided independentally for each amplifier
+    perAmpData : true                   # data is provided independentally for each amplifier
     # trimmed
     readCorner : LL
 
@@ -95,7 +95,7 @@ CCD_E2V : &CCD_E2V
     bbox : [[0, 0], [4095, 4003]]
     pixelSize : [0.010, 0.010]          # in mm
     transformDict : {nativeSys : 'Pixels', transforms : None}
-    transposeDetector : False
+    transposeDetector : false
     pitch : 0.0                         # (degrees)
     yaw : 0.0                           # rotation in plane of camera (degrees)
     roll : 0.0                          # (degrees)
@@ -176,7 +176,7 @@ CCD_ITL : &CCD_ITL
     bbox : [[0, 0], [4071, 3999]]
     pixelSize : [0.010, 0.010]          # in mm
     transformDict : {nativeSys : 'Pixels', transforms : None}
-    transposeDetector : False
+    transposeDetector : false
     pitch : 0.0                         # (degrees)
     yaw : 0.0                           # rotation in plane of camera (degrees)
     roll : 0.0                          # (degrees)
@@ -477,7 +477,7 @@ CCD_E2V_UCD : &CCD_E2V_UCD
     bbox : [[0, 0], [4095, 4003]]
     pixelSize : [0.010, 0.010]          # in mm
     transformDict : {nativeSys : 'Pixels', transforms : None}
-    transposeDetector : False
+    transposeDetector : false
     pitch : 0.0                         # (degrees)
     yaw : 0.0                           # rotation in plane of camera (degrees)
     roll : 0.0                          # (degrees)
@@ -558,7 +558,7 @@ CCD_ITL_UCD : &CCD_ITL_UCD
     bbox : [[0, 0], [4071, 3999]]
     pixelSize : [0.010, 0.010]          # in mm
     transformDict : {nativeSys : 'Pixels', transforms : None}
-    transposeDetector : False
+    transposeDetector : false
     pitch : 0.0                         # (degrees)
     yaw : 0.0                           # rotation in plane of camera (degrees)
     roll : 0.0                          # (degrees)
