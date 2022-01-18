@@ -9,8 +9,8 @@ tasks:
         class: lsst.ip.isr.IsrTask
         config:
             connections.newBFKernel: bfk
-            doDefect: False
-            doBrighterFatter: True
+            doDefect: false
+            doBrighterFatter: true
     calibrate:
         class: lsst.pipe.tasks.calibrate.CalibrateTask
         config:
