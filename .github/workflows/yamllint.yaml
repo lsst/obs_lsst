@@ -21,4 +21,4 @@ jobs:
         run: pip install yamllint
 
       - name: Run linter
-        run: yamllint .
+        run: yamllint corrections tests pipelines
