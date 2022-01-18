@@ -115,4 +115,3 @@
 - [DATASEC, String, '[4:512,1:2000]', '']
 - [DETSEC, String, '[509:1,1:2000]', '']
 - [GAIN, Double, 1.7, '']
-

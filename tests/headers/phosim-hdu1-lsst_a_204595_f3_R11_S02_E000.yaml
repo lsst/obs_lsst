@@ -11,7 +11,7 @@
 - - COMMENT
   - String
   - ['  FITS (Flexible Image Transport System) format is defined in ''Astronomy',
-    '  and Astrophysics'', volume 376, page 359; bibcode: 2001A&A...376..359H']
+     '  and Astrophysics'', volume 376, page 359; bibcode: 2001A&A...376..359H']
   - ''
 - [CTYPE1, String, RA---TAN, '']
 - [CRPIX1, Double, -9990.0, '']
@@ -40,10 +40,8 @@
 - [MJD-OBS, Double, 59857.286937, Modified Julian date (also TAI)]
 - [OUTPDIR, String, ., Output directory]
 - [OUTFILE, String, lsst_e_204595_f3_R11_S02_E000, Output filename]
-- [SEDDIR, String, /global/cscratch1/sd/descpho/Pipeline-tasks/DC2-R1-2p-WFD-i/000057/S,
-  '']
-- [IMGDIR, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9/data/i,
-  '']
+- [SEDDIR, String, /global/cscratch1/sd/descpho/Pipeline-tasks/DC2-R1-2p-WFD-i/000057/S, '']
+- [IMGDIR, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9/data/i, '']
 - [BACMODE, Int, 1, Background mode (0=off/1=on)]
 - [TELMODE, Int, 1, Telescope mode (0=off/1=on)]
 - [TRKMODE, Int, 1, Tracking mode (0=off/1=on)]
@@ -617,8 +615,7 @@
 - [PIXSIZE, Double, 10.0, Pixel Size (microns)]
 - [CHIPID, String, R11_S02, Chip/Amplifier ID]
 - [PAIRID, Int, 0, Pair ID]
-- [FPFILE, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9/data/l,
-  '']
+- [FPFILE, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9/data/l, '']
 - [CENTX, Double, -169250.0, Chip center x (microns)]
 - [CENTY, Double, -84750.0, Chip center y (microns)]
 - [PIXX, Int, 4000, Chip x pixels]
@@ -640,8 +637,7 @@
 - [TRY0, Double, -1000.009, Tree ring center]
 - [CREATOR, String, PHOSIM, '']
 - [VERSION, String, none, '']
-- [BRANCH, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9,
-  '']
+- [BRANCH, String, /global/common/software/lsst/cori-haswell-intel/phosim/v3.7.9, '']
 - [DATE, String, '2018-04-16T12:24:21', 'file creation date (YYYY-MM-DDThh:mm:ss UT)']
 - [BIAS, Double, 1007.7, Bias]
 - [GAIN, Double, 1.70316, Gain]
@@ -683,4 +679,3 @@
 - [DATASEC, String, '[4:512,1:2000]', Data section of amplifier]
 - [EXTNAME, String, Segment10, '']
 - [DETSEC, String, '[509:1,1:2000]', '']
-
