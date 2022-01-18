@@ -37,8 +37,7 @@
 - [MONOWL, Double, 700.03, Monochromator wavelength (nm)]
 - [EXPTIME, Double, 21.913, Exposure Time in Seconds]
 - [SHUT_DEL, Double, 0.0, Delay between shutter close command and readout (msec)]
-- [FILENAME, String, E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845.fits,
-  Orig]
+- [FILENAME, String, E2V-CCD250-200-Dev_lambda_flat_0700_6006D_20180724102845.fits, Orig]
 - [BINX, Int, 1, '[pixels] binning along X axis']
 - [BINY, Int, 1, '[pixels] binning along Y axis']
 - - HEADVER
@@ -168,4 +167,3 @@
 - [CRVAL2Q, Double, 4128.0, '']
 - [BSCALE, Double, 1.0, '']
 - [BZERO, Double, 0.0, '']
-
