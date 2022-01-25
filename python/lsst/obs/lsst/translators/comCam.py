@@ -137,3 +137,19 @@ class LsstComCamTranslator(LsstCamTranslator):
             modified = True
 
         return modified
+
+    def _is_on_mountain(self):
+        """Indicate whether these data are coming from the instrument
+        installed on the mountain.
+        Returns
+        -------
+        is : `bool`
+            `True` if instrument is on the mountain.
+
+        Notes
+        -----
+        TODO: DM-33387 This is currently a terrible hack and MUST be removed
+        once CAP-807 and CAP-808 are done.
+        Until then, ALL non-calib ComCam data will look like it is on sky.
+        """
+        return True
