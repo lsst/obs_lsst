@@ -5,7 +5,7 @@ from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 from lsst.meas.astrom import FitAffineWcsTask
 
 ASTROM_REFCAT_NAME = 'gaia_dr2_20200414'
-PHOTO_REFCAT_NAME = 'ps1_pv3_3pi_20170110'
+PHOTO_REFCAT_NAME = 'gaia_dr2_20200414'
 
 config.connections.astromRefCat = ASTROM_REFCAT_NAME
 config.astromRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
