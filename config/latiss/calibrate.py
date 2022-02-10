@@ -52,4 +52,4 @@ config.astrometry.referenceSelector.magLimit.fluxField = "phot_g_mean_flux"
 config.astrometry.matcher.maxRotationDeg = 5.99
 config.astrometry.sourceSelector['matcher'].minSnr = 10
 
-doWriteMatchesDenormalized = True
+config.doWriteMatchesDenormalized = True
