@@ -24,14 +24,17 @@ for filt in filts._filters:
         psFiltMap[filt.band] = filt.band
 
 config.photoRefObjLoader.filterMap = psFiltMap
+config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
+
+if 'gaia' in PHOTO_REFCAT_NAME:
+    config.photoRefObjLoader.anyFilterMapsToThis = 'phot_g_mean'
+    config.photoRefObjLoader.filterMap = {}  # TODO: remove after DM-33270
+    config.photoCal.match.referenceSelection.magLimit.fluxField = "phot_g_mean_flux"
 
 config.doDeblend = False
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done
     config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
-
-config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
-
 
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
