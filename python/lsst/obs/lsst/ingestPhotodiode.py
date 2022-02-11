@@ -18,27 +18,24 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import os
 import tempfile
-# from multiprocessing import Pool
 
 from lsst.daf.butler import (
     CollectionType,
     DataCoordinate,
-    #    DatasetIdGenEnum,
+    DatasetIdGenEnum,
     DatasetRef,
     DatasetType,
     FileDataset,
     Progress,
 )
-
-from lsst.pex.config import Config, Field
-from lsst.pipe.base import Task
-from lsst.resources import ResourcePath
-# from lsst.utils.timer import timeMethod
-
 from lsst.ip.isr import PhotodiodeCalib
 from lsst.obs.base import Instrument, makeTransferChoiceField
 from lsst.obs.base.formatters.fitsGeneric import FitsGenericFormatter
+from lsst.pex.config import Config, Field
+from lsst.pipe.base import Task
+from lsst.resources import ResourcePath
 
 
 __all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask')
@@ -63,9 +60,12 @@ class PhotodiodeIngestTask(Task):
     ----------
     config : `PhotodiodeIngestConfig`
         Configuration for the task.
+    instrument : `~lsst.obs.base.Instrument`
+        The instrument these photodiode datasets are from.
     butler : `~lsst.daf.butler.Butler`
-        Writable butler instance, with ``butler.run`` set to the appropriate
-        `~lsst.daf.butler.CollectionType.RUN` collection for these datasets.
+        Writable butler instance, with ``butler.run`` set to the
+        appropriate `~lsst.daf.butler.CollectionType.RUN` collection
+        for these datasets.
     **kwargs
         Additional keyword arguments.
     """
@@ -91,19 +91,9 @@ class PhotodiodeIngestTask(Task):
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
-    def run(self, locations, run=None, processes=1, file_filter=r".*Photodiode_Readings.*txt",
+    def run(self, locations, run=None, file_filter=r".*Photodiode_Readings.*txt",
             track_file_attrs=None):
-        """Docs.
-        """
-        files = ResourcePath.findFileResources(locations, file_filter)
-
-        return self.ingestPhotodiodeFiles(files)
-
-    def ingestPhotodiodeFiles(self, files, *, pool=None, processes=1, run=None,
-                              skip_existing_exposures=False, track_file_attrs=True):
-        """Ingest files into a Butler data repository.
-
-        CZW: Doc
+        """Ingest photodiode data into a Butler data repository.
 
         Parameters
         ----------
@@ -133,19 +123,29 @@ class PhotodiodeIngestTask(Task):
         -------
         refs : `list` [`lsst.daf.butler.DatasetRef`]
             Dataset references for ingested raws.
+
+        Raises
+        ------
+        RuntimeError :
+            Raised if multiple exposures are found for a photodiode file.
         """
+        files = ResourcePath.findFileResources(locations, file_filter)
+
         registry = self.butler.registry
         registry.registerDatasetType(self.datasetType)
 
+        # Find and register run that we will ingest to.
         if run is None:
             run = self.instrument.makeCollectionName("calib", "photodiode")
-        # if run not in runs:
         registry.registerCollection(run, type=CollectionType.RUN)
-        #    runs.add(run)
 
-        # We need to write the files to disk for ingest.
+        # Use datasetIds that match the raw exposure data.
+        if self.butler.registry.supportsIdGenerationMode(DatasetIdGenEnum.DATAID_TYPE_RUN):
+            mode = DatasetIdGenEnum.DATAID_TYPE_RUN
+        else:
+            mode = DatasetIdGenEnum.UNIQUE
 
-        datasets = []
+        refs = []
         for inputFile in files:
             # Convert the file into the right class.
             if inputFile.isLocal:
@@ -157,17 +157,42 @@ class PhotodiodeIngestTask(Task):
 
             # Find the associated exposure information.
             whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
-            exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure", instrument=self.instrument.getName(),
+            instrumentName = self.instrument.getName()
+            exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
+                                                                             instrument=instrumentName,
                                                                              where=whereClause,
-                                                                             bind={"dayObs": dayObs, "seqNum": seqNum})]
+                                                                             bind={"dayObs": dayObs,
+                                                                                   "seqNum": seqNum})]
 
             nRecords = len(exposureRecords)
             if nRecords == 1:
                 exposureId = exposureRecords[0].id
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
+            elif nRecords == 0:
+                self.log.warn("Skipping instrument %s and dayObs/seqNum %d %d: no exposures found.",
+                              instrumentName, dayObs, seqNum)
+                continue
             else:
-                # This is a failure.  Do something here.
-                print("whoops")
+                raise RuntimeError("Multiple exposure entries found for instrument %s and "
+                                   "dayObs/seqNum %d %d.", instrumentName, dayObs, seqNum)
+
+            # Generate the dataId for this file.
+            dataId = DataCoordinate.standardize(
+                instrument=self.instrument.getName(),
+                exposure=exposureId,
+                universe=self.universe,
+            )
+
+            # If this already exists, we should skip it and continue.
+            existing = {
+                ref.dataId
+                for ref in self.butler.registry.queryDatasets(self.datasetType, collections=[run],
+                                                              dataId=dataId)
+            }
+            if existing:
+                self.log.warn("Skipping instrument %s and dayObs/seqNum %d %d: already exists in run %s.",
+                              instrumentName, dayObs, seqNum, run)
+                continue
 
             # Ingest must work from a file, but we can't use the
             # original, as we've added new metadata and reformatted
@@ -175,27 +200,16 @@ class PhotodiodeIngestTask(Task):
             tempFile = tempfile.mktemp() + ".fits"
             calib.writeFits(tempFile)
 
-            dataId = DataCoordinate.standardize(
-                instrument=self.instrument.getName(),
-                exposure=exposureId,
-                universe=self.universe,
-            )
-
-            # does it exist?
-            existing = {
-                ref.dataId
-                for ref in self.butler.registry.queryDatasets(self.datasetType, collections=[run],
-                                                              dataId=dataId)
-            }
-            if existing:
-                print(existing)
-
             ref = DatasetRef(self.datasetType, dataId)
+            dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
 
-            datasets.append(FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter))
+            # No try, as if this fails, we should stop.
+            self.butler.ingest(dataset, transfer=self.config.transfer, run=run,
+                               idGenerationMode=mode,
+                               record_validation_info=track_file_attrs)
+            self.log.info("Photodiode %s:%d (%d/%d) ingested successfully", instrumentName, exposureId,
+                          dayObs, seqNum)
+            os.unlink(tempFile)
+            refs.append(dataset)
 
-        import pdb; pdb.set_trace()
-        results = self.butler.ingest(*datasets, transfer=self.config.transfer, run=run,
-                                     # idGenerationMode=mode,
-                                     record_validation_info=track_file_attrs)
-        return results
+        return refs

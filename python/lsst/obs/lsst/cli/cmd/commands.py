@@ -23,13 +23,12 @@ import click
 from lsst.daf.butler.cli.opt import (
     config_option,
     config_file_option,
+    locations_argument,
     options_file_option,
     repo_argument,
     regex_option,
     run_option,
     transfer_option,
-    processes_option,
-    locations_argument,
 )
 from lsst.obs.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
@@ -47,7 +46,6 @@ from ... import script
 @config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
 @run_option(required=False)
 @transfer_option()
-@processes_option()
 @click.option(
     "--track-file-attrs/--no-track-file-attrs",
     default=True,

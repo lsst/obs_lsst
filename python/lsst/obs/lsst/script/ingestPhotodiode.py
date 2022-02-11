@@ -25,7 +25,7 @@ from .. import PhotodiodeIngestTask, PhotodiodeIngestConfig
 
 
 def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None, config_file=None,
-                     transfer="auto", processes=1, track_file_attrs=True):
+                     transfer="copy", track_file_attrs=True):
     """Ingests photodiode data into the butler registry.
 
     Parameters
@@ -46,13 +46,7 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
     config_file : `str` or `None`
         Path to a config file that contains overrides to the ingest config.
     transfer : `str` or None
-        The external data transfer type, by default "auto".
-    processes : `int`
-        Number of processes to use for ingest.
-        track_file_attrs : `bool`, optional
-        Control whether file attributes such as the size or checksum should
-        be tracked by the datastore. Whether this parameter is honored
-        depends on the specific datastore implentation.
+        The external data transfer type, by default "copy".
     track_file_attrs : `bool`, optional
         Control whether file attributes such as the size or checksum should
         be tracked by the datastore. Whether this parameter is honored
@@ -75,6 +69,7 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
         for name, value in config.items():
             configOverrides.addValueOverride(name, value)
     configOverrides.applyTo(config)
+
     task = PhotodiodeIngestTask(butler=butler, instrument=instr, config=config)
-    task.run(locations, run=output_run, processes=processes, file_filter=regex,
+    task.run(locations, run=output_run, file_filter=regex,
              track_file_attrs=track_file_attrs)
