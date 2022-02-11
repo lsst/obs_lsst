@@ -2,7 +2,7 @@
 #
 # Developed for the LSST Data Management System.
 # This product includes software developed by the LSST Project
-# (http://www.lsst.org).
+# (https://www.lsst.org).
 # See the COPYRIGHT file at the top-level directory of this distribution
 # for details of code ownership.
 #
@@ -16,13 +16,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# You should have received a copy of the LSST License Statement and
-# the GNU General Public License along with this program.  If not,
-# see <http://www.lsstcorp.org/LegalNotices/>.
-#
-from .version import *
-from .lsstCamMapper import *
-from .filters import *
-from ._instrument import *
-from ._fitsHeader import *
-from .ingestPhotodiode import *
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from .commands import (
+    ingest_photodiode,
+)
+

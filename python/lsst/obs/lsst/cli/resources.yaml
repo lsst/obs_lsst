@@ -1,0 +1,4 @@
+cmd:
+  import: lsst.obs.lsst.cli.cmd
+  commands:
+    - ingest-photodiode
