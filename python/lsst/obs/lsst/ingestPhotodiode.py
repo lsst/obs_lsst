@@ -31,9 +31,9 @@ from lsst.daf.butler import (
     Progress,
 )
 from lsst.ip.isr import PhotodiodeCalib
-from lsst.obs.base import Instrument, makeTransferChoiceField
+from lsst.obs.base import makeTransferChoiceField
 from lsst.obs.base.formatters.fitsGeneric import FitsGenericFormatter
-from lsst.pex.config import Config, Field
+from lsst.pex.config import Config
 from lsst.pipe.base import Task
 from lsst.resources import ResourcePath
 
@@ -45,12 +45,6 @@ class PhotodiodeIngestConfig(Config):
     """Configuration class for PhotodiodeIngestTask."""
 
     transfer = makeTransferChoiceField()
-    failFast = Field(
-        dtype=bool,
-        default=False,
-        doc="If True, stop ingest as soon as any problem is encountered with any file. "
-        "Otherwise problem files will be skipped and logged and a report issued at completion.",
-    )
 
 
 class PhotodiodeIngestTask(Task):

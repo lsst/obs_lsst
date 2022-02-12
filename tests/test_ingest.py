@@ -29,6 +29,8 @@ import lsst.utils.tests
 from lsst.afw.math import flipImage
 from lsst.afw.cameraGeom import AmplifierGeometryComparison
 from lsst.daf.butler import Butler
+from lsst.daf.butler.cli.butler import cli as butlerCli
+from lsst.daf.butler.cli.utils import LogCliRunner
 from lsst.obs.base.ingest_tests import IngestTestBase
 import lsst.afw.cameraGeom.testUtils  # for injected test asserts
 import lsst.obs.lsst
@@ -125,6 +127,34 @@ class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
                         "3019031900001", "3019031900001-R10-S02-det029.fits")
     dataIds = [dict(instrument="LSSTCam", exposure=3019031900001, detector=29)]
     filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
+
+
+class LSSTCamPhotodiodeIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+
+    curatedCalibrationDatasetTypes = ("camera",)
+    instrumentClassName = "lsst.obs.lsst.LsstCam"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "lsstCam", "raw", "2021-12-12",
+                        "30211212000310", "30211212000310-R22-S22-det098.fits")
+    dataIds = [dict(instrument="LSSTCam", exposure=3021121200310, detector=98)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="SDSSi", band="i")
+    pdPath = os.path.join(DATAROOT, "lsstCam", "raw", "2021-12-12",
+                          "30211212000310")
+
+    def testPhotodiode(self, pdPath=None):
+        if pdPath is None:
+            pdPath = self.pdPath
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-photodiode",
+                self.root,
+                self.instrumentClassName,
+                pdPath,
+            ],
+        )
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
 
 
 def setup_module(module):
