@@ -18,8 +18,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import os
-import tempfile
+__all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask')
+
 
 from lsst.daf.butler import (
     CollectionType,
@@ -38,13 +38,15 @@ from lsst.pipe.base import Task
 from lsst.resources import ResourcePath
 
 
-__all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask')
-
-
 class PhotodiodeIngestConfig(Config):
     """Configuration class for PhotodiodeIngestTask."""
 
-    transfer = makeTransferChoiceField()
+    transfer = makeTransferChoiceField(default="copy")
+
+    def validate(self):
+        super().validate()
+        if self.transfer != "copy":
+            raise ValueError(f"Transfer Must be 'copy' for photodiode data. {self.transfer}")
 
 
 class PhotodiodeIngestTask(Task):
@@ -77,11 +79,12 @@ class PhotodiodeIngestTask(Task):
         )
 
     def __init__(self, butler, instrument, config=None, **kwargs):
+        config.validate()
         super().__init__(config, **kwargs)
         self.butler = butler
         self.universe = self.butler.registry.dimensions
         self.datasetType = self.getDatasetType()
-        self.progress = Progress("obs.lsst.PhotodiodeIngestTask")
+        self.progress = Progress(self.log.name)
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
@@ -93,15 +96,10 @@ class PhotodiodeIngestTask(Task):
         ----------
         files : iterable over `lsst.resources.ResourcePath`
             URIs to the files to be ingested.
-        pool : `multiprocessing.Pool` optional
-            If not `None`, a process pool with which to
-            parallelize some operations.
-        processes : `int`, optional
-            The number of processes to use.  Ignored if ``pool`` is `None`.
         run : `str`, optional
             Name of the RUN-type collection to write to,
             overriding the default derived from the instrument
-            name
+            name.
         skip_existing_exposures : `bool`, optional
             If `True`, skip photodiodes that have already been
             ingested (i.e. raws for which we already have a
@@ -140,12 +138,12 @@ class PhotodiodeIngestTask(Task):
             mode = DatasetIdGenEnum.UNIQUE
 
         refs = []
+        numExisting = 0
         for inputFile in files:
             # Convert the file into the right class.
-            if inputFile.isLocal:
-                calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(inputFile.path)
-            else:
-                print("Non-local file.")
+            with inputFile.as_local() as localFile:
+                calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.path)
+
             dayObs = calib.getMetadata()['day_obs']
             seqNum = calib.getMetadata()['seq_num']
 
@@ -163,12 +161,12 @@ class PhotodiodeIngestTask(Task):
                 exposureId = exposureRecords[0].id
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
             elif nRecords == 0:
-                self.log.warn("Skipping instrument %s and dayObs/seqNum %d %d: no exposures found.",
-                              instrumentName, dayObs, seqNum)
+                self.log.warning("Skipping instrument %s and dayObs/seqNum %d %d: no exposures found.",
+                                 instrumentName, dayObs, seqNum)
                 continue
             else:
-                raise RuntimeError("Multiple exposure entries found for instrument %s and "
-                                   "dayObs/seqNum %d %d.", instrumentName, dayObs, seqNum)
+                raise RuntimeError(f"Multiple exposure entries found for instrument {instrumentName} and "
+                                   f"dayObs/seqNum {dayObs} {seqNum}")
 
             # Generate the dataId for this file.
             dataId = DataCoordinate.standardize(
@@ -184,26 +182,29 @@ class PhotodiodeIngestTask(Task):
                                                               dataId=dataId)
             }
             if existing:
-                self.log.warn("Skipping instrument %s and dayObs/seqNum %d %d: already exists in run %s.",
-                              instrumentName, dayObs, seqNum, run)
+                self.log.debug("Skipping instrument %s and dayObs/seqNum %d %d: already exists in run %s.",
+                               instrumentName, dayObs, seqNum, run)
+                numExisting += 1
                 continue
 
             # Ingest must work from a file, but we can't use the
             # original, as we've added new metadata and reformatted
             # it.  Write it to a temp file that we can use to ingest.
-            tempFile = tempfile.mktemp() + ".fits"
-            calib.writeFits(tempFile)
+            with ResourcePath.temporary_uri(suffix=".fits") as tempFile:
+                calib.writeFits(tempFile.ospath)
 
-            ref = DatasetRef(self.datasetType, dataId)
-            dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
+                ref = DatasetRef(self.datasetType, dataId)
+                dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
 
-            # No try, as if this fails, we should stop.
-            self.butler.ingest(dataset, transfer=self.config.transfer, run=run,
-                               idGenerationMode=mode,
-                               record_validation_info=track_file_attrs)
-            self.log.info("Photodiode %s:%d (%d/%d) ingested successfully", instrumentName, exposureId,
-                          dayObs, seqNum)
-            os.unlink(tempFile)
-            refs.append(dataset)
+                # No try, as if this fails, we should stop.
+                self.butler.ingest(dataset, transfer=self.config.transfer, run=run,
+                                   idGenerationMode=mode,
+                                   record_validation_info=track_file_attrs)
+                self.log.info("Photodiode %s:%d (%d/%d) ingested successfully", instrumentName, exposureId,
+                              dayObs, seqNum)
+                refs.append(dataset)
+
+        if numExisting != 0:
+            self.log.warning("Skipped %d entries that already existed in run %s", numExisting, run)
 
         return refs

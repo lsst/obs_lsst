@@ -35,17 +35,21 @@ from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
 
 
+defaultRegex = r".*Photodiode_Readings.*txt\b"
+
+
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
 @repo_argument(required=True)
 @instrument_argument(required=True, help="INSTRUMENT is the name of the instrument to use.")
 @locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
                     required=True)
-@regex_option(default=r"Photodiode_Readings.*\b",
-              help="Regex string used to find photodiode data in directories listed in LOCATIONS.")
+@regex_option(default=defaultRegex,
+              help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
+              f"Defaults to {defaultRegex}")
 @config_option(metavar="TEXT=TEXT", multiple=True)
 @config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
 @run_option(required=False)
-@transfer_option()
+@transfer_option(default="copy")
 @click.option(
     "--track-file-attrs/--no-track-file-attrs",
     default=True,

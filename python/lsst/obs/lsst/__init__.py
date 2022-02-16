@@ -25,4 +25,4 @@ from .lsstCamMapper import *
 from .filters import *
 from ._instrument import *
 from ._fitsHeader import *
-from .ingestPhotodiode import *
+from ._ingestPhotodiode import *
