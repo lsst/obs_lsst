@@ -190,6 +190,8 @@ class PhotodiodeIngestTask(Task):
             # Ingest must work from a file, but we can't use the
             # original, as we've added new metadata and reformatted
             # it.  Write it to a temp file that we can use to ingest.
+            # If we can have the files written appropriately, this
+            # will be a direct ingest of those files.
             with ResourcePath.temporary_uri(suffix=".fits") as tempFile:
                 calib.writeFits(tempFile.ospath)
 
