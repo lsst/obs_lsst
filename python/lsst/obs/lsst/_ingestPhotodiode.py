@@ -142,7 +142,7 @@ class PhotodiodeIngestTask(Task):
         for inputFile in files:
             # Convert the file into the right class.
             with inputFile.as_local() as localFile:
-                calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.path)
+                calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
 
             dayObs = calib.getMetadata()['day_obs']
             seqNum = calib.getMetadata()['seq_num']
