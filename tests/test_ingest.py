@@ -142,6 +142,8 @@ class LSSTCamPhotodiodeIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase)
     pdPath = os.path.join(DATAROOT, "lsstCam", "raw")
 
     def testPhotodiode(self, pdPath=None):
+        self._ingestRaws("auto")
+
         if pdPath is None:
             pdPath = self.pdPath
         runner = LogCliRunner()
