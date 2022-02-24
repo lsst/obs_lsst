@@ -118,7 +118,7 @@ class PhotodiodeIngestTask(Task):
 
         Raises
         ------
-        RuntimeError :
+        RuntimeError
             Raised if the number of exposures found for a photodiode
             file is not one
         """
@@ -169,8 +169,8 @@ class PhotodiodeIngestTask(Task):
                 continue
             else:
                 numFailed += 1
-                self.log.warning(f"Multiple exposure entries found for instrument {instrumentName} and "
-                                 f"dayObs/seqNum {dayObs} {seqNum}")
+                self.log.warning("Multiple exposure entries found for instrument %s and "
+                                 "dayObs/seqNum %d %d.", instrumentName, dayObs, seqNum)
                 continue
 
             # Generate the dataId for this file.

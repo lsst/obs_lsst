@@ -137,7 +137,6 @@ class LSSTCamPhotodiodeIngestTestCase(lsst.utils.tests.TestCase):
     ingestDir = TESTDIR
     file = os.path.join(DATAROOT, "lsstCam", "raw", "2021-12-12",
                         "30211212000310", "30211212000310-R22-S22-det098.fits")
-    transfer = "auto"
     dataIds = [dict(instrument="LSSTCam", exposure=3021121200310, detector=98)]
     filterLabel = lsst.afw.image.FilterLabel(physical="SDSSi", band="i")
     pdPath = os.path.join(DATAROOT, "lsstCam", "raw")
@@ -188,8 +187,6 @@ class LSSTCamPhotodiodeIngestTestCase(lsst.utils.tests.TestCase):
                 self.file,
                 "--output-run",
                 outputRun,
-                "--transfer",
-                self.transfer,
                 "--ingest-task",
                 self.rawIngestTask,
             ],
