@@ -24,6 +24,7 @@
 
 import unittest
 import os
+import tempfile
 import lsst.utils.tests
 
 from lsst.afw.math import flipImage
@@ -130,10 +131,9 @@ class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
 
 
-class LSSTCamPhotodiodeIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
-
-    curatedCalibrationDatasetTypes = ("camera",)
+class LSSTCamPhotodiodeIngestTestCase(lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.LsstCam"
+    rawIngestTask = "lsst.obs.base.RawIngestTask"
     ingestDir = TESTDIR
     file = os.path.join(DATAROOT, "lsstCam", "raw", "2021-12-12",
                         "30211212000310", "30211212000310-R22-S22-det098.fits")
@@ -141,9 +141,26 @@ class LSSTCamPhotodiodeIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase)
     filterLabel = lsst.afw.image.FilterLabel(physical="SDSSi", band="i")
     pdPath = os.path.join(DATAROOT, "lsstCam", "raw")
 
-    def testPhotodiode(self, pdPath=None):
-        if pdPath is None:
-            pdPath = self.pdPath
+    def setUp(self):
+        """Setup for lightweight photodiode ingest task.
+
+        This will create the repo and register the instrument.
+        """
+        self.root = tempfile.mkdtemp(dir=self.ingestDir)
+
+        # Create Repo
+        runner = LogCliRunner()
+        result = runner.invoke(butlerCli, ["create", self.root])
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+        # Register Instrument
+        runner = LogCliRunner()
+        result = runner.invoke(butlerCli, ["register-instrument", self.root, self.instrumentClassName])
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+    def testPhotodiodeFailure(self):
+        """Test ingest to a repo missing exposure information will raise.
+        """
         runner = LogCliRunner()
         result = runner.invoke(
             butlerCli,
@@ -151,11 +168,46 @@ class LSSTCamPhotodiodeIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase)
                 "ingest-photodiode",
                 self.root,
                 self.instrumentClassName,
-                pdPath,
+                self.pdPath,
+            ],
+        )
+        self.assertEqual(result.exit_code, 1, f"output: {result.output} exception: {result.exception}")
+
+    def testPhotodiode(self):
+        """Test ingest to a repo with the exposure information will not raise.
+        """
+        # Ingest raw to provide exposure information.
+        outputRun = "raw_ingest_" + self.id()
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-raws",
+                self.root,
+                self.file,
+                "--output-run",
+                outputRun,
+                "--ingest-task",
+                self.rawIngestTask,
             ],
         )
         self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
 
+        # Ingest photodiode matching this exposure.
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-photodiode",
+                self.root,
+                self.instrumentClassName,
+                self.pdPath,
+            ],
+        )
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+        # Confirm that we can retrieve the ingested photodiode, and
+        # that it has the correct type.
         butler = Butler(self.root, run="LSSTCam/calib/photodiode")
         getResult = butler.get('photodiode', dataId=self.dataIds[0])
         self.assertIsInstance(getResult, PhotodiodeCalib)

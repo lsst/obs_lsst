@@ -118,8 +118,9 @@ class PhotodiodeIngestTask(Task):
 
         Raises
         ------
-        RuntimeError :
-            Raised if multiple exposures are found for a photodiode file.
+        RuntimeError
+            Raised if the number of exposures found for a photodiode
+            file is not one
         """
         files = ResourcePath.findFileResources(locations, file_filter)
 
@@ -139,6 +140,7 @@ class PhotodiodeIngestTask(Task):
 
         refs = []
         numExisting = 0
+        numFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
             with inputFile.as_local() as localFile:
@@ -161,12 +163,15 @@ class PhotodiodeIngestTask(Task):
                 exposureId = exposureRecords[0].id
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
             elif nRecords == 0:
+                numFailed += 1
                 self.log.warning("Skipping instrument %s and dayObs/seqNum %d %d: no exposures found.",
                                  instrumentName, dayObs, seqNum)
                 continue
             else:
-                raise RuntimeError(f"Multiple exposure entries found for instrument {instrumentName} and "
-                                   f"dayObs/seqNum {dayObs} {seqNum}")
+                numFailed += 1
+                self.log.warning("Multiple exposure entries found for instrument %s and "
+                                 "dayObs/seqNum %d %d.", instrumentName, dayObs, seqNum)
+                continue
 
             # Generate the dataId for this file.
             dataId = DataCoordinate.standardize(
@@ -208,5 +213,6 @@ class PhotodiodeIngestTask(Task):
 
         if numExisting != 0:
             self.log.warning("Skipped %d entries that already existed in run %s", numExisting, run)
-
+        if numFailed != 0:
+            raise RuntimeError(f"Failed to ingest {numFailed} entries due to missing exposure information.")
         return refs
