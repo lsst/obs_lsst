@@ -26,8 +26,13 @@ import os.path
 
 ObsConfigDir = os.path.dirname(__file__)
 
-for sub in ("isr", "charImage", "calibrate"):
-    path = os.path.join(ObsConfigDir, sub + ".py")
-    if os.path.exists(path):
-        getattr(config, sub).load(path)
+# this avoids having to either have the wrong filenames, or have stub files
+# which just load the other file, which we should to stop doing in Gen3.
+configMap = {'isr': 'isr',
+             'charImage': 'characterizeImage',
+             'calibrate': 'calibrate'}
 
+for configName, filename in configMap.items():
+    path = os.path.join(ObsConfigDir, filename + ".py")
+    if os.path.exists(path):
+        getattr(config, configName).load(path)
