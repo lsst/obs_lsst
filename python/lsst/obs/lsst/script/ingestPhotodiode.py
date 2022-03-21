@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from lsst.daf.butler import Butler
 from lsst.pipe.base.configOverrides import ConfigOverrides
-from lsst.obs.base.utils import getInstrument
+from lsst.pipe.base import Instrument
 from .. import PhotodiodeIngestTask, PhotodiodeIngestConfig
 
 
@@ -58,7 +58,7 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
         Raised if operations on configuration object fail.
     """
     butler = Butler(repo, writeable=True)
-    instr = getInstrument(instrument, butler.registry)
+    instr = Instrument.from_string(instrument, butler.registry)
 
     config = PhotodiodeIngestConfig()
     config.transfer = transfer
