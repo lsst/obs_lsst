@@ -30,7 +30,7 @@ from lsst.daf.butler.cli.opt import (
     run_option,
     transfer_option,
 )
-from lsst.obs.base.cli.opt import instrument_argument
+from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
 
