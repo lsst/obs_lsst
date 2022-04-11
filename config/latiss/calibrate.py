@@ -8,7 +8,7 @@ from lsst.meas.astrom import FitAffineWcsTask
 # allow configuration at a single point here, with logic following to allow
 # easy switching between Gaia, Pan-STARRS and ATLAS refcats.
 ASTROM_REFCAT_NAME = 'gaia_dr2_20200414'
-PHOTO_REFCAT_NAME = 'gaia_dr2_20200414'
+PHOTO_REFCAT_NAME = 'atlas_refcat2_20220201'
 
 # configure the astrometry
 config.connections.astromRefCat = ASTROM_REFCAT_NAME
@@ -38,7 +38,7 @@ if 'gaia' in PHOTO_REFCAT_NAME:
     config.photoRefObjLoader.filterMap = {}  # TODO: remove after DM-33270
     config.photoCal.match.referenceSelection.magLimit.fluxField = "phot_g_mean_flux"
 
-config.doDeblend = False
+config.doDeblend = True
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # if no deblending has been done this is required to not crash
     config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
