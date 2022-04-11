@@ -24,5 +24,5 @@ config.measurePsf.psfDeterminer = 'pca'
 config.measurePsf.psfDeterminer['pca'].spatialOrder = 0
 config.measurePsf.psfDeterminer['pca'].nEigenComponents = 1
 config.measurePsf.starSelector['objectSize'].fluxMin = 2500
-config.installSimplePsf.width = 81  # why is the default 11?!
-config.installSimplePsf.fwhm = 2.355*2
+config.installSimplePsf.width = 81  
+config.installSimplePsf.fwhm = 2.355*2 # LATISS platescale is 2x LSST nominal
