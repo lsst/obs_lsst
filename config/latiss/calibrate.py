@@ -4,9 +4,7 @@ from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask, MagnitudeLimit
 from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 from lsst.meas.astrom import FitAffineWcsTask
 
-# support independent refacts for astrometry and photometry
-# allow configuration at a single point here, with logic following to allow
-# easy switching between Gaia, Pan-STARRS and ATLAS refcats.
+# support independent refcats for astrometry and photometry
 ASTROM_REFCAT_NAME = 'gaia_dr2_20200414'
 PHOTO_REFCAT_NAME = 'atlas_refcat2_20220201'
 
@@ -22,22 +20,16 @@ config.connections.photoRefCat = PHOTO_REFCAT_NAME
 config.photoRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.photoRefObjLoader.ref_dataset_name = PHOTO_REFCAT_NAME
 
-# some logic will be required here once we also want to support ATLAS refcat
-# for photometry
-panStarrsFilterMap = {}
+# configure the filter map for atlas refcat2
+atlasFilterMap = {}
 filts = LATISS_FILTER_DEFINITIONS
 for filt in filts._filters:
     if len(filt.band) == 1:  # skip 'white' etc
-        panStarrsFilterMap[filt.band] = filt.band
-config.photoRefObjLoader.filterMap = panStarrsFilterMap
-config.photoCal.match.referenceSelection.magLimit.fluxField = "i_flux"
+        atlasFilterMap[filt.band] = filt.band
+config.photoRefObjLoader.filterMap = atlasFilterMap
+config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 
-# automatically configure for use with Gaia if we're using Gaia
-if 'gaia' in PHOTO_REFCAT_NAME:
-    config.photoRefObjLoader.anyFilterMapsToThis = 'phot_g_mean'
-    config.photoRefObjLoader.filterMap = {}  # TODO: remove after DM-33270
-    config.photoCal.match.referenceSelection.magLimit.fluxField = "phot_g_mean_flux"
-
+# turn on deblending
 config.doDeblend = True
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # if no deblending has been done this is required to not crash
@@ -46,7 +38,7 @@ if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
 # we often have very few sources so use affine task
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
-# should these ever differ, or should we tie them together with MAXOFFSET?
+# Increase maxoffset as AUXTEL pointing can be unreliable
 MAXOFFSET = 3000
 config.astromRefObjLoader.pixelMargin = 1000
 config.astrometry.matcher.maxOffsetPix = MAXOFFSET
