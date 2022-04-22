@@ -802,3 +802,37 @@ class LsstBaseTranslator(FitsTranslator):
         log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
                     self._log_prefix)
         return 1.0
+
+    @cache_translation
+    def to_group_counter_start(self):
+        # Effectively the start of the visit as determined by the headers.
+        counter = self.to_observation_counter()
+        # Older data does not have the CURINDEX header.
+        if self.is_key_ok("CURINDEX"):
+            # CURINDEX is 1-based.
+            seq_start = counter - self._header["CURINDEX"] + 1
+            self._used_these_cards("CURINDEX")
+            return seq_start
+        else:
+            # If the counter is 0 we need to pick something else
+            # that is not going to confuse the visit calculation
+            # (since setting everything to 0 will make one big visit).
+            return counter if counter != 0 else self.to_exposure_id()
+
+    @cache_translation
+    def to_group_counter_end(self):
+        # Effectively the end of the visit as determined by the headers.
+        counter = self.to_observation_counter()
+        # Older data does not have the CURINDEX or MAXINDEX headers.
+        if self.is_key_ok("CURINDEX") and self.is_key_ok("MAXINDEX"):
+            # CURINDEX is 1-based. CURINDEX == MAXINDEX indicates the
+            # final exposure in the sequence.
+            remaining = self._header["MAXINDEX"] - self._header["CURINDEX"]
+            seq_end = counter + remaining
+            self._used_these_cards("CURINDEX", "MAXINDEX")
+            return seq_end
+        else:
+            # If the counter is 0 we need to pick something else
+            # that is not going to confuse the visit calculation
+            # (since setting everything to 0 will make one big visit).
+            return counter if counter != 0 else self.to_exposure_id()
