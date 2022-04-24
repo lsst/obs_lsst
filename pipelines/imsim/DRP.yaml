@@ -57,6 +57,23 @@ tasks:
                 config.match_tract_catalog.coords_ref_to_convert = {'ra': 'x', 'dec': 'y'}
                 # Might need adjusting for different survey depths
                 config.match_tract_catalog.mag_faintest_ref = 27.0;
+    # Afterburner to correct for DM-34019
+    writeRecalibrateSourceTable:
+        class: lsst.pipe.tasks.postprocess.WriteRecalibratedSourceTableTask
+        config:
+            doReevaluateSkyWcs: true
+            doReevaluatePhotoCalib: true
+            connections.outputCatalog: calibratedSource
+    transformRecalibratedSourceTable:
+        class:  lsst.pipe.tasks.postprocess.TransformSourceTableTask
+        config:
+            connections.inputCatalog: calibratedSource
+            connections.outputCatalog: calibratedSourceTable
+    consolidateRecalibratedSourceTable:
+        class:  lsst.pipe.tasks.postprocess.ConsolidateSourceTableTask
+        config:
+            connections.inputCatalogs: calibratedSourceTable
+            connections.outputCatalog: calibratedSourceTable_visit
 subsets:
     step1:
         subset:
@@ -194,6 +211,9 @@ subsets:
     step6:
         subset:
         - consolidateDiaSourceTable
+        - writeRecalibrateSourceTable
+        - transformRecalibratedSourceTable
+        - consolidateRecalibratedSourceTable
         description: >
             Tasks that can be run together, but only after the 'step1', 'step2',
             'step3', and 'step4' subsets
