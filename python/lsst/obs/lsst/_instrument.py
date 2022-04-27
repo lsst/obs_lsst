@@ -27,7 +27,7 @@ import os.path
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils.introspection import get_full_type_name
 from lsst.utils import getPackageDir
-from lsst.obs.base import Instrument
+from lsst.obs.base import Instrument, VisitSystem
 from lsst.obs.base.gen2to3 import TranslatorFactory
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
                       LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
@@ -82,6 +82,7 @@ class LsstCam(Instrument):
     policyName = "lsstCam"
     translatorClass = LsstCamTranslator
     obsDataPackage = "obs_lsst_data"
+    visitSystem = VisitSystem.BY_SEQ_START_END
 
     @property
     def configPaths(self):
@@ -124,6 +125,7 @@ class LsstCam(Instrument):
                     "visit_max": obsMax,
                     "exposure_max": obsMax,
                     "class_name": get_full_type_name(self),
+                    "visit_system": self.visitSystem.value,
                 },
                 update=update
             )
@@ -187,6 +189,7 @@ class LsstCamImSim(LsstCam):
     policyName = "imsim"
     translatorClass = LsstCamImSimTranslator
     filterDefinitions = LSSTCAM_IMSIM_FILTER_DEFINITIONS
+    visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -201,6 +204,7 @@ class LsstCamPhoSim(LsstCam):
     instrument = "LSSTCam-PhoSim"
     policyName = "phosim"
     translatorClass = LsstCamPhoSimTranslator
+    visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -216,6 +220,7 @@ class LsstTS8(LsstCam):
     instrument = "LSST-TS8"
     policyName = "ts8"
     translatorClass = LsstTS8Translator
+    visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -230,6 +235,7 @@ class LsstUCDCam(LsstCam):
     instrument = "LSST-UCDCam"
     policyName = "ucd"
     translatorClass = LsstUCDCamTranslator
+    visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
@@ -245,6 +251,7 @@ class LsstTS3(LsstCam):
     instrument = "LSST-TS3"
     policyName = "ts3"
     translatorClass = LsstTS3Translator
+    visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
