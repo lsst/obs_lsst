@@ -18,4 +18,4 @@ ts8/CALIB/qe_curve/
 lsstcam/CALIB/calibRegistry.sqlite3
 lsstcam/CALIB/qe_curve/
 .vscode/
-
+.coverage*
