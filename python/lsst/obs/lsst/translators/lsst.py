@@ -857,5 +857,13 @@ class LsstBaseTranslator(FitsTranslator):
             if "SIMULATE" in k and v:
                 return True
 
+        # If the controller is H, P, or Q then the data are simulated.
+        ctrlr_key = "CONTRLLR"
+        if self.is_key_ok(ctrlr_key):
+            controller = self._header[ctrlr_key]
+            self._used_these_cards(ctrlr_key)
+            if controller in "HPQ":
+                return True
+
         # No simulation flags set.
         return False

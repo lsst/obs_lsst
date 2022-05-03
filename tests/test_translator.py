@@ -172,7 +172,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            exposure_time=15.0*u.s,
                            group_counter_end=32,
                            group_counter_start=32,
-                           has_simulated_content=False,  # Missing SIMULATE header.
+                           has_simulated_content=True,
                            object="UNKNOWN",
                            observation_counter=32,
                            observation_id="MC_H_20000217_000032",
@@ -269,7 +269,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            exposure_time=1.0*u.s,
                            group_counter_end=6001,
                            group_counter_start=6001,
-                           has_simulated_content=False,  # Should be True but the SIMULATE header is missing.
+                           has_simulated_content=True,
                            object="UNKNOWN",
                            observation_counter=6001,
                            observation_id="CC_H_20000217_006001",
