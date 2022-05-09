@@ -38,7 +38,8 @@ if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
 # we often have very few sources so use affine task
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
-# Increase maxoffset as AUXTEL pointing can be unreliable
+# Increase maxoffset as AUXTEL pointing can be unreliable, pixelMargin also increased to 
+# ensure refcat overlap when we see large pointing offsets. 
 MAXOFFSET = 3000
 config.astromRefObjLoader.pixelMargin = 1000
 config.astrometry.matcher.maxOffsetPix = MAXOFFSET
