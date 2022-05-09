@@ -19,20 +19,3 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
-"""
-latiss-specific overrides for ProcessCcdTask
-"""
-import os.path
-
-ObsConfigDir = os.path.dirname(__file__)
-
-# this avoids having to either have the wrong filenames, or have stub files
-# which just load the other file, which we should to stop doing in Gen3.
-configMap = {'isr': 'isr',
-             'charImage': 'characterizeImage',
-             'calibrate': 'calibrate'}
-
-for configName, filename in configMap.items():
-    path = os.path.join(ObsConfigDir, filename + ".py")
-    if os.path.exists(path):
-        getattr(config, configName).load(path)
