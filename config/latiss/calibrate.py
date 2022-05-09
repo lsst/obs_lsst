@@ -8,6 +8,7 @@ from lsst.meas.astrom import FitAffineWcsTask
 ASTROM_REFCAT_NAME = 'gaia_dr2_20200414' # TODO: remove after DM-27013 once Gaia DR2 is default
 PHOTO_REFCAT_NAME = 'atlas_refcat2_20220201'
 
+
 # configure the astrometry, TODO: remove after DM-27013 once Gaia DR2 is default
 config.connections.astromRefCat = ASTROM_REFCAT_NAME
 config.astromRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
@@ -17,7 +18,6 @@ config.astromRefObjLoader.filterMap = {}
 
 # configure the photometry
 config.connections.photoRefCat = PHOTO_REFCAT_NAME
-config.photoRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.photoRefObjLoader.ref_dataset_name = PHOTO_REFCAT_NAME
 
 # configure the filter map for atlas refcat2
