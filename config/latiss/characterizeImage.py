@@ -1,6 +1,6 @@
 from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask
 
-# support multiple refacts with configuration at a single point here,
+# Support multiple refacts with configuration at a single point here,
 # with logic following to allow easy switching between Gaia and Pan-STARRS
 REFCAT_NAME = 'gaia'
 # REFCAT_NAME = 'ps1'
@@ -13,10 +13,10 @@ else:
 config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.refObjLoader.ref_dataset_name = REFCAT
 
-# we are at the other end of the regime
+# We do not require deblending at this stage. 
 config.doDeblend = False
 
-# switch to PCA determiner as it is much more robust when there are very few
+# Wwitch to PCA determiner as it is much more robust when there are very few
 # sources. Increase default FWHM due to plate scale and reduce fluxMin due to
 # short expTimes on a 1.2m telescope. nEigenComponents and spatialOrder set to
 # min values so that we always succeed even with one or two stars.
