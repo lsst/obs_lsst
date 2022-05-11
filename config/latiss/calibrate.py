@@ -33,9 +33,10 @@ config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
 # Increase maxoffset as AUXTEL pointing can be unreliable. Between Feb2020-Mar2022 we saw offsets
 # of up to 4 arcmin, which translates to 2400pix. We choose 3000 as a conservative limit. pixelMargin 
-# also increased to ensure refcat overlap when we see large pointing offsets. 
+# also increased to ensure refcat overlap when we see large pointing offsets considering a 3000pix 
+# offset and detector half-width of 2100pix. 
 MAXOFFSET = 3000
-config.astromRefObjLoader.pixelMargin = 1000
+config.astromRefObjLoader.pixelMargin = 900
 config.astrometry.matcher.maxOffsetPix = MAXOFFSET
 
 # Apply a magnitude limit and decrease the SNR limit as we're only a 1.2m
