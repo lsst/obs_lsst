@@ -31,8 +31,9 @@ config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 # We often have very few sources due to smaller aperture so use affine task. 
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
-# Increase maxoffset as AUXTEL pointing can be unreliable, pixelMargin also increased to 
-# ensure refcat overlap when we see large pointing offsets. 
+# Increase maxoffset as AUXTEL pointing can be unreliable. Between Feb2020-Mar2022 we saw offsets
+# of up to 4 arcmin, which translates to 2400pix. We choose 3000 as a conservative limit. pixelMargin 
+# also increased to ensure refcat overlap when we see large pointing offsets. 
 MAXOFFSET = 3000
 config.astromRefObjLoader.pixelMargin = 1000
 config.astrometry.matcher.maxOffsetPix = MAXOFFSET
