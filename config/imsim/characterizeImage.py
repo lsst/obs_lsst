@@ -23,6 +23,14 @@
 imsim-specific overrides for CharacterizeImageTask
 """
 
+import os.path
+
+obsConfigDir = os.path.join(os.path.dirname(__file__))
+
+# Astrometry refcat overrides for simulations
+config.refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
+config.refObjLoader.ref_dataset_name = 'cal_ref_cat'
+
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
 config.background.approxOrderX = 1
 config.detection.background.approxOrderX = 1

@@ -20,15 +20,15 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-"""LSST-specific overrides for MeasureMergedCoaddSourcesTask"""
+"""imSim-specific overrides for MeasureMergedCoaddSourcesTask"""
 
 import os.path
 
-config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "convolvedFluxes.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "hsm.py"))
-config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "apertures.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "kron.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "convolvedFluxes.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "hsm.py"))
+config.load(os.path.join(os.path.dirname(__file__), "..", "cmodel.py"))
 
 config.match.refObjLoader.ref_dataset_name = "cal_ref_cat"
 config.match.refObjLoader.load(os.path.join(os.path.dirname(__file__), "filterMap.py"))
