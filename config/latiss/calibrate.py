@@ -4,16 +4,6 @@ from lsst.meas.algorithms import LoadIndexedReferenceObjectsTask, MagnitudeLimit
 from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 from lsst.meas.astrom import FitAffineWcsTask
 
-# support independent refcats for astrometry and photometry
-ASTROM_REFCAT_NAME = 'gaia_dr2_20200414' # TODO: remove after DM-27013 once Gaia DR2 is default
-
-# configure the astrometry, TODO: remove after DM-27013 once Gaia DR2 is default
-config.connections.astromRefCat = ASTROM_REFCAT_NAME
-config.astromRefObjLoader.retarget(LoadIndexedReferenceObjectsTask)
-config.astromRefObjLoader.ref_dataset_name = ASTROM_REFCAT_NAME
-config.astromRefObjLoader.anyFilterMapsToThis = 'phot_g_mean'
-config.astromRefObjLoader.filterMap = {} 
-
 # Configure the photometry to use atlas_refcat2. 
 PHOTO_REFCAT_NAME = 'atlas_refcat2_20220201'
 config.connections.photoRefCat = PHOTO_REFCAT_NAME
