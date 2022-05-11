@@ -13,9 +13,6 @@ else:
 config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.refObjLoader.ref_dataset_name = REFCAT
 
-# We do not require deblending at this stage. 
-config.doDeblend = False
-
 # Wwitch to PCA determiner as it is much more robust when there are very few
 # sources. Increase default FWHM due to plate scale and reduce fluxMin due to
 # short expTimes on a 1.2m telescope. nEigenComponents and spatialOrder set to
