@@ -51,3 +51,9 @@ config.measureApCorr.sourceSelector["science"].flags.good = ["calib_psf_used"]
 config.measureApCorr.sourceSelector["science"].flags.bad = []
 config.measureApCorr.sourceSelector["science"].signalToNoise.minimum = 150.0
 config.measureApCorr.sourceSelector.name = "science"
+
+# enable the full suite of measurements
+config.load(os.path.join(obsConfigDir, "cmodel.py"))
+config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
+config.measurement.load(os.path.join(obsConfigDir, "convolvedFluxes.py"))
+config.measurement.load(os.path.join(obsConfigDir, "gaap.py"))
