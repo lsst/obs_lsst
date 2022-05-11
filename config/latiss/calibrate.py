@@ -18,13 +18,6 @@ for filt in filts._filters:
 config.photoRefObjLoader.filterMap = atlasFilterMap
 config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 
-# No color terms for latiss at the moment
-config.photoCal.applyColorTerms = False
-
-# Demand astrometry and photoCal succeed
-config.requireAstrometry = True
-config.requirePhotoCal = True
-
 # We often have very few sources due to smaller aperture so use affine task. 
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
