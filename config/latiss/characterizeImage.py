@@ -10,7 +10,7 @@ if REFCAT_NAME == 'gaia':
 else:
     REFCAT = "ps1_pv3_3pi_20170110"
 
-config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
+#config.refObjLoader.retarget(LoadIndexedReferenceObjectsTask)
 config.refObjLoader.ref_dataset_name = REFCAT
 
 # Wwitch to PCA determiner as it is much more robust when there are very few

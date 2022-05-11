@@ -28,12 +28,6 @@ for filt in filts._filters:
 config.photoRefObjLoader.filterMap = atlasFilterMap
 config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 
-# Turn on deblending
-config.doDeblend = True
-if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
-    # if no deblending has been done this is required to not crash
-    config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
-
 # We often have very few sources due to smaller aperture so use affine task. 
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
