@@ -35,32 +35,8 @@ config.detection.background.load(bgFile)
 # Enable temporary local background subtraction
 config.detection.doTempLocalBackground  = True
 
-# Reference catalog
-for refObjLoader in (config.astromRefObjLoader,
-                     config.photoRefObjLoader,
-                     ):
-    refObjLoader.load(os.path.join(obsConfigDir, 'filterMap.py'))
-    refObjLoader.ref_dataset_name = 'cal_ref_cat'
-    # Use the filterMap instead of the "any" filter.
-    refObjLoader.anyFilterMapsToThis = None
-
-config.connections.astromRefCat = "cal_ref_cat"
-config.connections.photoRefCat = "cal_ref_cat"
-
 # Set to match defaults currenyly used in HSC production runs (e.g. S15B)
 config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
-
-# No color term in simulation at the moment
-config.photoCal.applyColorTerms = False
-config.photoCal.match.referenceSelection.doMagLimit = True
-config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
-config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
-# select only stars for photometry calibration
-config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
-
-# Demand astrometry and photoCal succeed
-config.requireAstrometry = True
-config.requirePhotoCal = True
 
 # Detection
 config.detection.isotropicGrow = True
