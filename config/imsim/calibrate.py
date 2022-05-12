@@ -24,17 +24,33 @@ imsim-specific overrides for CalibrateTask
 """
 import os.path
 
+configDir = os.path.dirname(__file__)
+
+# Reference catalog overrides for simulated data.
+for refObjLoader in (config.astromRefObjLoader,
+                     config.photoRefObjLoader,
+                     ):
+    refObjLoader.load(os.path.join(configDir, 'filterMap.py'))
+    refObjLoader.ref_dataset_name = 'cal_ref_cat'
+    # Use the filterMap instead of the "any" filter.
+    refObjLoader.anyFilterMapsToThis = None
+
+config.connections.astromRefCat = "cal_ref_cat"
+config.connections.photoRefCat = "cal_ref_cat"
+
+# No color term in simulation at the moment
+config.photoCal.applyColorTerms = False
+config.photoCal.match.referenceSelection.doMagLimit = True
+config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
+config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
+# select only stars for photometry calibration
+config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
+
 # Additional configs for star+galaxy ref cats post DM-17917
 config.astrometry.referenceSelector.doUnresolved = True
 config.astrometry.referenceSelector.unresolved.name = "resolved"
 config.astrometry.referenceSelector.unresolved.minimum = None
 config.astrometry.referenceSelector.unresolved.maximum = 0.5
-
-configDir = os.path.dirname(__file__)
-config.astromRefObjLoader.load(os.path.join(configDir, "..", "filterMap.py"))
-# Use the filterMap instead of the "any" filter.
-config.astromRefObjLoader.anyFilterMapsToThis = None
-config.photoRefObjLoader.load(os.path.join(configDir, "..", "filterMap.py"))
 
 config.astrometry.doMagnitudeOutlierRejection = True
 # Set threshold above which astrometry will be considered a failure (DM-32129)
