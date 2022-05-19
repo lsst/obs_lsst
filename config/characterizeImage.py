@@ -56,16 +56,6 @@ config.deblend.maskLimits["NO_DATA"] = 0.25 # Ignore sources that are in the vig
 config.deblend.maxFootprintArea = 10000
 
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
-
-# Convolved fluxes can fail for small target seeing if the observation seeing is larger
-if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
-    names = config.measurement.plugins["ext_convolved_ConvolvedFlux"].getAllResultNames()
-    config.measureApCorr.allowFailure += names
-
-if "ext_gaap_GaapFlux" in config.measurement.plugins:
-    names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames()
-    config.measureApCorr.allowFailure += names
-
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
 
 # Prevent spurious detections in vignetting areas
