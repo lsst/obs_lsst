@@ -27,6 +27,15 @@ import os.path
 
 obsConfigDir = os.path.join(os.path.dirname(__file__))
 
+config.load(os.path.join(obsConfigDir, "..", "cmodel.py"))
+config.measurement.load(os.path.join(obsConfigDir, "..", "kron.py"))
+config.measurement.load(os.path.join(obsConfigDir, "..", "convolvedFluxes.py"))
+config.measurement.load(os.path.join(obsConfigDir, "..", "gaap.py"))
+config.measurement.load(os.path.join(obsConfigDir, "..", "hsm.py"))
+if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
+    # no deblending has been done
+    config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
+
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
 config.background.approxOrderX = 1
 config.detection.background.approxOrderX = 1

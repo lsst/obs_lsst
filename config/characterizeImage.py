@@ -49,12 +49,7 @@ config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio =
 config.detection.isotropicGrow = True
 
 # Activate calibration of measurements: required for aperture corrections
-config.load(os.path.join(obsConfigDir, "cmodel.py"))
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
-config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
-config.measurement.load(os.path.join(obsConfigDir, "convolvedFluxes.py"))
-config.measurement.load(os.path.join(obsConfigDir, "gaap.py"))
-config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done
     config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
