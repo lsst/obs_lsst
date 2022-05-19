@@ -50,9 +50,6 @@ config.detection.isotropicGrow = True
 
 # Activate calibration of measurements: required for aperture corrections
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
-if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
-    # no deblending has been done
-    config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
 
 # Deblender
 config.deblend.maskLimits["NO_DATA"] = 0.25 # Ignore sources that are in the vignetted region
