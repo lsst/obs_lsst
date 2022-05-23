@@ -29,7 +29,7 @@ import lsst.utils.tests
 
 import lsst.afw.image
 from lsst.obs.base import createInitialSkyWcsFromBoresight
-from lsst.obs.lsst.latiss import Latiss
+from lsst.obs.lsst import Latiss
 
 
 class WcsRotationTestCase(lsst.utils.tests.TestCase):

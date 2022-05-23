@@ -21,7 +21,6 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 from .version import *
-from .lsstCamMapper import *
 from .filters import *
 from ._instrument import *
 from ._fitsHeader import *

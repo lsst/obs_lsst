@@ -27,8 +27,7 @@ Miscellaneous utilities related to lsst cameras
 
 __all__ = ("readRawFile",)
 
-from .lsstCamMapper import assemble_raw
-from .assembly import readRawAmps
+from .assembly import attachRawWcsFromBoresight, readRawAmps, fixAmpsAndAssemble
 from ._fitsHeader import readRawFitsHeader
 
 
@@ -41,7 +40,7 @@ def readRawFile(fileName, detector, dataId=None):
         The fully-qualified filename.
     detector : `lsst.afw.cameraGeom.Detector`
         Detector to associate with the returned Exposure.
-    dataId : `lsst.daf.persistence.DataId` or `dict`
+    dataId : `lsst.daf.butler.DataCoordinate` or `dict`
         DataId to use in log message output.
 
     Returns
@@ -52,16 +51,9 @@ def readRawFile(fileName, detector, dataId=None):
     if dataId is None:
         dataId = {}
 
-    class Info():
-        def __init__(self, obj):
-            self.obj = obj
-
     amps = readRawAmps(fileName, detector=detector)
-
-    component_info = {}
-    component_info["raw_hdu"] = Info(readRawFitsHeader(fileName))
-    component_info["raw_amp"] = Info(amps)
-
-    exp = assemble_raw(dataId, component_info, None)
-
+    exp = fixAmpsAndAssemble(amps, str(dataId))
+    md = readRawFitsHeader(fileName)
+    exp.setMetadata(md)
+    attachRawWcsFromBoresight(exp, dataId)
     return exp
