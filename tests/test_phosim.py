@@ -29,6 +29,8 @@ from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
+from lsst.obs.lsst import LsstCamPhoSim
+
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -42,13 +44,17 @@ def _clean_metadata_provenance(hdr):
 class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
 
+    @classmethod
+    def getInstrument(cls):
+        return LsstCamPhoSim()
+
     def setUp(self):
-        dataIds = {'raw': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
+        dataIds = {'raw': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(self._butler, self._mapper, dataIds)
+        self.setUp_tests(self._butler, None, dataIds)
 
         ccdExposureId_bits = 34
         exposureIds = {'raw': 204595042}
@@ -59,15 +65,10 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         detector_serials = {'raw': 'ITL-3800C-102-Dev'}
         dimensions = {'raw': Extent2I(4176, 4020)}
         sky_origin = (55.67759886, -30.44239357)
-        raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'i'}, 1),
-                       ({'level': 'sensor', 'filter': 'foo'}, 0),
-                       ({'level': 'sensor', 'visit': 204595}, 1),
-                       ({'level': 'filter'}, 1),
-                       ({'level': 'filter', 'visit': 204595}, 1),
-                       ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'i'}, 1),
-                       ({'level': 'expId', 'filter': 'foo'}, 0)
+        raw_subsets = (({}, 1),
+                       ({'physical_filter': 'i'}, 1),
+                       ({'physical_filter': 'foo'}, 0),
+                       ({'exposure': 204595}, 1),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -83,43 +84,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11", "00204595-R11-S20-det042.fits")
-        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum', 'subdir',))
-        query_format = ["expId", "filter"]
-        queryMetadata = (({'expId': 204595}, [(204595, 'i')]),
-                         ({'filter': 'i'}, [(204595, 'i')]),
-                         )
-        map_python_type = lsst.afw.image.DecoratedImageF
-        map_python_std_type = lsst.afw.image.ExposureF
-        map_cpp_type = 'DecoratedImageF'
-        map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join('processCcd_metadata', '00204595-i', 'R11',
-                                            'processCcdMetadata_00204595-i-R11-S20-det042.yaml')
-        raw_filename = '00204595-R11-S20-det042.fits'
-        default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('skyTile', set(['expId', 'run'])),
-                      ('filter', set(['expId'])),
-                      ('expId', set(['expId', 'run']))
-                      )
-        self.setUp_mapper(output=self.data_dir,
-                          path_to_raw=path_to_raw,
-                          keys=keys,
-                          query_format=query_format,
-                          queryMetadata=queryMetadata,
-                          metadata_output_path=metadata_output_path,
-                          map_python_type=map_python_type,
-                          map_python_std_type=map_python_std_type,
-                          map_cpp_type=map_cpp_type,
-                          map_storage_name=map_storage_name,
-                          raw_filename=raw_filename,
-                          default_level=default_level,
-                          raw_levels=raw_levels,
-                          test_config_metadata=True
-                          )
+        self.raw_filename = '00204595-R11-S20-det042.fits'
 
         self.setUp_camera(camera_name='LSSTCam-PhoSim',
                           n_detectors=201,
@@ -131,8 +96,8 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
     def testMetadata(self):
         """Check that we can read headers properly"""
-        dataId = {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
-        md = self.butler.get("raw_md", dataId)
+        dataId = {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'}
+        md = self.butler.get("raw.metadata", dataId)
 
         # This header comes from amp header
         self.assertEqual(md["PRESS"], 520.0)
@@ -140,7 +105,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         # This header is in HDU0
         self.assertEqual(md["TESTTYPE"], "PHOSIM")
 
-        visitInfo = self.butler.get("raw_visitInfo", dataId)
+        visitInfo = self.butler.get("raw.visitInfo", dataId)
         weather = visitInfo.getWeather()
         self.assertEqual(weather.getAirTemperature(), 20.0)
 
@@ -148,7 +113,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         with unittest.mock.patch.dict(os.environ,
                                       {"METADATA_CORRECTIONS_PATH": os.path.join(TESTDIR, "data")}):
             # Check that corrections are applied during simple md get
-            md_md = self.butler.get("raw_md", dataId)
+            md_md = self.butler.get("raw.metadata", dataId)
             self.assertEqual(md_md["NEWHDR"], "corrected")
 
             # Check that corrections are applied if we do assembly
@@ -161,49 +126,9 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             self.assertEqual(raw_md, md_md)
 
             # And finally ensure that visitInfo gets corrections
-            visitInfo = self.butler.get("raw_visitInfo", dataId)
+            visitInfo = self.butler.get("raw.visitInfo", dataId)
             weather = visitInfo.getWeather()
             self.assertEqual(weather.getAirTemperature(), 10.0)
-
-    def testCcdExposureId(self):
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={})
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 1001)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
-                                                              "detectorName": "S01"})
-        self.assertEqual(exposureId, 1001)
-
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})
-
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1})
-
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R99",
-                                                     "detectorName": "S01"})
-
-    def testDetectorName(self):
-        name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
-        self.assertEqual(name, "R00_S00")
-
-        name = self.mapper._extractDetectorName({'visit': 204595, 'detectorName': 'S20'})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'visit': 204595, 'detector': 42})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'detector': 42})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'visit': 204595})
-        self.assertEqual(name, "R11_S20")
-
-        with self.assertRaises(RuntimeError):
-            self.mapper._extractDetectorName({'visit': 1})
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

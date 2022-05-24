@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import os
 import sys
 import unittest
 
@@ -28,18 +27,24 @@ from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
+from lsst.obs.lsst import LsstCamImSim
 
 
 class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "imsim"
 
+    @classmethod
+    def getInstrument(cls):
+        return LsstCamImSim()
+
     def setUp(self):
-        dataIds = {'raw': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
-                   'bias': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'},
-                   'flat': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11', 'filter': 'i_sim_1.4'},
-                   'dark': {'expId': 204595, 'detectorName': 'S20', 'raftName': 'R11'}
+        dataIds = {'raw': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'},
+                   'bias': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'},
+                   'flat': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11',
+                            'physical_filter': 'i_sim_1.4'},
+                   'dark': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'}
                    }
-        self.setUp_tests(self._butler, self._mapper, dataIds)
+        self.setUp_tests(self._butler, None, dataIds)
 
         ccdExposureId_bits = 34
         exposureIds = {'raw': 204595042,
@@ -78,15 +83,11 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                       'flat': Extent2I(4072, 4000),
                       }
         sky_origin = (55.67759886, -30.44239357)
-        raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'i_sim_1.4'}, 1),
-                       ({'level': 'sensor', 'filter': 'foo'}, 0),
-                       ({'level': 'sensor', 'expId': 204595}, 1),
-                       ({'level': 'filter', 'expId': 204595}, 1),
-                       ({'level': 'filter'}, 1),
-                       ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'i_sim_1.4'}, 1),
-                       ({'level': 'expId', 'filter': 'foo'}, 0)
+        raw_subsets = (({}, 1),
+                       ({'physical_filter': 'i_sim_1.4'}, 1),
+                       ({'physical_filter': 'foo'}, 0),
+                       ({'exposure': 204595}, 1),
+                       ({'exposure': 204595}, 1),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -102,45 +103,7 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "204595", "R11",
-                                   "00204595-R11-S20-det042.fits")
-        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'snap', 'run', 'calibDate', 'half', 'detectorName', 'raftName', 'label',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum', 'subdir',))
-        query_format = ["visit", "filter"]
-        queryMetadata = (({'visit': 204595}, [(204595, 'i_sim_1.4')]),
-                         ({'filter': 'i_sim_1.4'}, [(204595, 'i_sim_1.4')]),
-                         )
-        map_python_type = lsst.afw.image.DecoratedImageF
-        map_python_std_type = lsst.afw.image.ExposureF
-        map_cpp_type = 'DecoratedImageF'
-        map_storage_name = 'FitsStorage'
-        metadata_output_path = os.path.join('processCcd_metadata', '00204595-i_sim_1.4', 'R11',
-                                            'processCcdMetadata_00204595'
-                                            '-i_sim_1.4-R11-S20-det042.yaml')
-        raw_filename = '00204595-R11-S20-det042.fits'
-        default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('skyTile', set(['expId', 'run'])),
-                      ('filter', set(['expId'])),
-                      ('visit', set(['expId']))
-                      )
-        self.setUp_mapper(output=self.data_dir,
-                          path_to_raw=path_to_raw,
-                          keys=keys,
-                          query_format=query_format,
-                          queryMetadata=queryMetadata,
-                          metadata_output_path=metadata_output_path,
-                          map_python_type=map_python_type,
-                          map_python_std_type=map_python_std_type,
-                          map_cpp_type=map_cpp_type,
-                          map_storage_name=map_storage_name,
-                          raw_filename=raw_filename,
-                          default_level=default_level,
-                          raw_levels=raw_levels,
-                          test_config_metadata=True
-                          )
+        self.raw_filename = '00204595-R11-S20-det042.fits'
 
         self.setUp_camera(camera_name='LSSTCam-imSim',
                           n_detectors=189,
@@ -149,46 +112,6 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         super().setUp()
-
-    def testCcdExposureId(self):
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={})
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 1001)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R01",
-                                                              "detectorName": "S01"})
-        self.assertEqual(exposureId, 1001)
-
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 2000})
-
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1})
-
-        with self.assertRaises(ValueError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "raftName": "R99",
-                                                     "detectorName": "S01"})
-
-    def testDetectorName(self):
-        name = self.mapper._extractDetectorName({"raftName": "R00", "detectorName": "S00"})
-        self.assertEqual(name, "R00_S00")
-
-        name = self.mapper._extractDetectorName({'visit': 204595, 'detectorName': 'S20'})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'visit': 204595, 'detector': 42})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'detector': 42})
-        self.assertEqual(name, "R11_S20")
-
-        name = self.mapper._extractDetectorName({'visit': 204595})
-        self.assertEqual(name, "R11_S20")
-
-        with self.assertRaises(RuntimeError):
-            self.mapper._extractDetectorName({'visit': 1})
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

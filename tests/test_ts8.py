@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import os
 import sys
 import unittest
 
@@ -28,19 +27,24 @@ from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
+from lsst.obs.lsst import LsstTS8
 
 
 class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts8"
 
+    @classmethod
+    def getInstrument(cls):
+        return LsstTS8()
+
     def setUp(self):
-        dataIds = {'raw': {'expId': 201807241028453, 'detectorName': 'S11', 'raftName': 'RTM-010'},
-                   'bias': {'detectorName': 'S11', 'raftName': 'RTM-010',
-                            'dateObs': '2018-07-24T10:28:45.342'},
+        dataIds = {'raw': {'exposure': 201807241028453, 'name_in_raft': 'S11', 'raft': 'RTM-010'},
+                   'bias': {'name_in_raft': 'S11', 'raft': 'RTM-010',
+                            'day_obs': 20180724, 'seq_num': 17},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(self._butler, self._mapper, dataIds)
+        self.setUp_tests(self._butler, None, dataIds)
 
         ccdExposureId_bits = 58
         exposureIds = {'raw': 201807241028453067, 'bias': 201807241028453067}
@@ -52,14 +56,11 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4096, 4004)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'z'}, 1),
-                       ({'level': 'sensor', 'filter': 'foo'}, 0),
-                       ({'level': 'sensor', 'expId': 201807241028453}, 1),
-                       ({'level': 'filter', 'expId': 201807241028453}, 1),
-                       ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'z'}, 1),
-                       ({'level': 'expId', 'filter': 'foo'}, 0)
+        raw_subsets = (({}, 1),
+                       ({'physical_filter': 'z'}, 1),
+                       ({'physical_filter': 'foo'}, 0),
+                       ({'exposure': 201807241028453}, 1),
+                       ({'exposure': 201807241028454}, 0),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -75,44 +76,7 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "6006D", "201807241028453-RTM-010-S11-det067.fits")
-        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'calibDate', 'half', 'label', 'run', 'snap', 'detectorName', 'raftName',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'dayObs', 'seqNum', 'subdir',))
-        query_format = ["expId", "filter"]
-        queryMetadata = (({'expId': 201807241028453}, [(201807241028453, 'z')]),
-                         ({'detector': 67}, [(201807241028453, 'z')]),
-                         ({'detectorName': 'S11', 'raftName': 'RTM-010'}, [(201807241028453, 'z')]),
-                         )
-        map_python_type = lsst.afw.image.DecoratedImageF
-        map_python_std_type = lsst.afw.image.ExposureF
-        map_cpp_type = 'DecoratedImageF'
-        map_storage_name = 'FitsStorage'
-        metadata_output_path = None  # Not on sky data so processCcd not run.
-
-        raw_filename = '201807241028453-RTM-010-S11-det067.fits'
-        default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'run', 'detectorName', 'raftName'])),
-                      ('skyTile', set(['expId', 'run'])),
-                      ('filter', set(['expId'])),
-                      ('expId', set(['expId', 'run']))
-                      )
-        self.setUp_mapper(output=self.data_dir,
-                          path_to_raw=path_to_raw,
-                          keys=keys,
-                          query_format=query_format,
-                          queryMetadata=queryMetadata,
-                          metadata_output_path=metadata_output_path,
-                          map_python_type=map_python_type,
-                          map_python_std_type=map_python_std_type,
-                          map_cpp_type=map_cpp_type,
-                          map_storage_name=map_storage_name,
-                          raw_filename=raw_filename,
-                          default_level=default_level,
-                          raw_levels=raw_levels,
-                          test_config_metadata=False,
-                          )
+        self.raw_filename = '201807241028453-RTM-010-S11-det067.fits'
 
         self.setUp_camera(camera_name='LSST-TS8',
                           n_detectors=225,
@@ -121,36 +85,6 @@ class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         super().setUp()
-
-    def testCcdExposureId(self):
-        exposureId = self.butler.get('ccdExposureId', dataId={})
-        self.assertEqual(exposureId, 0)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(exposureId, 1001)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S01",
-                                                              "raftName": "RTM-002"})
-        self.assertEqual(exposureId, 1001)
-
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1})
-
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={"detector": 1})
-
-        with self.assertRaises(KeyError):
-            self.butler.get('ccdExposureId', dataId={"visit": 1, "detectorName": "S44"})
-
-    def testDetectorName(self):
-        name = self.mapper._extractDetectorName({"detectorName": "S02", "raftName": "RTM-002"})
-        self.assertEqual(name, "RTM-002_S02")
-
-        name = self.mapper._extractDetectorName({"detector": 67, 'visit': 201807241028453})
-        self.assertEqual(name, "RTM-010_S11")
-
-        name = self.mapper._extractDetectorName({"detector": 67, 'visit': 201807241028453, "channel": 1})
-        self.assertEqual(name, "RTM-010_S11")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

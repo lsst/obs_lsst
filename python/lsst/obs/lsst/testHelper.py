@@ -62,7 +62,13 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
         if not os.path.exists(cls.data_dir):
             raise unittest.SkipTest(f"Data directory {cls.data_dir} does not exist.")
 
-        cls._butler = lsst.daf.butler.Butler(cls.data_dir)
+        instrument = cls.getInstrument()
+        # Assume the test repos use the defaults.
+        collections = [instrument.makeUnboundedCalibrationRunName(),
+                       instrument.makeDefaultRawIngestRunName(),
+                       instrument.makeCalibrationCollectionName()]
+        cls._butler = lsst.daf.butler.Butler(cls.data_dir, collections=collections,
+                                             instrument=instrument.getName())
 
 
 class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
@@ -78,4 +84,4 @@ class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
 
     def testRawFilename(self):
         uri = self.butler.getURI("raw", dataId=self.dataIds["raw"])
-        self.assertEqual(uri.ospath, self.mapper_data.raw_filename)
+        self.assertEqual(uri.basename(), self.raw_filename)
