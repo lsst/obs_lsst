@@ -28,12 +28,11 @@ __all__ = (
     "COMCAM_FILTER_DEFINITIONS",
 )
 
-import re
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
 from .translators.lsst import FILTER_DELIMITER
 
 
-def addFilter(filter_dict, band, physical_filter, lambdaEff=0.0):
+def addFilter(filter_dict, band, physical_filter):
     """Define a filter in filter_dict, to be converted to a Filter later"""
 
     # index by band but keep distinct physical filters by band
@@ -42,32 +41,24 @@ def addFilter(filter_dict, band, physical_filter, lambdaEff=0.0):
         filter_dict[band] = {}
 
     filter_dict[band][physical_filter] = dict(physical_filter=physical_filter,
-                                              band=band, lambdaEff=lambdaEff, alias=[],
+                                              band=band, alias=[],
                                               )
 
 
-# The LSST Filters from L. Jones 05/14/2020 - "Edges" = 5% of peak throughput
-# See https://github.com/rhiannonlynne/notebooks/blob/master/Filter%20Characteristics.ipynb # noqa: W505
+# The LSST Filters from L. Jones 05/14/2020
 #
 # N.b. DM-26623 requests that these physical names be updated once
 # the camera team has decided upon the final values (CAP-617)
 
 LsstCamFiltersBaseline = FilterDefinitionCollection(
     FilterDefinition(physical_filter="empty", band="white",
-                     lambdaEff=0.0,
                      alias={"no_filter", "open"}),
-    FilterDefinition(physical_filter="u", band="u",
-                     lambdaEff=368.48, lambdaMin=320.00, lambdaMax=408.60),
-    FilterDefinition(physical_filter="g", band="g",
-                     lambdaEff=480.20, lambdaMin=386.40, lambdaMax=567.00),
-    FilterDefinition(physical_filter="r", band="r",
-                     lambdaEff=623.12, lambdaMin=537.00, lambdaMax=706.00),
-    FilterDefinition(physical_filter="i", band="i",
-                     lambdaEff=754.17, lambdaMin=676.00, lambdaMax=833.00),
-    FilterDefinition(physical_filter="z", band="z",
-                     lambdaEff=869.05, lambdaMin=803.00, lambdaMax=938.60),
-    FilterDefinition(physical_filter="y", band="y",
-                     lambdaEff=973.64, lambdaMin=908.40, lambdaMax=1099.00),
+    FilterDefinition(physical_filter="u", band="u"),
+    FilterDefinition(physical_filter="g", band="g"),
+    FilterDefinition(physical_filter="r", band="r"),
+    FilterDefinition(physical_filter="i", band="i"),
+    FilterDefinition(physical_filter="z", band="z"),
+    FilterDefinition(physical_filter="y", band="y"),
 )
 
 #
@@ -108,18 +99,10 @@ BOT_filter_map = {
 
 BOTFilters_dict = {}
 for physical_filter, band in BOT_filter_map.items():
-    lambdaEff = 0.0
-    lsstCamFilterMatches = [f for f in LsstCamFiltersBaseline if f.band == band]
-    if lsstCamFilterMatches:
-        lambdaEff = lsstCamFilterMatches[0].lambdaEff
-
-    if mat := re.match(r"(\d+)nm$", physical_filter):
-        lambdaEff = float(mat.group(1))
-
     if physical_filter == "empty":
         pass  # Already defined above
     else:
-        addFilter(BOTFilters_dict, band, physical_filter, lambdaEff=lambdaEff)
+        addFilter(BOTFilters_dict, band, physical_filter)
 
     # Empty ND is removed by metadata translator so is not needed here
     ndFilters = ["ND_OD0.1", "ND_OD0.3", "ND_OD0.5", "ND_OD0.7", "ND_OD1.0", "ND_OD2.0"]
@@ -139,10 +122,10 @@ for physical_filter, band in BOT_filter_map.items():
         # Use a generic ND modifier for the band
         ndband = f"{band}{FILTER_DELIMITER}nd"
 
-        addFilter(BOTFilters_dict, band=ndband, physical_filter=phys_plus_nd, lambdaEff=lambdaEff)
+        addFilter(BOTFilters_dict, band=ndband, physical_filter=phys_plus_nd)
 
 BOTFilters = [
-    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
+    FilterDefinition(band="unknown", physical_filter="unknown"),
 ]
 for band, physical_filters in BOTFilters_dict.items():
     for physical_filter, filter_defn in physical_filters.items():
@@ -164,9 +147,9 @@ LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # Filters in SLAC's Test Stand 3
 #
 TS3Filters = [
-    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
-    FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
-    FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
+    FilterDefinition(band="unknown", physical_filter="unknown"),
+    FilterDefinition(physical_filter="275CutOn"),
+    FilterDefinition(physical_filter="550CutOn")]
 
 TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *LsstCamFiltersBaseline,
@@ -176,9 +159,9 @@ TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
 # Filters in SLAC's Test Stand 8
 #
 TS8Filters = [
-    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
-    FilterDefinition(physical_filter="275CutOn", lambdaEff=0.0),
-    FilterDefinition(physical_filter="550CutOn", lambdaEff=0.0)]
+    FilterDefinition(band="unknown", physical_filter="unknown"),
+    FilterDefinition(physical_filter="275CutOn"),
+    FilterDefinition(physical_filter="550CutOn")]
 
 TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *LsstCamFiltersBaseline,
@@ -191,49 +174,35 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
 _latiss_filters = (
     FilterDefinition(physical_filter="empty",
                      band="white",
-                     lambdaEff=0.0,
                      alias={"no_filter", "open"}),
     FilterDefinition(physical_filter="blank_bk7_wg05",
-                     band="white",
-                     lambdaEff=0.0),
+                     band="white"),
     FilterDefinition(physical_filter="KPNO_1111_436nm",
-                     band="g",
-                     lambdaEff=436.0, lambdaMin=386.0, lambdaMax=486.0),
+                     band="g"),
     FilterDefinition(physical_filter="KPNO_373A_677nm",
-                     band="r",
-                     lambdaEff=677.0, lambdaMin=624.0, lambdaMax=730.0),
+                     band="r"),
     FilterDefinition(physical_filter="KPNO_406_828nm",
-                     band="z",
-                     lambdaEff=828.0, lambdaMin=738.5, lambdaMax=917.5),
+                     band="z"),
     FilterDefinition(physical_filter="diffuser",
-                     band="diffuser",
-                     lambdaEff=0.0),
+                     band="diffuser"),
     FilterDefinition(physical_filter="unknown",
-                     band="unknown",
-                     lambdaEff=0.0),
+                     band="unknown"),
     FilterDefinition(physical_filter="BG40",
                      band="g",
-                     afw_name="bg",
-                     lambdaEff=472.0, lambdaMin=334.5, lambdaMax=609.5),
+                     afw_name="bg"),
     FilterDefinition(physical_filter="quadnotch1",
-                     lambdaEff=0.0,
                      band="notch"),
     FilterDefinition(physical_filter="RG610",
-                     lambdaEff=0.0,
                      band="r",
                      afw_name="rg"),
     FilterDefinition(physical_filter="FELH0600",
-                     lambdaEff=0.0,
                      band="r",
                      afw_name="rg"),
     FilterDefinition(physical_filter="SDSSg",
-                     lambdaEff=477.0,
                      band="g"),
     FilterDefinition(physical_filter="SDSSr",
-                     lambdaEff=623.1,
                      band="r"),
     FilterDefinition(physical_filter="SDSSi",
-                     lambdaEff=762.5,
                      band="i"),
 )
 
@@ -260,9 +229,6 @@ for filter in _latiss_filters:
         # For gratings set the band to the band of the filter
         combo = FilterDefinition(physical_filter=new_name,
                                  band=filter.band,
-                                 lambdaEff=filter.lambdaEff,
-                                 lambdaMin=filter.lambdaMin,
-                                 lambdaMax=filter.lambdaMax,
                                  afw_name=filter.afw_name,
                                  alias=new_aliases)
         _latiss_filter_and_grating.append(combo)
@@ -275,23 +241,17 @@ LSSTCAM_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
     # These were computed using throughputs 1.4 and
     # lsst.sims.photUtils.BandpassSet.
     FilterDefinition(physical_filter="u_sim_1.4",
-                     band="u",
-                     lambdaEff=367.070, lambdaMin=308.0, lambdaMax=408.6),
+                     band="u"),
     FilterDefinition(physical_filter="g_sim_1.4",
-                     band="g",
-                     lambdaEff=482.685, lambdaMin=386.5, lambdaMax=567.0),
+                     band="g"),
     FilterDefinition(physical_filter="r_sim_1.4",
-                     band="r",
-                     lambdaEff=622.324, lambdaMin=537.0, lambdaMax=706.0),
+                     band="r"),
     FilterDefinition(physical_filter="i_sim_1.4",
-                     band="i",
-                     lambdaEff=754.598, lambdaMin=676.0, lambdaMax=833.0),
+                     band="i"),
     FilterDefinition(physical_filter="z_sim_1.4",
-                     band="z",
-                     lambdaEff=869.090, lambdaMin=803.0, lambdaMax=938.6),
+                     band="z"),
     FilterDefinition(physical_filter="y_sim_1.4",
-                     band="y",
-                     lambdaEff=971.028, lambdaMin=908.4, lambdaMax=1096.3)
+                     band="y"),
 )
 
 # ###########################################################################
@@ -314,14 +274,13 @@ for band, sn in [("u", "SN-05"),  # incorrect sub thickness
                  ]:
     physical_filter = f"{band}_{sn[3:]}"
     lsstCamFilter = [f for f in LsstCamFiltersBaseline if f.band == band][0]
-    lambdaEff = lsstCamFilter.lambdaEff
 
-    addFilter(ComCamFilters_dict, band, physical_filter, lambdaEff=lambdaEff)
+    addFilter(ComCamFilters_dict, band, physical_filter)
 
 
 ComCamFilters = [
-    FilterDefinition(band="white", physical_filter="empty", lambdaEff=0.0),
-    FilterDefinition(band="unknown", physical_filter="unknown", lambdaEff=0.0),
+    FilterDefinition(band="white", physical_filter="empty"),
+    FilterDefinition(band="unknown", physical_filter="unknown"),
 ]
 for band, physical_filters in ComCamFilters_dict.items():
     for physical_filter, filter_defn in physical_filters.items():
