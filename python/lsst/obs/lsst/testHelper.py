@@ -25,6 +25,8 @@ __all__ = ("ObsLsstButlerTests", "ObsLsstObsBaseOverrides")
 
 import os.path
 import unittest
+from abc import abstractmethod
+
 import lsst.utils.tests
 import lsst.obs.base.tests
 import lsst.daf.butler
@@ -50,6 +52,18 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
     """Name of instrument directory within data/input."""
 
     _butler = None
+
+    @classmethod
+    @abstractmethod
+    def getInstrument(cls):
+        """Retrieve the `lsst.obs.base.Instrument` class for this instrument.
+
+        Returns
+        -------
+        instrument : `lsst.obs.base.Instrument`
+            The class associated with this instrument.
+        """
+        ...
 
     @classmethod
     def tearDownClass(cls):
