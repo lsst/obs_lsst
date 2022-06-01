@@ -1,0 +1,933 @@
+SIMPLE  =                    T / file does conform to FITS standard             BITPIX  =                   16 / number of bits per data pixel                  NAXIS   =                    0 / number of data axes                            EXTEND  =                    T / FITS dataset may contain extensions            COMMENT   FITS (Flexible Image Transport System) format is defined in 'AstronomyCOMMENT   and Astrophysics', volume 376, page 359; bibcode: 2001A&A...376..359H END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                  148 / width of table in bytes                        NAXIS2  =                   40 / number of rows in table                        PCOUNT  =                    0 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                    7 / number of fields in each row                   TTYPE1  = 'id      '           / Archive ID of the persistable object that owns TFORM1  = '1J      '           / format of field                                TDOC1   = 'Archive ID of the persistable object that owns the records pointed &'CONTINUE  'at by this entry'                                                    TCCLS1  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE2  = 'cat.archive'        / index of the catalog this entry points to, fromTFORM2  = '1J      '           / format of field                                TDOC2   = 'index of the catalog this entry points to, from the perspective of &'CONTINUE  'the archive'                                                         TCCLS2  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE3  = 'cat.persistable'    / index of the catalog this entry points to, fromTFORM3  = '1J      '           / format of field                                TDOC3   = 'index of the catalog this entry points to, from the perspective of &'CONTINUE  'the Persistable'                                                     TCCLS3  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE4  = 'row0    '           / first row used by the persistable object in thiTFORM4  = '1J      '           / format of field                                TDOC4   = 'first row used by the persistable object in this catalog'            TCCLS4  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE5  = 'nrows   '           / number of rows used by the persistable object iTFORM5  = '1J      '           / format of field                                TDOC5   = 'number of rows used by the persistable object in this catalog'       TCCLS5  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE6  = 'name    '           / unique name for the persistable object's class TFORM6  = '64A     '           / format of field                                TDOC6   = 'unique name for the persistable object''s class'                     TCCLS6  = 'String  '           / Field template used by lsst.afw.table          TTYPE7  = 'module  '           / Python module that should be imported to registTFORM7  = '64A     '           / format of field                                TDOC7   = 'Python module that should be imported to register the object''s fac&'CONTINUE  'tory    '                                                            TCCLS7  = 'String  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_INDEX'                                                       EXTNAME = 'ARCHIVE_INDEX'                                                       AR_CATN =                    0 / # of this catalog relative to the start of thisAR_NCAT =                    7 / # of catalogs in this archive, including the inHIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                      	             TransformPoint2ToPoint2                                         lsst.afw.geom                                                      
+             TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                	   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                
+   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                   TransformPoint2ToPoint2                                         lsst.afw.geom                                                                    TransformMap                                                    lsst.afw.cameraGeom                                                              Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                            Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         0   Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         @   Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         P   Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         `   Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         p   Detector                                                        lsst.afw.cameraGeom                                                             Detector                                                        lsst.afw.cameraGeom                                                         Ä   Detector                                                        lsst.afw.cameraGeom                                                              	Camera                                                          lsst.afw.cameraGeom                                                             Camera                                                          lsst.afw.cameraGeom                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                    4 / width of table in bytes                        NAXIS2  =                    9 / number of rows in table                        PCOUNT  =                    0 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                    1 / number of fields in each row                   TTYPE1  = 'detector'           / archive ID of Detector in a DetectorCollection TFORM1  = '1J      '           / format of field                                TDOC1   = 'archive ID of Detector in a DetectorCollection'                      TCCLS1  = 'Scalar  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    1 / # of this catalog relative to the start of thisAR_NAME = 'Camera  '           / Class name for objects stored here             EXTNAME = 'Camera  '                                                            HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                  164 / width of table in bytes                        NAXIS2  =                    9 / number of rows in table                        PCOUNT  =                  207 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                   20 / number of fields in each row                   TTYPE1  = 'name    '           / Name of the detector                           TFORM1  = '1QA(7)  '           / format of field                                TDOC1   = 'Name of the detector'                                                TCCLS1  = 'String  '           / Field template used by lsst.afw.table          TTYPE2  = 'id      '           / Integer ID for the detector                    TFORM2  = '1J      '           / format of field                                TDOC2   = 'Integer ID for the detector'                                         TCCLS2  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE3  = 'type    '           / Raw DetectorType enum value                    TFORM3  = '1J      '           / format of field                                TDOC3   = 'Raw DetectorType enum value'                                         TCCLS3  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE4  = 'serial  '           / Serial name of the detector                    TFORM4  = '1QA(13) '           / format of field                                TDOC4   = 'Serial name of the detector'                                         TCCLS4  = 'String  '           / Field template used by lsst.afw.table          TTYPE5  = 'bbox_min_x'         / Detector bounding box (minimum)                TFORM5  = '1J      '           / format of field                                TDOC5   = 'Detector bounding box (minimum)'                                     TUNIT5  = 'pixel   '                                                            TCCLS5  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE6  = 'bbox_min_y'         / Detector bounding box (minimum)                TFORM6  = '1J      '           / format of field                                TDOC6   = 'Detector bounding box (minimum)'                                     TUNIT6  = 'pixel   '                                                            TCCLS6  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE7  = 'bbox_max_x'         / Detector bounding box (maximum)                TFORM7  = '1J      '           / format of field                                TDOC7   = 'Detector bounding box (maximum)'                                     TUNIT7  = 'pixel   '                                                            TCCLS7  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE8  = 'bbox_max_y'         / Detector bounding box (maximum)                TFORM8  = '1J      '           / format of field                                TDOC8   = 'Detector bounding box (maximum)'                                     TUNIT8  = 'pixel   '                                                            TCCLS8  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE9  = 'pixelSize_x'        / Physical pixel size                            TFORM9  = '1D      '           / format of field                                TDOC9   = 'Physical pixel size'                                                 TUNIT9  = 'mm      '                                                            TCCLS9  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE10 = 'pixelSize_y'        / Physical pixel size                            TFORM10 = '1D      '           / format of field                                TDOC10  = 'Physical pixel size'                                                 TUNIT10 = 'mm      '                                                            TCCLS10 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE11 = 'fpPosition_x'       / Focal plane position of reference point        TFORM11 = '1D      '           / format of field                                TDOC11  = 'Focal plane position of reference point'                             TUNIT11 = 'mm      '                                                            TCCLS11 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE12 = 'fpPosition_y'       / Focal plane position of reference point        TFORM12 = '1D      '           / format of field                                TDOC12  = 'Focal plane position of reference point'                             TUNIT12 = 'mm      '                                                            TCCLS12 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE13 = 'refPoint_x'         / Pixel position of reference point              TFORM13 = '1D      '           / format of field                                TDOC13  = 'Pixel position of reference point'                                   TUNIT13 = 'pixel   '                                                            TCCLS13 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE14 = 'refPoint_y'         / Pixel position of reference point              TFORM14 = '1D      '           / format of field                                TDOC14  = 'Pixel position of reference point'                                   TUNIT14 = 'pixel   '                                                            TCCLS14 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE15 = 'yaw     '           / Rotation about Z (X to Y), 1st rotation        TFORM15 = '1D      '           / format of field                                TDOC15  = 'Rotation about Z (X to Y), 1st rotation'                             TUNIT15 = 'rad     '                                                            TCCLS15 = 'Angle   '           / Field template used by lsst.afw.table          TTYPE16 = 'pitch   '           / Rotation about Y' (Z'=Z to X'), 2nd rotation   TFORM16 = '1D      '           / format of field                                TDOC16  = 'Rotation about Y'' (Z''=Z to X''), 2nd rotation'                     TUNIT16 = 'rad     '                                                            TCCLS16 = 'Angle   '           / Field template used by lsst.afw.table          TTYPE17 = 'roll    '           / Rotation about X'' (Y''=Y' to Z''), 3rd rotatioTFORM17 = '1D      '           / format of field                                TDOC17  = 'Rotation about X'''' (Y''''=Y'' to Z''''), 3rd rotation'             TUNIT17 = 'rad     '                                                            TCCLS17 = 'Angle   '           / Field template used by lsst.afw.table          TTYPE18 = 'transformMap'       / Archive ID of TransformMap                     TFORM18 = '1J      '           / format of field                                TDOC18  = 'Archive ID of TransformMap'                                          TCCLS18 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE19 = 'crosstalk'          / Crosstalk matrix, flattened                    TFORM19 = '1QE(0)  '           / format of field                                TDOC19  = 'Crosstalk matrix, flattened'                                         TCCLS19 = 'Array   '           / Field template used by lsst.afw.table          TTYPE20 = 'physicalType'       / Physical type of the detector                  TFORM20 = '1QA(3)  '           / format of field                                TDOC20  = 'Physical type of the detector'                                       TCCLS20 = 'String  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    2 / # of this catalog relative to the start of thisAR_NAME = 'Detector'           / Class name for objects stored here             EXTNAME = 'Detector'                                                            HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                            Á  ü?Ñz·GÆ{?Ñz·GÆ{¿E      ¿E      @ü“     @üB                                                                                                           Á  ü?Ñz·GÆ{?Ñz·GÆ{        ¿E      @ü“     @üB                                                              +              .                     5          Á  ü?Ñz·GÆ{?Ñz·GÆ{@E      ¿E      @ü“     @üB                                                              B              E                     L          Á  ü?Ñz·GÆ{?Ñz·GÆ{¿E              @ü“     @üB                                                              Y              \                     c          Á  ü?Ñz·GÆ{?Ñz·GÆ{                @ü“     @üB                                                              p              s                     z          Á  ü?Ñz·GÆ{?Ñz·GÆ{@E              @ü“     @üB                                                              á              ä                     ë          Á  ü?Ñz·GÆ{?Ñz·GÆ{¿E      @E      @ü“     @üB                                                              û              °                     ®          Á  ü?Ñz·GÆ{?Ñz·GÆ{        @E      @ü“     @üB                                                              µ              ∏                     ø          Á  ü?Ñz·GÆ{?Ñz·GÆ{@E      @E      @ü“     @üB                                                              ÃR22_S00ITL-3800C-229ITLR22_S01ITL-3800C-251ITLR22_S02ITL-3800C-215ITLR22_S10ITL-3800C-326ITLR22_S11ITL-3800C-283ITLR22_S12ITL-3800C-243ITLR22_S20ITL-3800C-319ITLR22_S21ITL-3800C-209ITLR22_S22ITL-3800C-206ITL                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                   68 / width of table in bytes                        NAXIS2  =                   19 / number of rows in table                        PCOUNT  =                  499 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                    5 / number of fields in each row                   TTYPE1  = 'fromSysName'        / Camera coordinate system name.                 TFORM1  = '1QA(10) '           / format of field                                TDOC1   = 'Camera coordinate system name.'                                      TCCLS1  = 'String  '           / Field template used by lsst.afw.table          TTYPE2  = 'fromSysDetectorName' / Camera coordinate system detector name.       TFORM2  = '1QA(7)  '           / format of field                                TDOC2   = 'Camera coordinate system detector name.'                             TCCLS2  = 'String  '           / Field template used by lsst.afw.table          TTYPE3  = 'toSysName'          / Camera coordinate system name.                 TFORM3  = '1QA(10) '           / format of field                                TDOC3   = 'Camera coordinate system name.'                                      TCCLS3  = 'String  '           / Field template used by lsst.afw.table          TTYPE4  = 'toSysDetectorName'  / Camera coordinate system detector name.        TFORM4  = '1QA(7)  '           / format of field                                TDOC4   = 'Camera coordinate system detector name.'                             TCCLS4  = 'String  '           / Field template used by lsst.afw.table          TTYPE5  = 'transform'          / Archive ID of the transform.                   TFORM5  = '1J      '           / format of field                                TDOC5   = 'Archive ID of the transform.'                                        TCCLS5  = 'Scalar  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    3 / # of this catalog relative to the start of thisAR_NAME = 'TransformMap'       / Class name for objects stored here             EXTNAME = 'TransformMap'                                                        HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                    
+                      
+       
+                               
+                                    !              '          
+       .              8              9              ?          
+       F              P              Q              W          
+       ^              h              i              o          
+       v              Ä              Å              á   	       
+       é              ò              ô              ü   
+       
+       ¶              ∞              ±              ∑          
+       æ              »              …              œ          
+       ÷              ‡              ·              Á                 Ó              Ù       	       ˚                                                 	                   !                (             .       	      5             >                E             K       	      R             [                b             h       	      o             x                             Ö       	      å             ï                ú             ¢       	      ©             ≤                π             ø       	      ∆             œ                ÷             ‹       	      „             Ï   FocalPlane FieldAngle FocalPlane PixelsR22_S00FocalPlane PixelsR22_S01FocalPlane PixelsR22_S02FocalPlane PixelsR22_S10FocalPlane PixelsR22_S11FocalPlane PixelsR22_S12FocalPlane PixelsR22_S20FocalPlane PixelsR22_S21FocalPlane PixelsR22_S22PixelsR22_S11TanPixelsR22_S11PixelsR22_S02TanPixelsR22_S02PixelsR22_S12TanPixelsR22_S12PixelsR22_S01TanPixelsR22_S01PixelsR22_S20TanPixelsR22_S20PixelsR22_S10TanPixelsR22_S10PixelsR22_S21TanPixelsR22_S21PixelsR22_S00TanPixelsR22_S00PixelsR22_S22TanPixelsR22_S22                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                   16 / width of table in bytes                        NAXIS2  =                   19 / number of rows in table                        PCOUNT  =                25638 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                    1 / number of fields in each row                   TTYPE1  = 'bytes   '           / a bytestring containing the output of TransformTFORM1  = '1QB(2523)'          / format of field                                TDOC1   = 'a bytestring containing the output of Transform.writeString'         TCCLS1  = 'Array   '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    4 / # of this catalog relative to the start of thisAR_NAME = 'TransformPoint2ToPoint2' / Class name for objects stored here        EXTNAME = 'TransformPoint2ToPoint2'                                             HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ›               »      ›       »      •       «      m       »      4       »      ¸       «      ƒ       «      	ã       «      
+R       ∆            	œ      ﬂ      	€      Æ      	œ      â      	€      )X      	√      33      	√      <ˆ      	œ      Fπ      	œ      Pà      	œ      ZW1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    InvB = 1
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          Nout = 3
+       IsA Mapping
+          MapA =
+             Begin UnitNormMap
+                Nin = 2
+                Nout = 3
+             IsA Mapping
+             End UnitNormMap
+          MapB =
+             Begin CmpMap
+                Nin = 3
+             IsA Mapping
+                Series = 0
+                MapA =
+                   Begin UnitMap
+                      Nin = 2
+                   IsA Mapping
+                   End UnitMap
+                MapB =
+                   Begin PolyMap
+                      Nin = 1
+                   IsA Mapping
+                      MPF1 = 2
+                      NCF1 = 2
+                      CF1 = 9.6962736221907193e-05
+                      CF2 = 0
+                      PF1 = 1
+                      PF2 = 2
+                      IterInv = 1
+                      NiterInv = 30
+                      TolInv = 1e-08
+                   End PolyMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin UnitNormMap
+          Nin = 2
+          Nout = 3
+          Invert = 1
+       IsA Mapping
+       End UnitNormMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -62.615000000000002
+    Scl1 = 0.01
+    Sft2 = -62.254999999999995
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -20.365000000000002
+    Scl1 = 0.01
+    Sft2 = -62.254999999999995
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = 21.884999999999998
+    Scl1 = 0.01
+    Sft2 = -62.254999999999995
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -62.615000000000002
+    Scl1 = 0.01
+    Sft2 = -20.004999999999999
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -20.365000000000002
+    Scl1 = 0.01
+    Sft2 = -20.004999999999999
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = 21.884999999999998
+    Scl1 = 0.01
+    Sft2 = -20.004999999999999
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -62.615000000000002
+    Scl1 = 0.01
+    Sft2 = 22.245000000000001
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = -20.365000000000002
+    Scl1 = 0.01
+    Sft2 = 22.245000000000001
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin WinMap
+    Nin = 2
+    IsSimp = 1
+    Invert = 1
+ IsA Mapping
+    Sft1 = 21.884999999999998
+    Scl1 = 0.01
+    Sft2 = 22.245000000000001
+    Scl2 = 0.01
+ End WinMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -20.365000000000002
+                Scl1 = 0.01
+                Sft2 = -20.004999999999999
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 2036.5000000000002
+          Scl1 = 1031324.0312095531
+          Sft2 = 2000.5
+          Scl2 = 1031324.0312095531
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = 21.884999999999998
+                Scl1 = 0.01
+                Sft2 = -62.254999999999995
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = -2188.4999999999995
+          Scl1 = 1031324.0312354818
+          Sft2 = 6225.4999999999991
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = 21.884999999999998
+                Scl1 = 0.01
+                Sft2 = -20.004999999999999
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = -2188.4999999999995
+          Scl1 = 1031324.0312354818
+          Sft2 = 2000.5
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -20.365000000000002
+                Scl1 = 0.01
+                Sft2 = -62.254999999999995
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 2036.5000000000002
+          Scl1 = 1031324.0312095531
+          Sft2 = 6225.4999999999991
+          Scl2 = 1031324.0312095531
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -62.615000000000002
+                Scl1 = 0.01
+                Sft2 = 22.245000000000001
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 6261.5
+          Scl1 = 1031324.0312354818
+          Sft2 = -2224.5
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -62.615000000000002
+                Scl1 = 0.01
+                Sft2 = -20.004999999999999
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 6261.5
+          Scl1 = 1031324.0312354818
+          Sft2 = 2000.5
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -20.365000000000002
+                Scl1 = 0.01
+                Sft2 = 22.245000000000001
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 2036.5000000000002
+          Scl1 = 1031324.0312095531
+          Sft2 = -2224.5
+          Scl2 = 1031324.0312095531
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = -62.615000000000002
+                Scl1 = 0.01
+                Sft2 = -62.254999999999995
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = 6261.5
+          Scl1 = 1031324.0312354818
+          Sft2 = 6225.4999999999991
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+1 TransformPoint2ToPoint2 Begin CmpMap
+    Nin = 2
+    IsSimp = 1
+ IsA Mapping
+    MapA =
+       Begin CmpMap
+          Nin = 2
+          IsSimp = 1
+       IsA Mapping
+          MapA =
+             Begin WinMap
+                Nin = 2
+             IsA Mapping
+                Sft1 = 21.884999999999998
+                Scl1 = 0.01
+                Sft2 = 22.245000000000001
+                Scl2 = 0.01
+             End WinMap
+          MapB =
+             Begin CmpMap
+                Nin = 2
+                IsSimp = 1
+             IsA Mapping
+                InvB = 1
+                MapA =
+                   Begin CmpMap
+                      Nin = 2
+                      Nout = 3
+                   IsA Mapping
+                      MapA =
+                         Begin UnitNormMap
+                            Nin = 2
+                            Nout = 3
+                         IsA Mapping
+                         End UnitNormMap
+                      MapB =
+                         Begin CmpMap
+                            Nin = 3
+                         IsA Mapping
+                            Series = 0
+                            MapA =
+                               Begin UnitMap
+                                  Nin = 2
+                               IsA Mapping
+                               End UnitMap
+                            MapB =
+                               Begin PolyMap
+                                  Nin = 1
+                               IsA Mapping
+                                  MPF1 = 2
+                                  NCF1 = 2
+                                  CF1 = 9.6962736221907193e-05
+                                  CF2 = 0
+                                  PF1 = 1
+                                  PF2 = 2
+                                  IterInv = 1
+                                  NiterInv = 30
+                                  TolInv = 1e-08
+                               End PolyMap
+                         End CmpMap
+                   End CmpMap
+                MapB =
+                   Begin UnitNormMap
+                      Nin = 2
+                      Nout = 3
+                      Invert = 1
+                   IsA Mapping
+                   End UnitNormMap
+             End CmpMap
+       End CmpMap
+    MapB =
+       Begin WinMap
+          Nin = 2
+       IsA Mapping
+          Sft1 = -2188.4999999999995
+          Scl1 = 1031324.0312354818
+          Sft2 = -2224.5
+          Scl2 = 1031324.0312354818
+       End WinMap
+ End CmpMap
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                  221 / width of table in bytes                        NAXIS2  =                  144 / number of rows in table                        PCOUNT  =                 4752 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                   38 / number of fields in each row                   TTYPE1  = 'flags   '           / bits for all Flag fields; see also TFLAGn      TFORM1  = '3X      '           / format of field                                FLAGCOL =                    1 / Column number for the bitflags.                TTYPE2  = 'name    '           / name of amplifier location in camera           TFORM2  = '1QA(3)  '           / format of field                                TDOC2   = 'name of amplifier location in camera'                                TCCLS2  = 'String  '           / Field template used by lsst.afw.table          TTYPE3  = 'bbox_min_x'         / bbox of amplifier image data on assembled imageTFORM3  = '1J      '           / format of field                                TDOC3   = 'bbox of amplifier image data on assembled image, min point'          TUNIT3  = 'pixel   '                                                            TCCLS3  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE4  = 'bbox_min_y'         / bbox of amplifier image data on assembled imageTFORM4  = '1J      '           / format of field                                TDOC4   = 'bbox of amplifier image data on assembled image, min point'          TUNIT4  = 'pixel   '                                                            TCCLS4  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE5  = 'bbox_extent_x'      / bbox of amplifier image data on assembled imageTFORM5  = '1J      '           / format of field                                TDOC5   = 'bbox of amplifier image data on assembled image, extent'             TUNIT5  = 'pixel   '                                                            TCCLS5  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE6  = 'bbox_extent_y'      / bbox of amplifier image data on assembled imageTFORM6  = '1J      '           / format of field                                TDOC6   = 'bbox of amplifier image data on assembled image, extent'             TUNIT6  = 'pixel   '                                                            TCCLS6  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE7  = 'gain    '           / amplifier gain                                 TFORM7  = '1D      '           / format of field                                TDOC7   = 'amplifier gain'                                                      TUNIT7  = 'electron adu^-1'                                                     TCCLS7  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE8  = 'saturation'         / level above which pixels are considered saturatTFORM8  = '1D      '           / format of field                                TDOC8   = 'level above which pixels are considered saturated; use `nan` if no &'CONTINUE  'such level applies'                                                  TUNIT8  = 'adu     '                                                            TCCLS8  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE9  = 'suspectlevel'       / level above which pixels are considered suspiciTFORM9  = '1D      '           / format of field                                TDOC9   = 'level above which pixels are considered suspicious, meaning they ma&'CONTINUE  'y be affected by unknown systematics; for example if non-linearity &'CONTINUE  'corrections above a certain level are unstable then that would be a&'CONTINUE  ' useful value for suspectLevel; use `nan` if no such level applies'  TUNIT9  = 'adu     '                                                            TCCLS9  = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE10 = 'readnoise'          / amplifier read noise                           TFORM10 = '1D      '           / format of field                                TDOC10  = 'amplifier read noise'                                                TUNIT10 = 'electron'                                                            TCCLS10 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE11 = 'readoutcorner'      / readout corner, in the frame of the assembled iTFORM11 = '1J      '           / format of field                                TDOC11  = 'readout corner, in the frame of the assembled image'                 TCCLS11 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE12 = 'linearity_coeffs'   / coefficients for linearity fit up to cubic     TFORM12 = '1QD(2)  '           / format of field                                TDOC12  = 'coefficients for linearity fit up to cubic'                          TCCLS12 = 'Array   '           / Field template used by lsst.afw.table          TTYPE13 = 'linearity_type'     / type of linearity model                        TFORM13 = '1QA(12) '           / format of field                                TDOC13  = 'type of linearity model'                                             TCCLS13 = 'String  '           / Field template used by lsst.afw.table          TFLAG1  = 'hasrawinfo'                                                          TFDOC1  = 'is raw amplifier information available (e.g. untrimmed bounding box&'CONTINUE  'es)?    '                                                            TTYPE14 = 'raw_bbox_min_x'     / entire amplifier bbox on raw image, min point  TFORM14 = '1J      '           / format of field                                TDOC14  = 'entire amplifier bbox on raw image, min point'                       TUNIT14 = 'pixel   '                                                            TCCLS14 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE15 = 'raw_bbox_min_y'     / entire amplifier bbox on raw image, min point  TFORM15 = '1J      '           / format of field                                TDOC15  = 'entire amplifier bbox on raw image, min point'                       TUNIT15 = 'pixel   '                                                            TCCLS15 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE16 = 'raw_bbox_extent_x'  / entire amplifier bbox on raw image, extent     TFORM16 = '1J      '           / format of field                                TDOC16  = 'entire amplifier bbox on raw image, extent'                          TUNIT16 = 'pixel   '                                                            TCCLS16 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE17 = 'raw_bbox_extent_y'  / entire amplifier bbox on raw image, extent     TFORM17 = '1J      '           / format of field                                TDOC17  = 'entire amplifier bbox on raw image, extent'                          TUNIT17 = 'pixel   '                                                            TCCLS17 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE18 = 'raw_databbox_min_x' / image data bbox on raw image, min point        TFORM18 = '1J      '           / format of field                                TDOC18  = 'image data bbox on raw image, min point'                             TUNIT18 = 'pixel   '                                                            TCCLS18 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE19 = 'raw_databbox_min_y' / image data bbox on raw image, min point        TFORM19 = '1J      '           / format of field                                TDOC19  = 'image data bbox on raw image, min point'                             TUNIT19 = 'pixel   '                                                            TCCLS19 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE20 = 'raw_databbox_extent_x' / image data bbox on raw image, extent        TFORM20 = '1J      '           / format of field                                TDOC20  = 'image data bbox on raw image, extent'                                TUNIT20 = 'pixel   '                                                            TCCLS20 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE21 = 'raw_databbox_extent_y' / image data bbox on raw image, extent        TFORM21 = '1J      '           / format of field                                TDOC21  = 'image data bbox on raw image, extent'                                TUNIT21 = 'pixel   '                                                            TCCLS21 = 'Scalar  '           / Field template used by lsst.afw.table          TFLAG2  = 'raw_flip_x'                                                          TFDOC2  = 'flip row order to make assembled image?'                             TFLAG3  = 'raw_flip_y'                                                          TFDOC3  = 'flip column order to make an assembled image?'                       TTYPE22 = 'raw_xyoffset_x'     / offset for assembling a raw CCD image: desired TFORM22 = '1J      '           / format of field                                TDOC22  = 'offset for assembling a raw CCD image: desired xy0 - raw xy0; 0,0 i&'CONTINUE  'f raw data comes assembled'                                          TUNIT22 = 'pixel   '                                                            TCCLS22 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE23 = 'raw_xyoffset_y'     / offset for assembling a raw CCD image: desired TFORM23 = '1J      '           / format of field                                TDOC23  = 'offset for assembling a raw CCD image: desired xy0 - raw xy0; 0,0 i&'CONTINUE  'f raw data comes assembled'                                          TUNIT23 = 'pixel   '                                                            TCCLS23 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE24 = 'raw_horizontaloverscanbbox_min_x' / usable horizontal overscan bbox oTFORM24 = '1J      '           / format of field                                TDOC24  = 'usable horizontal overscan bbox on raw image, min point'             TUNIT24 = 'pixel   '                                                            TCCLS24 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE25 = 'raw_horizontaloverscanbbox_min_y' / usable horizontal overscan bbox oTFORM25 = '1J      '           / format of field                                TDOC25  = 'usable horizontal overscan bbox on raw image, min point'             TUNIT25 = 'pixel   '                                                            TCCLS25 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE26 = 'raw_horizontaloverscanbbox_extent_x' / usable horizontal overscan bboTFORM26 = '1J      '           / format of field                                TDOC26  = 'usable horizontal overscan bbox on raw image, extent'                TUNIT26 = 'pixel   '                                                            TCCLS26 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE27 = 'raw_horizontaloverscanbbox_extent_y' / usable horizontal overscan bboTFORM27 = '1J      '           / format of field                                TDOC27  = 'usable horizontal overscan bbox on raw image, extent'                TUNIT27 = 'pixel   '                                                            TCCLS27 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE28 = 'raw_verticaloverscanbbox_min_x' / usable vertical overscan region rawTFORM28 = '1J      '           / format of field                                TDOC28  = 'usable vertical overscan region raw image, min point'                TUNIT28 = 'pixel   '                                                            TCCLS28 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE29 = 'raw_verticaloverscanbbox_min_y' / usable vertical overscan region rawTFORM29 = '1J      '           / format of field                                TDOC29  = 'usable vertical overscan region raw image, min point'                TUNIT29 = 'pixel   '                                                            TCCLS29 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE30 = 'raw_verticaloverscanbbox_extent_x' / usable vertical overscan region TFORM30 = '1J      '           / format of field                                TDOC30  = 'usable vertical overscan region raw image, extent'                   TUNIT30 = 'pixel   '                                                            TCCLS30 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE31 = 'raw_verticaloverscanbbox_extent_y' / usable vertical overscan region TFORM31 = '1J      '           / format of field                                TDOC31  = 'usable vertical overscan region raw image, extent'                   TUNIT31 = 'pixel   '                                                            TCCLS31 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE32 = 'raw_prescanbbox_min_x' / usable (horizontal) prescan bbox on raw imagTFORM32 = '1J      '           / format of field                                TDOC32  = 'usable (horizontal) prescan bbox on raw image, min point'            TUNIT32 = 'pixel   '                                                            TCCLS32 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE33 = 'raw_prescanbbox_min_y' / usable (horizontal) prescan bbox on raw imagTFORM33 = '1J      '           / format of field                                TDOC33  = 'usable (horizontal) prescan bbox on raw image, min point'            TUNIT33 = 'pixel   '                                                            TCCLS33 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE34 = 'raw_prescanbbox_extent_x' / usable (horizontal) prescan bbox on raw iTFORM34 = '1J      '           / format of field                                TDOC34  = 'usable (horizontal) prescan bbox on raw image, extent'               TUNIT34 = 'pixel   '                                                            TCCLS34 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE35 = 'raw_prescanbbox_extent_y' / usable (horizontal) prescan bbox on raw iTFORM35 = '1J      '           / format of field                                TDOC35  = 'usable (horizontal) prescan bbox on raw image, extent'               TUNIT35 = 'pixel   '                                                            TCCLS35 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE36 = 'linearityThreshold' / Minimum ADU level to apply linearity.          TFORM36 = '1D      '           / format of field                                TDOC36  = 'Minimum ADU level to apply linearity.'                               TCCLS36 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE37 = 'linearityMaximum'   / Maximum ADU level to apply linearity.          TFORM37 = '1D      '           / format of field                                TDOC37  = 'Maximum ADU level to apply linearity.'                               TCCLS37 = 'Scalar  '           / Field template used by lsst.afw.table          TTYPE38 = 'linearityUnits'     / Input units for linearity relation.            TFORM38 = '1QA(2)  '           / format of field                                TDOC38  = 'Input units for linearity relation.'                                 TCCLS38 = 'String  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    5 / # of this catalog relative to the start of thisAR_NAME = 'Detector'           / Class name for objects stored here             EXTNAME = 'Detector'                                                            HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             `                     –  ˝  –?ı†ê-‡ApH    ¯      @!ffffff                                                       ˝  –                    –     –  ˝   0             –        ApH                  `              !  ˝  –  ˝  –?ı¡T…ÖoApH    ¯      @$                        $              4                       ˝  –                   –     –  ˝   0             –        ApH                  @`              B  ˙  –  ˝  –?ızêñªôApH    ¯      @%ÃÃÃÃÃÕ                  E              U                       ˝  –  @                –     –  ˝   0             –        ApH                  a`              c  ˜  –  ˝  –?ıV’œ™ÕüApH    ¯      @&ffffff                  f              v                       ˝  –  `                –     –  ˝   0             –        ApH                  Ç`              Ñ  Ù  –  ˝  –?Ù·∞â†'RApH    ¯      @&ffffff                  á              ó                       ˝  –  Ä                –     –  ˝   0             –        ApH                  £`              •  	Ò  –  ˝  –?ıÑM:í£ApH    ¯      @%                        ®              ∏                       ˝  –  
+†                –     –  ˝   0             –        ApH                  ƒ`              ∆  Ó  –  ˝  –?ı∞Ú{≤˛≈ApH    ¯      @!ffffff                  …              Ÿ                       ˝  –  ¿                –     –  ˝   0             –        ApH                  Â`              Á  Î  –  ˝  –?ıä	ﬁApH    ¯      @333333                  Í              ˙                       ˝  –  ‡                –     –  ˝   0             –        ApH                 @               Î      ˝  –?ˆjOv`ApH    ¯      @ôôôôôö                                                     ˝  –  ‡                 –     –  ˝   0             –        ApH                 '@             )  Ó      ˝  –?ˆÚ‰éäqﬁApH    ¯      @ ôôôôôö                 ,             <                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 H@             J  	Ò      ˝  –?ˆÌ(åÁ∞ApH    ¯      @"333333                 M             ]                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 i@             k  Ù      ˝  –?ˆ√…ÓÀ˚ApH    ¯      @%333333                 n             ~                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ä@             å  ˜      ˝  –?ÙÿD–©*ApH    ¯      @%ffffff                 è             ü                       ˝  –  `                 –     –  ˝   0             –        ApH                 ´@             ≠  ˙      ˝  –?Ù∂E° ¿ÉApH    ¯      @%                       ∞             ¿                       ˝  –  @                 –     –  ˝   0             –        ApH                 Ã@             Œ  ˝      ˝  –?ˆ*ô0æApH    ¯      @#ffffff                 —             ·                       ˝  –                    –     –  ˝   0             –        ApH                 Ì@             Ô          ˝  –?ˆjOv`ApH    ¯      @!ôôôôôö                 Ú                                    ˝  –                     –     –  ˝   0             –        ApH                 `                   –  ˝  –?ı˚µsÍ≥ApH    ¯      @333333                              #                       ˝  –                    –     –  ˝   0             –        ApH                 /`             1  ˝  –  ˝  –?ı¿6‚ÎApH    ¯      @ôôôôôö                 4             D                       ˝  –                   –     –  ˝   0             –        ApH                 P`             R  ˙  –  ˝  –?ıÜ¬&ÄùIApH    ¯      @                       U             e                       ˝  –  @                –     –  ˝   0             –        ApH                 q`             s  ˜  –  ˝  –?ıêˇó$tTApH    ¯      @ôôôôôö                 v             Ü                       ˝  –  `                –     –  ˝   0             –        ApH                 í`             î  Ù  –  ˝  –?ıñªò«‚ÇApH    ¯      @ôôôôôö                 ó             ß                       ˝  –  Ä                –     –  ˝   0             –        ApH                 ≥`             µ  	Ò  –  ˝  –?ıåÁØ∑ÈApH    ¯      @                       ∏             »                       ˝  –  
+†                –     –  ˝   0             –        ApH                 ‘`             ÷  Ó  –  ˝  –?ı£n.±ƒ3ApH    ¯      @                       Ÿ             È                       ˝  –  ¿                –     –  ˝   0             –        ApH                 ı`             ˜  Î  –  ˝  –?ıh€ã¨qApH    ¯      @ÃÃÃÃÃÕ                 ˙             
+                       ˝  –  ‡                –     –  ˝   0             –        ApH                 @               Î      ˝  –?ıˇó$tSèApH    ¯      @                                    +                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 7@             9  Ó      ˝  –?ˆáì›óˆ+ApH    ¯      @ffffff                 <             L                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 X@             Z  	Ò      ˝  –?ˆ|⁄QŒApH    ¯      @333333                 ]             m                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 y@             {  Ù      ˝  –?ˆffffffApH    ¯      @ôôôôôö                 ~             é                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ö@             ú  ˜      ˝  –?ˆm≈÷8ÜYApH    ¯      @                       ü             Ø                       ˝  –  `                 –     –  ˝   0             –        ApH                 ª@             Ω  ˙      ˝  –?ˆ£n.±ƒ3ApH    ¯      @ÃÃÃÃÃÕ                 ¿             –                       ˝  –  @                 –     –  ˝   0             –        ApH                 ‹@             ﬁ  ˝      ˝  –?ˆßÊö‘,ApH    ¯      @ffffff                 ·             Ò                       ˝  –                    –     –  ˝   0             –        ApH                 ˝@             ˇ          ˝  –?ˆm\˙¨ŸËApH    ¯      @ffffff                                                     ˝  –                     –     –  ˝   0             –        ApH                 `                    –  ˝  –?ıˇ.HËßApH    ¯      @333333                 #             3                       ˝  –                    –     –  ˝   0             –        ApH                 ?`             A  ˝  –  ˝  –?ˆ/É{J#:ApH    ¯      @ÃÃÃÃÃÕ                 D             T                       ˝  –                   –     –  ˝   0             –        ApH                 ``             b  ˙  –  ˝  –?ı¥¢3úøApH    ¯      @ 333333                 e             u                       ˝  –  @                –     –  ˝   0             –        ApH                 Å`             É  ˜  –  ˝  –?ˆ6‚ÎCApH    ¯      @ 333333                 Ü             ñ                       ˝  –  `                –     –  ˝   0             –        ApH                 ¢`             §  Ù  –  ˝  –?ˆüæv»¥ApH    ¯      @                        ß             ∑                       ˝  –  Ä                –     –  ˝   0             –        ApH                 √`             ≈  	Ò  –  ˝  –?ı¶L/É{JApH    ¯      @ 333333                 »             ÿ                       ˝  –  
+†                –     –  ˝   0             –        ApH                 ‰`             Ê  Ó  –  ˝  –?ˆ"–Â`AâApH    ¯      @ôôôôôö                 È             ˘                       ˝  –  ¿                –     –  ˝   0             –        ApH                 `               Î  –  ˝  –?ı4m≈÷8ÜApH    ¯      @ÃÃÃÃÃÕ                 
+                                    ˝  –  ‡                –     –  ˝   0             –        ApH                 &@             (  Î      ˝  –?ıûÏø±[WApH    ¯      @333333                 +             ;                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 G@             I  Ó      ˝  –?ˆ¸PHApH    ¯      @333333                 L             \                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 h@             j  	Ò      ˝  –?ıÿ≠´üUõApH    ¯      @ffffff                 m             }                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 â@             ã  Ù      ˝  –?ı‡uˆ˝!ˇApH    ¯      @ÃÃÃÃÃÕ                 é             û                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ™@             ¨  ˜      ˝  –?ıÛ∂E° ¡ApH    ¯      @ôôôôôö                 Ø             ø                       ˝  –  `                 –     –  ˝   0             –        ApH                 À@             Õ  ˙      ˝  –?ˆ\ë—N;ÕApH    ¯      @                       –             ‡                       ˝  –  @                 –     –  ˝   0             –        ApH                 Ï@             Ó  ˝      ˝  –?ˆÉ‰%ÆÊ2ApH    ¯      @                       Ò                                    ˝  –                    –     –  ˝   0             –        ApH                 @                       ˝  –?ˆ£n.±ƒApH    ¯      @                                    "                       ˝  –                     –     –  ˝   0             –        ApH                 .`             0      –  ˝  –?ˆLò_ˆîApH    ¯      @ÃÃÃÃÃÕ                 3             C                       ˝  –                    –     –  ˝   0             –        ApH                 O`             Q  ˝  –  ˝  –?ˆ!-w1êApH    ¯      @!ôôôôôö                 T             d                       ˝  –                   –     –  ˝   0             –        ApH                 p`             r  ˙  –  ˝  –?ˆ-‡qvApH    ¯      @#333333                 u             Ö                       ˝  –  @                –     –  ˝   0             –        ApH                 ë`             ì  ˜  –  ˝  –?ˆ≤ïÈ·±ApH    ¯      @$                       ñ             ¶                       ˝  –  `                –     –  ˝   0             –        ApH                 ≤`             ¥  Ù  –  ˝  –?ˆŒ_o“ApH    ¯      @#ôôôôôö                 ∑             «                       ˝  –  Ä                –     –  ˝   0             –        ApH                 ”`             ’  	Ò  –  ˝  –?ˆ7¥¢3úApH    ¯      @!ÃÃÃÃÃÕ                 ÿ             Ë                       ˝  –  
+†                –     –  ˝   0             –        ApH                 Ù`             ˆ  Ó  –  ˝  –?ˆ∏QÎÖApH    ¯      @333333                 ˘             	                       ˝  –  ¿                –     –  ˝   0             –        ApH                 `               Î  –  ˝  –?ıŸá+ApH    ¯      @ôôôôôö                              *                       ˝  –  ‡                –     –  ˝   0             –        ApH                 6@             8  Î      ˝  –?Ù‰%ÆÊ1˘ApH    ¯      @ÃÃÃÃÃÕ                 ;             K                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 W@             Y  Ó      ˝  –?ˆìtºjApH    ¯      @ôôôôôö                 \             l                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 x@             z  	Ò      ˝  –?ˆC,•zxApH    ¯      @!ffffff                 }             ç                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 ô@             õ  Ù      ˝  –?ı≠B√…ÓÃApH    ¯      @"ffffff                 û             Æ                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ∫@             º  ˜      ˝  –?ˆú‡uˆ˝ApH    ¯      @"ÃÃÃÃÃÕ                 ø             œ                       ˝  –  `                 –     –  ˝   0             –        ApH                 €@             ›  ˙      ˝  –?ı£S&¬ApH    ¯      @"ffffff                 ‡                                    ˝  –  @                 –     –  ˝   0             –        ApH                 ¸@             ˛  ˝      ˝  –?ˆ@∑Ä4m∆ApH    ¯      @"ffffff                                                     ˝  –                    –     –  ˝   0             –        ApH                 @                       ˝  –?ˆ¡Ω•ùApH    ¯      @ 333333                 "             2                       ˝  –                     –     –  ˝   0             –        ApH                 >`             @      –  ˝  –?ı´üUõ=ApH    ¯      @333333                 C             S                       ˝  –                    –     –  ˝   0             –        ApH                 _`             a  ˝  –  ˝  –?ıxF‹]dApH    ¯      @                       d             t                       ˝  –                   –     –  ˝   0             –        ApH                 Ä`             Ç  ˙  –  ˝  –?ı¨q≤ïÍApH    ¯      @                       Ö             ï                       ˝  –  @                –     –  ˝   0             –        ApH                 °`             £  ˜  –  ˝  –?ıîFsÅ◊‹ApH    ¯      @ÃÃÃÃÃÕ                 ¶             ∂                       ˝  –  `                –     –  ˝   0             –        ApH                 ¬`             ƒ  Ù  –  ˝  –?ıåÁØ∑ÈApH    ¯      @333333                 «             ◊                       ˝  –  Ä                –     –  ˝   0             –        ApH                 „`             Â  	Ò  –  ˝  –?ÙÀ˚µsÎApH    ¯      @333333                 Ë             ¯                       ˝  –  
+†                –     –  ˝   0             –        ApH                 	`             	  Ó  –  ˝  –?ıAÚ◊sApH    ¯      @ffffff                 		             	                       ˝  –  ¿                –     –  ˝   0             –        ApH                 	%`             	'  Î  –  ˝  –?ı»K]ÃdApH    ¯      @ffffff                 	*             	:                       ˝  –  ‡                –     –  ˝   0             –        ApH                 	F@             	H  Î      ˝  –?ıÇ@∑Ä4nApH    ¯      @ffffff                 	K             	[                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 	g@             	i  Ó      ˝  –?ˆ+I∫^ApH    ¯      @ôôôôôö                 	l             	|                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 	à@             	ä  	Ò      ˝  –?ˆxF‹]dApH    ¯      @ffffff                 	ç             	ù                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 	©@             	´  Ù      ˝  –?ˆ∞ ƒõ•„ApH    ¯      @ôôôôôö                 	Æ             	æ                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 	 @             	Ã  ˜      ˝  –?ˆûÉ‰%ÆÊApH    ¯      @                        	œ             	ﬂ                       ˝  –  `                 –     –  ˝   0             –        ApH                 	Î@             	Ì  ˙      ˝  –?ˆŒŸá+ApH    ¯      @ffffff                 	             
+                        ˝  –  @                 –     –  ˝   0             –        ApH                 
+@             
+  ˝      ˝  –?ˆŸb∂Æ}ApH    ¯      @ÃÃÃÃÃÕ                 
+             
+!                       ˝  –                    –     –  ˝   0             –        ApH                 
+-@             
+/          ˝  –?ˆ˝!ˇ.HÈApH    ¯      @333333                 
+2             
+B                       ˝  –                     –     –  ˝   0             –        ApH                 
+N`             
+P      –  ˝  –?ˆﬁ —∑ApH    ¯      @333333                 
+S             
+c                       ˝  –                    –     –  ˝   0             –        ApH                 
+o`             
+q  ˝  –  ˝  –?ı€Ùá¸π$ApH    ¯      @ôôôôôö                 
+t             
+Ñ                       ˝  –                   –     –  ˝   0             –        ApH                 
+ê`             
+í  ˙  –  ˝  –?ı-w1è≈ApH    ¯      @333333                 
+ï             
+•                       ˝  –  @                –     –  ˝   0             –        ApH                 
+±`             
+≥  ˜  –  ˝  –?ıÔ4÷°aÂApH    ¯      @ôôôôôö                 
+∂             
+∆                       ˝  –  `                –     –  ˝   0             –        ApH                 
+“`             
+‘  Ù  –  ˝  –?ˆu%F
+¶ApH    ¯      @                        
+◊             
+Á                       ˝  –  Ä                –     –  ˝   0             –        ApH                 
+Û`             
+ı  	Ò  –  ˝  –?ı≠´üUõ=ApH    ¯      @ôôôôôö                 
+¯                                    ˝  –  
+†                –     –  ˝   0             –        ApH                 `               Ó  –  ˝  –?ı≈m\˙¨⁄ApH    ¯      @                                    )                       ˝  –  ¿                –     –  ˝   0             –        ApH                 5`             7  Î  –  ˝  –?ıâ†'RTaApH    ¯      @ÃÃÃÃÃÕ                 :             J                       ˝  –  ‡                –     –  ˝   0             –        ApH                 V@             X  Î      ˝  –?ˆêñªò»ApH    ¯      @ 333333                 [             k                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 w@             y  Ó      ˝  –?ˆÆ}VlÙApH    ¯      @ ffffff                 |             å                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 ò@             ö  	Ò      ˝  –?ˆ€Ùá¸π$ApH    ¯      @"333333                 ù             ≠                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 π@             ª  Ù      ˝  –?˜ﬁ —∑ApH    ¯      @#                       æ             Œ                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ⁄@             ‹  ˜      ˝  –?ˆË>BZÓcApH    ¯      @%                       ﬂ             Ô                       ˝  –  `                 –     –  ˝   0             –        ApH                 ˚@             ˝  ˙      ˝  –?˜	ﬁ —∑ApH    ¯      @%333333                                                      ˝  –  @                 –     –  ˝   0             –        ApH                 @               ˝      ˝  –?ˆ‡quéApH    ¯      @&                       !             1                       ˝  –                    –     –  ˝   0             –        ApH                 =@             ?          ˝  –?ˆﬁi≠B√ ApH    ¯      @"ffffff                 B             R                       ˝  –                     –     –  ˝   0             –        ApH                 ^`             `      –  ˝  –?ıÛ∂E° ¡ApH    ¯      @ÃÃÃÃÃÕ                 c             s                       ˝  –                    –     –  ˝   0             –        ApH                 `             Å  ˝  –  ˝  –?ˆ+jÁ’fœApH    ¯      @333333                 Ñ             î                       ˝  –                   –     –  ˝   0             –        ApH                 †`             ¢  ˙  –  ˝  –?ˆT`™d¬¯ApH    ¯      @ffffff                 •             µ                       ˝  –  @                –     –  ˝   0             –        ApH                 ¡`             √  ˜  –  ˝  –?ˆdZ¨1ApH    ¯      @ ffffff                 ∆             ÷                       ˝  –  `                –     –  ˝   0             –        ApH                 ‚`             ‰  Ù  –  ˝  –?ˆ_ˆîFtApH    ¯      @                        Á             ˜                       ˝  –  Ä                –     –  ˝   0             –        ApH                 `               	Ò  –  ˝  –?ˆá+JApH    ¯      @ÃÃÃÃÃÕ                                                     ˝  –  
+†                –     –  ˝   0             –        ApH                 $`             &  Ó  –  ˝  –?ˆjÁ’fœBApH    ¯      @333333                 )             9                       ˝  –  ¿                –     –  ˝   0             –        ApH                 E`             G  Î  –  ˝  –?ˆç∏ªApH    ¯      @333333                 J             Z                       ˝  –  ‡                –     –  ˝   0             –        ApH                 f@             h  Î      ˝  –?ˆÇ@∑Ä4nApH    ¯      @333333                 k             {                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 á@             â  Ó      ˝  –?˜1¯†ê-‡ApH    ¯      @                        å             ú                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 ®@             ™  	Ò      ˝  –?ˆ˘rGE8ÔApH    ¯      @"ôôôôôö                 ≠             Ω                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 …@             À  Ù      ˝  –?˜1¯†ê-‡ApH    ¯      @$                       Œ             ﬁ                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 Í@             Ï  ˜      ˝  –?˜ä	ﬁApH    ¯      @$333333                 Ô             ˇ                       ˝  –  `                 –     –  ˝   0             –        ApH                 @               ˙      ˝  –?ˆﬁ —∑YApH    ¯      @#ffffff                                                      ˝  –  @                 –     –  ˝   0             –        ApH                 ,@             .  ˝      ˝  –?˜º£nApH    ¯      @"                       1             A                       ˝  –                    –     –  ˝   0             –        ApH                 M@             O          ˝  –?ˆ€"–Â`BApH    ¯      @ 333333                 R             b                       ˝  –                     –     –  ˝   0             –        ApH                 n`             p      –  ˝  –?Ù˜e˝ä⁄∫ApH    ¯      @                       s             É                       ˝  –                    –     –  ˝   0             –        ApH                 è`             ë  ˝  –  ˝  –?ÙÉ‰%ÆÊ2ApH    ¯      @333333                 î             §                       ˝  –                   –     –  ˝   0             –        ApH                 ∞`             ≤  ˙  –  ˝  –?ÙB√…ÓÀ˚ApH    ¯      @333333                 µ             ≈                       ˝  –  @                –     –  ˝   0             –        ApH                 —`             ”  ˜  –  ˝  –?ÙzêñªôApH    ¯      @ ÃÃÃÃÃÕ                 ÷             Ê                       ˝  –  `                –     –  ˝   0             –        ApH                 Ú`             Ù  Ù  –  ˝  –?Ù⁄πıY≥–ApH    ¯      @ôôôôôö                 ˜                                    ˝  –  Ä                –     –  ˝   0             –        ApH                 `               	Ò  –  ˝  –?Ù‹]càeïApH    ¯      @ffffff                              (                       ˝  –  
+†                –     –  ˝   0             –        ApH                 4`             6  Ó  –  ˝  –?Ù˚µsÍ≥ApH    ¯      @ôôôôôö                 9             I                       ˝  –  ¿                –     –  ˝   0             –        ApH                 U`             W  Î  –  ˝  –?Ùúæﬂ§@ApH    ¯      @ÃÃÃÃÃÕ                 Z             j                       ˝  –  ‡                –     –  ˝   0             –        ApH                 v@             x  Î      ˝  –?Ú√…ÓÀ˚ApH    ¯      @                       {             ã                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 ó@             ô  Ó      ˝  –?ˆ+”√a@ApH    ¯      @333333                 ú             ¨                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 ∏@             ∫  	Ò      ˝  –?ˆ»K]ÃdApH    ¯      @!ôôôôôö                 Ω             Õ                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 Ÿ@             €  Ù      ˝  –?ˆ&¡Ω•ApH    ¯      @#ôôôôôö                 ﬁ             Ó                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 ˙@             ¸  ˜      ˝  –?ˆ7K∆ßÔûApH    ¯      @#333333                 ˇ                                    ˝  –  `                 –     –  ˝   0             –        ApH                 @               ˙      ˝  –?ˆ"–Â`AâApH    ¯      @#ffffff                               0                       ˝  –  @                 –     –  ˝   0             –        ApH                 <@             >  ˝      ˝  –?ı˚ÁlãCñApH    ¯      @!ÃÃÃÃÃÕ                 A             Q                       ˝  –                    –     –  ˝   0             –        ApH                 ]@             _          ˝  –?ıÙÿD–ApH    ¯      @ ffffff                 b             r                       ˝  –                     –     –  ˝   0             –        ApH                 ~`             Ä      –  ˝  –?ˆxl"h	’ApH    ¯      @ ôôôôôö                 É             ì                       ˝  –                    –     –  ˝   0             –        ApH                 ü`             °  ˝  –  ˝  –?ˆ8Ô4÷°bApH    ¯      @#                       §             ¥                       ˝  –                   –     –  ˝   0             –        ApH                 ¿`             ¬  ˙  –  ˝  –?ˆ[W>´6zApH    ¯      @$                       ≈             ’                       ˝  –  @                –     –  ˝   0             –        ApH                 ·`             „  ˜  –  ˝  –?ˆlÙ!-wApH    ¯      @$ÃÃÃÃÃÕ                 Ê             ˆ                       ˝  –  `                –     –  ˝   0             –        ApH                 `               Ù  –  ˝  –?ˆLò_ˆîApH    ¯      @$ffffff                                                     ˝  –  Ä                –     –  ˝   0             –        ApH                 #`             %  	Ò  –  ˝  –?ıcÒA [¿ApH    ¯      @"ôôôôôö                 (             8                       ˝  –  
+†                –     –  ˝   0             –        ApH                 D`             F  Ó  –  ˝  –?ˆbM“Ò™ApH    ¯      @                        I             Y                       ˝  –  ¿                –     –  ˝   0             –        ApH                 e`             g  Î  –  ˝  –?ı•ú‡u˜ApH    ¯      @ÃÃÃÃÃÕ                 j             z                       ˝  –  ‡                –     –  ˝   0             –        ApH                 Ü@             à  Î      ˝  –?ı˝Û∂E°ÀApH    ¯      @ 333333                 ã             õ                       ˝  –  ‡                 –     –  ˝   0             –        ApH                 ß@             ©  Ó      ˝  –?ˆD–©*0ApH    ¯      @!ôôôôôö                 ¨             º                       ˝  –  ¿                 –     –  ˝   0             –        ApH                 »@                	Ò      ˝  –?ˆ&ÄùIQÉApH    ¯      @$                       Õ             ›                       ˝  –  
+†                 –     –  ˝   0             –        ApH                 È@             Î  Ù      ˝  –?ˆ4ÍJåApH    ¯      @%ôôôôôö                 Ó             ˛                       ˝  –  Ä                 –     –  ˝   0             –        ApH                 
+@               ˜      ˝  –?ˆ}øHÀíApH    ¯      @&                                                           ˝  –  `                 –     –  ˝   0             –        ApH                 +@             -  ˙      ˝  –?ˆ±[W>´6ApH    ¯      @%ÃÃÃÃÃÕ                 0             @                       ˝  –  @                 –     –  ˝   0             –        ApH                 L@             N  ˝      ˝  –?ˆ°a‰˜e˛ApH    ¯      @$333333                 Q             a                       ˝  –                    –     –  ˝   0             –        ApH                 m@             o          ˝  –?ˆ÷8ÜYJıApH    ¯      @"                       r             Ç                       ˝  –                     –     –  ˝   0             –        ApH                 éC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDNC10        ApH    PROPORTIONALDNC11        ApH    PROPORTIONALDNC12        ApH    PROPORTIONALDNC13        ApH    PROPORTIONALDNC14        ApH    PROPORTIONALDNC15        ApH    PROPORTIONALDNC16        ApH    PROPORTIONALDNC17        ApH    PROPORTIONALDNC07        ApH    PROPORTIONALDNC06        ApH    PROPORTIONALDNC05        ApH    PROPORTIONALDNC04        ApH    PROPORTIONALDNC03        ApH    PROPORTIONALDNC02        ApH    PROPORTIONALDNC01        ApH    PROPORTIONALDNC00        ApH    PROPORTIONALDN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                XTENSION= 'BINTABLE'           / binary table extension                         BITPIX  =                    8 / 8-bit bytes                                    NAXIS   =                    2 / 2-dimensional binary table                     NAXIS1  =                   36 / width of table in bytes                        NAXIS2  =                    1 / number of rows in table                        PCOUNT  =                   48 / size of special data area                      GCOUNT  =                    1 / one data group (required keyword)              TFIELDS =                    3 / number of fields in each row                   TTYPE1  = 'name    '           / Camera name                                    TFORM1  = '1QA(10) '           / format of field                                TDOC1   = 'Camera name'                                                         TCCLS1  = 'String  '           / Field template used by lsst.afw.table          TTYPE2  = 'pupilFactoryName'   / Fully-qualified name of a Python PupilFactory cTFORM2  = '1QA(38) '           / format of field                                TDOC2   = 'Fully-qualified name of a Python PupilFactory class'                 TCCLS2  = 'String  '           / Field template used by lsst.afw.table          TTYPE3  = 'transformMap'       / archive ID for Camera's TransformMap           TFORM3  = '1J      '           / format of field                                TDOC3   = 'archive ID for Camera''s TransformMap'                               TCCLS3  = 'Scalar  '           / Field template used by lsst.afw.table          EXTTYPE = 'ARCHIVE_DATA'                                                        AR_CATN =                    6 / # of this catalog relative to the start of thisAR_NAME = 'Camera  '           / Class name for objects stored here             EXTNAME = 'Camera  '                                                            HIERARCH AFW_TABLE_VERSION = 3                                                  END                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+               &       
+   LSSTComCamlsst.afw.cameraGeom.pupil.PupilFactory                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            

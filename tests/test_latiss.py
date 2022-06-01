@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-import os
 import sys
 import unittest
 
@@ -29,18 +28,23 @@ from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
 
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
+from lsst.obs.lsst import Latiss
 
 
 class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "latiss"
 
+    @classmethod
+    def getInstrument(cls):
+        return Latiss()
+
     def setUp(self):
-        dataIds = {'raw': {'expId': 3018092000065, 'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
-                   'bias': {'detector': 0, 'dayObs': '2018-09-20', 'seqNum': 65},
+        dataIds = {'raw': {'exposure': 3018092000065, 'detector': 0},
+                   'bias': {'detector': 0, 'exposure': 3018092000065},
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(self._butler, self._mapper, dataIds)
+        self.setUp_tests(self._butler, None, dataIds)
 
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3018092000065, 'bias': 3018092000065}
@@ -52,17 +56,12 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         dimensions = {'raw': Extent2I(4608, 4096),
                       'bias': Extent2I(4072, 4000)}
         sky_origin = unittest.SkipTest
-        raw_subsets = (({'level': 'sensor'}, 1),
-                       ({'level': 'sensor', 'filter': 'unknown~unknown'}, 1),
-                       ({'level': 'sensor', 'filter': 'foo'}, 0),
-                       ({'level': 'sensor', 'dayObs': '2018-09-20'}, 1),
-                       ({'level': 'sensor', 'expId': 3018092000065}, 1),
-                       ({'level': 'sensor', 'expId': 9999999999999}, 0),
-                       ({'level': 'filter'}, 1),
-                       ({'level': 'filter', 'expId': 3018092000065}, 1),
-                       ({'level': 'expId'}, 1),
-                       ({'level': 'expId', 'filter': 'unknown~unknown'}, 1),
-                       ({'level': 'expId', 'filter': 'foo'}, 0)
+        raw_subsets = (({}, 1),
+                       ({'physical_filter': 'unknown~unknown'}, 1),
+                       ({'physical_filter': 'SDSSg'}, 0),
+                       ({'exposure.day_obs': 20180920}, 1),
+                       ({'exposure': 3018092000065}, 1),
+                       ({'exposure': 9999999999999}, 0),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -78,44 +77,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        path_to_raw = os.path.join(self.data_dir, "raw", "2018-09-20", "3018092000065-det000.fits")
-        keys = set(('filter', 'patch', 'tract', 'visit', 'channel', 'amp', 'style', 'detector', 'dstype',
-                    'calibDate', 'half', 'label', 'dayObs', 'run', 'snap', 'detectorName', 'raftName',
-                    'numSubfilters', 'fgcmcycle', 'name', 'pixel_id', 'description', 'subfilter', 'expId',
-                    'seqNum', 'subdir',))
-        query_format = ["expId", "seqNum", "dayObs"]
-        queryMetadata = (({'expId': 3018092000065}, [(3018092000065, 65, '2018-09-20')]),
-                         ({'detector': 0}, [(3018092000065, 65, '2018-09-20')]),
-                         ({'seqNum': 65}, [(3018092000065, 65, '2018-09-20')]),
-                         )
-        map_python_type = lsst.afw.image.DecoratedImageF
-        map_python_std_type = lsst.afw.image.ExposureF
-        map_cpp_type = 'DecoratedImageF'
-        map_storage_name = 'FitsStorage'
-        metadata_output_path = None  # Not on sky data so processCcd not run.
-
-        raw_filename = '3018092000065-det000.fits'
-        default_level = 'sensor'
-        raw_levels = (('sensor', set(['expId', 'detector', 'dayObs'])),
-                      ('skyTile', set(['expId', 'dayObs'])),
-                      ('filter', set(['expId'])),
-                      ('expId', set(['expId', 'dayObs']))
-                      )
-        self.setUp_mapper(output=self.data_dir,
-                          path_to_raw=path_to_raw,
-                          keys=keys,
-                          query_format=query_format,
-                          queryMetadata=queryMetadata,
-                          metadata_output_path=metadata_output_path,
-                          map_python_type=map_python_type,
-                          map_python_std_type=map_python_std_type,
-                          map_cpp_type=map_cpp_type,
-                          map_storage_name=map_storage_name,
-                          raw_filename=raw_filename,
-                          default_level=default_level,
-                          raw_levels=raw_levels,
-                          test_config_metadata=False,
-                          )
+        self.raw_filename = '3018092000065-det000.fits'
 
         self.setUp_camera(camera_name='LATISS',
                           n_detectors=1,
@@ -124,37 +86,6 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                           )
 
         super().setUp()
-
-    def testCcdExposureId(self):
-        exposureId = self.butler.get('ccdExposureId', dataId={})
-        self.assertEqual(exposureId, 0)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 0})
-        self.assertEqual(exposureId, 1)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1})
-        self.assertEqual(exposureId, 1)
-
-        exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 999,
-                                                              "controller": "O"})
-        self.assertEqual(exposureId, 2020010100999)
-
-        # This will trigger a Python log message and lsst.log message
-        with self.assertLogs(level="WARNING") as cm:
-            with lsst.log.UsePythonLogging():
-                exposureId = self.butler.get('ccdExposureId', dataId={"visit": 1, "detector": 1})
-        self.assertEqual(len(cm.output), 2)
-        self.assertEqual(exposureId, 1)
-
-        with self.assertRaises(ValueError):
-            exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "2020-01-01", "seqNum": 1000000})
-
-        with self.assertRaises(ValueError):
-            exposureId = self.butler.get('ccdExposureId', dataId={"dayObs": "20-01-01", "seqNum": 9999})
-
-    def testDetectorName(self):
-        name = self.mapper._extractDetectorName({})
-        self.assertEqual(name, "RXX_S00")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

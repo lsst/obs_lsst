@@ -26,7 +26,7 @@ import unittest
 
 import lsst.utils.tests
 from lsst.utils import getPackageDir
-from lsst.daf.persistence import Butler
+from lsst.daf.butler import Butler
 from lsst.afw.cameraGeom import Detector
 from lsst.afw.image import ImageFitsReader
 import lsst.obs.base.yamlCamera as yamlCamera
@@ -38,8 +38,8 @@ PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
 LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, 'data', 'input', 'latiss')
 BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input')
-E2V_DATA_ID = {'raftName': 'R22', 'detectorName': 'S11', 'visit': 3019103101985}
-ITL_DATA_ID = {'raftName': 'R02', 'detectorName': 'S02', 'visit': 3019110102212}
+E2V_DATA_ID = {'raft': 'R22', 'name_in_raft': 'S11', 'exposure': 3019103101985, 'instrument': 'LSSTCam'}
+ITL_DATA_ID = {'raft': 'R02', 'name_in_raft': 'S02', 'exposure': 3019110102212, 'instrument': 'LSSTCam'}
 TESTDATA_ROOT = os.path.join(TESTDIR, "data")
 
 
@@ -119,12 +119,12 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         self.assertEqual(testVOSBox, amp2.getRawVerticalOverscanBBox())
 
     def testDetectors(self):
-        """Test that the detector returned by the gen 2 butler is the same
+        """Test that the detector returned by the butler is the same
         as the expected one.
         """
         for root, did, expected in zip(self.roots, self.ids, self.expecteds):
             butler = Butler(root)
-            raw = butler.get("raw", dataId=did)
+            raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
             for amp1, amp2 in zip(expected['detector'], raw.getDetector()):
                 with self.subTest(amp=amp1.getName()):
                     self.assertEqual(amp1.getName(), amp2.getName())
@@ -137,7 +137,7 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         # exclude LATISS for this test since we don't have an expected output
         for root, did, expected in zip(self.roots, self.ids, self.expecteds):
             butler = Butler(root)
-            raw = butler.get("raw", dataId=did)
+            raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
             assembled = task.assembleCcd(raw)
             count = numpy.sum(expected['expected'].read().array - assembled.getImage().array)
             self.assertEqual(count, 0)
