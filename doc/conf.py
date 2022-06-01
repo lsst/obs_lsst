@@ -25,12 +25,10 @@
 This configuration only affects single-package Sphinx documenation builds.
 """
 
-from documenteer.sphinxconfig.stackconf import build_package_configs
-import lsst.obs.lsst
-import lsst.obs.lsst.version
+from documenteer.conf.pipelinespkg import *  # noqa: F403
 
-
-_g = globals()
-_g.update(build_package_configs(
-    project_name="obs_lsst",
-    version=lsst.obs.lsst.version.__version__))
+project = "obs_lsst"
+html_theme_options["logotext"] = project  # noqa: F405
+html_title = project
+html_short_title = project
+doxylink = {}
