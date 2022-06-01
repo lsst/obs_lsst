@@ -802,3 +802,68 @@ class LsstBaseTranslator(FitsTranslator):
         log.warning("%s: Unable to determine airmass of a science observation, returning 1.",
                     self._log_prefix)
         return 1.0
+
+    @cache_translation
+    def to_group_counter_start(self):
+        # Effectively the start of the visit as determined by the headers.
+        counter = self.to_observation_counter()
+        # Older data does not have the CURINDEX header.
+        if self.is_key_ok("CURINDEX"):
+            # CURINDEX is 1-based.
+            seq_start = counter - self._header["CURINDEX"] + 1
+            self._used_these_cards("CURINDEX")
+            return seq_start
+        else:
+            # If the counter is 0 we need to pick something else
+            # that is not going to confuse the visit calculation
+            # (since setting everything to 0 will make one big visit).
+            return counter if counter != 0 else self.to_exposure_id()
+
+    @cache_translation
+    def to_group_counter_end(self):
+        # Effectively the end of the visit as determined by the headers.
+        counter = self.to_observation_counter()
+        # Older data does not have the CURINDEX or MAXINDEX headers.
+        if self.is_key_ok("CURINDEX") and self.is_key_ok("MAXINDEX"):
+            # CURINDEX is 1-based. CURINDEX == MAXINDEX indicates the
+            # final exposure in the sequence.
+            remaining = self._header["MAXINDEX"] - self._header["CURINDEX"]
+            seq_end = counter + remaining
+            self._used_these_cards("CURINDEX", "MAXINDEX")
+            return seq_end
+        else:
+            # If the counter is 0 we need to pick something else
+            # that is not going to confuse the visit calculation
+            # (since setting everything to 0 will make one big visit).
+            return counter if counter != 0 else self.to_exposure_id()
+
+    @cache_translation
+    def to_has_simulated_content(self):
+        # Check all the simulation flags.
+        # We do not know all the simulation flags that we may have so
+        # must check every header key. Ideally HIERARCH SIMULATE would
+        # be a hierarchical header so _header["SIMULATE"] would return
+        # everything. The header looks like:
+        #
+        # HIERARCH SIMULATE ATMCS =      / ATMCS Simulation Mode
+        # HIERARCH SIMULATE ATHEXAPOD = 0 / ATHexapod Simulation Mode
+        # HIERARCH SIMULATE ATPNEUMATICS =   / ATPneumatics Simulation Mode
+        # HIERARCH SIMULATE ATDOME =   1 / ATDome Simulation Mode
+        # HIERARCH SIMULATE ATSPECTROGRAPH = 0 / ATSpectrograph Simulation Mode
+        #
+        # So any header that includes "SIMULATE" in the key name and has a
+        # true value implies that something in the data is simulated.
+        for k, v in self._header.items():
+            if "SIMULATE" in k and v:
+                return True
+
+        # If the controller is H, P, or Q then the data are simulated.
+        ctrlr_key = "CONTRLLR"
+        if self.is_key_ok(ctrlr_key):
+            controller = self._header[ctrlr_key]
+            self._used_these_cards(ctrlr_key)
+            if controller in "HPQ":
+                return True
+
+        # No simulation flags set.
+        return False

@@ -32,6 +32,7 @@ class LsstSimTranslator(LsstBaseTranslator):
     _const_map = {
         # neither phosim nor imsim report a counter
         "observation_counter": 0,
+        "has_simulated_content": True,
     }
     _trivial_map = {}
 
