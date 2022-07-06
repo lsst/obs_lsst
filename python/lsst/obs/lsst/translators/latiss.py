@@ -72,6 +72,9 @@ DATE_END_IS_BAD = Time("2020-02-01T00:00", format="isot", scale="utc")
 ROTPA_CONVENTION_180_SWITCH1 = Time("2020-11-19T00:00", format="isot", scale="utc")
 ROTPA_CONVENTION_180_SWITCH2 = Time("2021-10-29T00:00", format="isot", scale="utc")
 
+# TARGET is set to start with 'spec:' for dispsered images before this date
+TARGET_STARTS_SPECCOLON = Time("2022-07-10T00:00", format="isot", scale="utc")
+
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
 
@@ -358,6 +361,11 @@ class LatissTranslator(LsstBaseTranslator):
             if "IMGTYPE" in header and header["IMGTYPE"] == "OBJECT":
                 log.debug("%s: Forcing OBJECT header to exist", log_label)
                 header["OBJECT"] = "NOTSET"
+                modified = True
+
+        if date < TARGET_STARTS_SPECCOLON:
+            if "OBJECT" in header:
+                header["OBJECT"] = header['OBJECT'].replace('spec:', '')
                 modified = True
 
         if "RADESYS" in header:
