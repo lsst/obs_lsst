@@ -672,6 +672,22 @@ class LsstBaseTranslator(FitsTranslator):
             return exposure_group
         return super().to_exposure_group()
 
+    @cache_translation
+    def to_focus_z(self):
+        """Return the defocal distance of the camera in units of mm.
+        If there is no ``FOCUSZ`` value in the header it will return
+        the default 0.0mm value.
+
+        Returns
+        -------
+        focus_z: `astropy.units.Quantity`
+            The defocal distance from header in mm or the 0.0mm default
+        """
+        if self.is_key_ok("FOCUSZ"):
+            focus_z = self._header["FOCUSZ"]
+            return focus_z * u.mm
+        return super().to_focus_z()
+
     @staticmethod
     def _is_filter_empty(filter):
         """Return true if the supplied filter indicates an empty filter slot
