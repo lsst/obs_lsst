@@ -197,13 +197,14 @@ class LsstTS8Translator(LsstBaseTranslator):
         this properly.
         """
 
+        default = "unknown"
         try:
             filter_pos = self._header["FILTPOS"]
             self._used_these_cards("FILTPOS")
         except KeyError:
-            log.warning("%s: FILTPOS key not found in header (assuming NONE)",
-                        self._log_prefix)
-            return "NONE"
+            log.warning("%s: FILTPOS key not found in header (assuming %s)",
+                        self._log_prefix, default)
+            return default
 
         try:
             return {
@@ -214,9 +215,9 @@ class LsstTS8Translator(LsstBaseTranslator):
                 6: 'y',
             }[filter_pos]
         except KeyError:
-            log.warning("%s: Unknown filter position (assuming NONE): %d",
-                        self._log_prefix, filter_pos)
-            return "NONE"
+            log.warning("%s: Unknown filter position (assuming %s): %d",
+                        self._log_prefix, default, filter_pos)
+        return default
 
     def to_exposure_id(self):
         """Generate a unique exposure ID number
