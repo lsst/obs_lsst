@@ -22,6 +22,7 @@ from astropy.coordinates import EarthLocation
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
 from .lsst import LsstBaseTranslator, FILTER_DELIMITER
+from .lsstCam import is_non_science_or_lab
 
 log = logging.getLogger(__name__)
 
@@ -77,33 +78,6 @@ TARGET_STARTS_SPECCOLON = Time("2022-07-10T00:00", format="isot", scale="utc")
 
 # Scaling factor radians to degrees.  Keep it simple.
 RAD2DEG = 180.0 / math.pi
-
-
-def is_non_science_or_lab(self):
-    """Pseudo method to determine whether this is a lab or non-science
-    header.
-
-    Raises
-    ------
-    KeyError
-        If this is a science observation and on the mountain.
-    """
-    # Return without raising if this is not a science observation
-    # since the defaults are fine.
-    try:
-        # This will raise if it is a science observation
-        is_non_science(self)
-        return
-    except KeyError:
-        pass
-
-    # We are still in the lab, return and use the default
-    if not self._is_on_mountain():
-        return
-
-    # This is a science observation on the mountain so we should not
-    # use defaults
-    raise KeyError(f"{self._log_prefix}: Required key is missing and this is a mountain science observation")
 
 
 class LatissTranslator(LsstBaseTranslator):
