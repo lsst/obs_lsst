@@ -82,7 +82,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         "detector_serial": "LSST_NUM",
         "science_program": (["PROGRAM", "RUNNUM"], dict(default="unknown")),
         "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
-                                                                 default=float("nan"), unit=u.deg)),
+                                                                 default=0.0, unit=u.deg)),
     }
 
     # Use Imsim raft definitions until a true lsstCam definition exists
