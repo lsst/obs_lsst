@@ -10,4 +10,4 @@ jobs:
   call-workflow:
     uses: lsst/rubin_workflows/.github/workflows/yamllint.yaml@main
     with:
-      args: "corrections tests pipelines"
+      args: "corrections tests"
