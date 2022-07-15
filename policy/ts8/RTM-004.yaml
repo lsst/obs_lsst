@@ -2,7 +2,7 @@ RTM-004 :
   detectorType : ITL
   raftSerial : LCA-11021_RTM-004-Dev
   ccdSerials :
-    S00 : ITL-3800C-381
+    S00 : ITL-3800C-372
     S01 : ITL-3800C-333
     S02 : ITL-3800C-380
     S10 : ITL-3800C-346

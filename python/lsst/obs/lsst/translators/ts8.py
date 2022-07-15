@@ -242,6 +242,10 @@ class LsstTS8Translator(LsstBaseTranslator):
     @cache_translation
     def to_observation_id(self):
         # Docstring will be inherited. Property defined in properties.py
+        if self.is_key_ok("OBSID"):
+            observation_id = self._header["OBSID"]
+            self._used_these_cards("OBSID")
+            return observation_id
         filename = self._header["FILENAME"]
         self._used_these_cards("FILENAME")
         return filename[:filename.rfind(".")]
