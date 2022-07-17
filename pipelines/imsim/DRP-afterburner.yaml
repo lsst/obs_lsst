@@ -1,0 +1,8 @@
+description: DP0.2 production afterburners
+instrument: lsst.obs.lsst.LsstCamImSim
+tasks:
+    # Afterburner to correct for DM-35322
+    # Rerun transformForcedSourceOnDiaObjectTable afterwards to produce
+    # recovered forcedSourceOnDiaObjectTables
+    rewriteForcedSourceOnDiaObjectTable:
+        class: lsst.pipe.tasks.postprocess.RewriteForcedSourceOnDiaObjectTask
