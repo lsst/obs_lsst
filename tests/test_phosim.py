@@ -54,7 +54,7 @@ class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(self._butler, None, dataIds)
+        self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 34
         exposureIds = {'raw': 204595042}

@@ -43,7 +43,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
                    }
-        self.setUp_tests(self._butler, None, dataIds)
+        self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3019053000001000,

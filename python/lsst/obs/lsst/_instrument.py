@@ -28,7 +28,6 @@ import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils.introspection import get_full_type_name
 from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument, VisitSystem
-from lsst.obs.base.gen2to3 import TranslatorFactory
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
                       LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
                       TS8_FILTER_DEFINITIONS, COMCAM_FILTER_DEFINITIONS,
@@ -158,12 +157,6 @@ class LsstCam(Instrument):
             purpose=purpose,
             raft=group,
         )
-
-    def makeDataIdTranslatorFactory(self) -> TranslatorFactory:
-        # Docstring inherited from lsst.obs.base.Instrument.
-        factory = TranslatorFactory()
-        factory.addGenericInstrumentRules(self.getName(), detectorKey="detector", exposureKey="expId")
-        return factory
 
 
 class LsstComCam(LsstCam):

@@ -44,7 +44,7 @@ class TestImsim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                             'physical_filter': 'i_sim_1.4'},
                    'dark': {'exposure': 204595, 'name_in_raft': 'S20', 'raft': 'R11'}
                    }
-        self.setUp_tests(self._butler, None, dataIds)
+        self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 34
         exposureIds = {'raw': 204595042,
