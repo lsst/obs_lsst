@@ -44,7 +44,7 @@ class TestLatiss(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
                    }
-        self.setUp_tests(self._butler, None, dataIds)
+        self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 52
         exposureIds = {'raw': 3018092000065, 'bias': 3018092000065}
