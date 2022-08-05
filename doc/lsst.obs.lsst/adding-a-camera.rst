@@ -9,7 +9,7 @@ to describe the real camera, but for now we also have variants to handle
 LATISS data, phosim and imsim simulations (they differ in e.g., the gain and
 crosstalk values) and data from various test stands.
 
-Once Butler Gen3 is ready this configuration data will be moved out of
+Eventually this configuration data will be moved out of
 the obs package and into the calibration registry, which will allow us
 to track evolution of the system (including replacing failed rafts – not
 that that’s going to happen).
@@ -59,23 +59,6 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
 -  run ``scons`` in the ``obs_lsst`` directory (or ``scons -u`` in
    policy)
 -  add ``fooCam.yaml`` to ``policy/.gitignore``
--  Create a new file ``python/lsst/obs/lsst/fooCam.py`` (see
-   ``latiss.py`` for an example)
-
-   Add a class ``FooCamMapper`` to the same file, setting a class-level
-   string ``_cameraName`` to “fooCam”. You also need to specify the metadata
-   translation class to use such as ``LsstFooCamTranslator``. Look at the example in
-   ``python/lsst/obs/lsst/latiss.py`` – you’ll see that this
-   overrides some entries in ``lsstCamMapper.yaml`` (in the class data
-   member ``yamlFileList``) with ``latissMapper.yaml``. If you want to
-   provide your own templates you’ll need to do the same thing, adding a
-   file ``policy/fooCam/fooCamMapper.yaml``
-
-   The name you provided as ``_cameraName`` is also used to e.g.,
-   provide per-camera configuration files (for example
-   ``config/latiss/ingest.py``)
-
-   Don’t forget to add ``FooCamMapper`` to ``__all__``
 -  Write a header translator for your instrument. This should be placed in
    ``python/lsst/obs/lsst/translators/fooCam.py``. You can follow the examples
    from other translators there.  Remember to add the new file to
@@ -91,25 +74,13 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    Pay careful attention to how you decide to define ``detector_group``
    and ``detector_name``.  You can read your detector IDs out of the camera
    YAML file once it's created or hard code them into your translator.
-   ``exposure_id`` and ``detector_exposure_id`` should be written in such
-   a way that they can be called from the mapper class to allow the values
-   to be determined from dataIds.
--  Add a ``FooCamParseTask`` to ``python/lsst/obs/lsst/fooCam.py``.
-   It’ll need to set a class variable ``_mapperClass = FooCamMapper`` and
-   also a class variable ``_translatorClass = LsstFooCamTranslator`` (the same
-   class as used in the mapper).  Most of the metadata translations are
-   inherited from the base class so you only need to add translations here
-   if you are adding something non-standard.
-   Don’t forget to add ``FooCamParseTask`` to ``__all__``
--  Put a ``_mapper`` file in the root of your repository, containing
-   ``lsst.obs.lsstCam.fooCam.FooCamMapper``
--  Retarget ``config.parse`` in ``config/fooCam/ingest.py`` to
-   ``FooCamParseTask``
 -  You will probably also want to copy e.g., ``config/latiss/latiss.py``
    to ``config/fooCam/fooCam.py`` and also files such as
    ``config/latiss/bias.py`` – don’t forget to modify them to import
    ``fooCam.py``!
--  Add ``FooCam.yaml`` to ``policy/.gitignore``
+-  Add a `~lsst.obs.base.Instrument` definition to ``python/lsst/obs/lsst/_instrument.py``.
+   You can copy one of the other instrument definitions to suit your needs.
+   This tells the butler how to understand this instrument.
 -  Add test data and associated unit tests following the instructions in
    :ref:`obs_lsst_testing`.
 
