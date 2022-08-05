@@ -97,6 +97,8 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         self.assertEqual([x for x in content['CCDs'] if 'W_' in x], [])
         self.assertEqual(content["name"], "LSSTCam")
         self.assertEqual(content["plateScale"], 20.0)
+        # SW0 is extrafocal is negative-z in DVCS
+        self.assertEqual(content["CCDs"]["R04_SW0"]["offset"][2], -1.5)
 
     def testFailures(self):
         with self.assertRaises(RuntimeError):

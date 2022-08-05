@@ -85,22 +85,23 @@ def applyRaftYaw(offset, raftYaw):
     Parameters
     ----------
     offset : `list` of `float`
-        A list of the offsets to rotate: [x, y]
+        A list of the offsets to rotate: [x, y, z]
     raftYaw : `float`
         Raft yaw angle in degrees.
 
     Returns
     -------
     offsets : `list` of `float
-        2-item sequence of floats containing the rotated offsets.
+        3-item sequence of floats containing the rotated offsets.
     """
     if raftYaw == 0.:
         return offset
-    new_offset = np.zeros(2, dtype=np.float)
+    new_offset = np.zeros(3, dtype=np.float)
     sinTheta = np.sin(np.radians(raftYaw))
     cosTheta = np.cos(np.radians(raftYaw))
     new_offset[0] = cosTheta*offset[0] - sinTheta*offset[1]
     new_offset[1] = sinTheta*offset[0] + cosTheta*offset[1]
+    new_offset[2] = offset[2]
     return new_offset
 
 
@@ -232,6 +233,8 @@ CCDs :\
             nindent += 1
 
             raftOffset = perRaftData["offset"]
+            if len(raftOffset) == 2:
+                raftOffset.append(0.0)  # Default offset_z is 0.0
             id0 = perRaftData['id0']
             try:
                 raftYaw = perRaftData['yaw']
@@ -242,9 +245,11 @@ CCDs :\
             for ccdName, ccdLayout in ccds.items():
                 if ccdName in geometryWithinRaft:
                     doffset = geometryWithinRaft[ccdName]['offset']
+                    if len(doffset) == 2:
+                        doffset.append(0.0)  # Default offset_z is 0.0
                     yaw = geometryWithinRaft[ccdName]['yaw'] + raftYaw
                 else:
-                    doffset = (0.0, 0.0,)
+                    doffset = (0.0, 0.0, 0.0)
                     yaw = None
 
                 print(indent(), "%s_%s : " % (raftNameMap.get(raftName, raftName), ccdName), file=fd)
@@ -256,10 +261,13 @@ CCDs :\
                 print(indent(), "serial : %s" % (raftCcdData['ccdSerials'][ccdName]), file=fd)
                 print(indent(), "physicalType : %s" % (detectorType), file=fd)
                 print(indent(), "refpos : %s" % (ccdLayout['refpos']), file=fd)
+                if len(ccdLayout['offset']) == 2:
+                    ccdLayout['offset'].append(0.0)  # Default offset_z is 0.0
                 ccdLayoutOffset = applyRaftYaw([el1+el2 for el1, el2 in zip(ccdLayout['offset'], doffset)],
                                                raftYaw)
-                print(indent(), "offset : [%g, %g]" % (ccdLayoutOffset[0] + raftOffset[0],
-                                                       ccdLayoutOffset[1] + raftOffset[1]),
+                print(indent(), "offset : [%g, %g, %g]" % (ccdLayoutOffset[0] + raftOffset[0],
+                                                           ccdLayoutOffset[1] + raftOffset[1],
+                                                           ccdLayoutOffset[2] + raftOffset[2]),
                       file=fd)
                 if yaw is not None:
                     print(indent(), "yaw : %g" % (yaw), file=fd)
