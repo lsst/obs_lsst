@@ -40,13 +40,12 @@ New data can be added as follow:
 
 -  This file or files
    should be added to the test butler repository in ``data/input``. Create
-   directory ``data/input/fooCam``, if required, and into that directory add a file
-   ``_mapper`` with contents ``lsst.obs.lsst.fooCam.FooCamMapper`` and then
-   run:
+   directory ``data/input/fooCam``, if required, and then run ``butler create`` for that directory to initialize a butler repository.
+   Then ingest your test raw file(s) with:
 
    .. code-block:: bash
 
-      ingestImages.py ./data/input/fooCam --mode=copy fooCamtest.fits
+      butler ingest-raws data/input/fooCam --transfer copy fooCamtest.fits
 
    specifying the path to the test files. This will store them in the butler
    repository.
@@ -56,11 +55,8 @@ New data can be added as follow:
    butler repository. This writes the file as tile compressed by default.
 
    Alternatively you can zero the file out and compress it using ``fpack`` and
-   then use ``ingestCalibs.py`` to add it to the test repository:
-
-   .. code-block:: bash
-
-      ingestCalibs.py ./data/input/fooCam --mode=copy --validity=99999 --output ./data/input/fooCam/CALIB calibfile.fits
+   then use ``butler ingest-files`` to add it to the test repository with
+   the appropriate data ID.
 
 -  Copy one of the ``tests/test_cam.py`` files most closely related to your
    camera.  You can include tests for processed data here but if you only
@@ -80,8 +76,6 @@ A header file can be generated in this format by running:
 
    translate_header -d testfile.fits > tests/headers/testfile.yaml
 
-The gen 2 translators are tested in ``tests/test_parsetask.py``.
-Again, there is a test method per camera and the test files are read directly from the ``data/input`` test data directory (not using a butler).
 
 CI Tests
 --------
