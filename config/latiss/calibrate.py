@@ -1,9 +1,7 @@
 from lsst.meas.astrom import FitAffineWcsTask
 
-# Configure the photometry to use atlas_refcat2. 
-PHOTO_REFCAT_NAME = 'atlas_refcat2_20220201'
-config.connections.photoRefCat = PHOTO_REFCAT_NAME
-config.photoRefObjLoader.ref_dataset_name = PHOTO_REFCAT_NAME
+# Configure the photometry to use atlas_refcat2.
+config.connections.photoRefCat = 'atlas_refcat2_20220201'
 config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 
 # We often have very few sources due to smaller aperture so use affine task. 
