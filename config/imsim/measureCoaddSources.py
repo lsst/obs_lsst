@@ -30,7 +30,6 @@ config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "convolved
 config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "hsm.py"))
 config.load(os.path.join(os.path.dirname(__file__), "..", "cmodel.py"))
 
-config.match.refObjLoader.ref_dataset_name = "cal_ref_cat"
 config.match.refObjLoader.load(os.path.join(os.path.dirname(__file__), "filterMap.py"))
 config.connections.refCat = "cal_ref_cat"
 
