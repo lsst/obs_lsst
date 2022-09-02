@@ -34,7 +34,9 @@ To add a new camera (e.g., ``fooCam``, made up of 9 CCDs in a single
    default to 0.0 and the yaw entry is not generated.  These offsets
    are interpreted relative to the nominal positions given in cameraHeader.yaml
    for each type of raft, as adjusted for the centre of the raft; these
-   values are therefore reasonable.
+   values are therefore reasonable.  (Note that offsets here and elsewhere may
+   either be specified as 2-tuples, in which case the z-offset is inferred to be
+   0.0, or directly as 3-tuples with their z-offset explicit).
 
    The yaw (rotation in the plane of the detector) is measured in degrees,
    anticlockwise as shown in cameraGeomUtils.plotFocalPlane (i.e. with ``R00`` in

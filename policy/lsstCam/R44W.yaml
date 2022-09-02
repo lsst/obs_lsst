@@ -8,11 +8,11 @@ R44W :
 
   geometryWithinRaft :
     SW0 : {
-      offset : [2.5, 1.4375],
+      offset : [2.5, 1.4375, -1.5],  # extrafocal
       yaw : 0.0,
     }
     SW1 : {
-      offset : [2.5, 3.5625],
+      offset : [2.5, 3.5625, 1.5],  # intrafocal
       yaw : 180.0,
     }
 
