@@ -25,7 +25,7 @@ also the odd utility function
 import lsst.geom as geom
 import lsst.afw.cameraGeom as cameraGeom
 
-__all__ = ["LsstCameraTransforms", "getAmpImage", "channelToAmp"]
+__all__ = ["LsstCameraTransforms", "channelToAmp"]
 
 
 class LsstCameraTransforms():
@@ -272,41 +272,6 @@ class LsstCameraTransforms():
 
         ampX, ampY = ampXY
         return detector.getName(), ampToChannel(amp), ampX, ampY
-
-# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-
-def getAmpImage(butler, dataId, channel):
-    r"""Return a amplifier image
-
-    Parameters
-    ----------
-    butler : `lsst.daf.persistence.butler.Butler`
-       The butler which will perform the I/O
-    dataId : `dict` or `dafPersist.butler.DataId`
-       The dataId specifying the desired detector
-    channel : `int`
-       The 1-indexed channel ID for the desired amplifier
-
-    Returns
-    -------
-    detectorName : `lsst.afw.image.ExposureF`
-       The desired image
-
-    Notes
-    -----
-    The Gen2 butler can't quite do this natively as it doesn't
-    know how to only lookup things that it doesn't know, so we
-    so that for it, poor lamb
-
-    """
-    keys = ["run", "detector"]
-    did = dataId.copy()
-    did.update(dict(zip(keys, butler.queryMetadata("raw", keys, did)[0])))
-    # the only snap is snap==0
-    did["snap"] = 0
-
-    return butler.get('raw_amp', did, channel=channel)
 
 
 def ampToChannel(amp):
