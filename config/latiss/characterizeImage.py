@@ -21,9 +21,8 @@ config.measurePsf.starSelector['science'].flags.bad = ["base_PixelFlags_flag_edg
 #config.measurePsf.psfDeterminer = 'pca'
 #config.measurePsf.psfDeterminer['pca'].spatialOrder = 0
 
-# Set PSF spatialOrder to 0 to calculate the mean PSF profile across the detector, i.e. no 
-# spatial variations. 
-config.measurePsf.psfDeterminer['piff'].spatialOrder = 0
+# Reduce psfex spatialOrder to 1, this helps ensure success with low numbers of psf candidates.
+config.measurePsf.psfDeterminer['psfex'].spatialOrder = 1
 
 config.installSimplePsf.width = 81  
 config.installSimplePsf.fwhm = 2.355*2 # LATISS platescale is 2x LSST nominal
