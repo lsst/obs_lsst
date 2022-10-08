@@ -216,12 +216,18 @@ _latiss_filters = (
                      band="r"),
     FilterDefinition(physical_filter="SDSSi",
                      band="i"),
+    FilterDefinition(physical_filter="SDSSu_65mm",
+                     band="u"),
     FilterDefinition(physical_filter="SDSSg_65mm",
                      band="g"),
     FilterDefinition(physical_filter="SDSSr_65mm",
                      band="r"),
     FilterDefinition(physical_filter="SDSSi_65mm",
                      band="i"),
+    FilterDefinition(physical_filter="SDSSz_65mm",
+                     band="z"),
+    FilterDefinition(physical_filter="SDSSy_65mm",
+                     band="y"),
 )
 
 # Form a new set of filter definitions from all the explicit gratings
