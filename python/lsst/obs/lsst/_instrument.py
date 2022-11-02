@@ -115,12 +115,15 @@ class LsstCam(Instrument):
         # The maximum values below make Gen3's ObservationDataIdPacker produce
         # outputs that match Gen2's ccdExposureId.
         obsMax = self.translatorClass.max_exposure_id()
+        # Make sure this is at least 1 to avoid non-uniqueness issues (e.g.
+        # for data ids that also get used in indexing).
+        detectorMax = max(self.translatorClass.DETECTOR_MAX, 1)
         with registry.transaction():
             registry.syncDimensionData(
                 "instrument",
                 {
                     "name": self.getName(),
-                    "detector_max": self.translatorClass.DETECTOR_MAX,
+                    "detector_max": detectorMax,
                     "visit_max": obsMax,
                     "exposure_max": obsMax,
                     "class_name": get_full_type_name(self),
