@@ -126,8 +126,10 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
         os.makedirs(outpath, exist_ok=True)
         full_detector_name = '_'.join([raft_name, detector_name])
         detector_id = cam[full_detector_name].getId()
-        curve_table.meta.update({'CALIBDATE': valid_start, 'INSTRUME': 'TS8', 'OBSTYPE': 'qe_curve',
+        curve_table.meta.update({'CALIBDATE': valid_start, 'INSTRUME': 'TS8',
+                                 'OBSTYPE': 'transmission_sensor', 'TYPE': 'transmission_sensor',
                                  'DETECTOR': detector_id, 'PICKLEFILE': os.path.split(picklefile)[1]})
+
         curve_table.meta['CALIB_ID'] = (f'raftName={raft_name} detectorName={detector_name} '
                                         f'detector={detector_id} calibDate={valid_start} '
                                         f'ccd={detector_id} ccdnum={detector_id} filter=None')
