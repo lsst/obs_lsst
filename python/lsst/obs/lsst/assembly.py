@@ -168,8 +168,14 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
     datasec = bboxFromIraf(d["DATASEC"]) if "DATASEC" in d else None
     biassec = bboxFromIraf(d["BIASSEC"]) if "BIASSEC" in d else None
 
-    if detsec and outAmp.getBBox() != detsec:
-        logCmd("DETSEC doesn't match (%s != %s)", outAmp.getBBox(), detsec)
+    # 2022-11-11: There is a known issue that the header DETSEC have
+    # the y-axis values flipped between the C0x and C1x entries.  This
+    # is incorrect, and disagrees with the cameraGeom values.
+    # DM-36115 contains additional details.  This test has been
+    # disabled to remove useless warnings until that is resolved.
+    # if detsec and outAmp.getBBox() != detsec:
+    #    logCmd("DETSEC doesn't match (%s != %s)",
+    #           outAmp.getBBox(), detsec)
     if datasec and outAmp.getRawDataBBox() != datasec:
         logCmd("DATASEC doesn't match for (%s != %s)", outAmp.getRawDataBBox(), detsec)
     if biassec and outAmp.getRawHorizontalOverscanBBox() != biassec:
