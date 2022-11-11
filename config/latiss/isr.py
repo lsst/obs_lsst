@@ -24,3 +24,4 @@ latiss-specific overrides for IsrTask
 """
 config.doCrosstalk=False
 config.doDefect=True
+config.overscan.fitType="MEDIAN_PER_ROW"
