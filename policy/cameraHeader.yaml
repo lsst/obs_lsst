@@ -68,11 +68,11 @@ AMP_ITL : &AMP_ITL
     readCorner : LL
 
     #                         [[x0,  y0], [xsize, ysize]]
-    rawBBox                 : [[0,    0], [544,    2048]]  # total size of one amp's raw data
+    rawBBox                 : [[0,    0], [576,    2048]]  # total size of one amp's raw data
 
     rawDataBBox             : [[3,    0], [509,    2000]]  # data region in raw data
     rawSerialPrescanBBox    : [[0,    0], [3,      2000]]  # serial prescan (often == extended)
-    rawSerialOverscanBBox   : [[512,  0], [32,     2000]]  # serial overscan
+    rawSerialOverscanBBox   : [[512,  0], [64,     2000]]  # serial overscan
     rawParallelPrescanBBox  : [[0,    1], [0,         0]]  # pixels digitised before first parallel transfer
     rawParallelOverscanBBox : [[3, 2000], [509,      48]]  # parallel overscan
 
