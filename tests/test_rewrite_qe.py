@@ -28,8 +28,8 @@ import tempfile
 import glob
 
 import lsst.utils
-from lsst.meas.algorithms import Curve
 from lsst.obs.lsst.script.rewrite_ts8_qe_files import rewrite_ts8_files
+from lsst.ip.isr import IntermediateSensorTransmissionCurve
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 DATADIR = lsst.utils.getPackageDir('obs_lsst_data')
@@ -47,9 +47,20 @@ class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
             files = glob.glob(os.path.join(root, '*', '19700101T000000.ecsv'))
             self.assertEqual(len(files), 9)
             for f in files:
-                curve1 = Curve.readText(f)
-                expect_file = os.path.join(DATADIR, 'ts8', 'qe_curve', os.path.relpath(f, root))
-                curve2 = Curve.readText(expect_file)
+                curve1 = IntermediateSensorTransmissionCurve.readText(f)
+                expect_file = os.path.join(DATADIR, 'ts8', 'transmission_sensor', os.path.relpath(f, root))
+                curve2 = IntermediateSensorTransmissionCurve.readText(expect_file)
+
+                # These fields are created every time, and therefore
+                # differ between the test data and the references.
+                curve1.getMetadata().pop('DATE')
+                curve1.getMetadata().pop('CALIB_CREATION_DATE')
+                curve1.getMetadata().pop('CALIB_CREATION_TIME')
+
+                curve2.getMetadata().pop('DATE')
+                curve2.getMetadata().pop('CALIB_CREATION_DATE')
+                curve2.getMetadata().pop('CALIB_CREATION_TIME')
+
                 self.assertEqual(curve1, curve2)
         except Exception:
             failed = True
