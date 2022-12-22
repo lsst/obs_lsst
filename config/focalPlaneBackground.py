@@ -28,5 +28,5 @@
 # `lsst.pipe.tasks.background.FocalPlaneBackgroundConfig` class.
 # Note that the diameter of the LSST focalplane is ~630 mm and each
 # CCD is ~40 mm on a side.
-config.xSize = 10.
-config.ySize = 10.
+config.xSize = 10.0
+config.ySize = 10.0
