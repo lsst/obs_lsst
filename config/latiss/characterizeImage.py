@@ -17,6 +17,9 @@ config.measurePsf.starSelector['science'].flags.bad = ["base_PixelFlags_flag_edg
                         "base_PixelFlags_flag_bad",
                         "base_PixelFlags_flag_interpolated"]
 
+# We are starved for PSF stars, so don't reserve any at this stage.
+config.measurePsf.reserve.fraction = 0.0
+
 # Use these to run the pca psf estimator 
 #config.measurePsf.psfDeterminer = 'pca'
 #config.measurePsf.psfDeterminer['pca'].spatialOrder = 0
