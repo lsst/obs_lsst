@@ -127,7 +127,7 @@ class LsstCam(Instrument):
                     "visit_max": obsMax,
                     "exposure_max": obsMax,
                     "class_name": get_full_type_name(self),
-                    "visit_system": self.visitSystem.value,
+                    "visit_system": None if self.visitSystem is None else self.visitSystem.value,
                 },
                 update=update
             )
