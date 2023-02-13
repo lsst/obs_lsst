@@ -13,6 +13,7 @@ from .phosim import *
 from .ts3 import *
 from .ts8 import *
 from .imsim import *
+from .imsim2 import *
 from .latiss import *
 from .lsst_ucdcam import *
 from .comCam import *

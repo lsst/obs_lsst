@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
-           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstCamImSim2")
 
 import os.path
 
@@ -35,7 +35,8 @@ from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
+    LsstCamImSim2Translator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -175,6 +176,15 @@ class LsstComCam(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstComCamRawFormatter
         return LsstComCamRawFormatter
+
+
+class LsstCamImSim2(LsstCam):
+    """Gen3 Butler specialization for ImSim simulations.
+    """
+
+    instrument = "LSSTCam-imSim-2"
+    policyName = "imsim2"
+    translatorClass = LsstCamImSim2Translator
 
 
 class LsstCamImSim(LsstCam):
