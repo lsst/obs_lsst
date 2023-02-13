@@ -26,4 +26,4 @@ config.doCrosstalk=False
 config.doDefect=True
 config.overscan.fitType="MEDIAN_PER_ROW"
 config.overscan.doParallelOverscan=True
-config.cameraKeywords=["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC"]
+config.cameraKeywordsToCompare=["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC"]
