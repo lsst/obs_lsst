@@ -40,3 +40,5 @@ config.astrometry.doMagnitudeOutlierRejection = True
 
 # Write srcMatchFull
 config.doWriteMatchesDenormalized = True
+
+config.measurement.plugins["base_Jacobian"].pixelScale = 0.1

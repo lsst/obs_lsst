@@ -21,3 +21,5 @@ config.measurePsf.psfDeterminer["psfex"].spatialOrder = 1
 
 config.installSimplePsf.width = 21
 config.installSimplePsf.fwhm = 2.355*2  # LATISS platescale is 2x LSST nominal
+
+config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
