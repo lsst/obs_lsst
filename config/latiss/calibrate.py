@@ -17,6 +17,11 @@ config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 config.astromRefObjLoader.pixelMargin = 250
 config.astrometry.matcher.maxOffsetPix = 900
 
+# These allow a better chance of finding a match for the otherwise "Unabel to
+# match sources" cases.
+config.astrometry.matcher.numPointsForShape = 5
+config.astrometry.matcher.numPointsForShapeAttempt = 8
+
 # Apply a magnitude limit and decrease the SNR limit as we're only a 1.2m
 # and frequently take short exposures.
 config.astrometry.referenceSelector.doMagLimit = True
@@ -25,6 +30,8 @@ config.astrometry.referenceSelector.magLimit.maximum = 18
 config.astrometry.referenceSelector.magLimit.fluxField = "phot_g_mean_flux"
 config.astrometry.matcher.maxRotationDeg = 2.0
 
+config.astrometry.sourceFluxType = "Psf"
+config.astrometry.sourceSelector['matcher'].sourceFluxType = "Psf"
 config.astrometry.sourceSelector['matcher'].minSnr = 10
 
 # Turn on reference vs. source magnitude outlier rejection to help avoid bad
