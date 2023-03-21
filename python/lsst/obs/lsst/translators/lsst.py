@@ -651,10 +651,8 @@ class LsstBaseTranslator(FitsTranslator):
         if not self._is_on_mountain():
             return None
 
-        # ALTAZ always relevant unless bias or dark
-        if self.to_observation_type() in ("bias", "dark"):
-            return None
-
+        # Always attempt to find the alt/az values regardless of observation
+        # type.
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
                                          self.to_datetime_begin(), is_zd=False)
 
