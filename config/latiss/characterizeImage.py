@@ -22,4 +22,9 @@ config.measurePsf.psfDeterminer["psfex"].spatialOrder = 1
 config.installSimplePsf.width = 21
 config.installSimplePsf.fwhm = 2.355*2  # LATISS platescale is 2x LSST nominal
 
+# Turn off S/N cut for aperture correction measurement source selection
+# (it now only includes calib_psf_used objects, and that cut is "good
+# enough" for the shallow LATISS data).
+config.measureApCorr.sourceSelector["science"].doSignalToNoise = False
+
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
