@@ -628,21 +628,25 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_tracking_radec(self):
-        if not self.is_on_sky():
-            return None
-
         # RA/DEC are *derived* headers and for the case where the DATE-BEG
         # is 1970 they are garbage and should not be used.
-        if self._header["DATE-OBS"] == self._header["DATE"]:
-            # A fixed up date -- use AZEL as source of truth
-            altaz = self.to_altaz_begin()
-            radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS()),
-                                                 obstime=altaz.obstime,
-                                                 location=altaz.location)
-        else:
-            radecsys = ("RADESYS",)
-            radecpairs = (("RASTART", "DECSTART"), ("RA", "DEC"))
-            radec = tracking_from_degree_headers(self, radecsys, radecpairs)
+        try:
+            if self._header["DATE-OBS"] == self._header["DATE"]:
+                # A fixed up date -- use AZEL as source of truth
+                altaz = self.to_altaz_begin()
+                radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS()),
+                                                     obstime=altaz.obstime,
+                                                     location=altaz.location)
+            else:
+                radecsys = ("RADESYS",)
+                radecpairs = (("RASTART", "DECSTART"), ("RA", "DEC"))
+                radec = tracking_from_degree_headers(self, radecsys, radecpairs)
+        except Exception:
+            # If this observation was not formally on sky then we are allowed
+            # to return None.
+            if self.is_on_sky():
+                raise
+            radec = None
 
         return radec
 
@@ -651,10 +655,8 @@ class LsstBaseTranslator(FitsTranslator):
         if not self._is_on_mountain():
             return None
 
-        # ALTAZ always relevant unless bias or dark
-        if self.to_observation_type() in ("bias", "dark"):
-            return None
-
+        # Always attempt to find the alt/az values regardless of observation
+        # type.
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
                                          self.to_datetime_begin(), is_zd=False)
 
