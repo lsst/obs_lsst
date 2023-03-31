@@ -231,6 +231,7 @@ class LsstCamPhoSimRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstCamPhoSimTranslator
     _instrument = LsstCamPhoSim
     filterDefinitions = LsstCamPhoSim.filterDefinitions
+    _extraFitsHeaders = [1]
 
 
 class LsstTS8RawFormatter(LsstCamRawFormatter):
