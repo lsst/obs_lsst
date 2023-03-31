@@ -70,16 +70,10 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
             Header metadata.
         """
         file = self.fileDescriptor.location.path
-        phdu = lsst.afw.fits.readMetadata(file, 0)
 
-        if "INHERIT" in phdu:
-            # Trust the inheritance flag
-            base_md = super().readMetadata()
-
-        # Merge ourselves
-        else:
-            base_md = merge_headers([phdu, lsst.afw.fits.readMetadata(file)],
-                                    mode="overwrite")
+        # For LSSTCam-style data we only want the primary header and
+        # do not read the per-amp headers.
+        base_md = lsst.afw.fits.readMetadata(file, 0)
 
         ehdrs = []
         for hduname in self._extraFitsHeaders:
@@ -94,6 +88,13 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         final_md = merge_headers([base_md] + ehdrs, mode="first")
         fix_header(final_md)
         return final_md
+
+    def stripMetadata(self):
+        """Remove metadata entries that are parsed into components."""
+        if "CRVAL1" not in self.metadata:
+            # No need to strip WCS since we do not seem to have any WCS.
+            return
+        super().stripMetadata()
 
     def getDetector(self, id):
         in_detector = self._instrument.getCamera()[id]
