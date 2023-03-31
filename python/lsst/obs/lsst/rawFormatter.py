@@ -86,7 +86,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
                 ehdrs.append(ehdr)
 
         final_md = merge_headers([base_md] + ehdrs, mode="first")
-        fix_header(final_md)
+        fix_header(final_md, translator_class=self.translatorClass)
         return final_md
 
     def stripMetadata(self):
