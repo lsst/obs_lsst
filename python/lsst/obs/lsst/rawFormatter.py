@@ -56,13 +56,12 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
     _instrument = LsstCam
 
     # These named HDUs' headers will be checked for and added to metadata.
-    _extraFitsHeaders = ["REB_COND", "CONFIG_COND"]
+    _extraFitsHeaders = ["REB_COND"]
 
     def readMetadata(self):
         """Read all header metadata directly into a PropertyList.
 
-        Specialist version since some of our data does not
-        set INHERIT=T so we have to merge the headers manually.
+        Will merge additional headers if required.
 
         Returns
         -------
@@ -71,21 +70,23 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         """
         file = self.fileDescriptor.location.path
 
-        # For LSSTCam-style data we only want the primary header and
-        # do not read the per-amp headers.
-        base_md = lsst.afw.fits.readMetadata(file, 0)
+        with lsst.afw.fits.Fits(file, "r") as hdu:
+            hdu.setHdu(0)
+            base_md = hdu.readMetadata()
 
-        ehdrs = []
-        for hduname in self._extraFitsHeaders:
-            try:
-                ehdr = lsst.afw.fits.readMetadata(file, hduname)
-            except lsst.afw.fits.FitsError:
-                # We can ignore this, the header doesn't exist in this file.
-                continue
-            else:
-                ehdrs.append(ehdr)
+            # Any extra HDUs we need to read.
+            ehdrs = []
+            for hduname in self._extraFitsHeaders:
+                try:
+                    hdu.setHdu(hduname)
+                    ehdr = hdu.readMetadata()
+                except lsst.afw.fits.FitsError:
+                    # The header doesn't exist in this file. Skip.
+                    continue
+                else:
+                    ehdrs.append(ehdr)
 
-        final_md = merge_headers([base_md] + ehdrs, mode="first")
+        final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
         fix_header(final_md, translator_class=self.translatorClass)
         return final_md
 
