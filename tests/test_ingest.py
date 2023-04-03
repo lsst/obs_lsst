@@ -56,7 +56,7 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
         # is wasteful.
         butler = Butler(self.root, run=self.outputRun)
         ref = butler.registry.findDataset("raw", self.dataIds[0])
-        full_assembled = butler.getDirect(ref)
+        full_assembled = butler.get(ref)
         unassembled_detector = self.instrumentClass().getCamera()[ref.dataId["detector"]]
         assembled_detector = full_assembled.getDetector()
         for unassembled_amp, assembled_amp in zip(unassembled_detector, assembled_detector):
@@ -66,8 +66,8 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
             # overscan region sizes.
             comparison = unassembled_amp.compareGeometry(assembled_amp)
             self.assertTrue(comparison & AmplifierGeometryComparison.ASSEMBLY_DIFFERS)
-            assembled_subimage = butler.getDirect(ref, parameters={"amp": assembled_amp})
-            unassembled_subimage = butler.getDirect(ref, parameters={"amp": unassembled_amp.getName()})
+            assembled_subimage = butler.get(ref, parameters={"amp": assembled_amp})
+            unassembled_subimage = butler.get(ref, parameters={"amp": unassembled_amp.getName()})
             self.assertEqual(len(assembled_subimage.getDetector()), 1)
             self.assertEqual(len(unassembled_subimage.getDetector()), 1)
             self.assertEqual(len(assembled_subimage.getDetector()), 1)
