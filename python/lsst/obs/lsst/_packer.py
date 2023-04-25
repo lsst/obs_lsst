@@ -533,4 +533,8 @@ class RubinDimensionPacker(DimensionPacker):
         )
 
 
-observation_packer_registry.register("rubin", RubinDimensionPacker)
+# The double-registration guard here would be unnecessary if not for
+# pytest-flake8 and some horribleness it must be doing to circumvent Python's
+# own guards against importing the same module twice in the same process.
+if "rubin" not in observation_packer_registry:
+    observation_packer_registry.register("rubin", RubinDimensionPacker)
