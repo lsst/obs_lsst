@@ -209,6 +209,8 @@ class LsstBaseTranslator(FitsTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
+        from ..not_idempotent import get_new_variable
+        print(get_new_variable())
         return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
 
     @classmethod
