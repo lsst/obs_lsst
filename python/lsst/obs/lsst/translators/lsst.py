@@ -222,7 +222,9 @@ class LsstBaseTranslator(FitsTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
+        from .._packer import RubinDimensionPacker
+
+        return RubinDimensionPacker.pack_id_pair(exposure_id, detector_num)
 
     @classmethod
     def max_detector_exposure_id(cls):
@@ -441,8 +443,9 @@ class LsstBaseTranslator(FitsTranslator):
             Controller code.  Will be `O` (but should be ignored) for IDs
             produced by calling `compute_exposure_id` with ``controller=None`.
         """
-        rest, seqnum = divmod(exposure_id, 10**_SEQNUM_MAXDIGITS)
-        controller_index, dayobs = divmod(rest, _CONTROLLER_INCREMENT)
+        dayobs, seqnum = divmod(exposure_id, 10**_SEQNUM_MAXDIGITS)
+        controller_index = dayobs // _CONTROLLER_INCREMENT - 2
+        dayobs -= controller_index * _CONTROLLER_INCREMENT
         return (str(dayobs), seqnum, CONTROLLERS[controller_index], )
 
     def _is_on_mountain(self):

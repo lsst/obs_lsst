@@ -19,7 +19,12 @@ import astropy.utils.exceptions
 from astropy.coordinates import AltAz
 from astro_metadata_translator import cache_translation
 
-from .lsst import LsstBaseTranslator, SIMONYI_LOCATION, SIMONYI_TELESCOPE
+from .lsst import (
+    LsstBaseTranslator,
+    SIMONYI_LOCATION,
+    SIMONYI_TELESCOPE,
+    compute_detector_exposure_id_generic,
+)
 
 log = logging.getLogger(__name__)
 
@@ -46,6 +51,11 @@ class LsstSimTranslator(LsstBaseTranslator):
             The maximum value.
         """
         return 9_999_999
+
+    @classmethod
+    def compute_detector_exposure_id(cls, exposure_id, detector_num):
+        # Docstring inherited from LsstBaseTranslator.
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
 
     @cache_translation
     def to_telescope(self):

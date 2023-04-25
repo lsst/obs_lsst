@@ -21,7 +21,7 @@ from astropy.time import Time, TimeDelta
 
 from astro_metadata_translator import cache_translation
 
-from .lsst import LsstBaseTranslator
+from .lsst import LsstBaseTranslator, compute_detector_exposure_id_generic
 
 log = logging.getLogger(__name__)
 
@@ -184,6 +184,11 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
         # Use 1 second resolution
         exposure_id = re.sub(r"\D", "", dateobs[:19])
         return int(exposure_id)
+
+    @classmethod
+    def compute_detector_exposure_id(cls, exposure_id, detector_num):
+        # Docstring inherited from LsstBaseTranslator.
+        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
 
     @cache_translation
     def to_datetime_begin(self):
