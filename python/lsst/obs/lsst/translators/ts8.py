@@ -184,46 +184,6 @@ class LsstTS8Translator(LsstBaseTranslator):
         serial = re.sub("-Dev$", "", serial)
         return serial
 
-    @cache_translation
-    def to_physical_filter(self):
-        """Return the filter name.
-
-        Uses the FILTPOS header.
-
-        Returns
-        -------
-        filter : `str`
-            The filter name.  Returns "NONE" if no filter can be determined.
-
-        Notes
-        -----
-        The calculations here are examples rather than being accurate.
-        They need to be fixed once the camera acquisition system does
-        this properly.
-        """
-
-        default = "unknown"
-        try:
-            filter_pos = self._header["FILTPOS"]
-            self._used_these_cards("FILTPOS")
-        except KeyError:
-            log.warning("%s: FILTPOS key not found in header (assuming %s)",
-                        self._log_prefix, default)
-            return default
-
-        try:
-            return {
-                2: 'g',
-                3: 'r',
-                4: 'i',
-                5: 'z',
-                6: 'y',
-            }[filter_pos]
-        except KeyError:
-            log.warning("%s: Unknown filter position (assuming %s): %d",
-                        self._log_prefix, default, filter_pos)
-        return default
-
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
