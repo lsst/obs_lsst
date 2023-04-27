@@ -117,7 +117,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
         config = _TestConfig()
         packer = config.packer.apply(instrument_data_id, is_exposure=is_exposure)
         self.assertIsInstance(packer, RubinDimensionPacker)
-        self.assertEqual(packer.maxBits, 40)
+        self.assertEqual(packer.maxBits, 41)
         full_data_id = DataCoordinate.standardize(
             instrument_data_id, exposure=exposure_id, visit=visit_id, detector=detector
         )

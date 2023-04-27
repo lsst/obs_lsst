@@ -118,8 +118,10 @@ class RubinDimensionPackerConfig(Config):
         "Reserved number of seq_num values, starting from 0.",
         dtype=int,
         check=_is_positive,
-        default=16384,
-        # Default is one exposure every 5.27s for a full day.
+        default=32768,
+        # Default is one exposure every 2.63s for a full day, which is really
+        # close to the hardware limit of one every 2.3s, and far from what
+        # anyone would actually do in practice.
     )
 
     n_detectors = Field(
