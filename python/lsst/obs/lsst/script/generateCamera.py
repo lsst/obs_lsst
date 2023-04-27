@@ -96,7 +96,7 @@ def applyRaftYaw(offset, raftYaw):
     """
     if raftYaw == 0.:
         return offset
-    new_offset = np.zeros(3, dtype=np.float)
+    new_offset = np.zeros(3, dtype=float)
     sinTheta = np.sin(np.radians(raftYaw))
     cosTheta = np.cos(np.radians(raftYaw))
     new_offset[0] = cosTheta*offset[0] - sinTheta*offset[1]
