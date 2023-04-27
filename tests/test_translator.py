@@ -21,10 +21,12 @@
 
 import os.path
 import unittest
+import warnings
 import astropy.units as u
 import astropy.units.cds as cds
-import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
+from astropy.io.fits.verify import VerifyWarning
 
+import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from astro_metadata_translator.tests import MetadataAssertHelper
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -330,7 +332,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_latiss_translator(self):
         test_data = (("latiss-2018-09-20-05700065-det000.yaml",
@@ -768,10 +773,13 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            check_altaz=True,
                            ))
                      )
-        self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
-        for filename, expected in test_data:
-            with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+        with warnings.catch_warnings():
+            # Avoid warnings from too-long FITS header keys.
+            warnings.simplefilter("ignore", VerifyWarning)
+            self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
+            for filename, expected in test_data:
+                with self.subTest(f"Testing {filename}"):
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
         # This translation should fail
         with self.assertRaises(KeyError):
@@ -959,7 +967,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
@@ -1061,7 +1072,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ucdcam_translator(self):
         test_data = (("UCD-E2V-CCD250-112-04_flat_flat_100_20181205153143.yaml",
