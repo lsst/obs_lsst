@@ -21,10 +21,12 @@
 
 import os.path
 import unittest
+import warnings
 import astropy.units as u
 import astropy.units.cds as cds
-import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
+from astropy.io.fits.verify import VerifyWarning
 
+import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
 from astro_metadata_translator.tests import MetadataAssertHelper
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -43,7 +45,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.0*u.s,
-                           detector_exposure_id=3019031900001029,
+                           detector_exposure_id=0x269200011d,
                            detector_group="R10",
                            detector_name="S02",
                            detector_num=29,
@@ -72,7 +74,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.0*u.s,
-                           detector_exposure_id=3019031900001097,
+                           detector_exposure_id=0x2692000161,
                            detector_group="R22",
                            detector_name="S21",
                            detector_num=97,
@@ -101,7 +103,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTCam",
                            boresight_rotation_coord="unknown",
                            dark_time=1.0*u.s,
-                           detector_exposure_id=3019032200002035,
+                           detector_exposure_id=0x2693800223,
                            detector_group="R10",
                            detector_name="S22",
                            detector_num=35,
@@ -130,7 +132,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTCam",
                            boresight_rotation_coord="unknown",
                            dark_time=1007.422*u.s,
-                           detector_exposure_id=3019040600643027,
+                           detector_exposure_id=0x269b02831b,
                            detector_group="R10",
                            detector_name="S00",
                            detector_num=27,
@@ -160,19 +162,19 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_phoSimLsstCam_translator(self):
-        test_data = (("lsstCam-MC_H_20000217_000032_R22_S00.yaml",
+        test_data = (("lsstCam-MC_H_20100217_000032_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
                            instrument="LSSTCam",
                            boresight_rotation_coord="sky",
                            dark_time=15.0*u.s,
-                           detector_exposure_id=4000021700032090,
+                           detector_exposure_id=0x401780205a,
                            detector_group="R22",
                            detector_name="S00",
                            detector_num=90,
                            detector_serial="E2V-CCD250-369",
                            detector_unique_name="R22_S00",
-                           exposure_group="4000021700032",
-                           exposure_id=4000021700032,
+                           exposure_group="4010021700032",
+                           exposure_id=4010021700032,
                            exposure_time=15.0*u.s,
                            focus_z=0.0*u.mm,
                            group_counter_end=32,
@@ -180,16 +182,16 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            has_simulated_content=True,
                            object="UNKNOWN",
                            observation_counter=32,
-                           observation_id="MC_H_20000217_000032",
+                           observation_id="MC_H_20100217_000032",
                            observation_reason="phosim",
                            observation_type="science",
-                           observing_day=20000217,
+                           observing_day=20100217,
                            physical_filter="g",
                            pressure=None,
                            relative_humidity=None,
                            science_program="9006001",
                            temperature=None,
-                           visit_id=4000021700032)),
+                           visit_id=4010021700032)),
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
@@ -202,7 +204,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTComCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.398*u.s,
-                           detector_exposure_id=3019053000001000,
+                           detector_exposure_id=0x26b6000100,
                            detector_group="R22",
                            detector_name="S00",
                            detector_num=0,
@@ -231,7 +233,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LSSTComCam",
                            boresight_rotation_coord="unknown",
                            dark_time=0.034*u.s,
-                           detector_exposure_id=3019052600223001,
+                           detector_exposure_id=0x26b400df01,
                            detector_group="R22",
                            detector_name="S01",
                            detector_num=1,
@@ -261,18 +263,18 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_phoSimComCam_translator(self):
-        test_data = (("comCam-CC_H_20000217_006001_R22_S00.yaml",
+        test_data = (("comCam-CC_H_20100217_006001_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
                            instrument="LSSTComCam",
                            boresight_rotation_coord="sky",
                            dark_time=1.0*u.s,
-                           detector_exposure_id=4000021706001000,
+                           detector_exposure_id=0x4017977100,
                            detector_group="R22",
                            detector_name="S00",
                            detector_num=0,
                            detector_serial="ITL-3800C-229",
-                           exposure_id=4000021706001,
-                           exposure_group="4000021706001",
+                           exposure_id=4010021706001,
+                           exposure_group="4010021706001",
                            exposure_time=1.0*u.s,
                            focus_z=0.0*u.mm,
                            group_counter_end=6001,
@@ -280,16 +282,16 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            has_simulated_content=True,
                            object="UNKNOWN",
                            observation_counter=6001,
-                           observation_id="CC_H_20000217_006001",
+                           observation_id="CC_H_20100217_006001",
                            observation_type="science",
                            observation_reason="test",
-                           observing_day=20000217,
+                           observing_day=20100217,
                            physical_filter="g_01",
                            pressure=None,
                            relative_humidity=None,
                            science_program="9006001",
                            temperature=None,
-                           visit_id=4000021706001)),
+                           visit_id=4010021706001)),
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
@@ -330,7 +332,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_latiss_translator(self):
         test_data = (("latiss-2018-09-20-05700065-det000.yaml",
@@ -338,7 +343,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=27.0*u.s,
-                           detector_exposure_id=3018092000065,
+                           detector_exposure_id=0x2638004100,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -368,7 +373,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=1.06*u.s,
-                           detector_exposure_id=2019030600014,
+                           detector_exposure_id=0x68b800e00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -398,7 +403,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=0.0*u.s,
-                           detector_exposure_id=2019032900022,
+                           detector_exposure_id=0x697001600,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -428,7 +433,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=0.0*u.s,
-                           detector_exposure_id=2020032900022,
+                           detector_exposure_id=0x74e001600,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -458,7 +463,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=0.0*u.s,
-                           detector_exposure_id=2019091500037,
+                           detector_exposure_id=0x6ec002500,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -488,7 +493,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=3.0*u.s,
-                           detector_exposure_id=2019103100004,
+                           detector_exposure_id=0x703000400,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -518,7 +523,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=3.0*u.s,
-                           detector_exposure_id=2019110400003,
+                           detector_exposure_id=0x705000300,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -548,7 +553,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=0.5*u.s,
-                           detector_exposure_id=2019111300061,
+                           detector_exposure_id=0x709803d00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -578,7 +583,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=15.0*u.s,
-                           detector_exposure_id=2019111800011,
+                           detector_exposure_id=0x70c000b00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -608,7 +613,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="sky",
                            dark_time=100.0*u.s,
-                           detector_exposure_id=2020012100045,
+                           detector_exposure_id=0x72c002d00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -639,7 +644,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="sky",
                            dark_time=5.0*u.s,
-                           detector_exposure_id=2020012800379,
+                           detector_exposure_id=0x72f817b00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -673,7 +678,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="sky",
                            dark_time=30.3176279067993*u.s,
-                           detector_exposure_id=2022040500348,
+                           detector_exposure_id=0x8be815c00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -707,7 +712,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="sky",
                            dark_time=30.2387452125549*u.s,
-                           detector_exposure_id=2022040500349,
+                           detector_exposure_id=0x8be815d00,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -741,7 +746,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            instrument="LATISS",
                            boresight_rotation_coord="unknown",
                            dark_time=30.0126*u.s,
-                           detector_exposure_id=2023032100053,
+                           detector_exposure_id=0x96d803500,
                            detector_group="RXX",
                            detector_name="S00",
                            detector_num=0,
@@ -768,10 +773,13 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            check_altaz=True,
                            ))
                      )
-        self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
-        for filename, expected in test_data:
-            with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+        with warnings.catch_warnings():
+            # Avoid warnings from too-long FITS header keys.
+            warnings.simplefilter("ignore", VerifyWarning)
+            self.assertObservationInfoFromYaml("latiss-future.yaml", dir=self.datadir)
+            for filename, expected in test_data:
+                with self.subTest(f"Testing {filename}"):
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
         # This translation should fail
         with self.assertRaises(KeyError):
@@ -959,7 +967,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ts8_translator(self):
         test_data = (("ts8-E2V-CCD250-179_lambda_bias_024_6006D_20180724104156.yaml",
@@ -1061,7 +1072,10 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                with warnings.catch_warnings():
+                    # Avoid warnings from too-long FITS header keys.
+                    warnings.simplefilter("ignore", VerifyWarning)
+                    self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ucdcam_translator(self):
         test_data = (("UCD-E2V-CCD250-112-04_flat_flat_100_20181205153143.yaml",

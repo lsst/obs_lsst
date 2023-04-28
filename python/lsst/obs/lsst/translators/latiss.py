@@ -390,27 +390,10 @@ class LatissTranslator(LsstBaseTranslator):
 
     @staticmethod
     def compute_detector_exposure_id(exposure_id, detector_num):
-        """Compute the detector exposure ID from detector number and
-        exposure ID.
-
-        This is a helper method to allow code working outside the translator
-        infrastructure to use the same algorithm.
-
-        Parameters
-        ----------
-        exposure_id : `int`
-            Unique exposure ID.
-        detector_num : `int`
-            Detector number.
-
-        Returns
-        -------
-        detector_exposure_id : `int`
-            The calculated ID.
-        """
+        # Docstring inherited.
         if detector_num != 0:
             log.warning("Unexpected non-zero detector number for LATISS")
-        return exposure_id
+        return LsstBaseTranslator.compute_detector_exposure_id(exposure_id, detector_num)
 
     @cache_translation
     def to_dark_time(self):

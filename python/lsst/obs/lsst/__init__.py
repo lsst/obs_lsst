@@ -25,3 +25,4 @@ from .filters import *
 from ._instrument import *
 from ._fitsHeader import *
 from ._ingestPhotodiode import *
+from ._packer import *

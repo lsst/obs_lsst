@@ -54,6 +54,19 @@ SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 # OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS.
 CONTROLLERS = "OCHPQ"
 
+# Number of decimal digits allocated to the sequence number in exposure_ids.
+_SEQNUM_MAXDIGITS = 5
+
+# Number of decimal digits allocated to the day of observation (and controller
+# code) in exposure_ids.
+_DAYOBS_MAXDIGITS = 8
+
+# Value added to day_obs for controllers after the default.
+_CONTROLLER_INCREMENT = 1000_00_00
+
+# Number of decimal digits used by exposure_ids.
+EXPOSURE_ID_MAXDIGITS = _SEQNUM_MAXDIGITS + _DAYOBS_MAXDIGITS
+
 obs_lsst_packageDir = getPackageDir("obs_lsst")
 
 log = logging.getLogger(__name__)
@@ -209,7 +222,9 @@ class LsstBaseTranslator(FitsTranslator):
         detector_exposure_id : `int`
             The calculated ID.
         """
-        return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
+        from .._packer import RubinDimensionPacker
+
+        return RubinDimensionPacker.pack_id_pair(exposure_id, detector_num)
 
     @classmethod
     def max_detector_exposure_id(cls):
@@ -390,8 +405,7 @@ class LsstBaseTranslator(FitsTranslator):
             raise ValueError(f"Malformed dayobs: {dayobs}")
 
         # Expect no more than 99,999 exposures in a day
-        maxdigits = 5
-        if seqnum >= 10**maxdigits:
+        if seqnum >= 10**_SEQNUM_MAXDIGITS:
             raise ValueError(f"Sequence number ({seqnum}) exceeds limit")
 
         # Camera control changes the exposure ID
@@ -402,13 +416,37 @@ class LsstBaseTranslator(FitsTranslator):
                                  f"in supported list: {CONTROLLERS}")
             dayobs = int(dayobs)
             # Increment a thousand years per controller
-            dayobs += 1000_00_00 * index
+            dayobs += _CONTROLLER_INCREMENT * index
 
         # Form the number as a string zero padding the sequence number
-        idstr = f"{dayobs}{seqnum:0{maxdigits}d}"
+        idstr = f"{dayobs}{seqnum:0{_SEQNUM_MAXDIGITS}d}"
 
         # Exposure ID has to be an integer
         return int(idstr)
+
+    @staticmethod
+    def unpack_exposure_id(exposure_id):
+        """Unpack an exposure ID into dayobs, seqnum, and controller.
+
+        Parameters
+        ----------
+        exposure_id : `int`
+            Integer exposure ID produced by `compute_exposure_id`.
+
+        Returns
+        -------
+        dayobs : `str`
+            Day of observation as a YYYYMMDD string.
+        seqnum : `int`
+            Sequence number.
+        controller : `str`
+            Controller code.  Will be `O` (but should be ignored) for IDs
+            produced by calling `compute_exposure_id` with ``controller=None`.
+        """
+        dayobs, seqnum = divmod(exposure_id, 10**_SEQNUM_MAXDIGITS)
+        controller_index = dayobs // _CONTROLLER_INCREMENT - 2
+        dayobs -= controller_index * _CONTROLLER_INCREMENT
+        return (str(dayobs), seqnum, CONTROLLERS[controller_index], )
 
     def _is_on_mountain(self):
         """Indicate whether these data are coming from the instrument

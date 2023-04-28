@@ -104,6 +104,22 @@ class LsstCam(Instrument):
                                f" but instead got geometry for {camera.getName()}")
         return camera
 
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="rubin",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above.
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
+
     def getRawFormatter(self, dataId):
         # Docstring inherited from Instrument.getRawFormatter
         # local import to prevent circular dependency
@@ -192,6 +208,23 @@ class LsstCamImSim(LsstCam):
         from .rawFormatter import LsstCamImSimRawFormatter
         return LsstCamImSimRawFormatter
 
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
+
 
 class LsstCamPhoSim(LsstCam):
     """Gen3 Butler specialization for Phosim simulations.
@@ -206,6 +239,23 @@ class LsstCamPhoSim(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstCamPhoSimRawFormatter
         return LsstCamPhoSimRawFormatter
+
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
 
 
 class LsstTS8(LsstCam):
@@ -223,6 +273,23 @@ class LsstTS8(LsstCam):
         from .rawFormatter import LsstTS8RawFormatter
         return LsstTS8RawFormatter
 
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
+
 
 class LsstUCDCam(LsstCam):
     """Gen3 Butler specialization for UCDCam test stand data.
@@ -237,6 +304,23 @@ class LsstUCDCam(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstUCDCamRawFormatter
         return LsstUCDCamRawFormatter
+
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
 
 
 class LsstTS3(LsstCam):
@@ -253,6 +337,23 @@ class LsstTS3(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstTS3RawFormatter
         return LsstTS3RawFormatter
+
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
 
 
 class Latiss(LsstCam):
