@@ -29,4 +29,3 @@ config.doCrosstalk = True
 config.qa.doThumbnailOss = False
 config.qa.doThumbnailFlattened = False
 config.overscan.fitType = "MEDIAN_PER_ROW"
-config.doSaturation = False
