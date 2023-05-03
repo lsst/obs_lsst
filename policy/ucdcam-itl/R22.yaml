@@ -1,0 +1,88 @@
+R22 :
+  detectorType : ITL
+  raftSerial : LCA-11021_RTM-ITL-22
+  ccdSerials :
+    S01 : ITL-3800C-002
+
+  amplifiers :
+    S01 :
+      C10 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C11 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C12 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C13 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C14 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C15 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C16 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C17 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C07 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C06 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C05 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C04 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C03 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C02 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C01 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
+      C00 : {
+        gain : 1.0,
+        readNoise : 6.0,
+        saturation : 10000,
+      }
