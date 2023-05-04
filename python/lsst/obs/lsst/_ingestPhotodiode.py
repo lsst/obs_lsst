@@ -20,7 +20,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 __all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask')
 
-import warnings
 
 from lsst.daf.butler import (
     CollectionType,
@@ -30,7 +29,6 @@ from lsst.daf.butler import (
     DatasetType,
     FileDataset,
     Progress,
-    UnresolvedRefWarning,
 )
 from lsst.ip.isr import PhotodiodeCalib
 from lsst.obs.base import makeTransferChoiceField
@@ -202,14 +200,11 @@ class PhotodiodeIngestTask(Task):
             with ResourcePath.temporary_uri(suffix=".fits") as tempFile:
                 calib.writeFits(tempFile.ospath)
 
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", category=UnresolvedRefWarning)
-                    ref = DatasetRef(self.datasetType, dataId)
+                ref = DatasetRef(self.datasetType, dataId, run=run, id_generation_mode=mode)
                 dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
 
                 # No try, as if this fails, we should stop.
-                self.butler.ingest(dataset, transfer=self.config.transfer, run=run,
-                                   idGenerationMode=mode,
+                self.butler.ingest(dataset, transfer=self.config.transfer,
                                    record_validation_info=track_file_attrs)
                 self.log.info("Photodiode %s:%d (%d/%d) ingested successfully", instrumentName, exposureId,
                               dayObs, seqNum)
