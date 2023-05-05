@@ -15,15 +15,17 @@ __all__ = ("LsstUCDCamITLTranslator", )
 import logging
 import astropy.units as u
 
-from astro_metadata_translator import cache_translation
-
 from .lsst import LsstBaseTranslator
 
 log = logging.getLogger(__name__)
 
+
 LSST_UCDCAM = "LSST-UCDCam-ITL"
+
 DETECTOR_GROUP_NAME = "R22"
+
 DETECTOR_NAME = "S01"
+
 
 class LsstUCDCamITLTranslator(LsstBaseTranslator):
     """Metadata translator for LSST UC Davis ITL Test Stand."""
@@ -57,8 +59,6 @@ class LsstUCDCamITLTranslator(LsstBaseTranslator):
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "science_program": ("RUNNUM", dict(default="unknown"))
     }
-
-    cameraPolicyFile = "policy/ucdcam_itl"
 
     @classmethod
     def can_translate(cls, header, filename=None):

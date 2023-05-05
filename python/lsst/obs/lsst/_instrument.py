@@ -36,7 +36,8 @@ from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
+    LsstUCDCamITLTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -379,3 +380,35 @@ class Latiss(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LatissRawFormatter
         return LatissRawFormatter
+
+
+class LsstUCDCamITL(LsstCam):
+    """Gen3 Butler specialization for UCDCam-ITL test stand data.
+    """
+
+    instrument = "LSST-UCDCam-ITL"
+    policyName = "ucdcam_itl"
+    translatorClass = LsstUCDCamITLTranslator
+    visitSystem = VisitSystem.ONE_TO_ONE
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstUCDCamITLRawFormatter
+        return LsstUCDCamITLRawFormatter
+
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )

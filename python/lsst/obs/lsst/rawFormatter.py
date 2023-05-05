@@ -31,6 +31,7 @@ __all__ = (
     "LsstTS3RawFormatter",
     "LsstComCamRawFormatter",
     "LsstUCDCamRawFormatter",
+    "LsstUCDCamITLRawFormatter",
 )
 
 import numpy as np
@@ -43,10 +44,12 @@ from lsst.afw.cameraGeom import makeUpdatedDetector
 
 from ._instrument import LsstCam, Latiss, \
     LsstCamImSim, LsstCamPhoSim, LsstTS8, \
-    LsstTS3, LsstUCDCam, LsstComCam
+    LsstTS3, LsstUCDCam, LsstComCam, \
+    LsstUCDCamITL
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
+    LsstUCDCamITLTranslator
 from .assembly import fixAmpsAndAssemble, fixAmpGeometry, readRawAmps, warn_once
 
 
@@ -257,3 +260,9 @@ class LsstUCDCamRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstUCDCamTranslator
     _instrument = LsstUCDCam
     filterDefinitions = LsstUCDCam.filterDefinitions
+
+
+class LsstUCDCamITLRawFormatter(LsstCamRawFormatter):
+    translatorClass = LsstUCDCamITLTranslator
+    _instrument = LsstUCDCamITL
+    filterDefinitions = LsstUCDCamITL.filterDefinitions
