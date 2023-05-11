@@ -13,6 +13,7 @@
 __all__ = ("LsstComCamTranslator", )
 
 import logging
+from numbers import Number
 
 from astropy.time import Time
 from .lsstCam import LsstCamTranslator
@@ -91,8 +92,10 @@ class LsstComCamTranslator(LsstCamTranslator):
         -----
         Fixes the following issues:
 
+        * If ComCam was in Chile, the FILTER is always empty (or unknown).
         * If LSST_NUM is missing it is filled in by looking at the CCDSLOT
           value and assuming that the ComCam detectors are fixed.
+        * If ROTPA is missing or non-numeric, it is set to 0.0.
 
         Corrections are reported as debug level log messages.
 
@@ -131,7 +134,7 @@ class LsstComCamTranslator(LsstCamTranslator):
                 modified = True
                 log.debug("%s: Set LSST_NUM to %s", log_label, header["LSST_NUM"])
 
-        if "ROTPA" not in header:
+        if "ROTPA" not in header or not isinstance(header["ROTPA"], Number):
             header["ROTPA"] = 0.0
             log.warning("Missing ROTPA in header - replacing with 0.0")
             modified = True
