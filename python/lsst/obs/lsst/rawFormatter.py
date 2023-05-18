@@ -56,13 +56,12 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
     _instrument = LsstCam
 
     # These named HDUs' headers will be checked for and added to metadata.
-    _extraFitsHeaders = ["REB_COND", "CONFIG_COND"]
+    _extraFitsHeaders = ["REB_COND"]
 
     def readMetadata(self):
         """Read all header metadata directly into a PropertyList.
 
-        Specialist version since some of our data does not
-        set INHERIT=T so we have to merge the headers manually.
+        Will merge additional headers if required.
 
         Returns
         -------
@@ -70,30 +69,33 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
             Header metadata.
         """
         file = self.fileDescriptor.location.path
-        phdu = lsst.afw.fits.readMetadata(file, 0)
 
-        if "INHERIT" in phdu:
-            # Trust the inheritance flag
-            base_md = super().readMetadata()
+        with lsst.afw.fits.Fits(file, "r") as hdu:
+            hdu.setHdu(0)
+            base_md = hdu.readMetadata()
 
-        # Merge ourselves
-        else:
-            base_md = merge_headers([phdu, lsst.afw.fits.readMetadata(file)],
-                                    mode="overwrite")
+            # Any extra HDUs we need to read.
+            ehdrs = []
+            for hduname in self._extraFitsHeaders:
+                try:
+                    hdu.setHdu(hduname)
+                    ehdr = hdu.readMetadata()
+                except lsst.afw.fits.FitsError:
+                    # The header doesn't exist in this file. Skip.
+                    continue
+                else:
+                    ehdrs.append(ehdr)
 
-        ehdrs = []
-        for hduname in self._extraFitsHeaders:
-            try:
-                ehdr = lsst.afw.fits.readMetadata(file, hduname)
-            except lsst.afw.fits.FitsError:
-                # We can ignore this, the header doesn't exist in this file.
-                continue
-            else:
-                ehdrs.append(ehdr)
-
-        final_md = merge_headers([base_md] + ehdrs, mode="first")
-        fix_header(final_md)
+        final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
+        fix_header(final_md, translator_class=self.translatorClass)
         return final_md
+
+    def stripMetadata(self):
+        """Remove metadata entries that are parsed into components."""
+        if "CRVAL1" not in self.metadata:
+            # No need to strip WCS since we do not seem to have any WCS.
+            return
+        super().stripMetadata()
 
     def getDetector(self, id):
         in_detector = self._instrument.getCamera()[id]
@@ -230,6 +232,7 @@ class LsstCamPhoSimRawFormatter(LsstCamRawFormatter):
     translatorClass = LsstCamPhoSimTranslator
     _instrument = LsstCamPhoSim
     filterDefinitions = LsstCamPhoSim.filterDefinitions
+    _extraFitsHeaders = [1]
 
 
 class LsstTS8RawFormatter(LsstCamRawFormatter):

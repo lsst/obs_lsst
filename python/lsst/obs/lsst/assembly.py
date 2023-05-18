@@ -163,10 +163,9 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
     #
     # Only warn about the first amp, use debug for the others
     #
-    d = metadata.toDict()
-    detsec = bboxFromIraf(d["DETSEC"]) if "DETSEC" in d else None
-    datasec = bboxFromIraf(d["DATASEC"]) if "DATASEC" in d else None
-    biassec = bboxFromIraf(d["BIASSEC"]) if "BIASSEC" in d else None
+    detsec = bboxFromIraf(metadata["DETSEC"]) if "DETSEC" in metadata else None
+    datasec = bboxFromIraf(metadata["DATASEC"]) if "DATASEC" in metadata else None
+    biassec = bboxFromIraf(metadata["BIASSEC"]) if "BIASSEC" in metadata else None
 
     # 2022-11-11: There is a known issue that the header DETSEC have
     # the y-axis values flipped between the C0x and C1x entries.  This
