@@ -184,6 +184,51 @@ class LsstTS8Translator(LsstBaseTranslator):
         serial = re.sub("-Dev$", "", serial)
         return serial
 
+    @cache_translation
+    def to_physical_filter(self):
+        """Return the filter name.
+
+        Uses the FILTPOS header for older TS8 data.  Newer data can use
+        the base class implementation.
+
+        Returns
+        -------
+        filter : `str`
+            The filter name.  Returns "NONE" if no filter can be determined.
+
+        Notes
+        -----
+        The FILTPOS handling is retained for backwards compatibility.
+        """
+
+        default = "unknown"
+        try:
+            filter_pos = self._header["FILTPOS"]
+            self._used_these_cards("FILTPOS")
+        except KeyError:
+            # TS8 data from 2023-05-09 and later should be following
+            # DM-38882 conventions.
+            physical_filter = super().to_physical_filter()
+            # Some TS8 taken prior to 2023-05-09 have the string
+            # 'unspecified' as the FILTER keyword and don't really
+            # follow any established convention.
+            if 'unspecified' in physical_filter:
+                return default
+            return physical_filter
+
+        try:
+            return {
+                2: 'g',
+                3: 'r',
+                4: 'i',
+                5: 'z',
+                6: 'y',
+            }[filter_pos]
+        except KeyError:
+            log.warning("%s: Unknown filter position (assuming %s): %d",
+                        self._log_prefix, default, filter_pos)
+        return default
+
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
