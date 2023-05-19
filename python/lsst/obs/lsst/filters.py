@@ -45,20 +45,29 @@ def addFilter(filter_dict, band, physical_filter):
                                               )
 
 
-# The LSST Filters from L. Jones 05/14/2020
-#
-# N.b. DM-26623 requests that these physical names be updated once
-# the camera team has decided upon the final values (CAP-617)
+EmptyFilter = FilterDefinition(physical_filter="empty", band="white",
+                               alias={"no_filter", "open"})
 
-LsstCamFiltersBaseline = FilterDefinitionCollection(
-    FilterDefinition(physical_filter="empty", band="white",
-                     alias={"no_filter", "open"}),
+# Generic filters used by PhoSim and UCDCam
+LsstCamFiltersGeneric = FilterDefinitionCollection(
     FilterDefinition(physical_filter="u", band="u"),
     FilterDefinition(physical_filter="g", band="g"),
     FilterDefinition(physical_filter="r", band="r"),
     FilterDefinition(physical_filter="i", band="i"),
     FilterDefinition(physical_filter="z", band="z"),
     FilterDefinition(physical_filter="y", band="y"),
+)
+
+# The LSST Filters from Tony Johnson, 05/09/2023, in DM-38882.
+LsstCamFiltersBaseline = FilterDefinitionCollection(
+    FilterDefinition(physical_filter="ph_5", band="white"),  # pinhole filter
+    FilterDefinition(physical_filter="ef_43", band="white"),  # "empty" filter
+    FilterDefinition(physical_filter="u_24", band="u"),
+    FilterDefinition(physical_filter="g_6", band="g"),
+    FilterDefinition(physical_filter="r_57", band="r"),
+    FilterDefinition(physical_filter="i_39", band="i"),
+    FilterDefinition(physical_filter="z_20", band="z"),
+    FilterDefinition(physical_filter="y_10", band="y"),
 )
 
 #
@@ -132,6 +141,46 @@ for band, physical_filters in BOTFilters_dict.items():
         BOTFilters.append(FilterDefinition(**filter_defn))
 
 #
+# These are the filters used by the CCOB for both TS8 and LSSTCam.
+# For the testing of LSSTCam at SLAC, they will be combined with the
+# real LSSTCam filters, so we include those combinations in the CCOB
+# filter definitions.
+#
+CCOB_filter_map = {
+    "": "white",
+    "HIGH": "white",
+    "LOW": "white",
+    "uv": "u",
+    "blue": "g",
+    "red": "r",
+    "nm750": "i",
+    "nm850": "z",
+    "nm960": "y",
+}
+
+CCOBFilters = []
+for lsst_filter_def in (EmptyFilter, *LsstCamFiltersBaseline):
+    lsstcam_filter = lsst_filter_def.physical_filter
+    lsstcam_band = lsst_filter_def.band
+    for ccob_filter, ccob_band in CCOB_filter_map.items():
+        if lsstcam_band != "white" and ccob_band != "white" and band != ccob_band:
+            # Skip disallowed filter combinations based on band values.
+            continue
+        if ccob_filter == "":
+            # This would correspond to an entry already in
+            # LSSTCamFilterBaseline
+            continue
+        filters = lsstcam_filter, ccob_filter
+        physical_filter = FILTER_DELIMITER.join(filters).strip(FILTER_DELIMITER)
+        if lsstcam_band == "white":
+            band = ccob_band
+        else:
+            band = lsstcam_band
+        if physical_filter == "":
+            physical_filter = "empty"
+        CCOBFilters.append(FilterDefinition(band=band, physical_filter=physical_filter))
+
+#
 # The filters that we might see in the real LSSTCam (including in SLAC)
 #
 # Note that the filters we'll use on the sky, LsstCamFiltersBaseline, must
@@ -139,8 +188,15 @@ for band, physical_filters in BOTFilters_dict.items():
 # for all the BOT composite filters (i.e. "u~ND_OD1.0")
 #
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    EmptyFilter,
     *LsstCamFiltersBaseline,
     *BOTFilters,
+    *CCOBFilters,
+)
+
+GENERIC_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    EmptyFilter,
+    *LsstCamFiltersGeneric,
 )
 
 #
@@ -152,7 +208,8 @@ TS3Filters = [
     FilterDefinition(physical_filter="550CutOn")]
 
 TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    *LsstCamFiltersBaseline,
+    EmptyFilter,
+    *LsstCamFiltersGeneric,
     *TS3Filters,
 )
 #
@@ -164,8 +221,11 @@ TS8Filters = [
     FilterDefinition(physical_filter="550CutOn")]
 
 TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    EmptyFilter,
+    *LsstCamFiltersGeneric,
     *LsstCamFiltersBaseline,
     *TS8Filters,
+    *CCOBFilters,
 )
 
 

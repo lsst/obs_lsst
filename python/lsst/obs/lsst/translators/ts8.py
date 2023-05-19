@@ -188,7 +188,8 @@ class LsstTS8Translator(LsstBaseTranslator):
     def to_physical_filter(self):
         """Return the filter name.
 
-        Uses the FILTPOS header.
+        Uses the FILTPOS header for older TS8 data.  Newer data can use
+        the base class implementation.
 
         Returns
         -------
@@ -197,9 +198,7 @@ class LsstTS8Translator(LsstBaseTranslator):
 
         Notes
         -----
-        The calculations here are examples rather than being accurate.
-        They need to be fixed once the camera acquisition system does
-        this properly.
+        The FILTPOS handling is retained for backwards compatibility.
         """
 
         default = "unknown"
@@ -207,9 +206,15 @@ class LsstTS8Translator(LsstBaseTranslator):
             filter_pos = self._header["FILTPOS"]
             self._used_these_cards("FILTPOS")
         except KeyError:
-            log.warning("%s: FILTPOS key not found in header (assuming %s)",
-                        self._log_prefix, default)
-            return default
+            # TS8 data from 2023-05-09 and later should be following
+            # DM-38882 conventions.
+            physical_filter = super().to_physical_filter()
+            # Some TS8 taken prior to 2023-05-09 have the string
+            # 'unspecified' as the FILTER keyword and don't really
+            # follow any established convention.
+            if 'unspecified' in physical_filter:
+                return default
+            return physical_filter
 
         try:
             return {
