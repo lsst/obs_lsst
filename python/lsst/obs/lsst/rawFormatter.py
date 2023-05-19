@@ -34,8 +34,11 @@ __all__ = (
 )
 
 import numpy as np
+import fitsio
 from astro_metadata_translator import fix_header, merge_headers
+import astropy.io.fits
 
+from lsst.daf.base import PropertyList
 import lsst.afw.fits
 from lsst.obs.base import FitsRawFormatterBase
 from lsst.obs.base.formatters.fitsExposure import standardizeAmplifierParameters
@@ -56,9 +59,15 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
     _instrument = LsstCam
 
     # These named HDUs' headers will be checked for and added to metadata.
-    _extraFitsHeaders = ["REB_COND"]
+    _extraFitsHeaders = list(range(1, 17))  # []  # [17]  # ["REB_COND"]
 
     def readMetadata(self):
+        self.readMetadata_fitsio()
+        self.readMetadata_astropy()
+        return self.readMetadata_afw()
+
+    @profile
+    def readMetadata_afw(self):
         """Read all header metadata directly into a PropertyList.
 
         Will merge additional headers if required.
@@ -87,6 +96,78 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
                     ehdrs.append(ehdr)
 
         final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
+        fix_header(final_md, translator_class=self.translatorClass)
+        return final_md
+
+    @profile
+    def readMetadata_astropy(self):
+        """Read all header metadata directly into a PropertyList.
+
+        Will merge additional headers if required.
+
+        Returns
+        -------
+        metadata : `~lsst.daf.base.PropertyList`
+            Header metadata.
+        """
+        file = self.fileDescriptor.location.path
+
+        with astropy.io.fits.open(file, memmap=True, disable_image_compression=True) as hdul:
+            base_md = dict(hdul[0].header)
+
+            # Any extra HDUs we need to read.
+            ehdrs = []
+            for hduname in self._extraFitsHeaders:
+                try:
+                    ehdr = hdul[hduname].header
+                except lsst.afw.fits.FitsError:
+                    # The header doesn't exist in this file. Skip.
+                    continue
+                else:
+                    ehdrs.append(ehdr)
+
+        final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
+        fix_header(final_md, translator_class=self.translatorClass)
+        ps = PropertyList()
+        ps.update(final_md)
+        return ps
+
+    @profile
+    def readMetadata_fitsio(self):
+        """Read all header metadata directly into a PropertyList.
+
+        Will merge additional headers if required.
+
+        Returns
+        -------
+        metadata : `~lsst.daf.base.PropertyList`
+            Header metadata.
+        """
+        file = self.fileDescriptor.location.path
+
+        with fitsio.FITS(file) as fits:
+            base_md = fits[0].read_header()
+
+            # Any extra HDUs we need to read.
+            ehdrs = []
+            for hduname in self._extraFitsHeaders:
+                try:
+                    ehdr = fits[hduname].read_header()
+                except OSError:
+                    # The header doesn't exist in this file. Skip.
+                    continue
+                else:
+                    ehdrs.append(ehdr)
+
+        # fitsio.FITSHDR does not support update so have to add each
+        # record one at a time and can't use merge_headers
+        for ehdr in ehdrs:
+            for rec in ehdr:
+                base_md.add_record(rec)
+
+        # final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
+        final_md = PropertyList()
+        final_md.update(dict(base_md))
         fix_header(final_md, translator_class=self.translatorClass)
         return final_md
 
