@@ -31,6 +31,7 @@ from lsst.obs.base import Instrument, VisitSystem
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
                       LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
                       TS8_FILTER_DEFINITIONS, COMCAM_FILTER_DEFINITIONS,
+                      GENERIC_FILTER_DEFINITIONS,
                       )
 
 from .translators import LatissTranslator, LsstCamTranslator, \
@@ -233,6 +234,7 @@ class LsstCamPhoSim(LsstCam):
     instrument = "LSSTCam-PhoSim"
     policyName = "phosim"
     translatorClass = LsstCamPhoSimTranslator
+    filterDefinitions = GENERIC_FILTER_DEFINITIONS
     visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
@@ -298,6 +300,7 @@ class LsstUCDCam(LsstCam):
     instrument = "LSST-UCDCam"
     policyName = "ucd"
     translatorClass = LsstUCDCamTranslator
+    filterDefinitions = GENERIC_FILTER_DEFINITIONS
     visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
