@@ -148,29 +148,6 @@ class LsstTS8Translator(LsstBaseTranslator):
 
         return modified
 
-    @staticmethod
-    def compute_exposure_id(dateobs, seqnum=0, controller=None):
-        """Helper method to calculate the TS8 exposure_id.
-
-        Parameters
-        ----------
-        dateobs : `str`
-            Date of observation in FITS ISO format.
-        seqnum : `int`, unused
-            Sequence number. Ignored.
-        controller : `str`, unused
-            Controller type. Ignored.
-
-        Returns
-        -------
-        exposure_id : `int`
-            Exposure ID.
-        """
-        # There is worry that seconds are too coarse so use 10th of second
-        # and read the first 21 characters.
-        exposure_id = re.sub(r"\D", "", dateobs[:21])
-        return int(exposure_id)
-
     @classmethod
     def compute_detector_exposure_id(cls, exposure_id, detector_num):
         # Docstring inherited from LsstBaseTranslator.
@@ -270,10 +247,14 @@ class LsstTS8Translator(LsstBaseTranslator):
                         self._log_prefix, default, filter_pos)
         return default
 
+    @cache_translation
     def to_exposure_id(self):
         """Generate a unique exposure ID number
 
-        Note that SEQNUM is not unique for a given day in TS8 data
+        Modern TS8 data conforms to standard LSSTCam OBSID, using the "C"
+        controller variant (all TS8 uses "C" controller).
+
+        For older data SEQNUM is not unique for a given day in TS8 data
         so instead we convert the ISO date of observation directly to an
         integer.
 
@@ -282,10 +263,17 @@ class LsstTS8Translator(LsstBaseTranslator):
         exposure_id : `int`
             Unique exposure number.
         """
+        obsid = self.to_observation_id()
+        if obsid.startswith("TS_C_"):
+            return super().to_exposure_id()
+
         iso = self._header["DATE-OBS"]
         self._used_these_cards("DATE-OBS")
 
-        return self.compute_exposure_id(iso)
+        # There is worry that seconds are too coarse so use 10th of second
+        # and read the first 21 characters.
+        exposure_id = re.sub(r"\D", "", iso[:21])
+        return int(exposure_id)
 
     # For now assume that visit IDs and exposure IDs are identical
     to_visit_id = to_exposure_id
