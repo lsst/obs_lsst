@@ -26,6 +26,7 @@ __all__ = (
     "TS3_FILTER_DEFINITIONS",
     "TS8_FILTER_DEFINITIONS",
     "COMCAM_FILTER_DEFINITIONS",
+    "GENERIC_FILTER_DEFINITIONS",
 )
 
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
@@ -161,6 +162,8 @@ CCOB_filter_map = {
 CCOBFilters = []
 for lsst_filter_def in (EmptyFilter, *LsstCamFiltersBaseline):
     lsstcam_filter = lsst_filter_def.physical_filter
+    if lsstcam_filter == "empty":
+        lsstcam_filter = ""
     lsstcam_band = lsst_filter_def.band
     for ccob_filter, ccob_band in CCOB_filter_map.items():
         if lsstcam_band != "white" and ccob_band != "white" and band != ccob_band:
@@ -336,6 +339,7 @@ LSSTCAM_IMSIM_FILTER_DEFINITIONS = FilterDefinitionCollection(
                      band="z"),
     FilterDefinition(physical_filter="y_sim_1.4",
                      band="y"),
+    *LsstCamFiltersGeneric,
 )
 
 # ###########################################################################
