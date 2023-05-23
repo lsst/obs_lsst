@@ -376,7 +376,7 @@ class LsstBaseTranslator(FitsTranslator):
 
         Parameters
         ----------
-        dayobs : `str`
+        dayobs : `str` or `int`
             Day of observation in either YYYYMMDD or YYYY-MM-DD format.
             If the string looks like ISO format it will be truncated before the
             ``T`` before being handled.
@@ -396,6 +396,10 @@ class LsstBaseTranslator(FitsTranslator):
         exposure_id : `int`
             Exposure ID in form YYYYMMDDnnnnn form.
         """
+        # We really want an integer but the checks require a str.
+        if isinstance(dayobs, int):
+            dayobs = str(dayobs)
+
         if "T" in dayobs:
             dayobs = dayobs[:dayobs.find("T")]
 
