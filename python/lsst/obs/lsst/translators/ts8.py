@@ -101,6 +101,53 @@ class LsstTS8Translator(LsstBaseTranslator):
 
         return False
 
+    @classmethod
+    def fix_header(cls, header, instrument, obsid, filename=None):
+        """Fix TS8 headers.
+
+        Notes
+        -----
+        See `~astro_metadata_translator.fix_header` for details of the general
+        process.
+        """
+        modified = False
+
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
+
+        if header.get("DATE-OBS", "OBS") == header.get("DATE-TRG", "TRG"):
+            log.warning("%s: DATE-OBS detected referring to end of observation.", log_label)
+            if "DATE-END" not in header:
+                header["DATE-END"] = header["DATE-OBS"]
+                header["MJD-END"] = header["MJD-OBS"]
+
+            # Time system used to be UTC and at some point became TAI.
+            # Need to include the transition date and update the TIMESYS
+            # header.
+            timesys = header.get("TIMESYS", "utc").lower()
+
+            # Need to subtract exposure time from DATE-OBS.
+            date_obs = None
+            for (key, format) in (("MJD-OBS", "mjd"), ("DATE-OBS", "isot")):
+                if date_val := header.get(key):
+                    date_obs = Time(date_val, format=format, scale=timesys)
+                    break
+
+            if date_obs:
+                exptime = TimeDelta(header["EXPTIME"]*u.s, scale="tai")
+                date_obs = date_obs - exptime
+                header["MJD-OBS"] = date_obs.mjd
+                header["DATE-OBS"] = date_obs.isot
+                header["DATE-BEG"] = header["DATE-OBS"]
+                header["MJD-BEG"] = header["MJD-OBS"]
+
+                modified = True
+            else:
+                # This should never happen because DATE-OBS is already present.
+                log.warning("%s: Unexpectedly failed to extract date from DATE-OBS/MJD-OBS", log_label)
+
+        return modified
+
     @staticmethod
     def compute_exposure_id(dateobs, seqnum=0, controller=None):
         """Helper method to calculate the TS8 exposure_id.
@@ -128,12 +175,6 @@ class LsstTS8Translator(LsstBaseTranslator):
     def compute_detector_exposure_id(cls, exposure_id, detector_num):
         # Docstring inherited from LsstBaseTranslator.
         return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
-
-    @cache_translation
-    def to_datetime_begin(self):
-        # Docstring will be inherited. Property defined in properties.py
-        self._used_these_cards("MJD-OBS")
-        return Time(self._header["MJD-OBS"], scale="utc", format="mjd")
 
     @cache_translation
     def to_detector_name(self):
