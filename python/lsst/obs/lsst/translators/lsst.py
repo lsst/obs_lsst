@@ -666,14 +666,6 @@ class LsstBaseTranslator(FitsTranslator):
         if not joined:
             joined = "unknown"
 
-        # Remove blank and "empty" fields.
-        joined = FILTER_DELIMITER.join(_ for _ in joined.split(FILTER_DELIMITER)
-                                       if _ and _ != "empty")
-
-        # Return "empty" if joined is blank at this point.
-        if not joined:
-            joined = "empty"
-
         return joined
 
     @cache_translation
