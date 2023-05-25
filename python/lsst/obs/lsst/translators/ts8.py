@@ -24,7 +24,8 @@ from .lsst import LsstBaseTranslator, compute_detector_exposure_id_generic
 
 log = logging.getLogger(__name__)
 
-_EXPOSURE_ID_DATE_CHANGE = Time("2023-05-25T12:00:00", format="isot", scale="utc")
+# First observation with new exposure ID is TS_C_20230524_000906.
+_EXPOSURE_ID_DATE_CHANGE = Time("2023-05-24T23:00:00.0", format="isot", scale="tai")
 _UNMODIFIED_DATE_OBS_HEADER = "HIERARCH LSST-TS8 DATE-OBS"
 
 
