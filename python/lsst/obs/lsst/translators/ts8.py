@@ -160,6 +160,22 @@ class LsstTS8Translator(LsstBaseTranslator):
         # Docstring inherited from LsstBaseTranslator.
         return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
 
+    @classmethod
+    def max_exposure_id(cls):
+        """The maximum exposure ID expected from this instrument.
+
+        The TS8 implementation is non-standard because TS8 data can create
+        two different forms of exposure_id based on the date but we need
+        the largest form to be the one returned.
+
+        Returns
+        -------
+        max_exposure_id : `int`
+            The maximum value.
+        """
+        max_date = "2050-12-31T23:59.999"
+        return int(re.sub(r"\D", "", max_date[:21]))
+
     @cache_translation
     def to_detector_name(self):
         # Docstring will be inherited. Property defined in properties.py
