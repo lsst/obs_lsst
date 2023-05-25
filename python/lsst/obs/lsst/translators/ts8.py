@@ -24,6 +24,10 @@ from .lsst import LsstBaseTranslator, compute_detector_exposure_id_generic
 
 log = logging.getLogger(__name__)
 
+# First observation with new exposure ID is TS_C_20230524_000906.
+_EXPOSURE_ID_DATE_CHANGE = Time("2023-05-24T23:00:00.0", format="isot", scale="tai")
+_UNMODIFIED_DATE_OBS_HEADER = "HIERARCH LSST-TS8 DATE-OBS"
+
 
 class LsstTS8Translator(LsstBaseTranslator):
     """Metadata translator for LSST Test Stand 8 data.
@@ -134,9 +138,13 @@ class LsstTS8Translator(LsstBaseTranslator):
                     break
 
             if date_obs:
+                # The historical exposure ID calculation requires that we
+                # have access to the unmodified DATE-OBS value.
+                header[_UNMODIFIED_DATE_OBS_HEADER] = header["DATE-OBS"]
+
                 exptime = TimeDelta(header["EXPTIME"]*u.s, scale="tai")
                 date_obs = date_obs - exptime
-                header["MJD-OBS"] = date_obs.mjd
+                header["MJD-OBS"] = float(date_obs.mjd)
                 header["DATE-OBS"] = date_obs.isot
                 header["DATE-BEG"] = header["DATE-OBS"]
                 header["MJD-BEG"] = header["MJD-OBS"]
@@ -152,6 +160,22 @@ class LsstTS8Translator(LsstBaseTranslator):
     def compute_detector_exposure_id(cls, exposure_id, detector_num):
         # Docstring inherited from LsstBaseTranslator.
         return compute_detector_exposure_id_generic(exposure_id, detector_num, max_num=cls.DETECTOR_MAX)
+
+    @classmethod
+    def max_exposure_id(cls):
+        """The maximum exposure ID expected from this instrument.
+
+        The TS8 implementation is non-standard because TS8 data can create
+        two different forms of exposure_id based on the date but we need
+        the largest form to be the one returned.
+
+        Returns
+        -------
+        max_exposure_id : `int`
+            The maximum value.
+        """
+        max_date = "2050-12-31T23:59.999"
+        return int(re.sub(r"\D", "", max_date[:21]))
 
     @cache_translation
     def to_detector_name(self):
@@ -252,7 +276,9 @@ class LsstTS8Translator(LsstBaseTranslator):
         """Generate a unique exposure ID number
 
         Modern TS8 data conforms to standard LSSTCam OBSID, using the "C"
-        controller variant (all TS8 uses "C" controller).
+        controller variant (all TS8 uses "C" controller). Due to existing
+        ingests, data taken before 2023-05-25 must use the old style
+        timestamp ID.
 
         For older data SEQNUM is not unique for a given day in TS8 data
         so instead we convert the ISO date of observation directly to an
@@ -263,11 +289,14 @@ class LsstTS8Translator(LsstBaseTranslator):
         exposure_id : `int`
             Unique exposure number.
         """
-        obsid = self.to_observation_id()
-        if obsid.startswith("TS_C_"):
-            return super().to_exposure_id()
+        begin = self.to_datetime_begin()
 
-        iso = self._header["DATE-OBS"]
+        if begin > _EXPOSURE_ID_DATE_CHANGE:
+            obsid = self.to_observation_id()
+            if obsid.startswith("TS_C_"):
+                return super().to_exposure_id()
+
+        iso = self._header.get(_UNMODIFIED_DATE_OBS_HEADER, self._header["DATE-OBS"])
         self._used_these_cards("DATE-OBS")
 
         # There is worry that seconds are too coarse so use 10th of second
