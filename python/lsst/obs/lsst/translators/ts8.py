@@ -136,7 +136,7 @@ class LsstTS8Translator(LsstBaseTranslator):
             if date_obs:
                 exptime = TimeDelta(header["EXPTIME"]*u.s, scale="tai")
                 date_obs = date_obs - exptime
-                header["MJD-OBS"] = date_obs.mjd
+                header["MJD-OBS"] = float(date_obs.mjd)
                 header["DATE-OBS"] = date_obs.isot
                 header["DATE-BEG"] = header["DATE-OBS"]
                 header["MJD-BEG"] = header["MJD-OBS"]
