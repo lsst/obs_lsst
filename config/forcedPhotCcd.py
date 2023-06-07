@@ -22,8 +22,7 @@
 
 import os.path
 
-
 config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
 
-config.measurement.slots.gaussianFlux = None
+# We only need the 12 pixel aperture for subsequent measurements.
+config.measurement.plugins["base_CircularApertureFlux"].radii = [12.0]
