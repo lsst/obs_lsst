@@ -82,7 +82,7 @@ class PhotodiodeIngestTask(Task):
         config.validate()
         super().__init__(config, **kwargs)
         self.butler = butler
-        self.universe = self.butler.registry.dimensions
+        self.universe = self.butler.dimensions
         self.datasetType = self.getDatasetType()
         self.progress = Progress(self.log.name)
         self.instrument = instrument
