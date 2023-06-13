@@ -75,7 +75,7 @@ class PhotodiodeIngestTask(Task):
             "photodiode",
             ("instrument", "exposure"),
             "IsrCalib",
-            universe=self.butler.registry.dimensions,
+            universe=self.universe,
         )
 
     def __init__(self, butler, instrument, config=None, **kwargs):
