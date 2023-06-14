@@ -88,7 +88,7 @@ class PhotodiodeIngestTask(Task):
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
-    def run(self, locations, run=None, file_filter=r".*Photodiode_Readings.*txt",
+    def run(self, locations, run=None, file_filter=r".*Photodiode_Readings.*txt|.*_photodiode.ecsv",
             track_file_attrs=None):
         """Ingest photodiode data into a Butler data repository.
 
@@ -143,20 +143,48 @@ class PhotodiodeIngestTask(Task):
         numFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
-            with inputFile.as_local() as localFile:
-                calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
+            # import pdb; pdb.set_trace()
+            calibType = "Unknown"
+            try:
+                # Can this be read directly?
+                with inputFile.as_local() as localFile:
+                    calib = PhotodiodeCalib.readText(inputFile.ospath)
+                calibType = "full"
+            except Exception:
+                # Try reading as a two-column file
+                with inputFile.as_local() as localFile:
+                    calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
+                calibType = "two-column"
 
-            dayObs = calib.getMetadata()['day_obs']
-            seqNum = calib.getMetadata()['seq_num']
+            # Get exposure records
+            if calibType == "full":
+                instrumentName = calib.getMetadata()['INSTRUME']
+                obsId = calib.getMetadata()['obsId']
+                whereClause = "exposure.obs_id=obsId"
+                exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
+                                                                                 instrument=instrumentName,
+                                                                                 where=whereClause,
+                                                                                 bind={"obsId": obsId})]
+                idTuple = (obsId)
 
-            # Find the associated exposure information.
-            whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
-            instrumentName = self.instrument.getName()
-            exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
-                                                                             instrument=instrumentName,
-                                                                             where=whereClause,
-                                                                             bind={"dayObs": dayObs,
-                                                                                   "seqNum": seqNum})]
+            elif calibType == "two-column":
+                dayObs = calib.getMetadata()['day_obs']
+                seqNum = calib.getMetadata()['seq_num']
+
+                # Find the associated exposure information.
+                whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
+                instrumentName = self.instrument.getName()
+                exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
+                                                                                 instrument=instrumentName,
+                                                                                 where=whereClause,
+                                                                                 bind={"dayObs": dayObs,
+                                                                                       "seqNum": seqNum})]
+                idTuple = (dayObs, seqNum)
+
+            else:
+                self.log.warning("Skipping input file %s of unknown type.",
+                                 inputFile)
+                continue
 
             nRecords = len(exposureRecords)
             if nRecords == 1:
@@ -164,13 +192,13 @@ class PhotodiodeIngestTask(Task):
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
             elif nRecords == 0:
                 numFailed += 1
-                self.log.warning("Skipping instrument %s and dayObs/seqNum %d %d: no exposures found.",
-                                 instrumentName, dayObs, seqNum)
+                self.log.warning("Skipping instrument %s and identifiers %s: no exposures found.",
+                                 instrumentName, idTuple)
                 continue
             else:
                 numFailed += 1
                 self.log.warning("Multiple exposure entries found for instrument %s and "
-                                 "dayObs/seqNum %d %d.", instrumentName, dayObs, seqNum)
+                                 "identifiers %s.", instrumentName, idTuple)
                 continue
 
             # Generate the dataId for this file.
@@ -187,8 +215,8 @@ class PhotodiodeIngestTask(Task):
                                                               dataId=dataId)
             }
             if existing:
-                self.log.debug("Skipping instrument %s and dayObs/seqNum %d %d: already exists in run %s.",
-                               instrumentName, dayObs, seqNum, run)
+                self.log.debug("Skipping instrument %s and identifiers %s: already exists in run %s.",
+                               instrumentName, idTuple, run)
                 numExisting += 1
                 continue
 
@@ -206,8 +234,8 @@ class PhotodiodeIngestTask(Task):
                 # No try, as if this fails, we should stop.
                 self.butler.ingest(dataset, transfer=self.config.transfer,
                                    record_validation_info=track_file_attrs)
-                self.log.info("Photodiode %s:%d (%d/%d) ingested successfully", instrumentName, exposureId,
-                              dayObs, seqNum)
+                self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
+                              idTuple)
                 refs.append(dataset)
 
         if numExisting != 0:
