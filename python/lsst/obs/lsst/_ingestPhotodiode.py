@@ -75,14 +75,14 @@ class PhotodiodeIngestTask(Task):
             "photodiode",
             ("instrument", "exposure"),
             "IsrCalib",
-            universe=self.butler.registry.dimensions,
+            universe=self.universe,
         )
 
     def __init__(self, butler, instrument, config=None, **kwargs):
         config.validate()
         super().__init__(config, **kwargs)
         self.butler = butler
-        self.universe = self.butler.registry.dimensions
+        self.universe = self.butler.dimensions
         self.datasetType = self.getDatasetType()
         self.progress = Progress(self.log.name)
         self.instrument = instrument
