@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
-           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstUCDCamITL")
 
 import os.path
 
@@ -385,7 +385,6 @@ class Latiss(LsstCam):
 class LsstUCDCamITL(LsstCam):
     """Gen3 Butler specialization for UCDCam-ITL test stand data.
     """
-
     instrument = "LSST-UCDCam-ITL"
     policyName = "ucdcam_itl"
     translatorClass = LsstUCDCamITLTranslator

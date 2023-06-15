@@ -7,82 +7,82 @@ R22 :
   amplifiers :
     S01 :
       C10 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.432,
+        readNoise : 8.7,
+        saturation : 200000,
       }
       C11 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.429,
+        readNoise : 8.9,
+        saturation : 200000,
       }
       C12 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.427,
+        readNoise : 8.8,
+        saturation : 200000,
       }
       C13 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.437,
+        readNoise : 8.9,
+        saturation : 200000,
       }
       C14 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.430,
+        readNoise : 9.8,
+        saturation : 200000,
       }
       C15 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.427,
+        readNoise : 10.6,
+        saturation : 200000,
       }
       C16 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.420,
+        readNoise : 8.8,
+        saturation : 200000,
       }
       C17 : {
         gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        readNoise : 10.1,
+        saturation : 200000,
       }
       C07 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.352,
+        readNoise : 6.3,
+        saturation : 200000,
       }
       C06 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.461,
+        readNoise : 7.2,
+        saturation : 200000,
       }
       C05 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 4.967,
+        readNoise : 155.4,
+        saturation : 200000,
       }
       C04 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.455,
+        readNoise : 6.8,
+        saturation : 200000,
       }
       C03 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.465,
+        readNoise : 6.8,
+        saturation : 200000,
       }
       C02 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.455,
+        readNoise : 7.2,
+        saturation : 200000,
       }
       C01 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.447,
+        readNoise : 8.2,
+        saturation : 200000,
       }
       C00 : {
-        gain : 1.0,
-        readNoise : 6.0,
-        saturation : 10000,
+        gain : 1.441,
+        readNoise : 10.0,
+        saturation : 200000,
       }

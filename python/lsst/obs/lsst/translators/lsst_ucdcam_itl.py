@@ -60,6 +60,8 @@ class LsstUCDCamITLTranslator(LsstBaseTranslator):
         "science_program": ("RUNNUM", dict(default="unknown"))
     }
 
+    cameraPolicyFile = "policy/ucdcam_itl.yaml"
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
