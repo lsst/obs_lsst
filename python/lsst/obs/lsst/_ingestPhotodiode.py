@@ -158,7 +158,12 @@ class PhotodiodeIngestTask(Task):
 
             # Get exposure records
             if calibType == "full":
-                instrumentName = calib.getMetadata()['INSTRUME']
+                instrumentName = calib.getMetadata().get('INSTRUME')
+                if instrumentName is None:
+                    # The field is populated by the calib class, so we
+                    # can't use defaults.
+                    instrumentName = self.instrument.getName()
+
                 obsId = calib.getMetadata()['obsId']
                 whereClause = "exposure.obs_id=obsId"
                 exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
