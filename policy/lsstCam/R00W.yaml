@@ -8,11 +8,11 @@ R00W :
 
   geometryWithinRaft :
     SW0 : {
-      offset : [2.5, 1.4375, -1.5],  # extrafocal
+      offset : [2.5, 1.4375, -1.5],
       yaw : 0.0,
     }
     SW1 : {
-      offset : [2.5, 3.5625, 1.5],  # intrafocal
+      offset : [2.5, 3.5625, 1.5],
       yaw : 180.0,
     }
 
@@ -23,83 +23,83 @@ R00W :
   amplifiers :
     SW0 :
       C10 : {
-        gain : 1.01211,
-        readNoise : 8.480,
+        gain : 1.25778,
+        readNoise : 8.806,
         saturation : 75057,
       }
       C11 : {
-        gain : 1.00990,
-        readNoise : 8.815,
+        gain : 1.25310,
+        readNoise : 8.955,
         saturation : 75990,
       }
       C12 : {
-        gain : 1.00480,
-        readNoise : 8.695,
+        gain : 1.24988,
+        readNoise : 8.976,
         saturation : 135423,
       }
       C13 : {
-        gain : 1.00620,
-        readNoise : 8.565,
+        gain : 1.25068,
+        readNoise : 9.005,
         saturation : 136450,
       }
       C14 : {
-        gain : 1.00057,
-        readNoise : 8.520,
+        gain : 1.24550,
+        readNoise : 8.936,
         saturation : 138361,
       }
       C15 : {
-        gain : 0.99283,
-        readNoise : 8.505,
+        gain : 1.24158,
+        readNoise : 8.939,
         saturation : 140359,
       }
       C16 : {
-        gain : 0.99160,
-        readNoise : 8.607,
+        gain : 1.23514,
+        readNoise : 8.985,
         saturation : 142185,
       }
       C17 : {
-        gain : 0.99471,
-        readNoise : 8.470,
+        gain : 1.23749,
+        readNoise : 8.893,
         saturation : 80909,
       }
     SW1 :
       C10 : {
-        gain : 0.99267,
-        readNoise : 8.199,
+        gain : 1.23117,
+        readNoise : 8.380,
         saturation : 68578,
       }
       C11 : {
-        gain : 0.99673,
-        readNoise : 8.458,
+        gain : 1.23368,
+        readNoise : 8.701,
         saturation : 76459,
       }
       C12 : {
-        gain : 0.99573,
-        readNoise : 8.686,
+        gain : 1.23457,
+        readNoise : 8.879,
         saturation : 133917,
       }
       C13 : {
-        gain : 1.00231,
-        readNoise : 8.644,
+        gain : 1.24103,
+        readNoise : 8.858,
         saturation : 117805,
       }
       C14 : {
-        gain : 0.99851,
-        readNoise : 8.748,
+        gain : 1.23720,
+        readNoise : 8.985,
         saturation : 117467,
       }
       C15 : {
-        gain : 0.99954,
-        readNoise : 8.834,
+        gain : 1.24141,
+        readNoise : 8.975,
         saturation : 83068,
       }
       C16 : {
-        gain : 0.99512,
-        readNoise : 8.577,
+        gain : 1.23504,
+        readNoise : 8.855,
         saturation : 115778,
       }
       C17 : {
-        gain : 1.00201,
-        readNoise : 8.607,
+        gain : 1.23769,
+        readNoise : 8.813,
         saturation : 72094,
       }
