@@ -134,13 +134,6 @@ def updateFromEOTest(RXXDir, raftNames, updatedData):
 
         shutil.copyfile(RXXFile, RXXFile + "~")  # make a backup, although we also have git
 
-        # the corner rafts are a nuisance, and we have to handle them as two
-        # .yaml files, e.g. R00.yaml and R00W.yaml, whereas the raft names
-        # don't need to worry about this.  Consequently, we may need to remove
-        # a "W" to be able to look up values
-        if raftName in ["R00W", "R04W", "R40W", "R44W"]:
-            raftNameData[raftName] = raftNameData[raftName[:3]]
-
         writeRXXFile(RXXFile, raftName, raftNameData[raftName],
                      gains=updatedData["gain"],
                      readNoises=updatedData["readNoise"],
