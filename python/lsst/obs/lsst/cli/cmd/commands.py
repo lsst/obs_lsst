@@ -35,7 +35,7 @@ from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
 
 
-defaultRegex = r".*Photodiode_Readings.*txt\b"
+defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
