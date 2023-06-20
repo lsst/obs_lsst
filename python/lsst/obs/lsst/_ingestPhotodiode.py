@@ -88,7 +88,7 @@ class PhotodiodeIngestTask(Task):
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
-    def run(self, locations, run=None, file_filter=r".*Photodiode_Readings.*txt|.*_photodiode.ecsv",
+    def run(self, locations, run=None, file_filter=r"Photodiode_Readings.*txt$|_photodiode.ecsv$",
             track_file_attrs=None):
         """Ingest photodiode data into a Butler data repository.
 
@@ -143,15 +143,14 @@ class PhotodiodeIngestTask(Task):
         numFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
-            # import pdb; pdb.set_trace()
             calibType = "Unknown"
             try:
-                # Can this be read directly?
+                # Can this be read directly in standard form?
                 with inputFile.as_local() as localFile:
-                    calib = PhotodiodeCalib.readText(inputFile.ospath)
+                    calib = PhotodiodeCalib.readText(localFile.ospath)
                 calibType = "full"
             except Exception:
-                # Try reading as a two-column file
+                # Try reading as a two-column file.
                 with inputFile.as_local() as localFile:
                     calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
                 calibType = "two-column"
@@ -166,11 +165,8 @@ class PhotodiodeIngestTask(Task):
 
                 obsId = calib.getMetadata()['obsId']
                 whereClause = "exposure.obs_id=obsId"
-                exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
-                                                                                 instrument=instrumentName,
-                                                                                 where=whereClause,
-                                                                                 bind={"obsId": obsId})]
-                idTuple = (obsId)
+                binding = {"obsId": obsId}
+                logId = obsId
 
             elif calibType == "two-column":
                 dayObs = calib.getMetadata()['day_obs']
@@ -179,17 +175,17 @@ class PhotodiodeIngestTask(Task):
                 # Find the associated exposure information.
                 whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
                 instrumentName = self.instrument.getName()
-                exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
-                                                                                 instrument=instrumentName,
-                                                                                 where=whereClause,
-                                                                                 bind={"dayObs": dayObs,
-                                                                                       "seqNum": seqNum})]
-                idTuple = (dayObs, seqNum)
+                binding = {"dayObs": dayObs, "seqNum": seqNum}
+                logId = (dayObs, seqNum)
 
             else:
                 self.log.warning("Skipping input file %s of unknown type.",
                                  inputFile)
                 continue
+            exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
+                                                                             instrument=instrumentName,
+                                                                             where=whereClause,
+                                                                             bind=binding)]
 
             nRecords = len(exposureRecords)
             if nRecords == 1:
@@ -198,12 +194,12 @@ class PhotodiodeIngestTask(Task):
             elif nRecords == 0:
                 numFailed += 1
                 self.log.warning("Skipping instrument %s and identifiers %s: no exposures found.",
-                                 instrumentName, idTuple)
+                                 instrumentName, logId)
                 continue
             else:
                 numFailed += 1
                 self.log.warning("Multiple exposure entries found for instrument %s and "
-                                 "identifiers %s.", instrumentName, idTuple)
+                                 "identifiers %s.", instrumentName, logId)
                 continue
 
             # Generate the dataId for this file.
@@ -221,7 +217,7 @@ class PhotodiodeIngestTask(Task):
             }
             if existing:
                 self.log.debug("Skipping instrument %s and identifiers %s: already exists in run %s.",
-                               instrumentName, idTuple, run)
+                               instrumentName, logId, run)
                 numExisting += 1
                 continue
 
@@ -240,7 +236,7 @@ class PhotodiodeIngestTask(Task):
                 self.butler.ingest(dataset, transfer=self.config.transfer,
                                    record_validation_info=track_file_attrs)
                 self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
-                              idTuple)
+                              logId)
                 refs.append(dataset)
 
         if numExisting != 0:
