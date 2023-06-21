@@ -675,37 +675,37 @@ CCDs :
     amplifiers :
       C10 :
         << : *C10_ITL
-        gain : 1.432
+        gain : 1.423
         readNoise : 8.7
         saturation : 200000
       C11 :
         << : *C11_ITL
-        gain : 1.429
+        gain : 1.422
         readNoise : 8.9
         saturation : 200000
       C12 :
         << : *C12_ITL
-        gain : 1.427
+        gain : 1.421
         readNoise : 8.8
         saturation : 200000
       C13 :
         << : *C13_ITL
-        gain : 1.437
+        gain : 1.43
         readNoise : 8.9
         saturation : 200000
       C14 :
         << : *C14_ITL
-        gain : 1.43
+        gain : 1.424
         readNoise : 9.8
         saturation : 200000
       C15 :
         << : *C15_ITL
-        gain : 1.427
+        gain : 1.424
         readNoise : 10.6
         saturation : 200000
       C16 :
         << : *C16_ITL
-        gain : 1.42
+        gain : 1.419
         readNoise : 8.8
         saturation : 200000
       C17 :
@@ -715,12 +715,12 @@ CCDs :
         saturation : 200000
       C07 :
         << : *C07_ITL
-        gain : 1.352
+        gain : 1.355
         readNoise : 6.3
         saturation : 200000
       C06 :
         << : *C06_ITL
-        gain : 1.461
+        gain : 1.464
         readNoise : 7.2
         saturation : 200000
       C05 :
@@ -735,21 +735,21 @@ CCDs :
         saturation : 200000
       C03 :
         << : *C03_ITL
-        gain : 1.465
+        gain : 1.461
         readNoise : 6.8
         saturation : 200000
       C02 :
         << : *C02_ITL
-        gain : 1.455
+        gain : 1.454
         readNoise : 7.2
         saturation : 200000
       C01 :
         << : *C01_ITL
-        gain : 1.447
+        gain : 1.446
         readNoise : 8.2
         saturation : 200000
       C00 :
         << : *C00_ITL
-        gain : 1.441
+        gain : 1.442
         readNoise : 10
         saturation : 200000
