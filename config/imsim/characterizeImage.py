@@ -53,10 +53,6 @@ config.detection.tempLocalBackground.approxOrderX = 1
 config.detection.tempWideBackground.approxOrderX = 1
 config.repair.cosmicray.background.approxOrderX = 1
 
-# Select candidates for PSF modeling based on S/N threshold (DM-17043 & DM-16785)
-config.measurePsf.starSelector["objectSize"].doFluxLimit = False
-config.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
-
 # S/N cuts for computing aperture corrections to include only objects that
 # were used in the PSF model and have PSF flux S/N greater than the minimum
 # set (DM-23071).
