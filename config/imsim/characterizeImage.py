@@ -46,7 +46,8 @@ if "ext_gaap_GaapFlux" in config.measurement.plugins:
     names = config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames()
     config.measureApCorr.allowFailure += names
 
-# Reduce Chebyshev polynomial order for background fitting (DM-30820)
+# Reduce Chebyshev polynomial order for background fitting (DM-30820);
+# imsim has a constant offset background.
 config.background.approxOrderX = 1
 config.detection.background.approxOrderX = 1
 config.detection.tempLocalBackground.approxOrderX = 1

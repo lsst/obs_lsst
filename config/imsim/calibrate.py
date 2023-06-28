@@ -37,36 +37,37 @@ for refObjLoader in (config.astromRefObjLoader,
 config.connections.astromRefCat = "cal_ref_cat"
 config.connections.photoRefCat = "cal_ref_cat"
 
-# No color term in simulation at the moment
-config.photoCal.applyColorTerms = False
-config.photoCal.match.referenceSelection.doMagLimit = True
-config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
-config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
-# select only stars for photometry calibration
-config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
-
-# Additional configs for star+galaxy ref cats post DM-17917
-config.astrometry.referenceSelector.doUnresolved = True
-config.astrometry.referenceSelector.unresolved.name = "resolved"
-config.astrometry.referenceSelector.unresolved.minimum = None
-config.astrometry.referenceSelector.unresolved.maximum = 0.5
-
-# Set threshold above which astrometry will be considered a failure (DM-32129)
-config.astrometry.maxMeanDistanceArcsec = 0.05
-
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
+# imsim has a constant offset background.
 config.detection.background.approxOrderX = 1
 config.detection.tempLocalBackground.approxOrderX = 1
 config.detection.tempWideBackground.approxOrderX = 1
 
-# Make sure galaxies are not used for zero-point calculation.
+# DM-32129: imsim astrometry fits should be very close to the (perfect) refcat.
+config.astrometry.maxMeanDistanceArcsec = 0.05
+
+# No color terms in simulation.
+config.photoCal.applyColorTerms = False
+
+# Select only stars for photometric calibration.
+config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
+# Brighter S/N cuts for photometric calibration source selection.
+config.photoCal.match.sourceSelection.doSignalToNoise = True
+config.photoCal.match.sourceSelection.signalToNoise.minimum = 150
+config.photoCal.match.sourceSelection.signalToNoise.fluxField = "base_PsfFlux_instFlux"
+config.photoCal.match.sourceSelection.signalToNoise.errField = "base_PsfFlux_instFluxErr"
+
+# DM-17917: Do not use galaxies from truth catalog for astro/photo calibration.
+config.astrometry.referenceSelector.doUnresolved = True
+config.astrometry.referenceSelector.unresolved.name = "resolved"
+config.astrometry.referenceSelector.unresolved.minimum = None
+config.astrometry.referenceSelector.unresolved.maximum = 0.5
 config.photoCal.match.referenceSelection.doUnresolved = True
 config.photoCal.match.referenceSelection.unresolved.name = "resolved"
 config.photoCal.match.referenceSelection.unresolved.minimum = None
 config.photoCal.match.referenceSelection.unresolved.maximum = 0.5
 
-# S/N cuts for zero-point calculation source selection
-config.photoCal.match.sourceSelection.doSignalToNoise = True
-config.photoCal.match.sourceSelection.signalToNoise.minimum = 150
-config.photoCal.match.sourceSelection.signalToNoise.fluxField = "base_PsfFlux_instFlux"
-config.photoCal.match.sourceSelection.signalToNoise.errField = "base_PsfFlux_instFluxErr"
+# Only use brighter sources from the very deep truth catalog for photometry.
+config.photoCal.match.referenceSelection.doMagLimit = True
+config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_i_smeared_flux"
+config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
