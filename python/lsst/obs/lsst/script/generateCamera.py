@@ -167,7 +167,7 @@ def generateCamera(cameraFile, path):
     def indent():
         """Return the current indent string"""
         dindent = 2    # number of spaces per indent
-        return(nindent*dindent - 1)*" "   # print will add the extra " "
+        return (nindent*dindent - 1) * " "   # print will add the extra " "
 
     with open(cameraFile, "a") as fd:
         print("""
