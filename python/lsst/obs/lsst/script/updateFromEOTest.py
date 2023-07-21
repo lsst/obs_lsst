@@ -27,7 +27,6 @@ __all__ = ("main", "writeRXXFile")
 import argparse
 import glob
 import os
-import shutil
 import sys
 import json
 import yaml
@@ -131,15 +130,6 @@ def updateFromEOTest(RXXDir, raftNames, updatedData):
         RXXFile = os.path.join(RXXDir, f"{raftName}.yaml")
         with open(RXXFile) as fd:
             raftNameData = yaml.load(fd, yaml.CSafeLoader)
-
-        shutil.copyfile(RXXFile, RXXFile + "~")  # make a backup, although we also have git
-
-        # the corner rafts are a nuisance, and we have to handle them as two
-        # .yaml files, e.g. R00.yaml and R00W.yaml, whereas the raft names
-        # don't need to worry about this.  Consequently, we may need to remove
-        # a "W" to be able to look up values
-        if raftName in ["R00W", "R04W", "R40W", "R44W"]:
-            raftNameData[raftName] = raftNameData[raftName[:3]]
 
         writeRXXFile(RXXFile, raftName, raftNameData[raftName],
                      gains=updatedData["gain"],
