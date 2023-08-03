@@ -42,3 +42,7 @@ config.astrometry.doMagnitudeOutlierRejection = True
 config.doWriteMatchesDenormalized = True
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
+
+# Set the default aperture as appropriate for the LATISS plate scale.
+config.measurement.slots.apFlux='base_CircularApertureFlux_35_0'
+config.measurement.slots.calibFlux='base_CircularApertureFlux_35_0'
