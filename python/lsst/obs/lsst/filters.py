@@ -291,6 +291,10 @@ _latiss_filters = (
                      band="z"),
     FilterDefinition(physical_filter="SDSSy_65mm",
                      band="y"),
+    FilterDefinition(physical_filter="collimator",
+                     band="white"),
+    FilterDefinition(physical_filter="cyl_lens",
+                     band="white"),
 )
 
 # Form a new set of filter definitions from all the explicit gratings
