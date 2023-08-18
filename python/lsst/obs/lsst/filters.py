@@ -298,8 +298,34 @@ _latiss_filters = (
 )
 
 # Form a new set of filter definitions from all the explicit gratings
-_latiss_gratings = ("ronchi90lpmm", "ronchi170lpmm", "empty", "unknown",
-                    "holo4_003", "blue300lpmm_qn1", "holo4_001")
+_latiss_gratings = ("ronchi90lpmm",
+                    "ronchi170lpmm",
+                    "empty",
+                    "unknown",
+                    "holo4_003",
+                    "blue300lpmm_qn1",
+                    "holo4_001",
+                    "pinhole_1_1000",
+                    "pinhole_1_0500",
+                    "pinhole_1_0200",
+                    "pinhole_1_0100",
+                    "pinhole_2_1_1000",
+                    "pinhole_2_1_0500",
+                    "pinhole_2_1_0200",
+                    "pinhole_2_1_0100",
+                    "pinhole_2_2_1000",
+                    "pinhole_2_2_0500",
+                    "pinhole_2_2_0200",
+                    "pinhole_2_2_0100",
+                    "pinhole_2_3_1000",
+                    "pinhole_2_3_0500",
+                    "pinhole_2_3_0200",
+                    "pinhole_2_3_0100",
+                    "pinhole_2_4_1000",
+                    "pinhole_2_4_0500",
+                    "pinhole_2_4_0200",
+                    "pinhole_2_4_0100",
+                    )
 
 # Include the filters without the grating in case someone wants
 # to retrieve a filter by an actual filter name
