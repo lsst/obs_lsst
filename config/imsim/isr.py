@@ -22,5 +22,5 @@
 """
 imsim-specific overrides for IsrTask
 """
-config.doCrosstalk = True
+config.connections.newBFKernel = "bfk" 
 config.doBrighterFatter = True
