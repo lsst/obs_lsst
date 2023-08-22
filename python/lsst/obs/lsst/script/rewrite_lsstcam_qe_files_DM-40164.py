@@ -26,6 +26,7 @@ import dateutil.parser
 import numpy as np
 from scipy.interpolate import interp1d
 from scipy.optimize import leastsq
+import copy
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import AmpCurve
@@ -141,6 +142,10 @@ class SplineFitter:
 data_path = lsst.utils.getPackageDir("obs_lsst_data")
 transmission_path = os.path.join(data_path, "lsstCam", "transmission_sensor")
 parquet_file = os.path.join(transmission_path, "qe_raft_allvalues_nircorrected_20230725.parquet")
+parquet_file_update = os.path.join(
+    transmission_path,
+    "qe_raft_allvalues_nircorrected_20230725_adjust.parquet",
+)
 
 valid_start = "1970-01-01T00:00:00"
 valid_date = dateutil.parser.parse(valid_start)
@@ -252,11 +257,20 @@ for raft in questionable_rafts:
     fitter = SplineFitter(nodes, wavelengths, questionable_throughputs[raft], throughput_ref)
     pars = fitter.fit(np.ones(len(nodes)))
 
-    _, spl = fitter.compute_ratio_model(nodes, pars, wavelengths, questionable_throughputs[raft], throughput_ref, return_spline=True)
+    _, spl = fitter.compute_ratio_model(
+        nodes,
+        pars,
+        wavelengths,
+        questionable_throughputs[raft],
+        throughput_ref,
+        return_spline=True,
+    )
 
     questionable_spline_correctors[raft] = spl
 
 det_nums = np.unique(data["idet"])
+
+data_update = copy.copy(data)
 
 for det_num in det_nums:
     det_use, = np.where((data["idet"] == det_num) & (data["seg"] != "Ave"))
@@ -269,6 +283,8 @@ for det_num in det_nums:
         # Fix this up with spline.
         spl = questionable_spline_correctors[bay]
         efficiency *= spl.interpolate(wavelength)
+
+    data_update["qecorr"][det_use][:] = efficiency
 
     curve_table = QTable(
         {
@@ -306,3 +322,15 @@ for det_num in det_nums:
         os.remove(out_file)
 
     curve.writeText(out_file)
+
+    # And update the average.
+    det_use_ave, = np.where((data["idet"] == det_num) & (data["seg"] == "Ave"))
+    wavelength_ave = np.array(data["wl"][det_use_ave])
+    efficiency_ave = np.array(data["qecorr"][det_use_ave])
+    if bay in questionable_rafts:
+        spl = questionable_spline_correctors[bay]
+        efficiency_ave *= spl.interpolate(wavelength_ave)
+
+    data_update["qecorr"][det_use_ave][:] = efficiency_ave
+
+data_update.write(parquet_file_update, overwrite=True)
