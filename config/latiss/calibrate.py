@@ -17,7 +17,7 @@ config.photoCal.applyColorTerms = True
 config.photoCal.photoCatName="atlas_refcat2_20220201"
 config.photoCal.colorterms.load(os.path.join(ObsConfigDir, "colorterms.py"))
 
-# We often have very few sources due to smaller aperture so use affine task. 
+# We often have very few sources due to smaller aperture so use affine task.
 config.astrometry.wcsFitter.retarget(FitAffineWcsTask)
 
 # Note that the following two config values were validated on data taken in
