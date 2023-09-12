@@ -24,6 +24,7 @@ config.doSubtractLocalBackground = True
 config.sourceSelector["science"].flags.bad.append("localBackground_flag")
 config.fgcmLoadReferenceCatalog.load(os.path.join(configDir, "filterMap.py"))
 config.fgcmLoadReferenceCatalog.applyColorTerms = True
+config.fgcmLoadReferenceCatalog.colorterms.load(os.path.join(configDir, 'colorterms.py'))
 config.fgcmLoadReferenceCatalog.referenceSelector.doSignalToNoise = True
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.fluxField = "i_flux"
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.errField = "i_fluxErr"
