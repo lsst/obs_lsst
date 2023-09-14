@@ -53,7 +53,7 @@ config.sedterms.data = {
 
 # Define good stars with an r-i color cut.
 config.starColorCuts = ("g, i, 0.50, 3.5",)
-config.refStarColorCuts = ("g, i, 0.6, 2.0",)
+config.refStarColorCuts = ("g, i, 0.6, 1.1",)
 config.useExposureReferenceOffset = True
 config.precomputeSuperStarInitialCycle = False
 config.superStarSubCcdDict = {"g": True,
