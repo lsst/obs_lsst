@@ -26,16 +26,12 @@ import os.path
 
 configDir = os.path.dirname(__file__)
 
-# Reference catalog overrides for simulated data.
-for refObjLoader in (config.astromRefObjLoader,
-                     config.photoRefObjLoader,
-                     ):
-    refObjLoader.load(os.path.join(configDir, 'filterMap.py'))
-    # Use the filterMap instead of the "any" filter.
-    refObjLoader.anyFilterMapsToThis = None
-
+# imSim-specifc reference catalog configuration.
 config.connections.astromRefCat = "cal_ref_cat"
 config.connections.photoRefCat = "cal_ref_cat"
+config.astromRefObjLoader.load(os.path.join(configDir, 'filterMap.py'))
+config.photoRefObjLoader.load(os.path.join(configDir, 'filterMap.py'))
+config.astromRefObjLoader.anyFilterMapsToThis = None
 
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)
 # imsim has a constant offset background.
