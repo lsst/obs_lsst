@@ -27,11 +27,8 @@ configDir = os.path.dirname(__file__)
 config.load(os.path.join(configDir, "lsstCamCommon.py"))
 config.isr.load(os.path.join(configDir, "isr.py"))
 
-bgFile = os.path.join(configDir, "background.py")
 fpBgFile = os.path.join(configDir, "focalPlaneBackground.py")
 
 config.largeScaleBackground.load(fpBgFile)
-config.detection.background.load(bgFile)
-config.subtractBackground.load(bgFile)
 
 config.isr.doBrighterFatter = False

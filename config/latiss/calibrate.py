@@ -47,13 +47,6 @@ config.astrometry.sourceFluxType = "Psf"
 config.astrometry.sourceSelector['matcher'].sourceFluxType = "Psf"
 config.astrometry.sourceSelector['matcher'].minSnr = 10
 
-# Turn on reference vs. source magnitude outlier rejection to help avoid bad
-# matches.
-config.astrometry.doMagnitudeOutlierRejection = True
-
-# Write srcMatchFull
-config.doWriteMatchesDenormalized = True
-
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
 
 # Set the default aperture as appropriate for the LATISS plate scale.

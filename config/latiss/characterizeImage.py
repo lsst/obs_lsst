@@ -6,9 +6,6 @@ config.detection.thresholdValue = 3.6
 
 # Some modifications to the objectSize selector for PSF estimation optimized
 # for LATISS data.
-config.measurePsf.starSelector["objectSize"].sourceFluxField = "base_PsfFlux_instFlux"
-config.measurePsf.starSelector["objectSize"].doFluxLimit = False
-config.measurePsf.starSelector["objectSize"].doSignalToNoiseLimit = True
 config.measurePsf.starSelector["objectSize"].signalToNoiseMin = 10
 config.measurePsf.starSelector["objectSize"].widthStdAllowed = 0.28
 config.measurePsf.starSelector["objectSize"].widthMax = 14.0

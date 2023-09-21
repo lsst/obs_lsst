@@ -27,33 +27,11 @@ import os.path
 
 obsConfigDir = os.path.join(os.path.dirname(__file__))
 
-bgFile = os.path.join(obsConfigDir, "background.py")
-
-# Cosmic rays and background estimation
-config.detection.background.load(bgFile)
-
-# Enable temporary local background subtraction
-config.detection.doTempLocalBackground  = True
-
-# Set to match defaults currenyly used in HSC production runs (e.g. S15B)
-config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.95
-
-# Detection
-config.detection.isotropicGrow = True
-
 # Activate calibration of measurements: required for aperture corrections
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
 config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
 config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 
-# Deblender
-config.deblend.maxFootprintSize = 0
-config.deblend.maskLimits["NO_DATA"] = 0.25 # Ignore sources that are in the vignetted region
-config.deblend.maxFootprintArea = 10000
-
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
-
-# Prevent spurious detections in vignetting areas
-config.detection.thresholdType = 'pixel_stdev'
