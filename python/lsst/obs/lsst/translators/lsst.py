@@ -412,13 +412,20 @@ class LsstBaseTranslator(FitsTranslator):
         if seqnum >= 10**_SEQNUM_MAXDIGITS:
             raise ValueError(f"Sequence number ({seqnum}) exceeds limit")
 
+        dayobs = int(dayobs)
+        if dayobs > 20231004 and controller == "C":
+            # As of this date the CCS controller has a unified counter
+            # with the OCS, so there is no need to adjust the dayobs
+            # to make unique exposure IDs.
+            controller = None
+
         # Camera control changes the exposure ID
         if controller is not None:
             index = CONTROLLERS.find(controller)
             if index == -1:
                 raise ValueError(f"Supplied controller, '{controller}' is not "
                                  f"in supported list: {CONTROLLERS}")
-            dayobs = int(dayobs)
+
             # Increment a thousand years per controller
             dayobs += _CONTROLLER_INCREMENT * index
 
