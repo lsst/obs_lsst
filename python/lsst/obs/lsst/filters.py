@@ -234,6 +234,23 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
 
 # LATISS filters include a grating in the name so we need to construct
 # filters for each combination of filter+grating.
+
+# This set of filters can be installed in either the grating or filter wheel,
+# so we define them here to avoid duplication.
+sdss65mm_filters = [FilterDefinition(physical_filter="SDSSu_65mm",
+                                     band="u"),
+                    FilterDefinition(physical_filter="SDSSg_65mm",
+                                     band="g"),
+                    FilterDefinition(physical_filter="SDSSr_65mm",
+                                     band="r"),
+                    FilterDefinition(physical_filter="SDSSi_65mm",
+                                     band="i"),
+                    FilterDefinition(physical_filter="SDSSz_65mm",
+                                     band="z"),
+                    FilterDefinition(physical_filter="SDSSy_65mm",
+                                     band="y"),
+                    ]
+
 _latiss_filters = (
     FilterDefinition(physical_filter="empty",
                      band="white",
@@ -279,25 +296,15 @@ _latiss_filters = (
                      band="r"),
     FilterDefinition(physical_filter="SDSSi",
                      band="i"),
-    FilterDefinition(physical_filter="SDSSu_65mm",
-                     band="u"),
-    FilterDefinition(physical_filter="SDSSg_65mm",
-                     band="g"),
-    FilterDefinition(physical_filter="SDSSr_65mm",
-                     band="r"),
-    FilterDefinition(physical_filter="SDSSi_65mm",
-                     band="i"),
-    FilterDefinition(physical_filter="SDSSz_65mm",
-                     band="z"),
-    FilterDefinition(physical_filter="SDSSy_65mm",
-                     band="y"),
     FilterDefinition(physical_filter="collimator",
                      band="white"),
     FilterDefinition(physical_filter="cyl_lens",
                      band="white"),
+    *sdss65mm_filters,
 )
 
-# Form a new set of filter definitions from all the explicit gratings
+# Form a new set of filter definitions from all the explicit gratings, and add
+# sdss65mm_filter set.
 _latiss_gratings = ("ronchi90lpmm",
                     "ronchi170lpmm",
                     "empty",
@@ -325,6 +332,7 @@ _latiss_gratings = ("ronchi90lpmm",
                     "pinhole_2_4_0500",
                     "pinhole_2_4_0200",
                     "pinhole_2_4_0100",
+                    *sdss65mm_filters,
                     )
 
 # Include the filters without the grating in case someone wants
@@ -338,17 +346,32 @@ for filter in _latiss_filters:
         if filter.physical_filter == "diffuser":
             continue
 
-        # FilterDefinition is a frozen dataclass
-        new_name = FILTER_DELIMITER.join([filter.physical_filter, grating])
+        # If the grating is a FilterDefinition, use the band and alias
+        # attributes defined in the grating for the new, combined
+        # FilterDefinition. In addition, filter out any combinations that do
+        # not use the "empty" filter in combination with a grating that is a
+        # FitlerDefintion as we should never combine multiple filters in real
+        # observations.
+        if isinstance(grating, FilterDefinition):
+            if filter.physical_filter != "empty":
+                continue
 
-        # Also need to update aliases
-        new_aliases = {FILTER_DELIMITER.join([a, grating]) for a in filter.alias}
+            new_name = FILTER_DELIMITER.join([filter.physical_filter, grating.physical_filter])
+            new_aliases = {FILTER_DELIMITER.join([filter.physical_filter, a]) for a in grating.alias}
 
-        # For gratings set the band to the band of the filter
-        combo = FilterDefinition(physical_filter=new_name,
-                                 band=filter.band,
-                                 afw_name=filter.afw_name,
-                                 alias=new_aliases)
+            combo = FilterDefinition(physical_filter=new_name,
+                                     band=grating.band,
+                                     afw_name=grating.afw_name,
+                                     alias=new_aliases)
+        else:
+            new_name = FILTER_DELIMITER.join([filter.physical_filter, grating])
+            new_aliases = {FILTER_DELIMITER.join([a, grating]) for a in filter.alias}
+
+            combo = FilterDefinition(physical_filter=new_name,
+                                     band=filter.band,
+                                     afw_name=filter.afw_name,
+                                     alias=new_aliases)
+
         _latiss_filter_and_grating.append(combo)
 
 
