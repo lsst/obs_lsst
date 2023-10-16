@@ -15,6 +15,9 @@ config.measurePsf.reserve.fraction = 0.0
 
 # Reduce psfex spatialOrder to 1, this helps ensure success with low numbers of psf candidates.
 config.measurePsf.psfDeterminer["psfex"].spatialOrder = 1
+# Set the default kernel and stamp sizes for PSF modeling appropriate for LATISS
+config.measurePsf.makePsfCandidates.kernelSize = 71
+config.measurePsf.psfDeterminer["psfex"].stampSize = 71
 
 config.installSimplePsf.width = 21
 config.installSimplePsf.fwhm = 2.355*2  # LATISS plate scale is 2x LSST nominal
