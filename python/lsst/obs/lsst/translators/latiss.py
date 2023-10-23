@@ -98,9 +98,6 @@ class LatissTranslator(LsstBaseTranslator):
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "relative_humidity": None,
-        "pressure": None,
-        "temperature": None,
     }
 
     _trivial_map = {
