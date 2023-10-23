@@ -380,6 +380,15 @@ class LatissTranslator(LsstBaseTranslator):
             header['ROTPA'] = header['ROTPA'] - 180
             modified = True
 
+        if obsgeo := header.get("OBSGEO-Z"):
+            try:
+                if obsgeo > 0.0:
+                    obsgeo *= -1.0
+                    header["OBSGEO-Z"] = obsgeo
+                    modified = True
+            except TypeError:
+                pass
+
         return modified
 
     def _is_on_mountain(self):
