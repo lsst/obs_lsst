@@ -934,3 +934,34 @@ class LsstBaseTranslator(FitsTranslator):
 
         # No simulation flags set.
         return False
+
+    @cache_translation
+    def to_relative_humidity(self) -> float | None:
+        key = "HUMIDITY"
+        if self.is_key_ok(key):
+            self._used_these_cards(key)
+            return self._header[key]
+
+        return None
+
+    @cache_translation
+    def to_pressure(self):
+        key = "PRESSURE"
+        if self.is_key_ok(key):
+            value = self._header[key]
+            # There has been an inconsistency in units for the pressure reading
+            # so we need to adjust for this.
+            if value > 10_000:
+                unit = u.Pa
+            else:
+                unit = u.hPa
+            return value * unit
+
+        return None
+
+    @cache_translation
+    def to_temperature(self):
+        key = "AIRTEMP"
+        if self.is_key_ok(key):
+            return self._header[key] * u.deg_C
+        return None

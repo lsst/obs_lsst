@@ -98,9 +98,6 @@ class LatissTranslator(LsstBaseTranslator):
         "detector_group": _DETECTOR_GROUP_NAME,
         "detector_num": 0,
         "detector_name": _DETECTOR_NAME,  # Single sensor
-        "relative_humidity": None,
-        "pressure": None,
-        "temperature": None,
     }
 
     _trivial_map = {
@@ -379,6 +376,15 @@ class LatissTranslator(LsstBaseTranslator):
         if date < ROTPA_CONVENTION_180_SWITCH2 and date > ROTPA_CONVENTION_180_SWITCH1:
             header['ROTPA'] = header['ROTPA'] - 180
             modified = True
+
+        if obsgeo := header.get("OBSGEO-Z"):
+            try:
+                if obsgeo > 0.0:
+                    obsgeo *= -1.0
+                    header["OBSGEO-Z"] = obsgeo
+                    modified = True
+            except TypeError:
+                pass
 
         return modified
 

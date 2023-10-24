@@ -69,9 +69,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         # includes them
         "altaz_begin": None,
         "object": "UNKNOWN",
-        "relative_humidity": None,
-        "temperature": None,
-        "pressure": None,
     }
 
     _trivial_map = {
