@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
-           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstUCDCamITL")
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
 
 import os.path
 
@@ -36,8 +36,7 @@ from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
-    LsstUCDCamITLTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -294,39 +293,6 @@ class LsstTS8(LsstCam):
         )
 
 
-class LsstUCDCam(LsstCam):
-    """Gen3 Butler specialization for UCDCam test stand data.
-    """
-
-    instrument = "LSST-UCDCam"
-    policyName = "ucd"
-    translatorClass = LsstUCDCamTranslator
-    filterDefinitions = GENERIC_FILTER_DEFINITIONS
-    visitSystem = VisitSystem.ONE_TO_ONE
-
-    def getRawFormatter(self, dataId):
-        # local import to prevent circular dependency
-        from .rawFormatter import LsstUCDCamRawFormatter
-        return LsstUCDCamRawFormatter
-
-    def _make_default_dimension_packer(
-        self,
-        config_attr,
-        data_id,
-        is_exposure=None,
-        default="observation",
-    ):
-        # Docstring inherited from Instrument._make_default_dimension_packer.
-        # Only difference is the change to default above (which reverts back
-        # the default in lsst.pipe.base.Instrument).
-        return super()._make_default_dimension_packer(
-            config_attr,
-            data_id,
-            is_exposure=is_exposure,
-            default=default,
-        )
-
-
 class LsstTS3(LsstCam):
     """Gen3 Butler specialization for TS3 test stand data.
     """
@@ -382,18 +348,18 @@ class Latiss(LsstCam):
         return LatissRawFormatter
 
 
-class LsstUCDCamITL(LsstCam):
-    """Gen3 Butler specialization for UCDCam-ITL test stand data.
+class LsstUCDCam(LsstCam):
+    """Gen3 Butler specialization for UCDCam test stand data.
     """
-    instrument = "LSST-UCDCam-ITL"
-    policyName = "ucdcam_itl"
-    translatorClass = LsstUCDCamITLTranslator
+    instrument = "LSST-UCDCam"
+    policyName = "ucd"
+    translatorClass = LsstUCDCamTranslator
     visitSystem = VisitSystem.ONE_TO_ONE
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import LsstUCDCamITLRawFormatter
-        return LsstUCDCamITLRawFormatter
+        from .rawFormatter import LsstUCDCamRawFormatter
+        return LsstUCDCamRawFormatter
 
     def _make_default_dimension_packer(
         self,

@@ -142,8 +142,6 @@ class FilterDefTestCase(unittest.TestCase):
         test_data = (
             "phosim-lsst_a_204595_f3_R11_S02_E000.yaml",
             "lsstCam-MC_H_20100217_000032_R22_S00.yaml",  # This is a phosim header
-            "UCD-E2V-CCD250-112-04_flat_flat_100_20181205153143.yaml",
-            "UCD-ITL-3800C-002_flat_flat_100_20180530080354.yaml",
         )
         for filename in test_data:
             with self.subTest(f"Testing {filename}"):
