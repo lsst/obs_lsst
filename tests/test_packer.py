@@ -21,7 +21,8 @@
 
 import unittest
 
-from lsst.daf.butler import DataCoordinate, Registry, RegistryConfig
+from lsst.daf.butler import DataCoordinate, RegistryConfig
+from lsst.daf.butler.registry.sql_registry import SqlRegistry
 from lsst.obs.lsst import (
     Latiss,
     LsstCam,
@@ -54,7 +55,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
     def setUp(self) -> None:
         registry_config = RegistryConfig()
         registry_config["db"] = "sqlite://"
-        self.registry = Registry.createFromConfig(registry_config)
+        self.registry = SqlRegistry.createFromConfig(registry_config)
         self.rubin_packer_instruments = [LsstCam, LsstComCam, Latiss]
         self.old_packer_instruments = [
             LsstCamImSim,
