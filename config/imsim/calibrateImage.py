@@ -6,10 +6,10 @@ import os
 config_dir = os.path.join(os.path.dirname(__file__))
 
 # imsim background model is a single value per detector.
-config.psf_detection.background.approxOrderX: 1
-config.psf_detection.tempLocalBackground.approxOrderX: 1
-config.psf_detection.tempWideBackground.approxOrderX: 1
-config.psf_repair.cosmicray.background.approxOrderX: 1
+config.psf_detection.background.approxOrderX = 1
+config.psf_detection.tempLocalBackground.approxOrderX = 1
+config.psf_detection.tempWideBackground.approxOrderX = 1
+config.psf_repair.cosmicray.background.approxOrderX = 1
 config.star_detection.background.approxOrderX = 1
 config.star_detection.tempLocalBackground.approxOrderX = 1
 config.star_detection.tempWideBackground.approxOrderX = 1
