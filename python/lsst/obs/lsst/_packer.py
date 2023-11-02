@@ -164,7 +164,7 @@ class RubinDimensionPacker(DimensionPacker):
     data_id : `lsst.daf.butler.DataCoordinate`
         Data ID identifying at least the instrument dimension.  Does not need
         to have dimension records attached.
-    config : `RubinDimensionPackerConfig`
+    config : `RubinDimensionPackerConfig`, optional
         Configuration for this dimension packer.
     is_exposure : `bool`, optional
         If `False`, construct a packer for visit+detector data IDs.  If `True`,
@@ -201,7 +201,7 @@ class RubinDimensionPacker(DimensionPacker):
         self,
         data_id: DataCoordinate,
         *,
-        config: RubinDimensionPackerConfig | None,
+        config: RubinDimensionPackerConfig | None = None,
         is_exposure: bool | None = None,
     ):
         if config is None:
