@@ -55,7 +55,7 @@ class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
         # is the same for all instruments, so repeating it in other test cases
         # is wasteful.
         butler = Butler(self.root, run=self.outputRun)
-        ref = butler.registry.findDataset("raw", self.dataIds[0])
+        ref = butler.find_dataset("raw", self.dataIds[0])
         full_assembled = butler.get(ref)
         unassembled_detector = self.instrumentClass().getCamera()[ref.dataId["detector"]]
         assembled_detector = full_assembled.getDetector()
