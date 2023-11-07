@@ -28,5 +28,6 @@
 # (PREOPS-3135) runs (see figures on DM-37497) and are probably going to
 # evolve as the commissioning of AuxTel procedes.
 config.select.maxEllipResidual = 0.1
-config.select.maxScaledSizeScatter = 0.015
+# Updated with DM-40668
+config.select.maxScaledSizeScatter = 0.025
 config.select.maxPsfTraceRadiusDelta = 4.8
