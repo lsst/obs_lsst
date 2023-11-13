@@ -24,6 +24,14 @@ config.data = {
             c1=0.0610018330811135,
             c2=-0.0722575356707918,
         ),
+        # empty~i is the same as i~empty.
+        "empty~SDSSi_65mm": Colorterm(
+            primary="i",
+            secondary="r",
+            c0=0.016940180565664747,
+            c1=0.0610018330811135,
+            c2=-0.0722575356707918,
+        ),
         # The following two are blank until we have data to measure them.
         "SDSSz_65mm~empty": Colorterm(
             primary="z",
