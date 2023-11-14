@@ -37,9 +37,16 @@ config.data = {
             primary="z",
             secondary="z",
         ),
+        # The ATLAS-REFCAT2 does not have y band, so we use z here as
+        # a placeholder.
         "SDSSy_65mm~empty": Colorterm(
-            primary="y",
-            secondary="y",
+            primary="z",
+            secondary="z",
+        ),
+        # empty~y is the same as y~empty.
+        "empty~SDSSy_65mm": Colorterm(
+            primary="z",
+            secondary="z",
         ),
     }),
 }
