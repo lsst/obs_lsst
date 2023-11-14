@@ -6,6 +6,7 @@ config.physicalFilters = [
     "empty~SDSSi_65mm",
     "SDSSz_65mm~empty",
     "SDSSy_65mm~empty",
+    "empty~SDSSy_65mm",
 ]
 
 # FGCM name or filename of precomputed atmospheres
