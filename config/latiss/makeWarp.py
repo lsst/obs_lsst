@@ -31,3 +31,18 @@ config.select.maxEllipResidual = 0.1
 # Updated with DM-40668
 config.select.maxScaledSizeScatter = 0.025
 config.select.maxPsfTraceRadiusDelta = 4.8
+
+# PSF-matching configs are in units of pix and specific to skymap pixel scale
+
+# Max PSF FWHM allowed into coadds BestSeeingSelectVisits.maxPsfFwhm = 1.9
+# If skymap pixel scale is 0.1, that translates to Fwhm of 19.0
+# TO DO: Change this to 9.5 if we go to 0.2 pixel scale.
+config.modelPsf.defaultFwhm = 19.0
+
+# These configs are for skymaps of pixel scale 0.1
+# TO DO: Delete these 5 if we go a 0.2 pixel scale
+config.matchingKernelSize = 57
+config.warpAndPsfMatch.psfMatch.kernel['AL'].kernelSize = 43
+config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.5, 3.0, 6.0]
+config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellX = 256
+config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellY = 256
