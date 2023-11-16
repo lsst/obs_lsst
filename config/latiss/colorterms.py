@@ -24,14 +24,29 @@ config.data = {
             c1=0.0610018330811135,
             c2=-0.0722575356707918,
         ),
+        # empty~i is the same as i~empty.
+        "empty~SDSSi_65mm": Colorterm(
+            primary="i",
+            secondary="r",
+            c0=0.016940180565664747,
+            c1=0.0610018330811135,
+            c2=-0.0722575356707918,
+        ),
         # The following two are blank until we have data to measure them.
         "SDSSz_65mm~empty": Colorterm(
             primary="z",
             secondary="z",
         ),
+        # The ATLAS-REFCAT2 does not have y band, so we use z here as
+        # a placeholder.
         "SDSSy_65mm~empty": Colorterm(
-            primary="y",
-            secondary="y",
+            primary="z",
+            secondary="z",
+        ),
+        # empty~y is the same as y~empty.
+        "empty~SDSSy_65mm": Colorterm(
+            primary="z",
+            secondary="z",
         ),
     }),
 }
