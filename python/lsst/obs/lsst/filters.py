@@ -88,6 +88,10 @@ LsstCamFiltersBaseline = FilterDefinitionCollection(
 #
 # The band names are not yet defined, so I'm going to invent them
 
+# Update from 2023-11-18:
+# in DM-41675 Yousuke notes the following update to the BOT filters:
+# SpotProjFWheel:  [grid, spot, sparsegrid, streak, ellipses, empty6]
+
 # Map the BOT filters to corresponding band explicitly
 BOT_filter_map = {
     "empty": "white",
@@ -105,6 +109,9 @@ BOT_filter_map = {
     "970nm": "y",
     "grid": "grid",
     "spot": "spot",
+    "sparsegrid": "sparsegrid",
+    "streak": "streak",
+    "ellipses": "ellipses"
 }
 
 BOTFilters_dict = {}
@@ -228,6 +235,7 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *LsstCamFiltersGeneric,
     *LsstCamFiltersBaseline,
     *TS8Filters,
+    *BOTFilters,
     *CCOBFilters,
 )
 
