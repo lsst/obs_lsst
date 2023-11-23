@@ -30,5 +30,9 @@
 # After switching to Piff for PSF estimation, these proved too tight for at
 # least ci_imsim.  The updates just added a bit of padding top of what was
 # needed to get all images in ci_imsim through.
+#
+# The maxScaledSizeScatter has been increased further to reflect the new
+# metric definition (which results in higher values for this metric).  See
+# DM-40668 & DM-41838 for details.
 config.select.maxEllipResidual = 0.005
-config.select.maxScaledSizeScatter = 0.008
+config.select.maxScaledSizeScatter = 0.011
