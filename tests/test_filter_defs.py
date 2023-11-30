@@ -59,6 +59,7 @@ class FilterDefTestCase(unittest.TestCase):
             "lsstCam-MC_C_20190319_000001_R22_S21.yaml",
             "lsstCam-MC_C_20190322_000002_R10_S22.yaml",
             "lsstCam-MC_C_20190406_000643_R10_S00.yaml",
+            "lsstCam_MC_C_20231125_000600_R12_S10.yaml",
         )
         for filename in test_data:
             with self.subTest(f"Testing {filename}"):
