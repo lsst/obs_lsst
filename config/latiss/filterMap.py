@@ -10,5 +10,6 @@ for source, target in [
         # ATLAS Refcat2 does not have y band.
         ("SDSSy_65mm~empty", "z"),
         ("empty~SDSSy_65mm", "z"),
+        ("y", "z"),
     ]:
     config.filterMap[source] = target
