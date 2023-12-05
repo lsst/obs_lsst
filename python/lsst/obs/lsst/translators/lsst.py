@@ -673,6 +673,9 @@ class LsstBaseTranslator(FitsTranslator):
         if not joined:
             joined = "unknown"
 
+        # Replace instances of "NONE" with "none".
+        joined = joined.replace("NONE", "none")
+
         return joined
 
     @cache_translation

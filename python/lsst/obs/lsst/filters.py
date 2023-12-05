@@ -46,8 +46,18 @@ def addFilter(filter_dict, band, physical_filter):
                                               )
 
 
-EmptyFilter = FilterDefinition(physical_filter="empty", band="white",
-                               alias={"no_filter", "open"})
+# Collection to handle the distinct cases where no filter is being used.
+NoFilterCollection = FilterDefinitionCollection(
+    # For this case, no filter is being used and the optical path to
+    # the focal plane is unoccluded.
+    FilterDefinition(physical_filter="empty", band="white",
+                     alias={"no_filter", "open"}),
+    # For this case, all filters are returned to the carousel and the
+    # auto-changer partially occludes the focal plane.  See Tony
+    # Johnson's comment at https://jira.lsstcorp.org/browse/DM-41675.
+    FilterDefinition(physical_filter="none", band="white",
+                     alias={"no_filter", "open"}),
+)
 
 # Generic filters used by PhoSim and UCDCam
 LsstCamFiltersGeneric = FilterDefinitionCollection(
@@ -167,7 +177,7 @@ CCOB_filter_map = {
 }
 
 CCOBFilters = []
-for lsst_filter_def in (EmptyFilter, *LsstCamFiltersBaseline):
+for lsst_filter_def in (*NoFilterCollection, *LsstCamFiltersBaseline):
     lsstcam_filter = lsst_filter_def.physical_filter
     if lsstcam_filter == "empty":
         lsstcam_filter = ""
@@ -198,14 +208,14 @@ for lsst_filter_def in (EmptyFilter, *LsstCamFiltersBaseline):
 # for all the BOT composite filters (i.e. "u~ND_OD1.0")
 #
 LSSTCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    EmptyFilter,
+    *NoFilterCollection,
     *LsstCamFiltersBaseline,
     *BOTFilters,
     *CCOBFilters,
 )
 
 GENERIC_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    EmptyFilter,
+    *NoFilterCollection,
     *LsstCamFiltersGeneric,
 )
 
@@ -218,7 +228,7 @@ TS3Filters = [
     FilterDefinition(physical_filter="550CutOn")]
 
 TS3_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    EmptyFilter,
+    *NoFilterCollection,
     *LsstCamFiltersGeneric,
     *TS3Filters,
 )
@@ -231,7 +241,7 @@ TS8Filters = [
     FilterDefinition(physical_filter="550CutOn")]
 
 TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    EmptyFilter,
+    *NoFilterCollection,
     *LsstCamFiltersGeneric,
     *LsstCamFiltersBaseline,
     *TS8Filters,
