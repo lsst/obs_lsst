@@ -46,12 +46,15 @@ def addFilter(filter_dict, band, physical_filter):
                                               )
 
 
-# Collection to handle the special case where no filter is being used
-# and all of the various ways that may be expressed in the FITS
-# header.
+# Collection to handle the distinct cases where no filter is being used.
 NoFilterCollection = FilterDefinitionCollection(
+    # For this case, no filter is being used and the optical path to
+    # the focal plane is unoccluded.
     FilterDefinition(physical_filter="empty", band="white",
                      alias={"no_filter", "open"}),
+    # For this case, all filters are returned to the carousel and the
+    # auto-changer partially occludes the focal plane.  See Tony
+    # Johnson's comment at https://jira.lsstcorp.org/browse/DM-41675.
     FilterDefinition(physical_filter="NONE", band="white",
                      alias={"no_filter", "open"}),
 )
