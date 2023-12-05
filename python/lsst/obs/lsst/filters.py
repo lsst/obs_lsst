@@ -55,7 +55,7 @@ NoFilterCollection = FilterDefinitionCollection(
     # For this case, all filters are returned to the carousel and the
     # auto-changer partially occludes the focal plane.  See Tony
     # Johnson's comment at https://jira.lsstcorp.org/browse/DM-41675.
-    FilterDefinition(physical_filter="NONE", band="white",
+    FilterDefinition(physical_filter="none", band="white",
                      alias={"no_filter", "open"}),
 )
 
