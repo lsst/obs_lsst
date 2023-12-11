@@ -2,9 +2,9 @@ import lsst.fgcmcal as fgcmcal
 
 
 config.outfileBase = "FgcmLatissCalibrations"
-# The default photometric survey so far uses g, r, i bands.
-config.bands = ["g", "r", "i"]
-config.fitBands = ["g", "r", "i"]
+# The default photometric survey so far uses g, r, i, z, y bands.
+config.bands = ["g", "r", "i", "z", "y"]
+config.fitBands = ["g", "r", "i", "z", "y"]
 from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 config.physicalFilterMap = LATISS_FILTER_DEFINITIONS.physical_to_band
 config.requiredBands = ["g", "r", "i"]
@@ -23,11 +23,13 @@ config.mirrorArea = 1.13097
 config.defaultCameraOrientation = 0.0
 config.brightObsGrayMax = 0.5
 config.expGrayInitialCut = -0.5
-config.expGrayPhotometricCutDict = {"g": -0.5, "r": -0.5, "i": -0.5}
-config.expGrayHighCutDict = {"g": 0.2, "r": 0.2, "i": 0.2}
+config.expGrayPhotometricCutDict = {"g": -0.5, "r": -0.5, "i": -0.5, "z": -0.5, "y": -0.5}
+config.expGrayHighCutDict = {"g": 0.2, "r": 0.2, "i": 0.2, "z": 0.2, "y": 0.2}
 config.expVarGrayPhotometricCutDict = {"g": 0.1**2.,
                                        "r": 0.1**2.,
-                                       "i": 0.1**2.}
+                                       "i": 0.1**2.,
+                                       "z": 0.1**2.,
+                                       "y": 0.1**2.}
 # For tests, make a broad cut for outliers.
 config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
@@ -35,7 +37,9 @@ config.autoHighCutNSig = 3.0
 config.aperCorrFitNBins = 0
 config.aperCorrInputSlopeDict = {"g": 0.0,
                                  "r": 0.0,
-                                 "i": 0.0}
+                                 "i": 0.0,
+                                 "z": 0.0,
+                                 "y": 0.0}
 # Define the band to SED constants approximately so they work
 # for data that only has r, i observations.
 config.sedboundaryterms = fgcmcal.SedboundarytermDict()
@@ -43,12 +47,21 @@ config.sedboundaryterms.data["gr"] = fgcmcal.Sedboundaryterm(primary="g",
                                                              secondary="r")
 config.sedboundaryterms.data["ri"] = fgcmcal.Sedboundaryterm(primary="r",
                                                              secondary="i")
+config.sedboundaryterms.data["iz"] = fgcmcal.Sedboundaryterm(primary="i",
+                                                             secondary="z")
+config.sedboundaryterms.data["zy"] = fgcmcal.Sedboundaryterm(primary="z",
+                                                             secondary="y")
+
 config.sedterms = fgcmcal.SedtermDict()
 config.sedterms.data = {
     "g": fgcmcal.Sedterm(primaryTerm="gr", secondaryTerm="ri", constant=1.5),
     "r": fgcmcal.Sedterm(primaryTerm="gr", secondaryTerm="ri", constant=0.9),
     "i": fgcmcal.Sedterm(primaryTerm="ri", secondaryTerm="gr", constant=0.5,
                          extrapolated=True, primaryBand="i", secondaryBand="r", tertiaryBand="g"),
+    "z": fgcmcal.Sedterm(primaryTerm="iz", secondaryTerm="zy", constant=1.0),
+    "y": fgcmcal.Sedterm(primaryTerm="zy", secondaryTerm="iz", constant=0.25,
+                         extrapolated=True, primaryBand="y", secondaryBand="z",
+                         tertiaryBand="i"),
 }
 
 # Define good stars with an r-i color cut.
@@ -58,7 +71,9 @@ config.useExposureReferenceOffset = True
 config.precomputeSuperStarInitialCycle = False
 config.superStarSubCcdDict = {"g": True,
                               "r": True,
-                              "i": True}
+                              "i": True,
+                              "z": True,
+                              "y": True}
 config.superStarPlotCcdResiduals = False
 # Allow calibration to work with just 1 exposure on a night.
 config.minExpPerNight = 10
@@ -74,10 +89,14 @@ config.freezeStdAtmosphere = True
 config.superStarSubCcdChebyshevOrder = 2
 config.ccdGraySubCcdDict = {"g": True,
                             "r": True,
-                            "i": True}
+                            "i": True,
+                            "z": True,
+                            "y": True}
 config.ccdGrayFocalPlaneDict = {"g": False,
                                 "r": False,
-                                "i": False}
+                                "i": False,
+                                "z": False,
+                                "y": False}
 config.ccdGrayFocalPlaneFitMinCcd = 1
 config.ccdGrayFocalPlaneChebyshevOrder = 1
 # Do not model the magnitude errors (use errors as reported).
@@ -92,13 +111,19 @@ config.randomSeed = 12345
 # (Instead, use exposure repeatability metrics).
 config.useRepeatabilityForExpGrayCutsDict = {"g": False,
                                              "r": False,
-                                             "i": False}
+                                             "i": False,
+                                             "z": False,
+                                             "y": False}
 config.sigFgcmMaxEGrayDict = {"g": 0.1,
                               "r": 0.1,
-                              "i": 0.1}
+                              "i": 0.1,
+                              "z": 0.1,
+                              "y": 0.1}
 config.approxThroughputDict = {"g": 1.0,
                                "r": 1.0,
-                               "i": 1.0}
+                               "i": 1.0,
+                               "z": 1.0,
+                               "y": 1.0}
 
 config.deltaAperFitPerCcdNx = 2
 config.deltaAperFitPerCcdNy = 2
