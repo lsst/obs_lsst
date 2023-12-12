@@ -12,9 +12,10 @@ config.requiredBands = ["g", "r", "i"]
 config.nCore = 4
 config.cycleNumber = 0
 config.maxIterBeforeFinalCycle = 100
+config.minCcdPerExp = 1
 config.utBoundary = 0.0
 config.washMjds = (0.0, )
-# For tests, define 1 observing epoch that encompasses everything.
+# For now, define 1 observing epoch that encompasses everything.
 config.epochMjds = (0.0, 100000.0)
 config.coatingMjds = []
 config.latitude = -30.2333
@@ -30,7 +31,6 @@ config.expVarGrayPhotometricCutDict = {"g": 0.1**2.,
                                        "i": 0.1**2.,
                                        "z": 0.1**2.,
                                        "y": 0.1**2.}
-# For tests, make a broad cut for outliers.
 config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
 # Fit aperture corrections with only 2 bins to exercise the code.
