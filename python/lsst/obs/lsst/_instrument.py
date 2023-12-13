@@ -31,7 +31,7 @@ from lsst.obs.base import Instrument, VisitSystem
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
                       LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
                       TS8_FILTER_DEFINITIONS, COMCAM_FILTER_DEFINITIONS,
-                      GENERIC_FILTER_DEFINITIONS,
+                      GENERIC_FILTER_DEFINITIONS, UCD_FILTER_DEFINITIONS,
                       )
 
 from .translators import LatissTranslator, LsstCamTranslator, \
@@ -351,6 +351,7 @@ class Latiss(LsstCam):
 class LsstUCDCam(LsstCam):
     """Gen3 Butler specialization for UCDCam test stand data.
     """
+    filterDefinitions = UCD_FILTER_DEFINITIONS
     instrument = "LSST-UCDCam"
     policyName = "ucd"
     translatorClass = LsstUCDCamTranslator

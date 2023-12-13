@@ -79,4 +79,6 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             instrume = header["INSTRUME"].lower()
             if instrume == cls.supported_instrument.lower():
                 return True
+            elif instrume == "LSST-UCDCam-ITL".lower():
+                return True
         return False

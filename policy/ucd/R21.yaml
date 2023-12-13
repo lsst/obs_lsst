@@ -7,82 +7,82 @@ R21 :
   amplifiers :
     S01 :
       C10 : {
-        gain : 1.423,
+        gain : 1.698,
         readNoise : 8.7,
         saturation : 200000,
       }
       C11 : {
-        gain : 1.422,
+        gain : 1.677,
         readNoise : 8.9,
         saturation : 200000,
       }
       C12 : {
-        gain : 1.421,
+        gain : 1.654,
         readNoise : 8.8,
         saturation : 200000,
       }
       C13 : {
-        gain : 1.430,
+        gain : 1.654,
         readNoise : 8.9,
         saturation : 200000,
       }
       C14 : {
-        gain : 1.424,
+        gain : 1.679,
         readNoise : 9.8,
         saturation : 200000,
       }
       C15 : {
-        gain : 1.424,
+        gain : 1.667,
         readNoise : 10.6,
         saturation : 200000,
       }
       C16 : {
-        gain : 1.419,
+        gain : 1.663,
         readNoise : 8.8,
         saturation : 200000,
       }
       C17 : {
-        gain : 1.0,
+        gain : 1.681,
         readNoise : 10.1,
         saturation : 200000,
       }
       C07 : {
-        gain : 1.355,
+        gain : 1.777,
         readNoise : 6.3,
         saturation : 200000,
       }
       C06 : {
-        gain : 1.464,
+        gain : 1.779,
         readNoise : 7.2,
         saturation : 200000,
       }
       C05 : {
-        gain : 4.967,
+        gain : 1.769,
         readNoise : 155.4,
         saturation : 200000,
       }
       C04 : {
-        gain : 1.455,
+        gain : 1.766,
         readNoise : 6.8,
         saturation : 200000,
       }
       C03 : {
-        gain : 1.461,
+        gain : 1.776,
         readNoise : 6.8,
         saturation : 200000,
       }
       C02 : {
-        gain : 1.454,
+        gain : 1.758,
         readNoise : 7.2,
         saturation : 200000,
       }
       C01 : {
-        gain : 1.446,
+        gain : 1.785,
         readNoise : 8.2,
         saturation : 200000,
       }
       C00 : {
-        gain : 1.442,
+        gain : 1.783,
         readNoise : 10.0,
         saturation : 200000,
       }

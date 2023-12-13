@@ -27,6 +27,7 @@ __all__ = (
     "TS8_FILTER_DEFINITIONS",
     "COMCAM_FILTER_DEFINITIONS",
     "GENERIC_FILTER_DEFINITIONS",
+    "UCD_FILTER_DEFINITIONS",
 )
 
 from lsst.obs.base import FilterDefinition, FilterDefinitionCollection
@@ -248,7 +249,17 @@ TS8_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *BOTFilters,
     *CCOBFilters,
 )
+#
+# Filters in UC Davis Beam Simulator
+#
+UCDFilters = [
+    FilterDefinition(band="unknown", physical_filter="unknown")]
 
+UCD_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    EmptyFilter,
+    *LsstCamFiltersGeneric,
+    *UCDFilters,
+)
 
 # LATISS filters include a grating in the name so we need to construct
 # filters for each combination of filter+grating.
