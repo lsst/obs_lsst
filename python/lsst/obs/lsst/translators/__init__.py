@@ -16,3 +16,4 @@ from .imsim import *
 from .latiss import *
 from .lsst_ucdcam import *
 from .comCam import *
+from .comCamSim import *
