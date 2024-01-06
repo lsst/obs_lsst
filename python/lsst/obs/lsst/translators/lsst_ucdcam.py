@@ -69,6 +69,7 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             Header to convert to standardized form.
         filename : `str`, optional
             Name of file being translated.
+
         Returns
         -------
         can : `bool`
