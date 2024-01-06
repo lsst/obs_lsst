@@ -1272,9 +1272,27 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            detector_num=10,
                            detector_serial="E2V-CCD250-112-09",
                            exposure_time=1.0*u.s,
+                           observation_id="UCD-E2V-CCD250-20231031_000227_R21_S01",
                            observation_type="flat",
                            observation_reason="flat",
-                           observing_day=20231031))
+                           observing_day=20231031,
+                           physical_filter="r",
+                           science_program="2023-10-31"))
+                     ("UCD-ITL-3800C-TS_C_20230730_000237_R22_S01.yaml",
+                      dict(telescope=None,
+                           instrument="LSST-UCDCam",
+                           dark_time=3.082*u.s,
+                           detector_group="R22",
+                           detector_name="S01",
+                           detector_num=1,
+                           detector_serial="ITL-3800C-002",
+                           exposure_time=2.0*u.s,
+                           observation_id="UCD-ITL-3800C-TS_C_20230730_000237_R22_S01",
+                           observation_type="flat",
+                           observation_reason="flat",
+                           observing_day=20230730,
+                           physical_filter="r",
+                           science_program="2023-07-30"))
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
