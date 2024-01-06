@@ -1262,6 +1262,24 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                     warnings.simplefilter("ignore", VerifyWarning)
                     self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
+    def test_ucdcam_translator(self):
+        test_data = (("UCD-E2V-CCD250-20231031_000227_R21_S01.yaml",
+                      dict(telescope=None,
+                           instrument="LSST-UCDCam",
+                           dark_time=2.07859*u.s,
+                           detector_group="R21",
+                           detector_name="S01",
+                           detector_num=10,
+                           detector_serial="E2V-CCD250-112-09",
+                           exposure_time=1.0*u.s,
+                           observation_type="flat",
+                           observation_reason="flat",
+                           observing_day=20231031))
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
     def test_checker(self):
         filename = "latiss-future.yaml"
         from astro_metadata_translator.tests import read_test_file
