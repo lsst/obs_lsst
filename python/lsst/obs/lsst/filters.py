@@ -260,7 +260,6 @@ UCD_FILTER_DEFINITIONS = FilterDefinitionCollection(
     *LsstCamFiltersGeneric,
     *UCDFilters,
 )
-
 # LATISS filters include a grating in the name so we need to construct
 # filters for each combination of filter+grating.
 
