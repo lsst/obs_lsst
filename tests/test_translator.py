@@ -1263,7 +1263,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                     self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
 
     def test_ucdcam_translator(self):
-        test_data = (("UCD-E2V-CCD250-20231031_000227_R21_S01.yaml",
+        test_data = (("UCD-E2V-CCD250-TS_C_20231031_000227_R21_S01.yaml",
                       dict(telescope=None,
                            instrument="LSST-UCDCam",
                            dark_time=2.07859*u.s,
@@ -1280,7 +1280,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            group_counter_start=227,
                            has_simulated_content=False,
                            observation_counter=227,
-                           observation_id="UCD-E2V-CCD250-20231031_000227_R21_S01",
+                           observation_id="UCD-E2V-CCD250-TS_C_20231031_000227_R21_S01",
                            observation_type="flat",
                            observation_reason="flat",
                            observing_day=20231031,
