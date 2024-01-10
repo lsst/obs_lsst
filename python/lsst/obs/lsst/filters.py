@@ -256,7 +256,7 @@ UCDFilters = [
     FilterDefinition(band="unknown", physical_filter="unknown")]
 
 UCD_FILTER_DEFINITIONS = FilterDefinitionCollection(
-    EmptyFilter,
+    *NoFilterCollection,
     *LsstCamFiltersGeneric,
     *UCDFilters,
 )
