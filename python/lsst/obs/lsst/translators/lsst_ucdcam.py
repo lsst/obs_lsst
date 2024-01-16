@@ -77,6 +77,6 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
             otherwise.
         """
         if "INSTRUME" in header:
-            if header["INSTRUME"].lower() in (cls.supported_instrument.lower(), "LSST-UCDCam-ITL".lower())
+            if header["INSTRUME"].lower() in (cls.supported_instrument.lower(), "LSST-UCDCam-ITL".lower()):
                 return True
         return False
