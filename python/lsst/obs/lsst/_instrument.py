@@ -293,6 +293,38 @@ class LsstTS8(LsstCam):
         )
 
 
+class LsstUCDCam(LsstCam):
+    """Gen3 Butler specialization for UCDCam test stand data.
+    """
+    filterDefinitions = UCD_FILTER_DEFINITIONS
+    instrument = "LSST-UCDCam"
+    policyName = "ucd"
+    translatorClass = LsstUCDCamTranslator
+    visitSystem = VisitSystem.ONE_TO_ONE
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstUCDCamRawFormatter
+        return LsstUCDCamRawFormatter
+
+    def _make_default_dimension_packer(
+        self,
+        config_attr,
+        data_id,
+        is_exposure=None,
+        default="observation",
+    ):
+        # Docstring inherited from Instrument._make_default_dimension_packer.
+        # Only difference is the change to default above (which reverts back
+        # the default in lsst.pipe.base.Instrument).
+        return super()._make_default_dimension_packer(
+            config_attr,
+            data_id,
+            is_exposure=is_exposure,
+            default=default,
+        )
+
+
 class LsstTS3(LsstCam):
     """Gen3 Butler specialization for TS3 test stand data.
     """
@@ -346,35 +378,3 @@ class Latiss(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LatissRawFormatter
         return LatissRawFormatter
-
-
-class LsstUCDCam(LsstCam):
-    """Gen3 Butler specialization for UCDCam test stand data.
-    """
-    filterDefinitions = UCD_FILTER_DEFINITIONS
-    instrument = "LSST-UCDCam"
-    policyName = "ucd"
-    translatorClass = LsstUCDCamTranslator
-    visitSystem = VisitSystem.ONE_TO_ONE
-
-    def getRawFormatter(self, dataId):
-        # local import to prevent circular dependency
-        from .rawFormatter import LsstUCDCamRawFormatter
-        return LsstUCDCamRawFormatter
-
-    def _make_default_dimension_packer(
-        self,
-        config_attr,
-        data_id,
-        is_exposure=None,
-        default="observation",
-    ):
-        # Docstring inherited from Instrument._make_default_dimension_packer.
-        # Only difference is the change to default above (which reverts back
-        # the default in lsst.pipe.base.Instrument).
-        return super()._make_default_dimension_packer(
-            config_attr,
-            data_id,
-            is_exposure=is_exposure,
-            default=default,
-        )
