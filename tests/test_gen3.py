@@ -30,7 +30,7 @@ import numpy as np
 
 from astro_metadata_translator import ObservationInfo
 from lsst.obs.lsst import (LsstCam, LsstComCam, LsstCamImSim, LsstCamPhoSim,
-                           LsstTS8, LsstTS3, Latiss, readRawFitsHeader)
+                           LsstTS8, LsstTS3, LsstUCDCam, Latiss, readRawFitsHeader)
 
 from lsst.daf.butler import (
     Butler,
@@ -156,6 +156,10 @@ class TestInstruments(unittest.TestCase):
     def testTs3(self):
         self.checkInstrumentWithRegistry(LsstTS3,
                                          "ts3/raw/2016-07-22/201607220607067-R071-S00-det071.fits")
+
+    def testUcdCam(self):
+        self.checkInstrumentWithRegistry(LsstUCDCam,
+                                         "ucd/raw/2023-10-31/2023103100227-R21-S01-det010.fits")
 
     def testLatiss(self):
         self.checkInstrumentWithRegistry(Latiss,
