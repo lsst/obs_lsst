@@ -38,7 +38,7 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         return LsstUCDCam()
 
     def setUp(self):
-        dataIds = {'raw': {'exposure': 20180530150355, 'name_in_raft': 'S00', 'raft': 'R02'},
+        dataIds = {'raw': {'exposure': 3023073000237, 'name_in_raft': 'S01', 'raft': 'R22'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest
@@ -46,18 +46,25 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 48
-        exposureIds = {'raw': 201805301503552}
-        filters = {'raw': 'r'}
-        exptimes = {'raw': 0.5}
-        detectorIds = {'raw': 2}
-        detector_names = {'raw': 'R02_S00'}
-        detector_serials = {'raw': 'ITL-3800C-002'}
-        dimensions = {'raw': Extent2I(0, 0)}
+        exposureIds = {'raw': 302307300023701
+                       }
+        filters = {'raw': 'r'
+                   }
+        exptimes = {'raw': 2.0
+                    }
+        detectorIds = {'raw': 1
+                       }
+        detector_names = {'raw': 'R22_S01'
+                          }
+        detector_serials = {'raw': 'ITL-3800C-002'
+                            }
+        dimensions = {'raw': Extent2I(4608, 4096)
+                      }
         sky_origin = unittest.SkipTest
         raw_subsets = (({}, 2),
                        ({'physical_filter': 'r'}, 2),
                        ({'physical_filter': 'foo'}, 0),
-                       ({'exposure': 20180530150355}, 1),
+                       ({'exposure': 3023073000237}, 1), 
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -73,15 +80,26 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        self.raw_filename = '20180530150355-S00-det002.fits'
+        self.raw_filename = '3023073000237-R22-S01-det001.fits'
 
         self.setUp_camera(camera_name='LSST-UCDCam',
-                          n_detectors=4,
-                          first_detector_name='R00_S00',
+                          n_detectors=17,
+                          first_detector_name='R22_S00',
                           plate_scale=20.0 * arcseconds,
                           )
 
         super().setUp()
+
+    def testObsid(self):
+        """Check that we can retrieve data using the obsid."""
+        dataId = {'exposure': "TS_C_20230730_000237", 'name_in_raft': 'S01',
+                  'raft': 'R22'}
+        raw = self.butler.get('raw', dataId)
+        self.assertIsNotNone(raw)
+
+        # And that we can get just the header
+        md = self.butler.get('raw.metadata', dataId)
+        self.assertEqual(md["TELESCOP"], "LSST")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):

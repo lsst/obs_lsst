@@ -159,7 +159,7 @@ class TestInstruments(unittest.TestCase):
 
     def testUcdCam(self):
         self.checkInstrumentWithRegistry(LsstUCDCam,
-                                         "ucd/raw/2018-12-05/20181205233148-S00-det000.fits")
+                                         "ucd/raw/2023-10-31/2023103100227-R21-S01-det010.fits")
 
     def testLatiss(self):
         self.checkInstrumentWithRegistry(Latiss,
