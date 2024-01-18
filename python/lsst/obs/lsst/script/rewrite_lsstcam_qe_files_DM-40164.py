@@ -139,6 +139,8 @@ class SplineFitter:
         return ratio_model - 1.0
 
 
+debug_display = False
+
 data_path = lsst.utils.getPackageDir("obs_lsst_data")
 transmission_path = os.path.join(data_path, "lsstCam", "transmission_sensor")
 parquet_file = os.path.join(transmission_path, "qe_raft_allvalues_nircorrected_20230725.parquet")
@@ -168,7 +170,9 @@ n_amp_per_det = 16
 n_det_per_raft = 9
 
 # Nodes chosen to cover the wavelength range of the QE curve data.
-nodes = np.linspace(320.0, 1099.0, 20)
+# The number of nodes is chosen to be large enough to make the
+# corrections "well-matched" to the template.
+nodes = np.linspace(320.0, 1099.0, 40)
 
 # We will do all fitting at a standardized set of wavelengths.
 wavelengths = np.linspace(np.min(nodes), np.max(nodes), 1000)
@@ -265,6 +269,19 @@ for raft in questionable_rafts:
         throughput_ref,
         return_spline=True,
     )
+
+    if debug_display:
+        import matplotlib.pyplot as plt
+
+        corrected = np.array(spl.interpolate(wavelengths) * questionable_throughputs[raft])
+
+        plt.clf()
+        plt.plot(wavelengths, questionable_throughputs[raft], 'r-', label="Questionable")
+        plt.plot(wavelengths, throughput_ref, "b-", label="Reference")
+        plt.plot(wavelengths, corrected, "m-", label="Corrected")
+        plt.legend()
+        plt.title(f"Raft = {raft}")
+        plt.show()
 
     questionable_spline_correctors[raft] = spl
 
