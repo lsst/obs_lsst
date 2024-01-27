@@ -206,8 +206,8 @@ class LsstComCamSim(LsstCam):
 
     def getRawFormatter(self, dataId):
         # local import to prevent circular dependency
-        from .rawFormatter import LsstComCamRawFormatter
-        return LsstComCamRawFormatter
+        from .rawFormatter import LsstComCamSimRawFormatter
+        return LsstComCamSimRawFormatter
 
 
 class LsstCamImSim(LsstCam):
