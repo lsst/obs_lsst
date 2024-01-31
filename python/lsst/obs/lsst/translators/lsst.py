@@ -451,8 +451,8 @@ class LsstBaseTranslator(FitsTranslator):
         seqnum : `int`
             Sequence number.
         controller : `str`
-            Controller code.  Will be `O` (but should be ignored) for IDs
-            produced by calling `compute_exposure_id` with ``controller=None`.
+            Controller code.  Will be ``O`` (but should be ignored) for IDs
+            produced by calling `compute_exposure_id` with ``controller=None``.
         """
         dayobs, seqnum = divmod(exposure_id, 10**_SEQNUM_MAXDIGITS)
         controller_index = dayobs // _CONTROLLER_INCREMENT - 2
