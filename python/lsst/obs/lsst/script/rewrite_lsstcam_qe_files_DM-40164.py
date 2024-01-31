@@ -18,6 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# This script is a record of a one-time run for DM-40164.
+# See obs_lsst_data lsstCam/transmission_sensor/README.md
+# for details.
+
+
 import astropy.units as u
 from astropy.table import Table, QTable
 import re
