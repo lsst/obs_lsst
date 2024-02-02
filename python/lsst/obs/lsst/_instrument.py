@@ -22,6 +22,8 @@
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
            "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstComCamSim")
 
+import datetime
+import hashlib
 import os.path
 
 import lsst.obs.base.yamlCamera as yamlCamera
@@ -38,6 +40,8 @@ from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
     LsstComCamSimTranslator
+
+from .translators.lsst import GROUP_RE, TZERO_DATETIME
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -178,6 +182,76 @@ class LsstCam(Instrument):
             purpose=purpose,
             raft=group,
         )
+
+    @classmethod
+    def group_name_to_group_id(cls, group_name: str) -> int:
+        """Translate the exposure group name to an integer.
+
+        Parameters
+        ----------
+        group_name : `str`
+            The name of the exposure group.
+
+        Returns
+        -------
+        id : `int`
+            The exposure group name in integer form. This integer might be
+            used as an ID to uniquely identify the group in contexts where
+            a string can not be used.
+
+        Notes
+        -----
+        If given a group name that can be directly cast to an integer it
+        returns the integer. If the group name looks like an ISO date the ID
+        returned is seconds since an arbitrary recent epoch. Otherwise
+        the group name is hashed and the first 14 digits of the hash is
+        returned along with the length of the group name.
+        """
+        # If the group is an int we return it
+        try:
+            group_id = int(group_name)
+            return group_id
+        except ValueError:
+            pass
+
+        # A Group is defined as ISO date with an extension
+        # The integer must be the same for a given group so we can never
+        # use datetime_begin.
+        # Nominally a GROUPID looks like "ISODATE+N" where the +N is
+        # optional.  This can be converted to seconds since epoch with
+        # N being zero-padded to 4 digits and appended (defaulting to 0).
+        # For early data lacking that form we hash the group and return
+        # the int.
+        matches_date = GROUP_RE.match(group_name)
+        if matches_date:
+            iso_str = matches_date.group(1)
+            fraction = matches_date.group(2)
+            n = matches_date.group(3)
+            if n is not None:
+                n = int(n)
+            else:
+                n = 0
+            iso = datetime.datetime.strptime(iso_str, "%Y-%m-%dT%H:%M:%S")
+
+            tdelta = iso - TZERO_DATETIME
+            epoch = int(tdelta.total_seconds())
+
+            # Form the integer from EPOCH + 3 DIGIT FRAC + 0-pad N
+            group_id = int(f"{epoch}{fraction}{n:04d}")
+        else:
+            # Non-standard string so convert to numbers
+            # using a hash function. Use the first N hex digits
+            group_bytes = group_name.encode("us-ascii")
+            hasher = hashlib.blake2b(group_bytes)
+            # Need to be big enough it does not possibly clash with the
+            # date-based version above
+            digest = hasher.hexdigest()[:14]
+            group_id = int(digest, base=16)
+
+            # To help with hash collision, append the string length
+            group_id = int(f"{group_id}{len(group_name):02d}")
+
+        return group_id
 
 
 class LsstComCam(LsstCam):
