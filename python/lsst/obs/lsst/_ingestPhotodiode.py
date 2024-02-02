@@ -127,6 +127,11 @@ class PhotodiodeIngestTask(Task):
         registry = self.butler.registry
         registry.registerDatasetType(self.datasetType)
 
+        if "day_obs" in self.butler.dimensions["exposure"].implied:
+            day_obs_key = "day_obs"
+        else:
+            day_obs_key = "exposure.day_obs"
+
         # Find and register run that we will ingest to.
         if run is None:
             run = self.instrument.makeCollectionName("calib", "photodiode")
@@ -173,7 +178,7 @@ class PhotodiodeIngestTask(Task):
                 seqNum = calib.getMetadata()['seq_num']
 
                 # Find the associated exposure information.
-                whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
+                whereClause = f"{day_obs_key}=dayObs and exposure.seq_num=seqNum"
                 instrumentName = self.instrument.getName()
                 binding = {"dayObs": dayObs, "seqNum": seqNum}
                 logId = (dayObs, seqNum)
