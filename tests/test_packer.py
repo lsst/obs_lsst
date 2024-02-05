@@ -29,6 +29,7 @@ from lsst.obs.lsst import (
     LsstCamImSim,
     LsstCamPhoSim,
     LsstComCam,
+    LsstComCamSim,
     LsstTS3,
     LsstTS8,
     LsstUCDCam,
@@ -56,7 +57,8 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
         registry_config = RegistryConfig()
         registry_config["db"] = "sqlite://"
         self.registry = SqlRegistry.createFromConfig(registry_config)
-        self.rubin_packer_instruments = [LsstCam, LsstComCam, Latiss]
+        self.rubin_packer_instruments = [LsstCam, LsstComCam, LsstComCamSim,
+                                         Latiss]
         self.old_packer_instruments = [
             LsstCamImSim,
             LsstCamPhoSim,
@@ -244,6 +246,22 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             day_obs=20200911,
             seq_num=4,
             detector=5,
+        )
+
+    def test_comCamSim(self):
+        instrument = LsstComCamSim()
+        instrument.register(self.registry)
+        # Input values obtained from:
+        # $ butler query-dimension-records data/input/comCamSim exposure \
+        #      --where "instrument='LSSTComCamSim'" --limit 1
+        self.check_rubin_dimension_packer(
+            instrument,
+            is_exposure=False,
+            exposure_id=5024032100720,
+            day_obs=20240321,
+            seq_num=720,
+            detector=4,
+            controller="P"
         )
 
     def test_imsim(self):

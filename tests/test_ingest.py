@@ -29,7 +29,7 @@ import lsst.utils.tests
 
 from lsst.afw.math import flipImage
 from lsst.afw.cameraGeom import AmplifierGeometryComparison
-from lsst.daf.butler import Butler
+from lsst.daf.butler import Butler, DataCoordinate
 from lsst.daf.butler.cli.butler import cli as butlerCli
 from lsst.daf.butler.cli.utils import LogCliRunner
 from lsst.obs.base.ingest_tests import IngestTestBase
@@ -118,6 +118,34 @@ class ComCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
                         "3019053000001", "3019053000001-R22-S00-det000.fits")
     dataIds = [dict(instrument="LSSTComCam", exposure=3019053000001, detector=0)]
     filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
+
+
+class ComCamSimIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+
+    curatedCalibrationDatasetTypes = ("camera",)
+    instrumentClassName = "lsst.obs.lsst.LsstComCamSim"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "comCamSim", "raw", "2024-03-21",
+                        "5024032100720", "5024032100720-R22-S11-det004.fits.fz")
+    dataIds = [dict(instrument="LSSTComCamSim", exposure=5024032100720, detector=4)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="r_03", band="r")
+
+    @property
+    def visits(self):
+        butler = Butler(self.root, collections=[self.outputRun])
+        return {
+            DataCoordinate.standardize(
+                instrument="LSSTComCamSim",
+                visit=5024032100720,
+                universe=butler.dimensions
+            ): [
+                DataCoordinate.standardize(
+                    instrument="LSSTComCamSim",
+                    exposure=5024032100720,
+                    universe=butler.dimensions
+                )
+            ]
+        }
 
 
 class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):

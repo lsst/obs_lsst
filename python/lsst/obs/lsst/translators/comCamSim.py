@@ -13,9 +13,7 @@
 __all__ = ("LsstComCamSimTranslator", )
 
 import logging
-from numbers import Number
 
-from astropy.time import Time
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
 
@@ -39,7 +37,7 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         """Indicate whether this translation class can translate the
         supplied header.
 
-        Looks for "COMCAM" instrument in case-insensitive manner but
+        Looks for "COMCAMSIM" instrument in case-insensitive manner but
         must be on LSST telescope.  This avoids confusion with other
         telescopes using commissioning cameras.
 
