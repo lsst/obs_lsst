@@ -32,4 +32,5 @@ config.load(os.path.join(os.path.dirname(__file__), "..", "cmodel.py"))
 
 config.connections.refCat = "atlas_refcat2_20220201"
 
-config.doWriteMatchesDenormalized = True
+config.doMatchSources = False
+config.doWriteMatchesDenormalized = False
