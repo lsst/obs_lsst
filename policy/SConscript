@@ -18,7 +18,7 @@ libpathstr = lsst.sconsUtils.utils.libraryLoaderEnvironment()
 # the shebang
 python = "{} python".format(libpathstr)
 
-for camera in ["latiss", "lsstCam", "imsim", "phosim", "ts8", "ucd", "ts3", "comCam"]:
+for camera in ["latiss", "lsstCam", "imsim", "phosim", "ts8", "ucd", "ts3", "comCam", "comCamSim"]:
     # Invoke the bin.src variant so that we do not depend on the shebang
     # target having been run
     commandInst = env.Command(f"{camera}.yaml", "",

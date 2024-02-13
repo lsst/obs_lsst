@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
-           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam")
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstComCamSim")
 
 import os.path
 
@@ -36,7 +36,8 @@ from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
 
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
-    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator
+    LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
+    LsstComCamSimTranslator
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 
@@ -192,6 +193,21 @@ class LsstComCam(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstComCamRawFormatter
         return LsstComCamRawFormatter
+
+
+class LsstComCamSim(LsstCam):
+    """Gen3 Butler specialization for ComCamSim data.
+    """
+
+    filterDefinitions = COMCAM_FILTER_DEFINITIONS
+    instrument = "LSSTComCamSim"
+    policyName = "comCamSim"
+    translatorClass = LsstComCamSimTranslator
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstComCamSimRawFormatter
+        return LsstComCamSimRawFormatter
 
 
 class LsstCamImSim(LsstCam):

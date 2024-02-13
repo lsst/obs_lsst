@@ -51,8 +51,9 @@ SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 # Supported controller codes.
 # The order here directly relates to the resulting exposure ID
 # calculation. Do not reorder. Add new ones to the end.
-# OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS.
-CONTROLLERS = "OCHPQ"
+# OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS, S for
+# simulated images.
+CONTROLLERS = "OCHPQS"
 
 # Number of decimal digits allocated to the sequence number in exposure_ids.
 _SEQNUM_MAXDIGITS = 5
