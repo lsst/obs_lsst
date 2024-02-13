@@ -257,11 +257,11 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
         self.check_rubin_dimension_packer(
             instrument,
             is_exposure=False,
-            exposure_id=5024032100720,
+            exposure_id=7024032100720,
             day_obs=20240321,
             seq_num=720,
             detector=4,
-            controller="P"
+            controller="S"
         )
 
     def test_imsim(self):

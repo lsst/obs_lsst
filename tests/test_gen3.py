@@ -143,7 +143,7 @@ class TestInstruments(unittest.TestCase):
         self.checkInstrumentWithRegistry(LsstComCam, testFpath)
 
     def testComCamSim(self):
-        testFpath = "comCamSim/raw/2024-03-21/5024032100720/5024032100720-R22-S11-det004.fits.fz"
+        testFpath = "comCamSim/raw/2024-03-21/7024032100720/7024032100720-R22-S11-det004.fits.fz"
         self.checkInstrumentWithRegistry(LsstComCamSim, testFpath)
 
     def testImSim(self):

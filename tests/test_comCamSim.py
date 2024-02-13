@@ -38,7 +38,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         return LsstComCamSim()
 
     def setUp(self):
-        dataIds = {'raw': {'exposure': 5024032100720, 'name_in_raft': 'S11', 'raft': 'R22'},
+        dataIds = {'raw': {'exposure': 7024032100720, 'name_in_raft': 'S11', 'raft': 'R22'},
                    'bias': unittest.SkipTest,
                    'flat': unittest.SkipTest,
                    'dark': unittest.SkipTest,
@@ -46,7 +46,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         self.setUp_tests(self._butler, dataIds)
 
         ccdExposureId_bits = 52
-        exposureIds = {'raw': 5024032100720000,
+        exposureIds = {'raw': 7024032100720000,
                        }
         filters = {'raw': 'r_03',
                    }
@@ -65,7 +65,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         raw_subsets = (({}, 1),
                        ({'physical_filter': 'r_03'}, 1),
                        ({'physical_filter': 'foo'}, 0),
-                       ({'exposure': 5024032100720}, 1),
+                       ({'exposure': 7024032100720}, 1),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
@@ -81,7 +81,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                               linearizer_type=linearizer_type
                               )
 
-        self.raw_filename = '5024032100720-R22-S11-det004.fits.fz'
+        self.raw_filename = '7024032100720-R22-S11-det004.fits.fz'
 
         self.setUp_camera(camera_name='LSSTComCamSim',
                           n_detectors=9,
