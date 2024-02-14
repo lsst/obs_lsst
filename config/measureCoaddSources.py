@@ -20,9 +20,14 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-"""imSim-specific overrides for MeasureMergedCoaddSourcesTask"""
-
 import os.path
 
-config.match.refObjLoader.load(os.path.join(os.path.dirname(__file__), "filterMap.py"))
-config.connections.refCat = "cal_ref_cat"
+config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "convolvedFluxes.py"))
+config.measurement.load(os.path.join(os.path.dirname(__file__), "hsm.py"))
+config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
+
+config.doWriteMatchesDenormalized = True
+
+config.measurement.plugins.names |= ["base_InputCount"]
