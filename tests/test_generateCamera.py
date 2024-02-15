@@ -83,7 +83,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         """Test with ts8 in a test directory."""
         content = self.runGenerateCamera(["ts8", "lsstCam", os.path.curdir])
         self.assertEqual(content["name"], "LSST-TS8")
-        self.assertEqual(content["plateScale"], 20.0)
+        self.assertEqual(content["plateScale"], 20.005867576692737)
 
     def testGenerateCamera(self):
         """Test with lsstCam in a test directory."""
@@ -96,7 +96,7 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
         # Also make sure no bad names are sneaking through
         self.assertEqual([x for x in content['CCDs'] if 'W_' in x], [])
         self.assertEqual(content["name"], "LSSTCam")
-        self.assertEqual(content["plateScale"], 20.0)
+        self.assertEqual(content["plateScale"], 20.005867576692737)
         # SW0 is extrafocal is negative-z in DVCS
         self.assertEqual(content["CCDs"]["R04_SW0"]["offset"][2], -1.5)
 
