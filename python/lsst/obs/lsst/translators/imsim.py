@@ -15,6 +15,7 @@ __all__ = ("LsstCamImSimTranslator", )
 import logging
 import astropy.units as u
 from astropy.coordinates import Angle, AltAz
+from astropy.time import TimeDelta
 
 try:
     import erfa
@@ -57,6 +58,9 @@ class LsstCamImSimTranslator(LsstSimTranslator):
     }
 
     cameraPolicyFile = "policy/imsim.yaml"
+
+    _ROLLOVER_TIME = TimeDelta(0, scale="tai", format="sec")
+    """This instrument did not offset the observing day."""
 
     @classmethod
     def can_translate(cls, header, filename=None):

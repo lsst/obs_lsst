@@ -18,6 +18,7 @@ import astropy.io.fits as fits
 import astropy.units as u
 import astropy.units.cds as cds
 from astropy.coordinates import Angle
+from astropy.time import TimeDelta
 
 from astro_metadata_translator import cache_translation, merge_headers
 from astro_metadata_translator.translators.helpers import (
@@ -61,6 +62,9 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
     }
 
     cameraPolicyFile = "policy/phosim.yaml"
+
+    _ROLLOVER_TIME = TimeDelta(0, scale="tai", format="sec")
+    """This instrument did not offset the observing day."""
 
     @classmethod
     def can_translate(cls, header, filename=None):

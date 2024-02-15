@@ -178,7 +178,8 @@ class LsstBaseTranslator(FitsTranslator):
 
     _ROLLOVER_TIME = TimeDelta(12*60*60, scale="tai", format="sec")
     """Time delta for the definition of a Rubin Observatory start of day.
-    Used when the header is missing. See LSE-400 for details."""
+    Used when the header is missing. See LSE-400 or SITCOMTN-032 for details.
+    """
 
     @classmethod
     def __init_subclass__(cls, **kwargs):
