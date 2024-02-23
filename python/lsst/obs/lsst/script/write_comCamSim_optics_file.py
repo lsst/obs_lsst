@@ -73,7 +73,7 @@ optics_table.meta.update(
         "OBSTYPE": "transmission_optics",
         "TYPE": "transmission_optics",
         "CALIBCLS": "lsst.ip.isr.IntermediateOpticsTransmissionCurve",
-        "SOURCE": "throughputs package",
+        "SOURCE": "https://github.com/lsst/throughputs",
         "VERSION": 1.9,
     }
 )
