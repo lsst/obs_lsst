@@ -154,6 +154,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         """
         joined = super().to_physical_filter()
         while joined.endswith("~empty"):
-            joined = joined[:-len("~empty")]
+            joined = joined.removesuffix("~empty")
 
         return joined
