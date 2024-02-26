@@ -13,6 +13,9 @@
 __all__ = ("LsstCamTranslator", )
 
 import logging
+
+import pytz
+import astropy.time
 import astropy.units as u
 
 from astro_metadata_translator import cache_translation
@@ -24,6 +27,8 @@ log = logging.getLogger(__name__)
 
 # Normalized name of the LSST Camera
 LSST_CAM = "LSSTCam"
+
+_LSST_CAM_SHIP_DATE = 202406
 
 
 def is_non_science_or_lab(self):
@@ -157,3 +162,32 @@ class LsstCamTranslator(LsstBaseTranslator):
             joined = joined.removesuffix("~empty")
 
         return joined
+
+    @classmethod
+    def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
+        """Return the offset to use when calculating the observing day.
+
+        Parameters
+        ----------
+        observing_date : `astropy.time.Time`
+            The date of the observation. Unused.
+
+        Returns
+        -------
+        offset : `astropy.time.TimeDelta`
+            The offset to apply. During lab testing the offset is Pacific
+            Time which can mean UTC-7 or UTC-8 depending on daylight savings.
+            In Chile the offset is always UTC-12.
+        """
+        # Timezone calculations are slow. Only do this if the instrument
+        # is in the lab.
+        if int(observing_date.strftime("%Y%m")) > _LSST_CAM_SHIP_DATE:
+            return cls._ROLLOVER_TIME  # 12 hours in base class
+
+        # Convert the date to a datetime UTC.
+        pacific_tz = pytz.timezone("US/Pacific")
+        pacific_time = observing_date.utc.to_datetime(timezone=pacific_tz)
+
+        # We need the offset to go the other way.
+        offset = pacific_time.utcoffset() * -1
+        return astropy.time.TimeDelta(offset)
