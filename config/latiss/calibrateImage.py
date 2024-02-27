@@ -36,6 +36,7 @@ colors = config.photometry.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
 config.photometry.applyColorTerms = True
+config.photometry.photoCatName="atlas_refcat2_20220201"
 config.photometry.colorterms.load(os.path.join(config_dir, "colorterms.py"))
 
 # Note that the following two config values were validated on data taken in
