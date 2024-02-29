@@ -14,6 +14,7 @@ __all__ = ("LsstUCDCamTranslator", )
 
 import logging
 import astropy.units as u
+from astropy.time import TimeDelta
 
 from .lsst import LsstBaseTranslator
 
@@ -57,6 +58,9 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
     }
 
     cameraPolicyFile = "policy/ucd.yaml"
+
+    _ROLLOVER_TIME = TimeDelta(0, scale="tai", format="sec")
+    """This instrument did not offset the observing day."""
 
     @classmethod
     def can_translate(cls, header, filename=None):

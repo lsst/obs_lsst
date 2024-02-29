@@ -178,7 +178,8 @@ class LsstBaseTranslator(FitsTranslator):
 
     _ROLLOVER_TIME = TimeDelta(12*60*60, scale="tai", format="sec")
     """Time delta for the definition of a Rubin Observatory start of day.
-    Used when the header is missing. See LSE-400 for details."""
+    Used when the header is missing. See LSE-400 or SITCOMTN-032 for details.
+    """
 
     @classmethod
     def __init_subclass__(cls, **kwargs):
@@ -202,6 +203,25 @@ class LsstBaseTranslator(FitsTranslator):
             ``corrections`` directory within the ``obs_lsst`` package.
         """
         return [os.path.join(obs_lsst_packageDir, "corrections")]
+
+    @classmethod
+    def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
+        """Return the offset to use when calculating the observing day.
+
+        Parameters
+        ----------
+        observing_date : `astropy.time.Time`
+            The date of the observation. Unused.
+
+        Returns
+        -------
+        offset : `astropy.time.TimeDelta`
+            The offset to apply. The default implementation returns a fixed
+            number but subclasses can return a different value depending
+            on whether the instrument is in the instrument lab or on the
+            mountain.
+        """
+        return cls._ROLLOVER_TIME
 
     @classmethod
     def compute_detector_exposure_id(cls, exposure_id, detector_num):
@@ -806,10 +826,7 @@ class LsstBaseTranslator(FitsTranslator):
             self._used_these_cards("DAYOBS")
             return int(self._header["DAYOBS"])
 
-        # Calculate it ourselves correcting for the Rubin offset
-        date = self.to_datetime_begin().tai
-        date -= self._ROLLOVER_TIME
-        return int(date.strftime("%Y%m%d"))
+        return super().to_observing_day()
 
     @cache_translation
     def to_observation_counter(self):
