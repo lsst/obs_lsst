@@ -43,8 +43,8 @@ def attachRawWcsFromBoresight(exposure, dataIdForErrMsg=None):
     exposure : `lsst.afw.image.Exposure`
         Image object with attached metadata and detector components.
 
-    Return
-    ------
+    Returns
+    -------
     attached : `bool`
         If True, a WCS component was successfully created and attached to
         ``exposure``.
@@ -93,8 +93,8 @@ def fixAmpGeometry(inAmp, bbox, metadata, logCmd=None):
         functions.  Warnings about bad EXTNAMES are always sent directly to
         the module-level logger.
 
-    Return
-    ------
+    Returns
+    -------
     outAmp : `~lsst.afw.cameraGeom.Amplifier.Builder`
     modified : `bool`
         `True` if ``amp`` was modified; `False` otherwise.
@@ -299,7 +299,7 @@ def readRawAmps(fileName, detector):
     Returns
     -------
     ampExps : `list` of `lsst.afw.image.Exposure`
-       All the individual amps read from the file.
+        All the individual amps read from the file.
     """
     amps = []
     for hdu in range(1, len(detector)+1):
