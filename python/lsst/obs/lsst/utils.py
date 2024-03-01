@@ -36,7 +36,7 @@ def readRawFile(fileName, detector, dataId=None):
 
     Parameters
     ----------
-    filename : `str`
+    fileName : `str`
         The fully-qualified filename.
     detector : `lsst.afw.cameraGeom.Detector`
         Detector to associate with the returned Exposure.

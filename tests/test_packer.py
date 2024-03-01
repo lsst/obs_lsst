@@ -102,7 +102,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             Integer detector data ID value.
         controller : `str`, optional
             Controller code consistent with ``exposure_id``.
-        is_one_to_one_reinterpretatation : `bool`, optional
+        is_one_to_one_reinterpretation : `bool`, optional
             If `True`, this is a visit ID that represents the alternate
             interpretation of that exposure (which must be the first snap in a
             multi-snap sequence) as a standalone visit.

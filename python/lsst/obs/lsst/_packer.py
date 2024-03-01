@@ -38,7 +38,7 @@ def convert_day_obs_to_ordinal(day_obs: int) -> int:
     Parameters
     ----------
     day_obs : `int`
-       A YYYYMMDD decimal-digit integer.
+        A YYYYMMDD decimal-digit integer.
 
     Returns
     -------
@@ -63,7 +63,7 @@ def convert_ordinal_to_day_obs(day_ordinal: int) -> int:
     Returns
     -------
     day_obs : `int`
-       A YYYYMMDD decimal-digit integer.
+        A YYYYMMDD decimal-digit integer.
     """
     date = datetime.date.fromordinal(day_ordinal)
     return (date.year * 100 + date.month) * 100 + date.day
