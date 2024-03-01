@@ -27,3 +27,4 @@ config.doDefect=True
 config.overscan.fitType="MEDIAN_PER_ROW"
 config.overscan.doParallelOverscan=True
 config.cameraKeywordsToCompare=["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC"]
+config.saturation = 120000
