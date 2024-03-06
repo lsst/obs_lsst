@@ -23,6 +23,7 @@
 comCamSim-specific overrides for IsrTask
 """
 config.doDefect = False
+config.doBrighterFatter = True
 config.connections.newBFKernel = "bfk"
 config.doCrosstalk = False
 config.doFringe = False
