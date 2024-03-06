@@ -9,7 +9,6 @@ from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
 config.physicalFilterMap = LATISS_FILTER_DEFINITIONS.physical_to_band
 config.requiredBands = ["g", "r", "i"]
 
-config.nCore = 4
 config.cycleNumber = 0
 config.maxIterBeforeFinalCycle = 100
 config.minCcdPerExp = 1
