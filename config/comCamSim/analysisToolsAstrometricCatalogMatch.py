@@ -4,5 +4,5 @@ config.bands = ("g", "r", "i")
 config.referenceCatalogLoader.refObjLoader.anyFilterMapsToThis = "lsst_g"
 # refCatalog is the connections' defaultTemplate which controls connections
 # prerequisite input refCat and output matchedCatalog
-config.connections.refCatalog = "uw_stars_20240130"
+config.connections.refCatalog = "uw_stars_20240228"
 config.referenceCatalogLoader.refObjLoader.requireProperMotion = False

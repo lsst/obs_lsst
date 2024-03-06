@@ -23,7 +23,6 @@
 comCamSim-specific overrides for IsrTask
 """
 config.doDefect = False
-# TODO: Evaluate doBrighterFatter after initial DRP
-config.doBrighterFatter = False
+config.connections.newBFKernel = "bfk"
 config.doCrosstalk = False
 config.doFringe = False
