@@ -31,3 +31,21 @@ config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 config.astromRefObjLoader.anyFilterMapsToThis = None
 config.photoRefObjLoader.anyFilterMapsToThis = None
+
+# The following magnitude limits for reference objects used in the
+# astrometric and photometric calibrations were selected to more than
+# span the expected magnitude range of the icSrc catalog sources, i.e.
+# those available for the calibrations (see DM-43143 for example
+# distributions).  This is to avoid passing reference objects to the
+# matcher that sould not be in contention for matching (thus reducing
+# the chance of locking onto a bad match).
+# TODO: remove (or update) once DM-43168 is implemented.
+config.astrometry.referenceSelector.doMagLimit = True
+config.astrometry.referenceSelector.magLimit.fluxField = "lsst_r_flux"
+config.astrometry.referenceSelector.magLimit.minimum = 14.0
+config.astrometry.referenceSelector.magLimit.maximum = 22.0
+
+config.photoCal.match.referenceSelection.doMagLimit = True
+config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_r_flux"
+config.photoCal.match.referenceSelection.magLimit.minimum = 14.0
+config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
