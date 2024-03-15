@@ -335,8 +335,8 @@ class LatissTranslator(LsstBaseTranslator):
                 modified = True
 
         if date < TARGET_STARTS_SPECCOLON:
-            if "OBJECT" in header:
-                header["OBJECT"] = header['OBJECT'].replace('spec:', '')
+            if (obj := header.get("OBJECT", None)) is not None:
+                header["OBJECT"] = obj.replace('spec:', '')
                 modified = True
 
         if "RADESYS" in header:
