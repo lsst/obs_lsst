@@ -537,7 +537,14 @@ class LsstBaseTranslator(FitsTranslator):
         if self.is_key_ok("DATE-END"):
             return super().to_datetime_end()
 
-        return self.to_datetime_begin() + self.to_exposure_time()
+        exposure_time = self.to_exposure_time()
+        if exposure_time.value < 0.0:
+            # Some translators deliberately return -1.0s if the exposure
+            # time can not be determined. In that scenario set end time
+            # to the same value as the start time.
+            return self.to_datetime_begin()
+
+        return self.to_datetime_begin() + exposure_time
 
     @cache_translation
     def to_detector_num(self):
