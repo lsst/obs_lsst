@@ -522,7 +522,7 @@ class LsstBaseTranslator(FitsTranslator):
         try:
             # Try standard FITS headers
             return super().to_location()
-        except KeyError:
+        except (KeyError, TypeError):
             return self._DEFAULT_LOCATION
 
     @cache_translation
