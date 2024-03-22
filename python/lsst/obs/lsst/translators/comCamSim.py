@@ -13,6 +13,11 @@
 __all__ = ("LsstComCamSimTranslator", )
 
 import logging
+import warnings
+
+import astropy.utils.exceptions
+from astropy.coordinates import AltAz
+from astro_metadata_translator import cache_translation
 
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
@@ -98,3 +103,25 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         Until then, ALL non-calib ComCam data will look like it is on sky.
         """
         return True
+
+    @cache_translation
+    def to_altaz_begin(self):
+        # Tries to calculate the value. Simulated files for ops-rehearsal 3
+        # did not have the AZ/EL headers defined.
+        if self.are_keys_ok(["ELSTART", "AZSTART"]):
+            return super().to_altaz_begin()
+
+        # Calculate it from the RA/Dec and time.
+        # The time is not consistent with the HASTART/AMSTART values.
+        # This means that the elevation may well come out negative.
+        if self.are_keys_ok(["RA", "DEC"]):
+            # Derive from RADec in absence of any other information
+            radec = self.to_tracking_radec()
+            if radec is not None:
+                # This can trigger warnings because of the future dates
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", category=astropy.utils.exceptions.AstropyWarning)
+                    altaz = radec.transform_to(AltAz())
+                return altaz
+
+        return None
