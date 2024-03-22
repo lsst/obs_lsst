@@ -748,6 +748,11 @@ class LsstBaseTranslator(FitsTranslator):
         if not self._is_on_mountain():
             return None
 
+        # H controller data are sometimes science observations without
+        # having AZSTART header. The code lets those return nothing.
+        if self._get_controller_code() == "H" and not self.are_keys_ok(["ELSTART", "AZSTART"]):
+            return None
+
         # Always attempt to find the alt/az values regardless of observation
         # type.
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),

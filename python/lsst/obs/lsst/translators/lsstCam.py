@@ -72,7 +72,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         "telescope": SIMONYI_TELESCOPE,
         # Migrate these to full translations once test data appears that
         # includes them
-        "altaz_begin": None,
         "object": "UNKNOWN",
     }
 
