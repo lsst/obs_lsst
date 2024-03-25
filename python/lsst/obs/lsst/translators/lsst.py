@@ -53,7 +53,8 @@ SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 # calculation. Do not reorder. Add new ones to the end.
 # OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS, S for
 # simulated images.
-CONTROLLERS = "OCHPQS"
+SIMULATED_CONTROLLERS = "HPQS"
+CONTROLLERS = "OC" + SIMULATED_CONTROLLERS
 
 # Number of decimal digits allocated to the sequence number in exposure_ids.
 _SEQNUM_MAXDIGITS = 5
@@ -970,10 +971,10 @@ class LsstBaseTranslator(FitsTranslator):
             if "SIMULATE" in k and v:
                 return True
 
-        # If the controller is H, P, or Q then the data are simulated.
+        # If the controller is H, P, S, or Q then the data are simulated.
         controller = self._get_controller_code()
         if controller:
-            if controller in "HPQ":
+            if controller in SIMULATED_CONTROLLERS:
                 return True
 
         # No simulation flags set.
