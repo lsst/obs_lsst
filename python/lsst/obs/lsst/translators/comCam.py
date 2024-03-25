@@ -78,8 +78,8 @@ class LsstComCamTranslator(LsstCamTranslator):
             if instrument == "comcam" and telescope in (SIMONYI_TELESCOPE, "LSST"):
                 return True
             telcode = header.get("TELCODE", None)
-            # Some lab data reports that it is LSST_CAMERA
-            if telcode == "CC" and telescope in (SIMONYI_TELESCOPE, "LSST"):
+            # Some lab data from 2019 reports that it is LSST_CAMERA.
+            if telcode == "CC" and instrument == "lsst_camera":
                 return True
 
         return False
@@ -126,6 +126,11 @@ class LsstComCamTranslator(LsstCamTranslator):
             log.warning("%s: replaced FILTER %s with \"%s\"",
                         log_label, physical_filter_str, header["FILTER"])
             modified = True
+
+        if header.get("INSTRUME") == "LSST_CAMERA":
+            header["INSTRUME"] = "ComCam"  # Must match the can_translate check above
+            modified = True
+            log.debug("%s: Correct instrument header for ComCam", log_label)
 
         if "LSST_NUM" not in header:
             slot = header.get("CCDSLOT", None)
