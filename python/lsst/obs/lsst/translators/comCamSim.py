@@ -82,6 +82,40 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         """
         modified = False
 
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
+
+        # Some simulated files lack RASTART/DECSTART etc headers. Since these
+        # are simulated they can be populated directly from the RA/DEC headers.
+        synced_radec = False
+        for key in ("RA", "DEC"):
+            for time in ("START", "END"):
+                time_key = f"{key}{time}"
+                if not header.get(time_key):
+                    if (value := header.get(key)):
+                        header[time_key] = value
+                        synced_radec = True
+        if synced_radec:
+            modified = True
+            log.debug("%s: Synced RASTART/RAEND/DECSTART/DECEND headers with RA/DEC headers", log_label)
+
+        if not header.get("RADESYS") and header.get("RA") and header.get("DEC"):
+            header["RADESYS"] = "ICRS"
+            log.debug("%s: Forcing undefined RADESYS to '%s'", log_label, header["RADESYS"])
+            modified = True
+
+        if not header.get("TELCODE"):
+            if camcode := header.get("CAMCODE"):
+                header["TELCODE"] = camcode
+                modified = True
+                log.debug("%s: Setting TELCODE header from CAMCODE header", log_label)
+            else:
+                # Get the code from the OBSID.
+                code, _ = obsid.split("_", 1)
+                header["TELCODE"] = code
+                modified = True
+                log.debug("%s: Determining telescope code of %s from OBSID", log_label, code)
+
         return modified
 
     def _is_on_mountain(self):
