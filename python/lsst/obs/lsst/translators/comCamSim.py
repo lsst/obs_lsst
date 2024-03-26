@@ -13,6 +13,11 @@
 __all__ = ("LsstComCamSimTranslator", )
 
 import logging
+import warnings
+
+import astropy.utils.exceptions
+from astropy.coordinates import AltAz
+from astro_metadata_translator import cache_translation
 
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
@@ -59,10 +64,6 @@ class LsstComCamSimTranslator(LsstCamTranslator):
             instrument = header["INSTRUME"].lower()
             if instrument == "comcamsim" and telescope in (SIMONYI_TELESCOPE, "LSST"):
                 return True
-            telcode = header.get("TELCODE", None)
-            # Some lab data reports that it is LSST_CAMERA
-            if telcode == "CC" and telescope in (SIMONYI_TELESCOPE, "LSST"):
-                return True
 
         return False
 
@@ -81,6 +82,40 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         """
         modified = False
 
+        # Calculate the standard label to use for log messages
+        log_label = cls._construct_log_prefix(obsid, filename)
+
+        # Some simulated files lack RASTART/DECSTART etc headers. Since these
+        # are simulated they can be populated directly from the RA/DEC headers.
+        synced_radec = False
+        for key in ("RA", "DEC"):
+            for time in ("START", "END"):
+                time_key = f"{key}{time}"
+                if not header.get(time_key):
+                    if (value := header.get(key)):
+                        header[time_key] = value
+                        synced_radec = True
+        if synced_radec:
+            modified = True
+            log.debug("%s: Synced RASTART/RAEND/DECSTART/DECEND headers with RA/DEC headers", log_label)
+
+        if not header.get("RADESYS") and header.get("RA") and header.get("DEC"):
+            header["RADESYS"] = "ICRS"
+            log.debug("%s: Forcing undefined RADESYS to '%s'", log_label, header["RADESYS"])
+            modified = True
+
+        if not header.get("TELCODE"):
+            if camcode := header.get("CAMCODE"):
+                header["TELCODE"] = camcode
+                modified = True
+                log.debug("%s: Setting TELCODE header from CAMCODE header", log_label)
+            else:
+                # Get the code from the OBSID.
+                code, _ = obsid.split("_", 1)
+                header["TELCODE"] = code
+                modified = True
+                log.debug("%s: Determining telescope code of %s from OBSID", log_label, code)
+
         return modified
 
     def _is_on_mountain(self):
@@ -98,3 +133,25 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         Until then, ALL non-calib ComCam data will look like it is on sky.
         """
         return True
+
+    @cache_translation
+    def to_altaz_begin(self):
+        # Tries to calculate the value. Simulated files for ops-rehearsal 3
+        # did not have the AZ/EL headers defined.
+        if self.are_keys_ok(["ELSTART", "AZSTART"]):
+            return super().to_altaz_begin()
+
+        # Calculate it from the RA/Dec and time.
+        # The time is not consistent with the HASTART/AMSTART values.
+        # This means that the elevation may well come out negative.
+        if self.are_keys_ok(["RA", "DEC"]):
+            # Derive from RADec in absence of any other information
+            radec = self.to_tracking_radec()
+            if radec is not None:
+                # This can trigger warnings because of the future dates
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", category=astropy.utils.exceptions.AstropyWarning)
+                    altaz = radec.transform_to(AltAz())
+                return altaz
+
+        return None

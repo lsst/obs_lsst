@@ -333,7 +333,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            exposure_id=5024011700000,
                            exposure_group="5024011700000",
                            exposure_time=0.0*u.s,
-                           focus_z=0.0*u.mm,
+                           focus_z=0.0 * u.mm,
                            group_counter_end=5024011700000,
                            group_counter_start=5024011700000,
                            has_simulated_content=True,
@@ -350,10 +350,41 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                            temperature=None,
                            visit_id=5024011700000,
                            )),
+                     ("comCamSim-CC_S_20240321_000093_R22_S22.yaml",
+                      dict(telescope="Simonyi Survey Telescope",
+                           instrument="LSSTComCamSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=33.0546 * u.s,
+                           detector_group="R22",
+                           detector_name="S22",
+                           detector_num=8,
+                           detector_serial="ITL-3800C-206",
+                           exposure_id=7024032100093,
+                           exposure_group="2024-03-22T03:41:54.994",
+                           exposure_time=30.0 * u.s,
+                           focus_z=0.0 * u.mm,
+                           group_counter_end=93,
+                           group_counter_start=93,
+                           has_simulated_content=True,
+                           object="TEST",
+                           observation_counter=93,
+                           observation_id="CC_S_20240321_000093",
+                           observation_type="science",
+                           observation_reason="object",
+                           observing_day=20240321,
+                           physical_filter="r_03",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="unknown",
+                           temperature=None,
+                           visit_id=2910085149940000,
+                           )),
                      )
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
-                self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+                self.assertObservationInfoFromYaml(
+                    filename, dir=self.datadir, check_wcs=False, **expected
+                )
 
     def test_phoSimComCam_translator(self):
         test_data = (("comCam-CC_H_20100217_006001_R22_S00.yaml",

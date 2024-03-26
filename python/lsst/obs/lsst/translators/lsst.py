@@ -53,7 +53,8 @@ SIMONYI_TELESCOPE = "Simonyi Survey Telescope"
 # calculation. Do not reorder. Add new ones to the end.
 # OCS, CCS, pHosim, P for simulated OCS, Q for simulated CCS, S for
 # simulated images.
-CONTROLLERS = "OCHPQS"
+SIMULATED_CONTROLLERS = "HPQS"
+CONTROLLERS = "OC" + SIMULATED_CONTROLLERS
 
 # Number of decimal digits allocated to the sequence number in exposure_ids.
 _SEQNUM_MAXDIGITS = 5
@@ -602,6 +603,23 @@ class LsstBaseTranslator(FitsTranslator):
             darktime = self.to_exposure_time()
         return darktime
 
+    def _get_controller_code(self) -> str | None:
+        """Return the controller code.
+
+        Returns
+        -------
+        code : `str`
+            Single character code representing the controller. Returns
+            `None` if no controller can be determined.
+        """
+        key = "CONTRLLR"
+        if self.is_key_ok(key):
+            controller = self._header[key]
+            self._used_these_cards(key)
+        else:
+            controller = None
+        return controller
+
     @cache_translation
     def to_exposure_id(self):
         """Generate a unique exposure ID number
@@ -622,11 +640,7 @@ class LsstBaseTranslator(FitsTranslator):
         seqnum = self._header["SEQNUM"]
         self._used_these_cards("DAYOBS", "SEQNUM")
 
-        if self.is_key_ok("CONTRLLR"):
-            controller = self._header["CONTRLLR"]
-            self._used_these_cards("CONTRLLR")
-        else:
-            controller = None
+        controller = self._get_controller_code()
 
         return self.compute_exposure_id(dayobs, seqnum, controller=controller)
 
@@ -733,6 +747,11 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_altaz_begin(self):
         if not self._is_on_mountain():
+            return None
+
+        # H controller data are sometimes science observations without
+        # having AZSTART header. The code lets those return nothing.
+        if self._get_controller_code() == "H" and not self.are_keys_ok(["ELSTART", "AZSTART"]):
             return None
 
         # Always attempt to find the alt/az values regardless of observation
@@ -952,12 +971,10 @@ class LsstBaseTranslator(FitsTranslator):
             if "SIMULATE" in k and v:
                 return True
 
-        # If the controller is H, P, or Q then the data are simulated.
-        ctrlr_key = "CONTRLLR"
-        if self.is_key_ok(ctrlr_key):
-            controller = self._header[ctrlr_key]
-            self._used_these_cards(ctrlr_key)
-            if controller in "HPQ":
+        # If the controller is H, P, S, or Q then the data are simulated.
+        controller = self._get_controller_code()
+        if controller:
+            if controller in SIMULATED_CONTROLLERS:
                 return True
 
         # No simulation flags set.

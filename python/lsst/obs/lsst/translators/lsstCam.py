@@ -70,10 +70,6 @@ class LsstCamTranslator(LsstBaseTranslator):
     _const_map = {
         "instrument": LSST_CAM,
         "telescope": SIMONYI_TELESCOPE,
-        # Migrate these to full translations once test data appears that
-        # includes them
-        "altaz_begin": None,
-        "object": "UNKNOWN",
     }
 
     _trivial_map = {
@@ -82,6 +78,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         "observation_id": "OBSID",
         "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
+        "object": ("OBJECT", dict(default="UNKNOWN")),
         "science_program": (["PROGRAM", "RUNNUM"], dict(default="unknown")),
         "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
                                                                  default=0.0, unit=u.deg)),
