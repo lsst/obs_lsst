@@ -49,3 +49,6 @@ config.photoCal.match.referenceSelection.doMagLimit = True
 config.photoCal.match.referenceSelection.magLimit.fluxField = "lsst_r_flux"
 config.photoCal.match.referenceSelection.magLimit.minimum = 14.0
 config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
+
+# Exposure summary stats
+config.computeSummaryStats.load(os.path.join(configDir, "computeExposureSummaryStats.py"))
