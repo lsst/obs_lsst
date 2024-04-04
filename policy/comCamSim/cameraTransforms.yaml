@@ -1,6 +1,7 @@
 # Provide transformations *from* the nativeSys *to* the specified system (e.g. FieldAngle)
+# Updated to use the LSSTCam values, since those were accidentally used in making the simulated images used for Ops rehearsal 3
 
-plateScale : 20.018130891688713                     # plate scale, in arcseconds on sky/mm
+plateScale : 20.005867576692737         # plate scale, in arcseconds on sky/mm
 
 transforms :
   nativeSys : FocalPlane
@@ -12,4 +13,4 @@ transforms :
 
   FieldAngle :
     transformType : radial
-    coeffs : [0.0, 1.0, 0.0, 9.27930280e-08, 0.0, 2.41770368e-13]     # radial distortion coefficients (c_0 + c_1 r + c_2 r^2 + ...)
+    coeffs : [0.0, 1.0, 0.0, -8.33713991e-09, 0.0, -1.41389858e-15]     # radial distortion coefficients (c_0 + c_1 r + c_2 r^2 + ...)
