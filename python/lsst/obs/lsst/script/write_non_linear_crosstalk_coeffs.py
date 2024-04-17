@@ -117,18 +117,11 @@ for det_id, detector in enumerate(camera):
                     c1_matrix[k, j, i] = 0.0
                     continue
                 try:
-                    c0_matrix[k, j, i] = crosstalk_results[det_name][det_name][
-                        target_segment
-                    ][source_segment]["c0"]
-                    c1_matrix[k, j, i] = crosstalk_results[det_name][det_name][
-                        target_segment
-                    ][source_segment]["c1"]
-                    c0_error[k, j, i] = crosstalk_results[det_name][det_name][
-                        target_segment
-                    ][source_segment]["c0Error"]
-                    c1_error[k, j, i] = crosstalk_results[det_name][det_name][
-                        target_segment
-                    ][source_segment]["c1Error"]
+                    this_ct_result = crosstalk_results[det_name][det_name]
+                    c0_matrix[k, j, i] = this_ct_result[target_segment][source_segment]["c0"]
+                    c1_matrix[k, j, i] = this_ct_result[target_segment][source_segment]["c1"]
+                    c0_error[k, j, i] = this_ct_result[target_segment][source_segment]["c0Error"]
+                    c1_error[k, j, i] = this_ct_result[target_segment][source_segment]["c1Error"]
                 except KeyError:
                     continue
 
