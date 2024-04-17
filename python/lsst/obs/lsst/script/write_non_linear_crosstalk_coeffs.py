@@ -33,6 +33,8 @@ camera = butler.get("camera", instrument="LSSTCam", collections=["LSSTCam/calib"
 
 # PTC in butler query-collections /sdf/group/rubin/repo/main
 #  u/snyder18/*crosstalk_analysis*
+# PTC for the crosstalk coefficients persisted in the
+# u/snyder18/*crosstalk_analysis* collections used below.
 butlerPtc = Butler(repo, collections="u/lsstccs/ptc_13144_w_2023_22/20230607T013806Z")
 
 for det_id, detector in enumerate(camera):
