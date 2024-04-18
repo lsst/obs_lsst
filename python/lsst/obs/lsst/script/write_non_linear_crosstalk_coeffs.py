@@ -31,10 +31,13 @@ butler = Butler(repo)
 registry = butler.registry
 camera = butler.get("camera", instrument="LSSTCam", collections=["LSSTCam/calib"])
 
-# PTC in butler query-collections /sdf/group/rubin/repo/main
+# PTC RUN collection found via
+# butler query-collections /sdf/group/rubin/repo/main
 #  u/snyder18/*crosstalk_analysis*
 # PTC for the crosstalk coefficients persisted in the
-# u/snyder18/*crosstalk_analysis* collections used below.
+# u/snyder18/13199/crosstalk_analysis/20240406T213728Z and
+# u/snyder18/13198/crosstalk_analysis/20240406T214205Z
+# collections used below.
 butlerPtc = Butler(repo, collections="u/lsstccs/ptc_13144_w_2023_22/20230607T013806Z")
 
 for det_id, detector in enumerate(camera):
@@ -85,12 +88,14 @@ for det_id, detector in enumerate(camera):
     # The coefficients are in two collections
     if det_id < 99:
         run_num = 13198
+        run_col = "20240406T214205Z"
     else:
         run_num = 13199
+        run_col = "20240406T213728Z"
 
     # Crosstalk from A. Snyder (UCDavis, 2024)
-    collections = "u/snyder18/{0}/crosstalk_analysis".format(run_num)
-    where = "instrument='LSSTCam'" + " and detector={0}".format(det_id)
+    collections = f"u/snyder18/{run_num}/crosstalk_analysis/{run_col}"
+    where = "instrument='LSSTCam'" + f" and detector={det_id}"
 
     data_refs = list(
         registry.queryDatasets("crosstalkResults", collections=collections, where=where)
