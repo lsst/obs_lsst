@@ -34,6 +34,7 @@ camera = butler.get("camera", instrument="LSSTCam", collections=["LSSTCam/calib"
 # PTC RUN collection found via
 # butler query-collections /sdf/group/rubin/repo/main
 #  u/snyder18/*crosstalk_analysis*
+
 # PTC for the crosstalk coefficients persisted in the
 # u/snyder18/13199/crosstalk_analysis/20240406T213728Z and
 # u/snyder18/13198/crosstalk_analysis/20240406T214205Z
@@ -143,21 +144,25 @@ for det_id, detector in enumerate(camera):
     # PTC gains, to save matrix of gain ratios
     ptc = butlerPtc.get("ptc", instrument="LSSTCam", detector=det_id)
     gain_ratios_matrix = np.full((nAmp, nAmp), np.nan)
-
+    # Use this same loop to set the diagonal of the
+    # crosstalk matrices to invalid
+    coeff_valid_matrix = np.full((nAmp, nAmp), True)
     for i in range(nAmp):
         target_segment = AMP2SEG[i + 1]
         for j in range(nAmp):
             source_segment = AMP2SEG[j + 1]
             if i == j:
                 gain_ratios_matrix[j, i] = 1.0
+                coeff_valid_matrix[j, i] = False
                 continue
             gain_source = ptc.gain[source_segment]
             gain_target = ptc.gain[target_segment]
             gain_ratios_matrix[j, i] = gain_target / gain_source
 
-    # Units are e-/e-. "e" is the default in crosstalk calib class
-    # of ip_isr.
+    # Units are e-/e-.
+    cc.crosstalkRatiosUnits = 'electron'
     cc.ampGainRatios = gain_ratios_matrix
+    cc.coeffValid = coeff_valid_matrix
 
     # Save the ecsv files
     valid_start = "1970-01-01T00:00:00"
