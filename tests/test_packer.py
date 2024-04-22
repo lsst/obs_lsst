@@ -28,6 +28,7 @@ from lsst.obs.lsst import (
     LsstCam,
     LsstCamImSim,
     LsstCamPhoSim,
+    LsstCamSim,
     LsstComCam,
     LsstComCamSim,
     LsstTS3,
@@ -262,6 +263,22 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             seq_num=720,
             detector=4,
             controller="S"
+        )
+
+    def test_lsstCamSim(self):
+        instrument = LsstCamSim()
+        instrument.register(self.registry)
+        # Input values obtained from:
+        # $ butler query-dimension-records data/input/lsstCamSim exposure \
+        #      --where "instrument='LSSTCamSim'" --limit 1
+        self.check_rubin_dimension_packer(
+            instrument,
+            is_exposure=True,
+            exposure_id=7024032100720,
+            day_obs=20240321,
+            seq_num=720,
+            detector=94,
+            controller="S",
         )
 
     def test_imsim(self):

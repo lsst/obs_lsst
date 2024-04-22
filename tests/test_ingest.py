@@ -159,6 +159,34 @@ class LSSTCamIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     filterLabel = lsst.afw.image.FilterLabel(physical="unknown", band="unknown")
 
 
+class LSSTCamSimIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
+
+    curatedCalibrationDatasetTypes = ("camera",)
+    instrumentClassName = "lsst.obs.lsst.LsstCamSim"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "lsstCamSim", "raw", "2024-03-21",
+                        "7024032100720", "7024032100720-R22-S11-det094.fits.fz")
+    dataIds = [dict(instrument="LSSTCamSim", exposure=7024032100720, detector=94)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="r_57", band="r")
+
+    @property
+    def visits(self):
+        butler = Butler(self.root, collections=[self.outputRun])
+        return {
+            DataCoordinate.standardize(
+                instrument="LSSTCamSim",
+                visit=7024032100720,
+                universe=butler.dimensions
+            ): [
+                DataCoordinate.standardize(
+                    instrument="LSSTCamSim",
+                    exposure=7024032100720,
+                    universe=butler.dimensions
+                )
+            ]
+        }
+
+
 class LSSTCamPhotodiodeIngestTestCase(lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.LsstCam"
     rawIngestTask = "lsst.obs.base.RawIngestTask"
