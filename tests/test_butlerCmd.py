@@ -44,6 +44,10 @@ class TestButlerCmdLsstCamPhoSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.LsstCamPhoSim"
 
 
+class TestButlerCmdLsstCamSim(ButlerCmdTestBase, lsst.utils.tests.TestCase):
+    instrumentClassName = "lsst.obs.lsst.LsstCamSim"
+
+
 class TestButlerCmdLsstTS8(ButlerCmdTestBase, lsst.utils.tests.TestCase):
     instrumentClassName = "lsst.obs.lsst.LsstTS8"
 

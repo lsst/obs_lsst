@@ -20,7 +20,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
-           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstComCamSim")
+           "Latiss", "LsstTS3", "LsstUCDCam", "LsstComCam", "LsstComCamSim",
+           "LsstCamSim")
 
 import datetime
 import hashlib
@@ -39,7 +40,7 @@ from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
 from .translators import LatissTranslator, LsstCamTranslator, \
     LsstUCDCamTranslator, LsstTS3Translator, LsstComCamTranslator, \
     LsstCamPhoSimTranslator, LsstTS8Translator, LsstCamImSimTranslator, \
-    LsstComCamSimTranslator
+    LsstComCamSimTranslator, LsstCamSimTranslator
 
 from .translators.lsst import GROUP_RE, TZERO_DATETIME
 
@@ -282,6 +283,21 @@ class LsstComCamSim(LsstCam):
         # local import to prevent circular dependency
         from .rawFormatter import LsstComCamSimRawFormatter
         return LsstComCamSimRawFormatter
+
+
+class LsstCamSim(LsstCam):
+    """Gen3 Butler specialization for LSSTCamSim data.
+    """
+
+    filterDefinitions = LSSTCAM_FILTER_DEFINITIONS
+    instrument = "LSSTCamSim"
+    policyName = "lsstCamSim"
+    translatorClass = LsstCamSimTranslator
+
+    def getRawFormatter(self, dataId):
+        # local import to prevent circular dependency
+        from .rawFormatter import LsstCamSimRawFormatter
+        return LsstCamSimRawFormatter
 
 
 class LsstCamImSim(LsstCam):

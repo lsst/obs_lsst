@@ -256,6 +256,43 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir,
                                                    check_wcs=False, **expected)
 
+    def test_lsstCamSim_translator(self):
+        test_data = (("lsstCamSim-MC_S_20240321_000720_R22_S11.yaml",
+                      dict(telescope="Simonyi Survey Telescope",
+                           instrument="LSSTCamSim",
+                           boresight_rotation_coord="sky",
+                           dark_time=30.0*u.s,
+                           detector_exposure_id=730756993118,
+                           detector_group="R22",
+                           detector_name="S11",
+                           detector_num=94,
+                           detector_serial="E2V-CCD250-382",
+                           detector_unique_name="R22_S11",
+                           exposure_group="7024032100720",
+                           exposure_id=7024032100720,
+                           exposure_time=30.0*u.s,
+                           focus_z=0.0*u.mm,
+                           group_counter_end=720,
+                           group_counter_start=720,
+                           has_simulated_content=True,
+                           object="UNKNOWN",
+                           observation_counter=720,
+                           observation_id="MC_S_20240321_000720",
+                           observation_reason="survey",
+                           observation_type="science",
+                           observing_day=20240321,
+                           physical_filter="r_57",
+                           pressure=None,
+                           relative_humidity=None,
+                           science_program="720",
+                           temperature=None,
+                           visit_id=7024032100720)),
+                     )
+        for filename, expected in test_data:
+            with self.subTest(f"Testing {filename}"):
+                self.assertObservationInfoFromYaml(filename, dir=self.datadir,
+                                                   check_wcs=False, **expected)
+
     def test_comCam_translator(self):
         test_data = (("comCam-CC_C_20190530_000001_R22_S00.yaml",
                       dict(telescope="Simonyi Survey Telescope",
