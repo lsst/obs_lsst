@@ -125,9 +125,9 @@ class ComCamSimIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
     curatedCalibrationDatasetTypes = ("camera",)
     instrumentClassName = "lsst.obs.lsst.LsstComCamSim"
     ingestDir = TESTDIR
-    file = os.path.join(DATAROOT, "comCamSim", "raw", "2024-03-21",
-                        "7024032100720", "7024032100720-R22-S11-det004.fits.fz")
-    dataIds = [dict(instrument="LSSTComCamSim", exposure=7024032100720, detector=4)]
+    file = os.path.join(DATAROOT, "comCamSim", "raw", "2024-04-04",
+                        "7024040400780", "CC_S_20240404_000780_R22_S01.fits")
+    dataIds = [dict(instrument="LSSTComCamSim", exposure=7024040400780, detector=1)]
     filterLabel = lsst.afw.image.FilterLabel(physical="r_03", band="r")
 
     @property
@@ -136,12 +136,12 @@ class ComCamSimIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):
         return {
             DataCoordinate.standardize(
                 instrument="LSSTComCamSim",
-                visit=7024032100720,
+                visit=7024040400780,
                 universe=butler.dimensions
             ): [
                 DataCoordinate.standardize(
                     instrument="LSSTComCamSim",
-                    exposure=7024032100720,
+                    exposure=7024040400780,
                     universe=butler.dimensions
                 )
             ]
