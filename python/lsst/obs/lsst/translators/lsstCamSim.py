@@ -13,6 +13,7 @@
 __all__ = ("LsstCamSimTranslator",)
 
 import logging
+import astropy
 
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
@@ -76,3 +77,8 @@ class LsstCamSimTranslator(LsstCamTranslator):
         # Currently, no fixes are required.
 
         return modified
+
+    @classmethod
+    def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
+        # Always use the 12 hour offset.
+        return cls._ROLLOVER_TIME

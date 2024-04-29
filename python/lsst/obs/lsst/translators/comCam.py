@@ -50,6 +50,10 @@ class LsstComCamTranslator(LsstCamTranslator):
     # Use the comCam raft definition
     cameraPolicyFile = "policy/comCam.yaml"
 
+    # Date (YYYYMM) the camera changes from using lab day_offset (Pacific time)
+    # to summit day_offset (12 hours).
+    _CAMERA_SHIP_DATE = 202003
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the

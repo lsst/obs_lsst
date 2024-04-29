@@ -15,6 +15,7 @@ __all__ = ("LsstComCamSimTranslator", )
 import logging
 import warnings
 
+import astropy
 import astropy.utils.exceptions
 from astropy.coordinates import AltAz
 from astro_metadata_translator import cache_translation
@@ -155,3 +156,8 @@ class LsstComCamSimTranslator(LsstCamTranslator):
                 return altaz
 
         return None
+
+    @classmethod
+    def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
+        # Always use the 12 hour offset.
+        return cls._ROLLOVER_TIME

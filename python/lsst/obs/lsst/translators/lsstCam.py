@@ -28,8 +28,6 @@ log = logging.getLogger(__name__)
 # Normalized name of the LSST Camera
 LSST_CAM = "LSSTCam"
 
-_LSST_CAM_SHIP_DATE = 202406
-
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -86,6 +84,10 @@ class LsstCamTranslator(LsstBaseTranslator):
 
     # Use Imsim raft definitions until a true lsstCam definition exists
     cameraPolicyFile = "policy/lsstCam.yaml"
+
+    # Date (YYYYMM) the camera changes from using lab day_offset (Pacific time)
+    # to summit day_offset (12 hours).
+    _CAMERA_SHIP_DATE = 202406
 
     @classmethod
     def fix_header(cls, header, instrument, obsid, filename=None):
@@ -178,7 +180,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         """
         # Timezone calculations are slow. Only do this if the instrument
         # is in the lab.
-        if int(observing_date.strftime("%Y%m")) > _LSST_CAM_SHIP_DATE:
+        if int(observing_date.strftime("%Y%m")) > cls._CAMERA_SHIP_DATE:
             return cls._ROLLOVER_TIME  # 12 hours in base class
 
         # Convert the date to a datetime UTC.
