@@ -8,3 +8,5 @@ config.psf_determiner["psfex"].spatialOrder = 1
 # Set the default kernel and stamp sizes for PSF modeling appropriate for LATISS.
 config.psf_determiner["psfex"].stampSize = 71
 config.make_psf_candidates.kernelSize = 71
+
+config.source_selector["science"].signalToNoise.minimum = 20.0
