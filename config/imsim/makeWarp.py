@@ -34,5 +34,8 @@
 # The maxScaledSizeScatter has been increased further to reflect the new
 # metric definition (which results in higher values for this metric).  See
 # DM-40668 & DM-41838 for details.
-config.select.maxEllipResidual = 0.005
+config.select.maxEllipResidual = 0.0036
 config.select.maxScaledSizeScatter = 0.011
+config.select.maxPsfTraceRadiusDelta = 0.09
+config.select.maxPsfApFluxDelta = 0.062
+config.select.maxPsfApCorrSigmaScaledDelta = 0.053
