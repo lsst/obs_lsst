@@ -87,7 +87,7 @@ class LsstCamTranslator(LsstBaseTranslator):
 
     # Date (YYYYMM) the camera changes from using lab day_offset (Pacific time)
     # to summit day_offset (12 hours).
-    _CAMERA_SHIP_DATE = 202406
+    _CAMERA_SHIP_DATE = 202405
 
     @classmethod
     def fix_header(cls, header, instrument, obsid, filename=None):
@@ -180,7 +180,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         """
         # Timezone calculations are slow. Only do this if the instrument
         # is in the lab.
-        if int(observing_date.strftime("%Y%m")) > cls._CAMERA_SHIP_DATE:
+        if int(observing_date.strftime("%Y%m")) >= cls._CAMERA_SHIP_DATE:
             return cls._ROLLOVER_TIME  # 12 hours in base class
 
         # Convert the date to a datetime UTC.
