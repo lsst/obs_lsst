@@ -26,11 +26,19 @@
 # defaults (which were conditioned on HSC data).  These have been chosen
 # based on the data observed in the 2022-11B (PREOPS-1986) and 2022-12A
 # (PREOPS-3135) runs (see figures on DM-37497) and are probably going to
-# evolve as the commissioning of AuxTel procedes.
-config.select.maxEllipResidual = 0.1
-# Updated with DM-40668
-config.select.maxScaledSizeScatter = 0.025
-config.select.maxPsfTraceRadiusDelta = 4.8
+# evolve as the commissioning of AuxTel proceeds.  Further updated for
+# DM-40668....and the latest update is based on a reassessment as part of
+# the addition of two additional metrics on DM-37952 using the data
+# satisfying:
+#      (exposure.day_obs>=20230509 AND exposure.day_obs<=20240513) AND
+#      (exposure.observation_type='science') AND
+#      (exposure.science_program='AUXTEL_PHOTO_IMAGING' OR
+#       exposure.science_program='AUXTEL_DRP_IMAGING')"
+config.select.maxEllipResidual = 0.027
+config.select.maxScaledSizeScatter = 0.026
+config.select.maxPsfTraceRadiusDelta = 2.9
+config.select.maxPsfApFluxDelta = 0.075
+config.select.maxPsfApCorrSigmaScaledDelta = 0.118
 
 # PSF-matching configs are in units of pix and specific to skymap pixel scale
 
