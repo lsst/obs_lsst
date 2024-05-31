@@ -20,23 +20,15 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-# Set thresholds for PSF fidelity of visit/detector to get included in coadd.
-#
-# These thresholds were originally conditioned based on the w_2021_48
-# processing of the test-med-1 dataset and the w_2021_40 processing of the
-# ~5-yr depth 4431 tract (and considering the HSC thresholds by comparing the
-# metric distributions). See DM-32625 for details.
-#
-# After switching to Piff for PSF estimation, these proved too tight for at
-# least ci_imsim.  The updates just added a bit of padding top of what was
-# needed to get all images in ci_imsim through.
-#
-# The maxScaledSizeScatter has been increased further to reflect the new
-# metric definition (which results in higher values for this metric).  See
-# DM-40668 & DM-41838 for details.
+"""LATISS-specific overrides for MakeWarpTask"""
+
+# These thresholds must be relaxed for AuxTel/LATISS compared to the task
+# defaults (which were conditioned on HSC data).  These have been chosen
+# based on the data observed in the 2022-11B (PREOPS-1986) and 2022-12A
+# (PREOPS-3135) runs (see figures on DM-37497) and are probably going to
+# evolve as the commissioning of AuxTel procedes.
 config.doSelectPreWarp = True
-config.select.maxEllipResidual = 0.0036
-config.select.maxScaledSizeScatter = 0.011
-config.select.maxPsfTraceRadiusDelta = 0.09
-config.select.maxPsfApFluxDelta = 0.062
-config.select.maxPsfApCorrSigmaScaledDelta = 0.053
+config.select.maxEllipResidual = 0.1
+# Updated with DM-40668
+config.select.maxScaledSizeScatter = 0.025
+config.select.maxPsfTraceRadiusDelta = 4.8
