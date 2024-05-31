@@ -22,4 +22,4 @@
 
 
 # FUTURE: Set to True when we have sky background estimate
-config.doApplyNewbackground = False
+config.doApplyNewBackground = False
