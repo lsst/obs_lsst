@@ -50,5 +50,8 @@ config.astrometry.sourceSelector['matcher'].minSnr = 10
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
 
 # Set the default aperture as appropriate for the LATISS plate scale.
+config.measurement.algorithms["base_CompensatedTophatFlux"].apertures = [35]
+config.normalizedCalibrationFlux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
+
 config.measurement.slots.apFlux='base_CircularApertureFlux_35_0'
 config.measurement.slots.calibFlux='base_CircularApertureFlux_35_0'
