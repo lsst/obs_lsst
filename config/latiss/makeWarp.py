@@ -22,6 +22,11 @@
 
 """LATISS-specific overrides for MakeWarpTask"""
 
+import os.path
+
+# Load configs shared between assembleCoadd and makeWarp.
+config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
+
 # These thresholds must be relaxed for AuxTel/LATISS compared to the task
 # defaults (which were conditioned on HSC data).  These have been chosen
 # based on the data observed in the 2022-11B (PREOPS-1986) and 2022-12A
@@ -48,9 +53,7 @@ config.select.maxPsfApCorrSigmaScaledDelta = 0.118
 config.modelPsf.defaultFwhm = 19.0
 
 # These configs are for skymaps of pixel scale 0.1
-# TO DO: Delete these 5 if we go a 0.2 pixel scale
-config.matchingKernelSize = 57
-config.warpAndPsfMatch.psfMatch.kernel['AL'].kernelSize = 43
+# TO DO: Delete these 3 if we go a 0.2 pixel scale
 config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.5, 3.0, 6.0]
 config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellX = 256
 config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellY = 256
