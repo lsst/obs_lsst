@@ -1013,3 +1013,24 @@ class LsstBaseTranslator(FitsTranslator):
             self._used_these_cards(key)
             return self._header[key] * u.deg_C
         return None
+
+    @cache_translation
+    def to_can_see_sky(self) -> bool | None:
+        key = "SHUTTIME"
+        if self.is_key_ok(key) and self._header[key] == 0.0:
+            # Shutter never opened so impossible to see sky.
+            self._used_these_cards(key)
+            return False
+
+        key = "VIGN_MIN"
+        if self.is_key_ok(key):
+            self._used_these_cards(key)
+            vignetted = self._header[key]
+            if vignetted == "FULLY":
+                return False
+            return True
+
+        # Fallback to using the observation type if the key is missing.
+        # May not want to allow this for non-simulated cameras after
+        # comcam goes on sky.
+        return super().to_can_see_sky()
