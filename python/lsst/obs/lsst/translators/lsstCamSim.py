@@ -29,6 +29,7 @@ class LsstCamSimTranslator(LsstCamTranslator):
 
     _const_map = {
         "instrument": "LSSTCamSim",
+        "has_simulated_content": True,
     }
 
     cameraPolicyFile = "policy/lsstCamSim.yaml"
