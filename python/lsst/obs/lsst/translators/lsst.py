@@ -969,6 +969,7 @@ class LsstBaseTranslator(FitsTranslator):
         # true value implies that something in the data is simulated.
         for k, v in self._header.items():
             if "SIMULATE" in k and v:
+                self._used_these_cards(k)
                 return True
 
         # If the controller is H, P, S, or Q then the data are simulated.
@@ -994,6 +995,7 @@ class LsstBaseTranslator(FitsTranslator):
         key = "PRESSURE"
         if self.is_key_ok(key):
             value = self._header[key]
+            self._used_these_cards(key)
             # There has been an inconsistency in units for the pressure reading
             # so we need to adjust for this.
             if value > 10_000:
@@ -1008,5 +1010,6 @@ class LsstBaseTranslator(FitsTranslator):
     def to_temperature(self):
         key = "AIRTEMP"
         if self.is_key_ok(key):
+            self._used_these_cards(key)
             return self._header[key] * u.deg_C
         return None
