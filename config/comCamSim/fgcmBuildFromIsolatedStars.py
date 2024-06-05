@@ -16,8 +16,6 @@ config.connections.ref_cat = "uw_stars_20240524"
 
 configDir = os.path.join(os.path.dirname(__file__))
 config.physicalFilterMap = physical_to_band
-config.doSubtractLocalBackground = True
-config.sourceSelector["science"].flags.bad.append("localBackground_flag")
 config.fgcmLoadReferenceCatalog.filterMap = {
     "g": "lsst_g",
     "r": "lsst_r",
