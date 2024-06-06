@@ -24,8 +24,8 @@ import os.path
 
 configDir = os.path.dirname(__file__)
 
-config.connections.astromRefCat = "uw_stars_20240228"
-config.connections.photoRefCat = "uw_stars_20240228"
+config.connections.astromRefCat = "uw_stars_20240524"
+config.connections.photoRefCat = "uw_stars_20240524"
 
 config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
 config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
