@@ -20,14 +20,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-# AuxTel PSF is not stable at this time resulting in many frames being
-# rejected by standard psfWcsSelect. Switch to using WcsSelectImagesTask 
-# to avoid rejecting too many frames.
+"""Configs shared between assembleCoadd and makeWarp."""
 
-import os.path
+# These configs are for skymaps of pixel scale 0.1
+# TO DO: Delete the below if we go a 0.2 pixel scale.
+config.matchingKernelSize = 43
 
-# Load configs shared between assembleCoadd and makeWarp.
-config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py")
-
-from lsst.pipe.tasks.selectImages import WcsSelectImagesTask
-config.select.retarget(WcsSelectImagesTask)
