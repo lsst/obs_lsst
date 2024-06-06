@@ -1,12 +1,28 @@
 import lsst.fgcmcal as fgcmcal
 
+# We use our own filter to band mapping to limit to only the
+# filters used in the photometric survey which may be input
+# to fgcmcal. This override will be less important after
+# TODO: DM-44705.
+physical_to_band = {
+    "SDSSg_65mm~empty": "g",
+    "SDSSr_65mm~empty": "r",
+    "SDSSi_65mm~empty": "i",
+    "empty~SDSSi_65mm": "i",
+    "SDSSz_65mm~empty": "z",
+    "SDSSy_65mm~empty": "y",
+    "empty~SDSSy_65mm": "y",
+}
 
 config.outfileBase = "FgcmLatissCalibrations"
 # The default photometric survey so far uses g, r, i, z, y bands.
 config.bands = ["g", "r", "i", "z", "y"]
 config.fitBands = ["g", "r", "i", "z", "y"]
-from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
-config.physicalFilterMap = LATISS_FILTER_DEFINITIONS.physical_to_band
+# This should be replaced with:
+# from lsst.obs.lsst.filters import LATISS_FILTER_DEFINITIONS
+# config.physicalFilterMap = LATISS_FILTER_DEFINITIONS.physical_to_band
+# with TODO: DM-44705.
+config.physicalFilterMap = physical_to_band
 config.requiredBands = ["g", "r", "i"]
 
 config.cycleNumber = 0
