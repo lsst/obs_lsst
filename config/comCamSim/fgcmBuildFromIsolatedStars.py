@@ -12,7 +12,7 @@ config.primaryBands = ["i", "r", "g"]
 config.coarseNside = 64
 
 config.minPerBand = 2
-config.connections.ref_cat = "uw_stars_20240524"
+config.connections.ref_cat = "uw_stars_20240228"
 
 configDir = os.path.join(os.path.dirname(__file__))
 config.physicalFilterMap = physical_to_band
