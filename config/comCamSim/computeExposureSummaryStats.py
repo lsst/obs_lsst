@@ -2,25 +2,35 @@ import os.path
 
 config_dir = os.path.dirname(__file__)
 
-# Fiducial values come from a set of 4334 visits generated in:
-# repo='/repo/ops-rehearsal-3-prep'
-# collection='u/homer/w_2024_10/DM-43228'
-# Plots, including the median values used here, can be found on JIRA ticket DM-42747
+# Fiducial values derived from SMTN-002 (v2024-03-06), based on syseng_throughput v1.9.
+# See SMTN-002 (https://smtn-002.lsst.io) and DM-44855 for discussion.
 
+# Fiducial PsfSigma in pixels
 config.fiducialPsfSigma = {
-    'g': 1.72,
-    'r': 1.60,
-    'i': 1.57,
-}    
-
-config.fiducialSkyBackground = {
-    'g': 9.34,
-    'r': 19.58,
-    'i': 35.97,
+    'u': 1.72,
+    'g': 1.63,
+    'r': 1.56,
+    'i': 1.51,
+    'z': 1.47,
+    'y': 1.44,
 }
 
+# Fiducial ZeroPoint for 1s exposure
 config.fiducialZeroPoint = {
-    'g': 27.68,
-    'r': 27.56,
-    'i': 27.40,
+    'u': 25.96,
+    'g': 27.95,
+    'r': 27.80,
+    'i': 27.61,
+    'z': 27.22,
+    'y': 26.26,
+}
+
+# Fiducial SkyBackground in ADU per second
+config.fiducialSkyBackground = {
+    'u': 0.90,
+    'g': 9.20,
+    'r': 19.62,
+    'i': 31.51,
+    'z': 47.26,
+    'y': 53.91,
 }
