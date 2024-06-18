@@ -20,15 +20,20 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
+"""LATISS-specific overrides for MakePsfMatchedWarpTask"""
 
-# Load configs shared between assembleCoadd and makeCoaddTempExp
-config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
+# PSF-matching configs are in units of pix and specific to skymap pixel scale
 
-config.makePsfMatched = True
-config.warpAndPsfMatch.psfMatch.kernel['AL'].kernelSize = config.matchingKernelSize
-config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
-config.modelPsf.defaultFwhm = 7.7
+# Max PSF FWHM allowed into coadds BestSeeingSelectVisits.maxPsfFwhm = 1.9
+# If skymap pixel scale is 0.1, that translates to Fwhm of 19.0
+# TO DO: Change this to 9.5 if we go to 0.2 pixel scale.
+config.modelPsf.defaultFwhm = 19.0
 
-# FUTURE: Set to True when we have sky background estimate
-config.doApplySkyCorr = False
+# These configs are for skymaps of pixel scale 0.1
+# TO DO: Delete these 5 if we go a 0.2 pixel scale
+config.matchingKernelSize = 57
+config.psfMatch.kernel['AL'].kernelSize = 43
+config.psfMatch.kernel['AL'].alardSigGauss = [1.5, 3.0, 6.0]
+config.psfMatch.kernel['AL'].sizeCellX = 256
+config.psfMatch.kernel['AL'].sizeCellY = 256
+

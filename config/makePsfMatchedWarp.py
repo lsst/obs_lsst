@@ -1,5 +1,3 @@
-# Configs shared between makeCoaddTempExp and assemble
-
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -21,5 +19,8 @@
 # You should have received a copy of the LSST License Statement and
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
+
+config.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
+config.modelPsf.defaultFwhm = 7.7
 
 config.matchingKernelSize = 29
