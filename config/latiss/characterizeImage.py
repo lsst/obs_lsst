@@ -30,5 +30,13 @@ config.measureApCorr.sourceSelector["science"].doSignalToNoise = False
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
 
 # Set the default aperture as appropriate for the LATISS plate scale.
-config.measurement.slots.apFlux='base_CircularApertureFlux_35_0'
-config.measurement.slots.calibFlux='base_CircularApertureFlux_35_0'
+config.measurement.algorithms["base_CompensatedTophatFlux"].apertures = [35]
+config.normalizedCalibrationFlux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
+config.normalizedCalibrationFlux.measure_ap_corr.refFluxName = "base_CircularApertureFlux_35_0"
+# As above, turn off S/N cut for aperture correction source selection.
+config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].doSignalToNoise = False
+# Put in the correct override fields in case we revisit this in the future.
+config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].signalToNoise.fluxField = "base_CompensatedTophatFlux_35_instFlux"
+config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].signalToNoise.errField = "base_CompensatedTophatFlux_35_instFluxErr"
+config.measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
+config.measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"

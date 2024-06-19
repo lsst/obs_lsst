@@ -10,18 +10,12 @@ config.coarseNside = 64
 config.minPerBand = 2
 config.connections.ref_cat = "atlas_refcat2_20220201"
 
-config.instFluxField="apFlux_35_0_instFlux"
-config.sourceSelector["science"].signalToNoise.fluxField="apFlux_35_0_instFlux"
-
-config.sourceSelector["science"].signalToNoise.errField="apFlux_35_0_instFluxErr"
-
 config.apertureInnerInstFluxField="apFlux_35_0_instFlux"
 config.apertureOuterInstFluxField="apFlux_50_0_instFlux"
 
 configDir = os.path.join(os.path.dirname(__file__))
 config.physicalFilterMap = LATISS_FILTER_DEFINITIONS.physical_to_band
-config.doSubtractLocalBackground = True
-config.sourceSelector["science"].flags.bad.append("localBackground_flag")
+config.doSubtractLocalBackground = False
 config.fgcmLoadReferenceCatalog.load(os.path.join(configDir, "filterMap.py"))
 config.fgcmLoadReferenceCatalog.applyColorTerms = True
 config.fgcmLoadReferenceCatalog.colorterms.load(os.path.join(configDir, 'colorterms.py'))
