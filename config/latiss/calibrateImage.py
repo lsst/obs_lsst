@@ -20,12 +20,23 @@ config.psf_measure_psf.psfDeterminer["psfex"].spatialOrder = 1
 config.psf_measure_psf.makePsfCandidates.kernelSize = 71
 config.psf_measure_psf.psfDeterminer["psfex"].stampSize = 71
 
+config.psf_source_measurement.plugins["base_CompensatedTophatFlux"].apertures = [35]
+
 config.install_simple_psf.width = 21
 config.install_simple_psf.fwhm = 2.355 * 2  # LATISS plate scale is 2x LSST nominal
 
 # Turn off S/N cut for aperture correction measurement source selection
 # (it now only includes calib_psf_used objects, and that cut is "good
 # enough" for the shallow LATISS data).
+config.psf_normalized_calibration_flux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
+config.psf_normalized_calibration_flux.measure_ap_corr.refFluxName = "base_CircularApertureFlux_35_0"
+config.psf_normalized_calibration_flux.measure_ap_corr.sourceSelector["science"].doSignalToNoise = False
+# Put in the correct override fields in case we revisit this in the future.
+config.psf_normalized_calibration_flux.measure_ap_corr.sourceSelector["science"].signalToNoise.fluxField = \
+    "base_CompensatedTophatFlux_35_instFlux"
+config.psf_normalized_calibration_flux.measure_ap_corr.sourceSelector["science"].signalToNoise.errField = \
+    "base_CompensatedTophatFlux_35_instFluxErr"
+
 config.measure_aperture_correction.sourceSelector["science"].doSignalToNoise = False
 
 # Configure the photometry to use atlas_refcat2.
@@ -65,5 +76,7 @@ config.astrometry.matcher.maxRotationDeg = 2.0
 
 # Set the default aperture as appropriate for the LATISS plate scale.
 config.star_measurement.plugins["base_CircularApertureFlux"].radii = [35.0]
-config.star_measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
-config.star_measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"
+config.star_measurement.slots.apFlux = 'base_CircularApertureFlux_35_0'
+config.star_measurement.slots.calibFlux = 'base_CircularApertureFlux_35_0'
+config.star_measurement.algorithms["base_CompensatedTophatFlux"].apertures = [35]
+config.star_normalized_calibration_flux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
