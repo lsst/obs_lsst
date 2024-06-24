@@ -26,8 +26,8 @@
 # task defaults (which were conditioned on HSC data).  These have been
 # chosen based on the OR3 dataset reduced with w_2024_19 pipeline on
 # DM-37952 (see ticket for figures).
-config.select.maxEllipResidual = 0.0026
+config.select.maxEllipResidual = 0.004
 config.select.maxScaledSizeScatter = 0.014
-config.select.maxPsfTraceRadiusDelta = 0.065
+config.select.maxPsfTraceRadiusDelta = 0.091
 config.select.maxPsfApFluxDelta = 0.047
 config.select.maxPsfApCorrSigmaScaledDelta = 0.041
