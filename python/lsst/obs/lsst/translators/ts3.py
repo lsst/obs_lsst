@@ -52,6 +52,7 @@ class LsstTS3Translator(LsstBaseTranslator):
         "temperature": None,
         "pressure": None,
         "detector_name": _DETECTOR_NAME,  # Single sensor
+        "can_see_sky": False,
     }
 
     _trivial_map = {

@@ -46,6 +46,7 @@ class LsstUCDCamTranslator(LsstBaseTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
+        "can_see_sky": False,
     }
 
     _trivial_map = {

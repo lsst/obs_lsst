@@ -50,6 +50,7 @@ class LsstTS8Translator(LsstBaseTranslator):
         "relative_humidity": None,
         "temperature": None,
         "pressure": None,
+        "can_see_sky": False,
     }
 
     _trivial_map = {
