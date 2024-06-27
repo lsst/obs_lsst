@@ -4,6 +4,12 @@ from lsst.meas.algorithms import ColorLimit
 
 config_dir = os.path.dirname(__file__)
 
+# Lower the detection threshold from its default of 5.0 for these short and often
+# sparsely populated exposures. Along with the includeThresholdMultiplier = 10
+# default, only sources with an effective threshold above 36 will make it into the
+# catalog.
+config.psf_detection.thresholdValue = 3.6
+
 # Some modifications to the objectSize selector for PSF estimation optimized
 # for LATISS data.
 config.psf_measure_psf.starSelector["objectSize"].signalToNoiseMin = 10
