@@ -63,6 +63,11 @@ config.astrometry.matcher.maxOffsetPix = 900
 config.astrometry.matcher.numPointsForShape = 5
 config.astrometry.matcher.numPointsForShapeAttempt = 8
 
+# DM-43593: Use old star/galaxy separator, as SizeExtendedness needs reliable
+# shape measurements, but the shapeHSM moments are not well behaved on LATISS.
+config.star_measurement.plugins.names.remove("base_ClassificationSizeExtendedness")
+config.star_selector["science"].unresolved.name = "base_ClassificationExtendedness_value"
+
 # Apply a magnitude limit and decrease the SNR limit as we're only a 1.2m
 # and frequently take short exposures.
 config.astrometry.referenceSelector.doMagLimit = True
