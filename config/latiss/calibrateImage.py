@@ -4,6 +4,12 @@ from lsst.meas.algorithms import ColorLimit
 
 config_dir = os.path.dirname(__file__)
 
+# Lower the detection threshold from its default of 5.0 for these short and often
+# sparsely populated exposures. Along with the includeThresholdMultiplier = 10
+# default, only sources with an effective threshold above 36 will make it into the
+# catalog.
+config.psf_detection.thresholdValue = 3.6
+
 # Some modifications to the objectSize selector for PSF estimation optimized
 # for LATISS data.
 config.psf_measure_psf.starSelector["objectSize"].signalToNoiseMin = 10
@@ -26,6 +32,9 @@ config.install_simple_psf.fwhm = 2.355*2  # LATISS plate scale is 2x LSST nomina
 # (it now only includes calib_psf_used objects, and that cut is "good
 # enough" for the shallow LATISS data).
 config.measure_aperture_correction.sourceSelector["science"].doSignalToNoise = False
+
+# Allow deblending of larger areas, due to LATISS's larger plate scale.
+config.star_deblend.maxFootprintArea = 100000
 
 # Configure the photometry to use atlas_refcat2.
 config.connections.photometry_ref_cat = "atlas_refcat2_20220201"
@@ -53,6 +62,11 @@ config.astrometry.matcher.maxOffsetPix = 900
 # match sources" cases.
 config.astrometry.matcher.numPointsForShape = 5
 config.astrometry.matcher.numPointsForShapeAttempt = 8
+
+# DM-43593: Use old star/galaxy separator, as SizeExtendedness needs reliable
+# shape measurements, but the shapeHSM moments are not well behaved on LATISS.
+config.star_measurement.plugins.names.remove("base_ClassificationSizeExtendedness")
+config.star_selector["science"].unresolved.name = "base_ClassificationExtendedness_value"
 
 # Apply a magnitude limit and decrease the SNR limit as we're only a 1.2m
 # and frequently take short exposures.
