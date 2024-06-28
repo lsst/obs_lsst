@@ -33,6 +33,9 @@ config.install_simple_psf.fwhm = 2.355*2  # LATISS plate scale is 2x LSST nomina
 # enough" for the shallow LATISS data).
 config.measure_aperture_correction.sourceSelector["science"].doSignalToNoise = False
 
+# Allow deblending of larger areas, due to LATISS's larger plate scale.
+config.star_deblend.maxFootprintArea = 100000
+
 # Configure the photometry to use atlas_refcat2.
 config.connections.photometry_ref_cat = "atlas_refcat2_20220201"
 config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
