@@ -1,6 +1,6 @@
 # Change the PSF determiner to psfex from piff default as the latter will not
 # scale well to the large kernel/stamp sizes for PSF modeling for LATISS data.
-import lsst.meas.extensions.psfex.psfexPsfDeterminer
+import lsst.meas.extensions.psfex.psfexPsfDeterminer  # noqa: F401 required to use psfex below
 
 config.psf_determiner.name = "psfex"
 # Reduce spatialOrder to 1, this helps ensure success with low numbers of psf candidates.

@@ -20,5 +20,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import lsst.meas.extensions.photometryKron
+import lsst.meas.extensions.photometryKron  # noqa: F401 required to use KronFlux below
+
 config.plugins.names |= ["ext_photometryKron_KronFlux"]

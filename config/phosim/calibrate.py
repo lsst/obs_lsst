@@ -24,6 +24,6 @@ phosim-specific overrides for CalibrateTask
 """
 # Additional configs for star+galaxy ref cats post DM-17917
 config.astrometry.referenceSelector.doUnresolved = True
-config.astrometry.referenceSelector.unresolved.name = 'resolved'
+config.astrometry.referenceSelector.unresolved.name = "resolved"
 config.astrometry.referenceSelector.unresolved.minimum = None
 config.astrometry.referenceSelector.unresolved.maximum = 0.5

@@ -22,8 +22,6 @@
 
 import os.path
 
-from lsst.meas.base import CircularApertureFluxAlgorithm
-
 config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
 config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
 config.measurement.load(os.path.join(os.path.dirname(__file__), "convolvedFluxes.py"))
@@ -34,6 +32,7 @@ config.measurement.slots.gaussianFlux = None
 
 config.catalogCalculation.plugins.names = ["base_ClassificationExtendedness"]
 config.measurement.slots.psfFlux = "base_PsfFlux"
+
 
 def doUndeblended(config, algName, fluxList=None):
     """Activate undeblended measurements of algorithm

@@ -52,10 +52,10 @@ config.select.maxPsfApCorrSigmaScaledDelta = 0.118
 # TO DO: Change this to 9.5 if we go to 0.2 pixel scale.
 config.modelPsf.defaultFwhm = 19.0
 
-config.warpAndPsfMatch.psfMatch.kernel['AL'].kernelSize = config.matchingKernelSize
+config.warpAndPsfMatch.psfMatch.kernel["AL"].kernelSize = config.matchingKernelSize
 
 # These configs are for skymaps of pixel scale 0.1
 # TO DO: Delete these 3 if we go a 0.2 pixel scale
-config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.5, 3.0, 6.0]
-config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellX = 256
-config.warpAndPsfMatch.psfMatch.kernel['AL'].sizeCellY = 256
+config.warpAndPsfMatch.psfMatch.kernel["AL"].alardSigGauss = [1.5, 3.0, 6.0]
+config.warpAndPsfMatch.psfMatch.kernel["AL"].sizeCellX = 256
+config.warpAndPsfMatch.psfMatch.kernel["AL"].sizeCellY = 256

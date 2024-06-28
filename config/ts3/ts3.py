@@ -22,9 +22,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['detector', 'detectorName', 'raftName']
+if hasattr(config, "ccdKeys"):
+    config.ccdKeys = ["detector", "detectorName", "raftName"]
 
 config.isr.doLinearize = False
 config.isr.doDefect = False
-config.isr.doCrosstalk=False
+config.isr.doCrosstalk = False

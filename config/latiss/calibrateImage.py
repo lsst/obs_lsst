@@ -20,7 +20,7 @@ config.psf_measure_psf.makePsfCandidates.kernelSize = 71
 config.psf_measure_psf.psfDeterminer["psfex"].stampSize = 71
 
 config.install_simple_psf.width = 21
-config.install_simple_psf.fwhm = 2.355*2  # LATISS plate scale is 2x LSST nominal
+config.install_simple_psf.fwhm = 2.355 * 2  # LATISS plate scale is 2x LSST nominal
 
 # Turn off S/N cut for aperture correction measurement source selection
 # (it now only includes calib_psf_used objects, and that cut is "good
@@ -36,7 +36,7 @@ colors = config.photometry.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
 config.photometry.applyColorTerms = True
-config.photometry.photoCatName="atlas_refcat2_20220201"
+config.photometry.photoCatName = "atlas_refcat2_20220201"
 config.photometry.colorterms.load(os.path.join(config_dir, "colorterms.py"))
 
 # Note that the following two config values were validated on data taken in
@@ -64,5 +64,5 @@ config.astrometry.matcher.maxRotationDeg = 2.0
 
 # Set the default aperture as appropriate for the LATISS plate scale.
 config.star_measurement.plugins["base_CircularApertureFlux"].radii = [35.0]
-config.star_measurement.slots.apFlux = 'base_CircularApertureFlux_35_0'
-config.star_measurement.slots.calibFlux = 'base_CircularApertureFlux_35_0'
+config.star_measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
+config.star_measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"

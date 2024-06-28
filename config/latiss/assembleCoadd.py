@@ -21,13 +21,13 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 # AuxTel PSF is not stable at this time resulting in many frames being
-# rejected by standard psfWcsSelect. Switch to using WcsSelectImagesTask 
+# rejected by standard psfWcsSelect. Switch to using WcsSelectImagesTask
 # to avoid rejecting too many frames.
 
 import os.path
+from lsst.pipe.tasks.selectImages import WcsSelectImagesTask
 
 # Load configs shared between assembleCoadd and makeWarp.
 config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
 
-from lsst.pipe.tasks.selectImages import WcsSelectImagesTask
 config.select.retarget(WcsSelectImagesTask)

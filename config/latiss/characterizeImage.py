@@ -20,7 +20,7 @@ config.measurePsf.makePsfCandidates.kernelSize = 71
 config.measurePsf.psfDeterminer["psfex"].stampSize = 71
 
 config.installSimplePsf.width = 21
-config.installSimplePsf.fwhm = 2.355*2  # LATISS plate scale is 2x LSST nominal
+config.installSimplePsf.fwhm = 2.355 * 2  # LATISS plate scale is 2x LSST nominal
 
 # Turn off S/N cut for aperture correction measurement source selection
 # (it now only includes calib_psf_used objects, and that cut is "good
@@ -36,7 +36,11 @@ config.normalizedCalibrationFlux.measure_ap_corr.refFluxName = "base_CircularApe
 # As above, turn off S/N cut for aperture correction source selection.
 config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].doSignalToNoise = False
 # Put in the correct override fields in case we revisit this in the future.
-config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].signalToNoise.fluxField = "base_CompensatedTophatFlux_35_instFlux"
-config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector["science"].signalToNoise.errField = "base_CompensatedTophatFlux_35_instFluxErr"
+config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector[
+    "science"
+].signalToNoise.fluxField = "base_CompensatedTophatFlux_35_instFlux"
+config.normalizedCalibrationFlux.measure_ap_corr.sourceSelector[
+    "science"
+].signalToNoise.errField = "base_CompensatedTophatFlux_35_instFluxErr"
 config.measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
 config.measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"
