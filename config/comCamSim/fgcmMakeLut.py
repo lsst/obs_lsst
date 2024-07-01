@@ -6,4 +6,4 @@ config.physicalFilters = [
 ]
 
 # FGCM name or filename of precomputed atmospheres
-config.atmosphereTableName = 'fgcm_atm_lsst2'
+config.atmosphereTableName = "fgcm_atm_lsst2"

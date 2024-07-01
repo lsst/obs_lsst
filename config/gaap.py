@@ -20,8 +20,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import lsst.meas.extensions.gaap  # noqa: Load GAaP algorithm
+import lsst.meas.extensions.gaap  # noqa: F401 required to use GaapFlux below
+
 config.plugins.names.add("ext_gaap_GaapFlux")
 config.plugins["ext_gaap_GaapFlux"].sigmas = [0.5, 0.7, 1.0, 1.5, 2.5, 3.0]
-# Enable PSF photometry after PSF-Gaussianization in the `ext_gaap_GaapFlux` plugin
+# Enable PSF photometry after PSF-Gaussianization in `ext_gaap_GaapFlux`
 config.plugins["ext_gaap_GaapFlux"].doPsfPhotometry = True

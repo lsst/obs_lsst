@@ -26,8 +26,8 @@ import os.path
 config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
 
 config.makePsfMatched = True
-config.warpAndPsfMatch.psfMatch.kernel['AL'].kernelSize = config.matchingKernelSize
-config.warpAndPsfMatch.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
+config.warpAndPsfMatch.psfMatch.kernel["AL"].kernelSize = config.matchingKernelSize
+config.warpAndPsfMatch.psfMatch.kernel["AL"].alardSigGauss = [1.0, 2.0, 4.5]
 config.modelPsf.defaultFwhm = 7.7
 
 # FUTURE: Set to True when we have sky background estimate

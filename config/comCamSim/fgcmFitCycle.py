@@ -17,7 +17,7 @@ config.cycleNumber = 0
 config.maxIterBeforeFinalCycle = 50
 config.minCcdPerExp = 1
 config.utBoundary = 0.0
-config.washMjds = (0.0, )
+config.washMjds = (0.0,)
 # For now, define 1 observing epoch that encompasses everything.
 config.epochMjds = (0.0, 100000.0)
 config.coatingMjds = []

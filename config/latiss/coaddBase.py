@@ -25,4 +25,3 @@
 # These configs are for skymaps of pixel scale 0.1
 # TO DO: Delete the below if we go a 0.2 pixel scale.
 config.matchingKernelSize = 43
-

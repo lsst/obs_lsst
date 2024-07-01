@@ -20,8 +20,8 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os
-import lsst.meas.modelfit
+import lsst.meas.modelfit  # noqa: F401 required to use modelfit plugin below
+
 config.measurement.plugins.names |= ["modelfit_DoubleShapeletPsfApprox", "modelfit_CModel"]
-config.measurement.slots.modelFlux = 'modelfit_CModel'
-config.catalogCalculation.plugins['base_ClassificationExtendedness'].fluxRatio = 0.985
+config.measurement.slots.modelFlux = "modelfit_CModel"
+config.catalogCalculation.plugins["base_ClassificationExtendedness"].fluxRatio = 0.985

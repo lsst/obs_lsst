@@ -19,4 +19,4 @@ config.stdPhysicalFilterOverrideMap = {"empty~SDSSi_65mm": "SDSSi_65mm~empty",
                                        "empty~SDSSy_65mm": "SDSSy_65mm~empty"}
 
 # FGCM name or filename of precomputed atmospheres
-config.atmosphereTableName = 'fgcm_atm_lsst2'
+config.atmosphereTableName = "fgcm_atm_lsst2"

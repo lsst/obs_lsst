@@ -23,8 +23,8 @@
 """
 LSST Cam generic settings
 """
-if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['detector', 'snap', 'raftName', 'detectorName']
+if hasattr(config, "ccdKeys"):
+    config.ccdKeys = ["detector", "snap", "raftName", "detectorName"]
 
-if hasattr(config, 'visitKeys'):
+if hasattr(config, "visitKeys"):
     config.visitKeys = ["expId"]

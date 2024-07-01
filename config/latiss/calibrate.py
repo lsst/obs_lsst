@@ -14,7 +14,7 @@ colors = config.photoCal.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
 config.photoCal.applyColorTerms = True
-config.photoCal.photoCatName="atlas_refcat2_20220201"
+config.photoCal.photoCatName = "atlas_refcat2_20220201"
 config.photoCal.colorterms.load(os.path.join(ObsConfigDir, "colorterms.py"))
 
 # We often have very few sources due to smaller aperture so use affine task.
@@ -44,8 +44,8 @@ config.astrometry.referenceSelector.magLimit.fluxField = "phot_g_mean_flux"
 config.astrometry.matcher.maxRotationDeg = 2.0
 
 config.astrometry.sourceFluxType = "Psf"
-config.astrometry.sourceSelector['matcher'].sourceFluxType = "Psf"
-config.astrometry.sourceSelector['matcher'].minSnr = 10
+config.astrometry.sourceSelector["matcher"].sourceFluxType = "Psf"
+config.astrometry.sourceSelector["matcher"].minSnr = 10
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
 
@@ -53,5 +53,5 @@ config.measurement.plugins["base_Jacobian"].pixelScale = 0.1
 config.measurement.algorithms["base_CompensatedTophatFlux"].apertures = [35]
 config.normalizedCalibrationFlux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
 
-config.measurement.slots.apFlux='base_CircularApertureFlux_35_0'
-config.measurement.slots.calibFlux='base_CircularApertureFlux_35_0'
+config.measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
+config.measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"
