@@ -13,9 +13,10 @@ config.psf_measure_psf.starSelector["objectSize"].widthMax = 14.0
 # We are starved for PSF stars, so don't reserve any at this stage.
 config.psf_measure_psf.reserve.fraction = 0.0
 
-# Reduce psfex spatialOrder to 1, this helps ensure success with low numbers of psf candidates.
+# Reduce psfex spatialOrder to 1, this helps ensure success with low numbers
+# of psf candidates.
 config.psf_measure_psf.psfDeterminer["psfex"].spatialOrder = 1
-# Set the default kernel and stamp sizes for PSF modeling appropriate for LATISS
+# Set the default kernel and stamp sizes for PSF modeling for LATISS.7
 config.psf_measure_psf.makePsfCandidates.kernelSize = 71
 config.psf_measure_psf.psfDeterminer["psfex"].stampSize = 71
 

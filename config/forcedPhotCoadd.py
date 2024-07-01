@@ -61,6 +61,7 @@ doUndeblended(config, "ext_convolved_ConvolvedFlux",
               config.measurement.plugins["ext_convolved_ConvolvedFlux"].getAllResultNames())
 doUndeblended(config, "ext_gaap_GaapFlux",
               config.measurement.plugins["ext_gaap_GaapFlux"].getAllGaapResultNames())
-# Disable registration for apCorr of undeblended convolved; apCorr will be done through the deblended proxy
+# Disable registration for apCorr of undeblended convolved; apCorr will be
+# done through the deblended proxy.
 config.measurement.undeblended["ext_convolved_ConvolvedFlux"].registerForApCorr = False
 config.measurement.undeblended["ext_gaap_GaapFlux"].registerForApCorr = False

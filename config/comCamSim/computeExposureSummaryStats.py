@@ -2,8 +2,9 @@ import os.path
 
 config_dir = os.path.dirname(__file__)
 
-# Fiducial values derived from SMTN-002 (v2024-03-06), based on syseng_throughput v1.9.
-# See SMTN-002 (https://smtn-002.lsst.io) and DM-44855 for discussion.
+# Fiducial values derived from SMTN-002 (v2024-03-06), based on
+# syseng_throughput v1.9. See SMTN-002 (https://smtn-002.lsst.io) and DM-44855
+# for discussion.
 
 # Fiducial PsfSigma in pixels
 config.fiducialPsfSigma = {
