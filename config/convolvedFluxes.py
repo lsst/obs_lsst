@@ -20,6 +20,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import lsst.meas.extensions.convolved  # noqa: Load flux.convolved algorithm
+import lsst.meas.extensions.convolved  # noqa: F401 required to use ConvolvedFlux below
+
 config.plugins.names.add("ext_convolved_ConvolvedFlux")
 config.plugins["ext_convolved_ConvolvedFlux"].seeing.append(8.0)

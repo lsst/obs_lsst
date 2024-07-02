@@ -1,5 +1,3 @@
-import os.path
-
 config.isr.doFlat = False
 config.isr.doFringe = False
 config.isr.doCrosstalk = False

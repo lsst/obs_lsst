@@ -4,8 +4,8 @@ config.load(os.path.join(os.path.dirname(__file__), "latiss.py"))
 
 # Configuration for processStarTask
 
-if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['detector', 'detectorName']
+if hasattr(config, "ccdKeys"):
+    config.ccdKeys = ["detector", "detectorName"]
 
 config.isr.doLinearize = False
 

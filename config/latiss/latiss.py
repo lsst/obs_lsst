@@ -23,8 +23,8 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
-if hasattr(config, 'ccdKeys'):
-    config.ccdKeys = ['detector', 'detectorName']
+if hasattr(config, "ccdKeys"):
+    config.ccdKeys = ["detector", "detectorName"]
 
 config.isr.doDefect = True
 config.isr.doLinearize = False

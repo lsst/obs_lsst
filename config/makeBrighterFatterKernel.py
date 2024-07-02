@@ -21,7 +21,7 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 config.isr.doFlat = False  # mandatory for this task
-config.ccdKey = 'detector'
+config.ccdKey = "detector"
 
 # to be re-examined once more calibration products are available
 config.isr.doBias = False

@@ -37,7 +37,8 @@ if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done
     config.measurement.plugins["ext_shapeHSM_HsmShapeRegauss"].deblendNChild = ""
 
-# Convolved fluxes can fail for small target seeing if the observation seeing is larger
+# Convolved fluxes can fail for small target seeing if the observation seeing
+# is larger.
 if "ext_convolved_ConvolvedFlux" in config.measurement.plugins:
     names = config.measurement.plugins["ext_convolved_ConvolvedFlux"].getAllResultNames()
     config.measureApCorr.allowFailure += names
