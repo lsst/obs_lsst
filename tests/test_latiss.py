@@ -22,7 +22,6 @@
 import sys
 import unittest
 
-import lsst.log
 import lsst.utils.tests
 from lsst.geom import arcseconds, Extent2I
 import lsst.afw.image
