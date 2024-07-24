@@ -19,8 +19,13 @@ config.psf_measure_psf.psfDeterminer["psfex"].spatialOrder = 1
 # Set the default kernel and stamp sizes for PSF modeling for LATISS.7
 config.psf_measure_psf.makePsfCandidates.kernelSize = 71
 config.psf_measure_psf.psfDeterminer["psfex"].stampSize = 71
+config.psf_measure_psf.psfDeterminer["psfex"].photometricFluxField = \
+    "base_CircularApertureFlux_35_0_instFlux"
 
+config.psf_source_measurement.plugins["base_CircularApertureFlux"].radii = [35.0]
 config.psf_source_measurement.plugins["base_CompensatedTophatFlux"].apertures = [35]
+config.psf_source_measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
+config.psf_source_measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"
 
 config.install_simple_psf.width = 21
 config.install_simple_psf.fwhm = 2.355 * 2  # LATISS plate scale is 2x LSST nominal
@@ -76,7 +81,7 @@ config.astrometry.matcher.maxRotationDeg = 2.0
 
 # Set the default aperture as appropriate for the LATISS plate scale.
 config.star_measurement.plugins["base_CircularApertureFlux"].radii = [35.0]
-config.star_measurement.slots.apFlux = 'base_CircularApertureFlux_35_0'
-config.star_measurement.slots.calibFlux = 'base_CircularApertureFlux_35_0'
+config.star_measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
+config.star_measurement.slots.calibFlux = "base_CircularApertureFlux_35_0"
 config.star_measurement.algorithms["base_CompensatedTophatFlux"].apertures = [35]
 config.star_normalized_calibration_flux.raw_calibflux_name = "base_CompensatedTophatFlux_35"
