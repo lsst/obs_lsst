@@ -71,7 +71,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         metadata : `~lsst.daf.base.PropertyList`
             Header metadata.
         """
-        file = self.fileDescriptor.location.path
+        file = self._reader_path
 
         with lsst.afw.fits.Fits(file, "r") as hdu:
             hdu.setHdu(0)
@@ -114,7 +114,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
         # We start by fixing amp bounding boxes based on the size of the amp
         # images themselves, because the camera doesn't have the right overscan
         # regions for all images.
-        filename = self.fileDescriptor.location.path
+        filename = self._reader_path
         temp_detector = in_detector.rebuild()
         temp_detector.clear()
         with warn_once(filename) as logCmd:
@@ -137,7 +137,7 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
 
     def readFull(self):
         # Docstring inherited.
-        rawFile = self.fileDescriptor.location.path
+        rawFile = self._reader_path
         amplifier, detector, _ = standardizeAmplifierParameters(
             self.checked_parameters,
             self._instrument.getCamera()[self.observationInfo.detector_num],
