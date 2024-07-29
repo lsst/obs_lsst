@@ -20,12 +20,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
 from lsst.pipe.tasks.selectImages import PsfWcsSelectImagesTask
-
-# Load configs shared between assembleCoadd and makeCoaddTempExp
-config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
 
 config.subregionSize = (10000, 200)  # 200 rows (since patch width is typically < 10k pixels)
 config.removeMaskPlanes.append("CROSSTALK")
