@@ -529,8 +529,18 @@ class LsstBaseTranslator(FitsTranslator):
     @cache_translation
     def to_datetime_begin(self):
         # Docstring will be inherited. Property defined in properties.py
-        self._used_these_cards("MJD-OBS")
-        return Time(self._header["MJD-OBS"], scale="tai", format="mjd")
+        # Prefer -BEG over -OBS. Let it fail with KeyError if no headers
+        # can be found.
+        date_key = "MJD-BEG"
+        date_fmt = "mjd"
+        for k in ("MJD-BEG", "DATE-BEG", "MJD-OBS", "DATE-OBS"):
+            if self.is_key_ok(k):
+                date_key = k
+                date_fmt = "mjd" if k.startswith("MJD") else "fits"
+                break
+
+        self._used_these_cards(date_key)
+        return Time(self._header[date_key], scale="tai", format=date_fmt)
 
     @cache_translation
     def to_datetime_end(self):
