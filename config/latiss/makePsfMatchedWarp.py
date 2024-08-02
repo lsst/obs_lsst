@@ -20,14 +20,18 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-from lsst.pipe.tasks.selectImages import PsfWcsSelectImagesTask
+"""LATISS-specific overrides for MakePsfMatchedWarpTask"""
 
-config.subregionSize = (10000, 200)  # 200 rows (since patch width is typically < 10k pixels)
-config.removeMaskPlanes.append("CROSSTALK")
-config.doNImage = True
-config.badMaskPlanes += ["SUSPECT"]
+# PSF-matching configs are in units of pix and specific to skymap pixel scale
 
-config.select.retarget(PsfWcsSelectImagesTask)
+# Max PSF FWHM allowed into coadds BestSeeingSelectVisits.maxPsfFwhm = 1.9
+# If skymap pixel scale is 0.1, that translates to Fwhm of 19.0
+# TO DO: Change this to 9.5 if we go to 0.2 pixel scale.
+config.modelPsf.defaultFwhm = 19.0
 
-# FUTURE: Set to True when we get transmission curves
-config.doAttachTransmissionCurve = False
+# These configs are for skymaps of pixel scale 0.1
+# TO DO: Delete these 5 if we go a 0.2 pixel scale
+config.psfMatch.kernel['AL'].kernelSize = 57
+config.psfMatch.kernel['AL'].alardSigGauss = [1.5, 3.0, 6.0]
+config.psfMatch.kernel['AL'].sizeCellX = 256
+config.psfMatch.kernel['AL'].sizeCellY = 256

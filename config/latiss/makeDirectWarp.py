@@ -1,5 +1,3 @@
-# Configs shared between makeCoaddTempExp and assemble
-
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -22,4 +20,15 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.matchingKernelSize = 29
+"""LATISS-specific overrides for MakeWarpTask"""
+
+# These thresholds must be relaxed for AuxTel/LATISS compared to the task
+# defaults (which were conditioned on HSC data).  These have been chosen
+# based on the data observed in the 2022-11B (PREOPS-1986) and 2022-12A
+# (PREOPS-3135) runs (see figures on DM-37497) and are probably going to
+# evolve as the commissioning of AuxTel procedes.
+config.doSelectPreWarp = True
+config.select.maxEllipResidual = 0.1
+# Updated with DM-40668
+config.select.maxScaledSizeScatter = 0.025
+config.select.maxPsfTraceRadiusDelta = 4.8
