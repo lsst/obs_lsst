@@ -5,3 +5,5 @@ from lsst.pipe.tasks.postprocess import TransformObjectCatalogConfig
 objectConfig = TransformObjectCatalogConfig()
 objectConfig.load(os.path.join(os.path.dirname(__file__), "transformObjectCatalog.py"))
 config.bands = objectConfig.outputBands
+config.applyProperMotions = False
+
