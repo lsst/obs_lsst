@@ -24,6 +24,8 @@ imsim-specific overrides for CalibrateTask
 """
 import os.path
 
+from lsst.meas.algorithms import ColorLimit
+
 configDir = os.path.dirname(__file__)
 
 # imSim-specifc reference catalog configuration.
@@ -45,6 +47,8 @@ config.astrometry.maxMeanDistanceArcsec = 0.05
 # No color terms in simulation.
 config.photoCal.applyColorTerms = False
 config.photoCal.photoCatName = 'ps1_pv3_3pi_20170110'
+colors = config.photoCal.match.referenceSelection.colorLimits
+colors["g-r"] = ColorLimit(primary="r_flux", secondary="g_flux", minimum=0.4, maximum=2.0)
 
 # Select only stars for photometric calibration.
 config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
