@@ -25,7 +25,15 @@ LSST Cam-specific overrides for CalibrateTask
 """
 import os.path
 
-obsConfigDir = os.path.join(os.path.dirname(__file__))
+from lsst.meas.algorithms import ColorLimit
+
+config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
+colors = config.photoCal.match.referenceSelection.colorLimits
+colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
+
+config.photoCal.applyColorTerms = True
+config.photoCal.photoCatName = "atlas_refcat2_20220201"
+config.photoCal.colorterms.load(os.path.join(obsConfigDir, "colorterms.py"))
 
 # Activate calibration of measurements: required for aperture corrections
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
@@ -35,3 +43,6 @@ config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
+
+config.connections.astromRefCat = "gaia_dr3_20230707"
+config.connections.photoRefCat = "atlas_refcat2_20220201"
