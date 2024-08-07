@@ -3,12 +3,17 @@
 
 for source, target in [
     # update left hand column with the filter names once we know them
-    ("u", "u"),
-    ("g", "g"),
-    ("r", "r"),
-    ("i", "i"),
-    ("z", "z"),
+    ("empty", "white"),
+    ("u_02", "u"),
+    ("u_05", "u"),
+    ("u_06", "u"),
+    ("g_01", "g"),
+    ("g_07", "g"),
+    ("r_03", "r"),
+    ("i_06", "i"),
+    ("z_02", "z"),
+    ("z_03", "z"),
     # ATLAS Refcat2 does not have y band.
-    ("y", "z"),
+    ("y_04", "z"),
 ]:
     config.filterMap[source] = target
