@@ -3,8 +3,9 @@ import os.path
 config_dir = os.path.dirname(__file__)
 
 # Fiducial values derived from SMTN-002 (v2024-03-06), based on
-# syseng_throughput v1.9. See SMTN-002 (https://smtn-002.lsst.io) and DM-44855
-# for discussion.
+# syseng_throughput v1.9. Gain values derived from ComCam PTC
+# processed in u/jchiang/ptc_BLOCK-275_w_2024_28.
+# See DM-45333 for more details.
 
 # Fiducial PsfSigma in pixels
 config.fiducialPsfSigma = {
@@ -18,20 +19,20 @@ config.fiducialPsfSigma = {
 
 # Fiducial ZeroPoint for 1s exposure
 config.fiducialZeroPoint = {
-    "u": 25.96,
-    "g": 27.95,
-    "r": 27.80,
-    "i": 27.61,
-    "z": 27.22,
-    "y": 26.26,
+    'u': 25.97,
+    'g': 27.96,
+    'r': 27.81,
+    'i': 27.62,
+    'z': 27.23,
+    'y': 26.27,
 }
 
 # Fiducial SkyBackground in ADU per second
 config.fiducialSkyBackground = {
-    "u": 0.90,
-    "g": 9.20,
-    "r": 19.62,
-    "i": 31.51,
-    "z": 47.26,
-    "y": 53.91,
+    'u': 0.91,
+    'g': 9.35,
+    'r': 19.94,
+    'i': 32.04,
+    'z': 48.05,
+    'y': 54.81,
 }
