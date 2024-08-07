@@ -22,5 +22,7 @@
 """
 imsim-specific overrides for IsrTask
 """
+config.doLinearize = False
+config.doFringe = True
 config.connections.newBFKernel = "bfk"
 config.doBrighterFatter = True
