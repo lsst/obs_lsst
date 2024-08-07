@@ -10,7 +10,8 @@ config.photometry.match.referenceSelection.magLimit.fluxField = "r_flux"
 colors = config.photometry.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
-config.photometry.applyColorTerms = True
+# TODO: Turn color terms back on when they are available
+config.photometry.applyColorTerms = False
 config.photometry.photoCatName = "atlas_refcat2_20220201"
 config.photometry.colorterms.load(os.path.join(config_dir, "colorterms.py"))
 

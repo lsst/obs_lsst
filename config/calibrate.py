@@ -33,9 +33,9 @@ config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 colors = config.photoCal.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
-config.photoCal.applyColorTerms = True
+# TODO: Turn color terms back on when they are available
+config.photoCal.applyColorTerms = False
 config.photoCal.photoCatName = "atlas_refcat2_20220201"
-config.photoCal.colorterms.load(os.path.join(obsConfigDir, "colorterms.py"))
 
 # Activate calibration of measurements: required for aperture corrections
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
