@@ -1,3 +1,7 @@
+import os
+
+from lsst.meas.algorithms import ColorLimit  # Configure the photometry to use atlas_refcat2.
+
 # Configure the photometry to use atlas_refcat2.
 config_dir = os.path.dirname(__file__)
 
@@ -12,4 +16,4 @@ config.photometry.applyColorTerms = True
 config.photometry.photoCatName = "atlas_refcat2_20220201"
 config.photometry.colorterms.load(os.path.join(config_dir, "colorterms.py"))
 
-config.compute_summary_stats.load(os.path.join(configDir, "computeExposureSummaryStats.py"))
+config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSummaryStats.py"))

@@ -2,7 +2,7 @@ import os.path
 
 from lsst.meas.astrom import FitAffineWcsTask
 
-ObsConfigDir = os.path.dirname(__file__)
+obsConfigDir = os.path.dirname(__file__)
 
 # Configure the photometry to use atlas_refcat2.
 config.connections.photoRefCat = "atlas_refcat2_20220201"
