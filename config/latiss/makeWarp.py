@@ -22,11 +22,6 @@
 
 """LATISS-specific overrides for MakeWarpTask"""
 
-import os.path
-
-# Load configs shared between assembleCoadd and makeWarp.
-config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
-
 # These thresholds must be relaxed for AuxTel/LATISS compared to the task
 # defaults (which were conditioned on HSC data).  These have been chosen
 # based on the data observed in the 2022-11B (PREOPS-1986) and 2022-12A
