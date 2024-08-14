@@ -9,9 +9,10 @@ config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
 colors = config.photoCal.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 config.photoCal.applyColorTerms = True
+config.photoCal.photoCatName = "atlas_refcat2_20220201"
+config.photoCal.colorterms.load(os.path.join(obsConfigDir, "colorterms.py"))
 
 # Configure the photometry to use atlas_refcat2.
-config.connections.photoRefCat = "atlas_refcat2_20220201"
 config.photoRefObjLoader.load(os.path.join(obsConfigDir, "filterMap.py"))
 
 # We often have very few sources due to smaller aperture so use affine task.
