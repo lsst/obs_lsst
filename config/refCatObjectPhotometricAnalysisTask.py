@@ -1,4 +1,4 @@
 """Overrides for RefCatObjectPhotometricAnalysisTask"""
 
-config.connections.outputName = "objectTable_tract_atlas_refcat2_20220201_match_photom"
-config.connections.refCatalog = "atlas_refcat2_20220201"
+config.connections.outputName = "objectTable_tract_uw_stars_20240524_match_photom"
+config.connections.refCatalog = "uw_stars_20240524"
