@@ -1,8 +1,13 @@
 import os.path
 
+from lsst.meas.algorithms import ColorLimit
 from lsst.meas.astrom import FitAffineWcsTask
 
 obsConfigDir = os.path.dirname(__file__)
+
+config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
+colors = config.photoCal.match.referenceSelection.colorLimits
+colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
 # Configure the photometry to use atlas_refcat2.
 config.connections.photoRefCat = "atlas_refcat2_20220201"

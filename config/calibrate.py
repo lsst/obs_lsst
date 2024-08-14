@@ -25,13 +25,7 @@ LSST Cam-specific overrides for CalibrateTask
 """
 import os.path
 
-from lsst.meas.algorithms import ColorLimit
-
 obsConfigDir = os.path.dirname(__file__)
-
-config.photoCal.match.referenceSelection.magLimit.fluxField = "r_flux"
-colors = config.photoCal.match.referenceSelection.colorLimits
-colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
 
 # TODO: Turn color terms back on when they are available
 config.photoCal.applyColorTerms = False
