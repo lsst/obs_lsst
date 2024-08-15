@@ -20,14 +20,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-from lsst.pipe.tasks.selectImages import PsfWcsSelectImagesTask
-
-config.subregionSize = (10000, 200)  # 200 rows (since patch width is typically < 10k pixels)
-config.removeMaskPlanes.append("CROSSTALK")
-config.doNImage = True
-config.badMaskPlanes += ["SUSPECT"]
-
-config.select.retarget(PsfWcsSelectImagesTask)
-
-# FUTURE: Set to True when we get transmission curves
-config.doAttachTransmissionCurve = False
+config.psfMatch.kernel['AL'].kernelSize = 29
+config.psfMatch.kernel['AL'].alardSigGauss = [1.0, 2.0, 4.5]
+config.modelPsf.defaultFwhm = 7.7

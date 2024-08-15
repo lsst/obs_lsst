@@ -20,7 +20,7 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-"""LATISS-specific overrides for MakeWarpTask"""
+"""LATISS-specific overrides for MakeDirectWarpTask"""
 
 # These thresholds must be relaxed for AuxTel/LATISS compared to the task
 # defaults (which were conditioned on HSC data).  These have been chosen
@@ -34,23 +34,9 @@
 #      (exposure.observation_type='science') AND
 #      (exposure.science_program='AUXTEL_PHOTO_IMAGING' OR
 #       exposure.science_program='AUXTEL_DRP_IMAGING')"
+config.doSelectPreWarp = True
 config.select.maxEllipResidual = 0.027
 config.select.maxScaledSizeScatter = 0.026
 config.select.maxPsfTraceRadiusDelta = 2.9
 config.select.maxPsfApFluxDelta = 0.075
 config.select.maxPsfApCorrSigmaScaledDelta = 0.118
-
-# PSF-matching configs are in units of pix and specific to skymap pixel scale
-
-# Max PSF FWHM allowed into coadds BestSeeingSelectVisits.maxPsfFwhm = 1.9
-# If skymap pixel scale is 0.1, that translates to Fwhm of 19.0
-# TO DO: Change this to 9.5 if we go to 0.2 pixel scale.
-config.modelPsf.defaultFwhm = 19.0
-
-config.warpAndPsfMatch.psfMatch.kernel["AL"].kernelSize = 43
-
-# These configs are for skymaps of pixel scale 0.1
-# TO DO: Delete these 3 if we go a 0.2 pixel scale
-config.warpAndPsfMatch.psfMatch.kernel["AL"].alardSigGauss = [1.5, 3.0, 6.0]
-config.warpAndPsfMatch.psfMatch.kernel["AL"].sizeCellX = 256
-config.warpAndPsfMatch.psfMatch.kernel["AL"].sizeCellY = 256

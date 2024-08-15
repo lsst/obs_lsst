@@ -20,11 +20,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
-# Load configs shared between assembleCoadd and makeCoaddTempExp
-config.load(os.path.join(os.path.dirname(__file__), "coaddBase.py"))
-
 config.makePsfMatched = True
 config.warpAndPsfMatch.psfMatch.kernel["AL"].kernelSize = config.matchingKernelSize
 config.warpAndPsfMatch.psfMatch.kernel["AL"].alardSigGauss = [1.0, 2.0, 4.5]

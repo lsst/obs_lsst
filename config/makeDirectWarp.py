@@ -1,5 +1,3 @@
-# Configs shared between makeCoaddTempExp and assemble
-
 # This file is part of obs_lsst.
 #
 # Developed for the LSST Data Management System.
@@ -22,4 +20,6 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.matchingKernelSize = 29
+
+# FUTURE: Set to True when we have sky background estimate
+config.doApplyNewBackground = False
