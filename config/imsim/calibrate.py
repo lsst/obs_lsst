@@ -44,7 +44,7 @@ config.astrometry.maxMeanDistanceArcsec = 0.05
 
 # No color terms in simulation.
 config.photoCal.applyColorTerms = False
-config.photoCal.photoCatName = 'ps1_pv3_3pi_20170110'
+config.photoCal.photoCatName = 'cal_ref_cat_2_2'
 
 # Select only stars for photometric calibration.
 config.photoCal.match.sourceSelection.unresolved.maximum = 0.5
