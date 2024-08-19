@@ -27,3 +27,4 @@ config.doBrighterFatter = True
 config.connections.newBFKernel = "bfk"
 config.doCrosstalk = False
 config.doFringe = False
+config.doLinearize = False
