@@ -24,4 +24,9 @@ cameraConfig.detectorRules["R01_S00"] = copy.copy(detectorConfigWithParallelOver
 cameraConfig.detectorRules["R01_S11"] = copy.copy(detectorConfigWithParallelOverscan)
 cameraConfig.detectorRules["R30_S00"] = copy.copy(detectorConfigWithParallelOverscan)
 
+cameraConfig.detectorRules["R02_S21"] = copy.copy(defaultDetectorConfig)
+cameraConfig.detectorRules["R02_S21"].ampRules["C05"] = copy.copy(ampConfigWithParallelOverscan)
+cameraConfig.detectorRules["R02_S21"].ampRules["C10"] = copy.copy(ampConfigWithParallelOverscan)
+cameraConfig.detectorRules["R02_S21"].ampRules["C15"] = copy.copy(ampConfigWithParallelOverscan)
+
 config.overscanCamera = cameraConfig
