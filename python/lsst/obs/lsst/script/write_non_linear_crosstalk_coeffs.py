@@ -41,51 +41,18 @@ camera = butler.get("camera", instrument="LSSTCam", collections=["LSSTCam/calib"
 # collections used below.
 butlerPtc = Butler(repo, collections="u/lsstccs/ptc_13144_w_2023_22/20230607T013806Z")
 
-for det_id, detector in enumerate(camera):
-    det_name = detector.getName()
-    if det_name in [
-        "R00_SW0",
-        "R00_SW1",
-        "R04_SW0",
-        "R04_SW1",
-        "R40_SW0",
-        "R40_SW1",
-        "R44_SW0",
-        "R44_SW1",
-    ]:
-        nAmp = 8
-        AMP2SEG = {
-            1: "C10",
-            2: "C11",
-            3: "C12",
-            4: "C13",
-            5: "C14",
-            6: "C15",
-            7: "C16",
-            8: "C17",
-        }
-    else:
-        nAmp = 16
-        AMP2SEG = {
-            1: "C10",
-            2: "C11",
-            3: "C12",
-            4: "C13",
-            5: "C14",
-            6: "C15",
-            7: "C16",
-            8: "C17",
-            9: "C07",
-            10: "C06",
-            11: "C05",
-            12: "C04",
-            13: "C03",
-            14: "C02",
-            15: "C01",
-            16: "C00",
-        }
+# Use a dictionary keyed by detector id to store raw crosstalks.
+crosstalk_dict = {}
 
-    cc = CrosstalkCalib(detector=detector, nAmp=nAmp)
+for detector in camera:
+    det_id = detector.getId()
+    det_name = detector.getName()
+
+    print("Working on ", det_id, det_name)
+
+    nAmp = len(detector)
+
+    cc = CrosstalkCalib(nAmp=nAmp)
     # The coefficients are in two collections
     if det_id < 99:
         run_num = 13198
@@ -107,39 +74,55 @@ for det_id, detector in enumerate(camera):
     # the entire sensor and then 9 different sensors.
     # So 180 images, but only 20 are relevant for each sensors,
     # and only 5 are relevant per amplifier.  The rest are filled with NaN.
-    c0_matrix = np.full((nAmp, nAmp, 180), np.nan)
-    c1_matrix = np.full((nAmp, nAmp, 180), np.nan)
-    c0_error = np.full((nAmp, nAmp, 180), np.nan)
-    c1_error = np.full((nAmp, nAmp, 180), np.nan)
+    c0_matrix_in = np.full((nAmp, nAmp, 180), np.nan)
+    c1_matrix_in = np.full((nAmp, nAmp, 180), np.nan)
+    c0_error_in = np.full((nAmp, nAmp, 180), np.nan)
+    c1_error_in = np.full((nAmp, nAmp, 180), np.nan)
 
     for i, ref in enumerate(data_refs):
         crosstalk_results = butler.get(ref)
         for j in range(nAmp):
-            target_segment = AMP2SEG[j + 1]
+            target_segment = detector[j].getName()
             for k in range(nAmp):
-                source_segment = AMP2SEG[k + 1]
+                source_segment = detector[k].getName()
                 if j == k:
-                    c0_matrix[k, j, i] = 0.0
-                    c1_matrix[k, j, i] = 0.0
+                    c0_matrix_in[k, j, i] = 0.0
+                    c1_matrix_in[k, j, i] = 0.0
                     continue
                 try:
                     this_ct_result = crosstalk_results[det_name][det_name]
-                    c0_matrix[k, j, i] = this_ct_result[target_segment][source_segment]["c0"]
-                    c1_matrix[k, j, i] = this_ct_result[target_segment][source_segment]["c1"]
-                    c0_error[k, j, i] = this_ct_result[target_segment][source_segment]["c0Error"]
-                    c1_error[k, j, i] = this_ct_result[target_segment][source_segment]["c1Error"]
+                    c0_matrix_in[k, j, i] = this_ct_result[target_segment][source_segment]["c0"]
+                    c1_matrix_in[k, j, i] = this_ct_result[target_segment][source_segment]["c1"]
+                    c0_error_in[k, j, i] = this_ct_result[target_segment][source_segment]["c0Error"]
+                    c1_error_in[k, j, i] = this_ct_result[target_segment][source_segment]["c1Error"]
                 except KeyError:
                     continue
 
-    c0_matrix = np.nanmedian(c0_matrix, axis=2)
-    c1_matrix = np.nanmedian(c1_matrix, axis=2)
-    c0_error_matrix = np.nanmedian(c0_error, axis=2)
-    c1_error_matrix = np.nanmedian(c1_error, axis=2)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
 
-    cc.coeffs = c0_matrix
-    cc.coeffErr = c0_error_matrix
-    cc.coeffsSqr = c1_matrix
-    cc.coeffErrSqr = c1_error_matrix
+        c0_matrix = np.nanmedian(c0_matrix_in, axis=2)
+        c1_matrix = np.nanmedian(c1_matrix_in, axis=2)
+        c0_error_matrix = np.nanmedian(c0_error_in, axis=2)
+        c1_error_matrix = np.nanmedian(c1_error_in, axis=2)
+
+    coeff_valid_matrix = (
+        np.isfinite(c0_matrix)
+        & np.isfinite(c1_matrix)
+        & np.isfinite(c0_error_matrix)
+        & np.isfinite(c1_error_matrix)
+    )
+
+    # Set the nans to 0.
+    c0_matrix[~coeff_valid_matrix] = 0.0
+    c0_error_matrix[~coeff_valid_matrix] = 0.0
+    c1_matrix[~coeff_valid_matrix] = 0.0
+    c1_error_matrix[~coeff_valid_matrix] = 0.0
+
+    cc.coeffs[:, :] = c0_matrix
+    cc.coeffErr[:, :] = c0_error_matrix
+    cc.coeffsSqr[:, :] = c1_matrix
+    cc.coeffErrSqr[:, :] = c1_error_matrix
 
     # PTC gains, to save matrix of gain ratios
     ptc = butlerPtc.get("ptc", instrument="LSSTCam", detector=det_id)
@@ -148,9 +131,9 @@ for det_id, detector in enumerate(camera):
     # crosstalk matrices to invalid
     coeff_valid_matrix = np.full((nAmp, nAmp), True)
     for i in range(nAmp):
-        target_segment = AMP2SEG[i + 1]
+        target_segment = detector[i].getName()
         for j in range(nAmp):
-            source_segment = AMP2SEG[j + 1]
+            source_segment = detector[j].getName()
             if i == j:
                 gain_ratios_matrix[j, i] = 1.0
                 coeff_valid_matrix[j, i] = False
@@ -159,10 +142,18 @@ for det_id, detector in enumerate(camera):
             gain_target = ptc.gain[target_segment]
             gain_ratios_matrix[j, i] = gain_target / gain_source
 
+    fit_gains = np.full(nAmp, np.nan)
+    for i in range(nAmp):
+        fit_gains[i] = ptc.gain[detector[i].getName()]
+
     # Units are e-/e-.
     cc.crosstalkRatiosUnits = 'electron'
-    cc.ampGainRatios = gain_ratios_matrix
-    cc.coeffValid = coeff_valid_matrix
+    cc.ampGainRatios[:, :] = gain_ratios_matrix
+    cc.coeffValid[:, :] = coeff_valid_matrix
+    cc.fitGains[:] = fit_gains
+
+    crosstalk_dict[det_id] = cc
+
 
     # Save the ecsv files
     valid_start = "1970-01-01T00:00:00"
@@ -172,6 +163,9 @@ for det_id, detector in enumerate(camera):
     out_path = os.path.join(directory, "lsstCam", "crosstalk", det_name.lower())
     os.makedirs(out_path, exist_ok=True)
     out_file = os.path.join(out_path, datestr + ".ecsv")
+
+    cc = crosstalk_dict[det_id]
+    cc.hasCrosstalk = True
 
     cc.updateMetadata(
         camera=camera,
