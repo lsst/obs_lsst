@@ -13,6 +13,7 @@
 __all__ = ("LsstComCamSimTranslator", )
 
 import logging
+import math
 
 import astropy
 import astropy.units as u
@@ -148,8 +149,19 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         # Rather than attempting to calculate something that is already
         # known to be junk, return a fixed value.
         if self.are_keys_ok(["RA", "DEC"]):
+
+            # If there is an airmass value, use it for the elevation
+            # to try to use the available information even if inconsistent
+            # with the observing date.
+            airmass = self.to_boresight_airmass()
+            if airmass is None:
+                elevation = 45 * u.deg
+            else:
+                # The number does not have to be accurate.
+                elevation = math.asin(1 / airmass) * u.rad
+
             return AltAz(
-                0. * u.deg, 45. * u.deg, obstime=self.to_datetime_begin(), location=self.to_location()
+                0. * u.deg, elevation, obstime=self.to_datetime_begin(), location=self.to_location()
             )
 
         return None
