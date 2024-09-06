@@ -25,11 +25,16 @@ import numpy as np
 from lsst.daf.butler import Butler
 from lsst.ip.isr import CrosstalkCalib
 import lsst.utils
+import warnings
+from scipy.stats import median_abs_deviation
 
 repo = "/sdf/group/rubin/repo/main"
 butler = Butler(repo)
 registry = butler.registry
 camera = butler.get("camera", instrument="LSSTCam", collections=["LSSTCam/calib"])
+
+nsigma_outlier_coeff = 10.0
+nsigma_outlier_coeff_sqr = 20.0
 
 # PTC RUN collection found via
 # butler query-collections /sdf/group/rubin/repo/main
@@ -154,6 +159,138 @@ for detector in camera:
 
     crosstalk_dict[det_id] = cc
 
+n_itl = 0
+n_e2v = 0
+for det in camera:
+    if len(det) != len(camera[0]):
+        # Skip nAmp=8 detectors which fortunately look fine.
+        continue
+
+    if det.getPhysicalType() == "ITL":
+        n_itl += 1
+    else:
+        n_e2v += 1
+
+# Now we aggregate the ITL and E2V crosstalk terms.
+itl_matrices = np.zeros((n_itl, 16, 16))
+itl_matrices_sqr = np.zeros_like(itl_matrices)
+e2v_matrices = np.zeros((n_e2v, 16, 16))
+e2v_matrices_sqr = np.zeros_like(e2v_matrices)
+itl_det_nums = np.zeros(n_itl, dtype=np.int32)
+e2v_det_nums = np.zeros(n_e2v, dtype=np.int32)
+
+itl_index = 0
+e2v_index = 0
+
+for det in camera:
+    if len(det) != len(camera[0]):
+        # Skip nAmp=8 detectors which fortunately look fine.
+        continue
+
+    crosstalk = crosstalk_dict[det.getId()]
+
+    if det.getPhysicalType() == "ITL":
+        itl_matrices[itl_index, :, :] = crosstalk.coeffs
+        itl_matrices_sqr[itl_index, :, :] = crosstalk.coeffsSqr
+        # Flag bad values with nans.
+        itl_matrices[itl_index, :, :][~crosstalk.coeffValid] = np.nan
+        itl_matrices_sqr[itl_index, :, :][~crosstalk.coeffValid] = np.nan
+        itl_det_nums[itl_index] = det.getId()
+        itl_index += 1
+    else:
+        e2v_matrices[e2v_index, :, :] = crosstalk.coeffs
+        e2v_matrices_sqr[e2v_index, :, :] = crosstalk.coeffsSqr
+        e2v_matrices[e2v_index, :, :][~crosstalk.coeffValid] = np.nan
+        e2v_matrices_sqr[e2v_index, :, :][~crosstalk.coeffValid] = np.nan
+        e2v_det_nums[e2v_index] = det.getId()
+        e2v_index += 1
+
+# Compute the median ITL and E2V matrices for "fixups".
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    median_itl_matrix = np.nanmedian(itl_matrices, axis=0)
+    median_itl_matrix_sqr = np.nanmedian(itl_matrices_sqr, axis=0)
+    median_e2v_matrix = np.nanmedian(e2v_matrices, axis=0)
+    median_e2v_matrix_sqr = np.nanmedian(e2v_matrices_sqr, axis=0)
+
+# Fix up any large outliers for the ITL detectors.
+nAmp = len(camera[itl_det_nums[0]])
+for i in range(nAmp):
+    for j in range(nAmp):
+        if i == j:
+            continue
+
+        med_coeff = median_itl_matrix[i, j]
+        sigma_mad_coeff = median_abs_deviation(itl_matrices[:, i, j], scale="normal", nan_policy="omit")
+
+        min_coeff = med_coeff - nsigma_outlier_coeff*sigma_mad_coeff
+        max_coeff = med_coeff + nsigma_outlier_coeff*sigma_mad_coeff
+
+        med_coeff_sqr = median_itl_matrix_sqr[i, j]
+        sigma_mad_coeff_sqr = median_abs_deviation(
+            itl_matrices_sqr[:, i, j],
+            scale="normal",
+            nan_policy="omit",
+        )
+
+        min_coeff_sqr = med_coeff_sqr - nsigma_outlier_coeff_sqr*sigma_mad_coeff_sqr
+        max_coeff_sqr = med_coeff_sqr + nsigma_outlier_coeff_sqr*sigma_mad_coeff_sqr
+
+        bad, = np.where(
+            (itl_matrices[:, i, j] < min_coeff)
+            | (itl_matrices[:, i, j] > max_coeff)
+            | (itl_matrices_sqr[:, i, j] < min_coeff_sqr)
+            | (itl_matrices_sqr[:, i, j] > max_coeff_sqr)
+        )
+
+        if len(bad) > 0:
+            for b in itl_det_nums[bad]:
+                print(f"Found bad coefficient for detector {b} ({camera[b].getName()}), position ({i}, {j}).")
+
+                crosstalk_dict[b].coeffs[i, j] = med_coeff
+                crosstalk_dict[b].coeffsSqr[i, j] = med_coeff_sqr
+
+nAmp = len(camera[e2v_det_nums[0]])
+for i in range(nAmp):
+    for j in range(nAmp):
+        if i == j:
+            continue
+
+        med_coeff = median_e2v_matrix[i, j]
+        sigma_mad_coeff = median_abs_deviation(e2v_matrices[:, i, j], scale="normal", nan_policy="omit")
+
+        min_coeff = med_coeff - nsigma_outlier_coeff*sigma_mad_coeff
+        max_coeff = med_coeff + nsigma_outlier_coeff*sigma_mad_coeff
+
+        med_coeff_sqr = median_e2v_matrix_sqr[i, j]
+        sigma_mad_coeff_sqr = median_abs_deviation(
+            e2v_matrices_sqr[:, i, j],
+            scale="normal",
+            nan_policy="omit",
+        )
+
+        min_coeff_sqr = med_coeff_sqr - nsigma_outlier_coeff_sqr*sigma_mad_coeff_sqr
+        max_coeff_sqr = med_coeff_sqr + nsigma_outlier_coeff_sqr*sigma_mad_coeff_sqr
+
+        bad, = np.where(
+            (e2v_matrices[:, i, j] < min_coeff)
+            | (e2v_matrices[:, i, j] > max_coeff)
+            | (e2v_matrices_sqr[:, i, j] < min_coeff_sqr)
+            | (e2v_matrices_sqr[:, i, j] > max_coeff_sqr)
+        )
+
+        if len(bad) > 0:
+            for b in e2v_det_nums[bad]:
+                print(f"Found bad coefficient for detector {b} ({camera[b].getName()}), position ({i}, {j}).")
+
+                crosstalk_dict[b].coeffs[i, j] = med_coeff
+                crosstalk_dict[b].coeffsSqr[i, j] = med_coeff_sqr
+
+for detector in camera:
+    det_id = detector.getId()
+    det_name = detector.getName()
+
+    print("Serializing ", det_id, det_name)
 
     # Save the ecsv files
     valid_start = "1970-01-01T00:00:00"
