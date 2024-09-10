@@ -246,6 +246,8 @@ for i in range(nAmp):
         if len(bad) > 0:
             for b in itl_det_nums[bad]:
                 print(f"Found bad coefficient for detector {b} ({camera[b].getName()}), position ({i}, {j}).")
+                print(f"  Replacing {crosstalk_dict[b].coeffs[i, j]} with {med_coeff}.")
+                print(f"  Replacing {crosstalk_dict[b].coeffsSqr[i, j]} with {med_coeff_sqr}.")
 
                 crosstalk_dict[b].coeffs[i, j] = med_coeff
                 crosstalk_dict[b].coeffsSqr[i, j] = med_coeff_sqr
@@ -309,6 +311,6 @@ for detector in camera:
         detector=detector,
         setCalibId=True,
         setCalibInfo=True,
-        setDate=True,
+        setDate=False,
     )
     cc.writeText(out_file)
