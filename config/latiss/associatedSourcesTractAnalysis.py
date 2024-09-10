@@ -5,3 +5,6 @@ from lsst.pipe.tasks.postprocess import TransformObjectCatalogConfig
 objectConfig = TransformObjectCatalogConfig()
 objectConfig.load(os.path.join(os.path.dirname(__file__), "transformObjectCatalog.py"))
 config.bands = objectConfig.outputBands
+# gbdesAstrometricFitTask is not run for latiss, so there is no proper motion
+# catalog to use here.
+config.applyAstrometricCorrections = False
