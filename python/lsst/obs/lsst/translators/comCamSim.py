@@ -13,9 +13,10 @@
 __all__ = ("LsstComCamSimTranslator", )
 
 import logging
-import warnings
+import math
 
 import astropy
+import astropy.units as u
 import astropy.utils.exceptions
 from astropy.coordinates import AltAz
 from astro_metadata_translator import cache_translation
@@ -143,18 +144,25 @@ class LsstComCamSimTranslator(LsstCamTranslator):
         if self.are_keys_ok(["ELSTART", "AZSTART"]):
             return super().to_altaz_begin()
 
-        # Calculate it from the RA/Dec and time.
-        # The time is not consistent with the HASTART/AMSTART values.
+        # The time is not consistent with HASTART/AMSTART values.
         # This means that the elevation may well come out negative.
+        # Rather than attempting to calculate something that is already
+        # known to be junk, return a fixed value.
         if self.are_keys_ok(["RA", "DEC"]):
-            # Derive from RADec in absence of any other information
-            radec = self.to_tracking_radec()
-            if radec is not None:
-                # This can trigger warnings because of the future dates
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", category=astropy.utils.exceptions.AstropyWarning)
-                    altaz = radec.transform_to(AltAz())
-                return altaz
+
+            # If there is an airmass value, use it for the elevation
+            # to try to use the available information even if inconsistent
+            # with the observing date.
+            airmass = self.to_boresight_airmass()
+            if airmass is None:
+                elevation = 45 * u.deg
+            else:
+                # The number does not have to be accurate.
+                elevation = math.asin(1 / airmass) * u.rad
+
+            return AltAz(
+                0. * u.deg, elevation, obstime=self.to_datetime_begin(), location=self.to_location()
+            )
 
         return None
 
