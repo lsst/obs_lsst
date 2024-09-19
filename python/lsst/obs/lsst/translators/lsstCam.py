@@ -17,6 +17,7 @@ import logging
 import pytz
 import astropy.time
 import astropy.units as u
+from astropy.time import Time
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
@@ -74,7 +75,6 @@ class LsstCamTranslator(LsstBaseTranslator):
         "detector_group": "RAFTBAY",
         "detector_name": "CCDSLOT",
         "observation_id": "OBSID",
-        "exposure_time": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
         "object": ("OBJECT", dict(default="UNKNOWN")),
         "science_program": (["PROGRAM", "RUNNUM"], dict(default="unknown")),
@@ -161,6 +161,35 @@ class LsstCamTranslator(LsstBaseTranslator):
             joined = joined.removesuffix("~empty")
 
         return joined
+
+    @cache_translation
+    def to_exposure_time(self):
+        """Calculate the exposure time
+
+        Returns
+        -------
+        exposure time : `float`
+            Taken from the exposure time ROIMILLI (Region of Interest, in ms)
+        Raises
+        ------
+        NotImplementedError
+            Raised if ROIMILLI isn't in header
+        """
+
+        if self.is_key_ok("ROIMILLI"):
+            return self.quantity_from_card("ROIMILLI", u.ms)
+        else:
+            raise NotImplementedError("Unable to determine exposure time")
+
+    @cache_translation
+    def to_datetime_begin(self):
+        # Docstring will be inherited. Property defined in properties.py
+        for k in ["MJD-OBS", "MJD"]:
+            if self.is_key_ok(k):
+                self._used_these_cards(k)
+                return Time(self._header[k], scale="tai", format="mjd")
+
+        raise NotImplementedError("Unable to determine datetime_begin")
 
     @classmethod
     def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
