@@ -117,6 +117,24 @@ class LsstCamTranslator(LsstBaseTranslator):
             header["FILTER"] = "ph_5"
             modified = True
 
+        if "FILTER1" not in header:
+            # Set FILTER1 for the test types that require it.
+            filter1_map = {
+                "LAMBDA": header.get("CCOBLED"),
+                "SFLAT_LO": "LOW",
+                "SFLAT_HI": "HIGH"
+            }
+            test_type = header.get("TESTTYPE")
+            if test_type in filter1_map:
+                log.warning(
+                    "%s: Setting FILTER1='%s' for TESTTYPE %s",
+                    log_label,
+                    filter1_map[test_type],
+                    test_type
+                )
+                header["FILTER1"] = filter1_map[test_type]
+                modified = True
+
         return modified
 
     @classmethod
