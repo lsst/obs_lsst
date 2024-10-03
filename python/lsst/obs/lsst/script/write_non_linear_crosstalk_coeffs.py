@@ -311,6 +311,9 @@ for detector in camera:
         detector=detector,
         setCalibId=True,
         setCalibInfo=True,
-        setDate=False,
+        setDate=True,
     )
+    cc.metadata["CALIBDATE"] = valid_start
+    if os.path.isfile(out_file):
+        os.remove(out_file)
     cc.writeText(out_file)
