@@ -795,7 +795,8 @@ class LsstBaseTranslator(FitsTranslator):
             The defocal distance from header in mm or the 0.0mm default
         """
         if self.is_key_ok("FOCUSZ"):
-            focus_z = self._header["FOCUSZ"]
+            # Some broken files have strings instead of floats.
+            focus_z = float(self._header["FOCUSZ"])
             return focus_z * u.mm
         return super().to_focus_z()
 
