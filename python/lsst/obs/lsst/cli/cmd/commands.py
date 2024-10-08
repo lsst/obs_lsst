@@ -36,6 +36,7 @@ from ... import script
 
 
 defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
+default_guider_regex = r".*SG.*\.fits$"
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
@@ -55,9 +56,31 @@ defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
     default=True,
     help="Indicate to the datastore whether file attributes such as file size"
     " or checksum should be tracked or not. Whether this parameter is honored"
-    " depends on the specific datastore implentation.",
+    " depends on the specific datastore implementation.",
 )
 @options_file_option()
 def ingest_photodiode(*args, **kwargs):
     """Ingest photodiode data from a directory into the butler registry."""
     script.ingestPhotodiode(*args, **kwargs)
+
+
+@click.command(cls=ButlerCommand, short_help="Ingest LSSTCam guider data.")
+@repo_argument(required=True)
+@locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
+                    required=True)
+@regex_option(default=default_guider_regex,
+              help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
+              f"Defaults to {default_guider_regex}")
+@run_option(required=True, help="Run collection place these guider files.")
+@transfer_option(default="direct")
+@click.option(
+    "--track-file-attrs/--no-track-file-attrs",
+    default=True,
+    help="Indicate to the datastore whether file attributes such as file size"
+    " or checksum should be tracked or not. Whether this parameter is honored"
+    " depends on the specific datastore implementation.",
+)
+@options_file_option()
+def ingest_guider(*args, **kwargs):
+    """Ingest LSSTCam guider data into a butler repository."""
+    script.ingest_guider_simple(*args, **kwargs)
