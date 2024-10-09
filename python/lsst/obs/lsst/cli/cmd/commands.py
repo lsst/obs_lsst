@@ -29,6 +29,7 @@ from lsst.daf.butler.cli.opt import (
     regex_option,
     run_option,
     transfer_option,
+    register_dataset_types_option,
 )
 from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
@@ -71,7 +72,11 @@ def ingest_photodiode(*args, **kwargs):
 @regex_option(default=default_guider_regex,
               help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
               f"Defaults to {default_guider_regex}")
-@run_option(required=True, help="Run collection place these guider files.")
+@run_option(
+    required=False,
+    default=None,
+    help="Run collection place these guider files. Default is to create collection based on instrument.",
+)
 @transfer_option(default="direct")
 @click.option(
     "--track-file-attrs/--no-track-file-attrs",
@@ -80,6 +85,16 @@ def ingest_photodiode(*args, **kwargs):
     " or checksum should be tracked or not. Whether this parameter is honored"
     " depends on the specific datastore implementation.",
 )
+@click.option(
+    "--fail-fast/--no-fail-fast",
+    default=False,
+    is_flag=True,
+    help=(
+        "Stop ingest as soon as any problem is encountered with any file. "
+        "Otherwise problem files will be skipped and logged and a report issued at completion."
+    )
+)
+@register_dataset_types_option()
 @options_file_option()
 def ingest_guider(*args, **kwargs):
     """Ingest LSSTCam guider data into a butler repository."""
