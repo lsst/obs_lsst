@@ -35,12 +35,15 @@ import lsst.afw.fits
 import lsst.obs.lsst.translators  # Force translators to import  # noqa: F401
 from astro_metadata_translator import ObservationInfo
 from lsst.daf.butler import (Butler, DataCoordinate, DatasetIdGenEnum,
-                             DatasetRef, DatasetType, FileDataset)
+                             DatasetRef, DatasetType, FileDataset,
+                             MissingDatasetTypeError)
 from lsst.obs.base.formatters.fitsGeneric import FitsGenericFormatter
 from lsst.resources import ResourcePath, ResourcePathExpression
 
 _LOG = logging.getLogger(__name__)
-_DATASET_TYPE_NAME = "raw_guider"
+_DATASET_TYPE_NAME = "guider_raw"
+_DEFAULT_GUIDER_REGEX = r".*SG.*\.fits$"
+_DEFAULT_RUN_FORMAT = "{}/raw/guider"
 
 
 def _do_nothing(*args: Any, **kwargs: Any) -> None:
@@ -54,11 +57,15 @@ def _do_nothing(*args: Any, **kwargs: Any) -> None:
 
 def ingest_guider(
     butler: Butler,
-    run: str,
-    files: list[ResourcePathExpression],
+    locations: list[ResourcePathExpression],
+    *,
+    file_filter: str = _DEFAULT_GUIDER_REGEX,
+    group_files: bool = True,
+    run: str | None = None,
     transfer: str = "auto",
     register_dataset_type: bool = False,
     track_file_attrs: bool = True,
+    on_success: Callable[[list[FileDataset]], Any] = _do_nothing,
     on_metadata_failure: Callable[[ResourcePath, Exception], Any] = _do_nothing,
     on_undefined_exposure: Callable[[ResourcePath, str], Any] = _do_nothing,
     on_ingest_failure: Callable[[list[FileDataset], Exception], Any] = _do_nothing,
@@ -70,10 +77,18 @@ def ingest_guider(
     ----------
     butler : `lsst.daf.butler.Butler`
         Butler in which to ingest the guider files.
-    run : `str`
-        The name of the run that will be receiving these datasets.
-    files : `list` [ `lsst.resources.ResourcePathExpression` ]
-        Guider files to ingest.
+    locations : `list` [ `lsst.resources.ResourcePathExpression` ]
+        Guider files to ingest or directories of guider files.
+    file_filter : `str`, optional
+        The file filter to use if directories are to be searched.
+    group_files: `bool`, optional
+        If `True` files are ingested in groups based on the directories
+        they are found in. If `False` directories are searched and all files
+        are ingested together. If explicit files are given they are treated
+        as their own group.
+    run : `str` or `None`, optional
+        The name of the run that will be receiving these datasets. By default.
+        if `None`, a value of `<INSTRUMENT>/raw/guider` is used.
     transfer : `str`, optional
         Transfer mode to use for ingest. Default is "auto". If "direct"
         mode is used ingestion of a file that is already present in the
@@ -85,6 +100,12 @@ def ingest_guider(
         Control whether file attributes such as the size or checksum should
         be tracked by the datastore. Whether this parameter is honored
         depends on the specific datastore implementation.
+    on_success : `Callable`, optional
+        A callback invoked when all of the raws associated with a group
+        are ingested.  Will be passed a list of `FileDataset` objects, each
+        containing one or more resolved `DatasetRef` objects.  If this callback
+        raises it will interrupt the entire ingest process, even if
+        ``fail_fast`` is `False`.
     on_metadata_failure : `Callable`, optional
         A callback invoked when a failure occurs trying to translate the
         metadata for a file.  Will be passed the URI and the exception, in
@@ -114,22 +135,104 @@ def ingest_guider(
 
     Notes
     -----
-    Always uses a dataset type named "raw_guider" with dimensions instrument,
-    detector, exposure. The exposure must already be defined. The dataset
-    type
+    Always uses a dataset type named "guider_raw" with dimensions instrument,
+    detector, exposure. The exposure must already be defined.
     """
-    # Force butler to ensure that the required run exists.
-    butler = butler.clone(run=run)
-
     dataset_type = DatasetType(
         _DATASET_TYPE_NAME,
         {"instrument", "detector", "exposure"},
         "Stamps",
         universe=butler.dimensions,
     )
+
     if register_dataset_type:
         butler.registry.registerDatasetType(dataset_type)
+    else:
+        try:
+            registry_dataset_type = butler.get_dataset_type(_DATASET_TYPE_NAME)
+        except MissingDatasetTypeError as e:
+            e.add_note(
+                f"Can not ingest guider data without registering the {_DATASET_TYPE_NAME} dataset type. "
+                "Consider re-running with 'register_dataset_type' option."
+            )
+            raise
+        if not registry_dataset_type.is_compatible_with(dataset_type):
+            raise RuntimeError(
+                f"Registry dataset type {registry_dataset_type} is incompatible with "
+                f"definition required for guider ingest ({dataset_type})"
+            )
 
+    ingested_refs = []
+    missing_files = set()
+    if group_files:
+        for group in ResourcePath.findFileResources(
+            locations, file_filter, grouped=True
+        ):
+            files = list(group)
+            _LOG.info(
+                "Found group containing %d file%s in directory %s",
+                len(files),
+                "" if len(files) == 1 else "s",
+                files[0].dirname(),
+            )
+            ingested, missing = _ingest_group(
+                butler,
+                dataset_type,
+                files,
+                run=run,
+                transfer=transfer,
+                track_file_attrs=track_file_attrs,
+                on_ingest_failure=on_ingest_failure,
+                on_metadata_failure=on_metadata_failure,
+                on_undefined_exposure=on_undefined_exposure,
+                on_success=on_success,
+                fail_fast=fail_fast,
+            )
+            ingested_refs.extend(ingested)
+            missing_files.update(missing)
+    else:
+        files = list(
+            ResourcePath.findFileResources(locations, file_filter, grouped=False)
+        )
+        _LOG.info("Ingesting %d file%s", len(files), "" if len(files) == 1 else "s")
+        ingested_refs, missing_files = _ingest_group(
+            butler,
+            dataset_type,
+            files,
+            run=run,
+            transfer=transfer,
+            track_file_attrs=track_file_attrs,
+            on_ingest_failure=on_ingest_failure,
+            on_metadata_failure=on_metadata_failure,
+            on_undefined_exposure=on_undefined_exposure,
+            on_success=on_success,
+            fail_fast=fail_fast,
+        )
+
+    if n_missed := len(missing_files):
+        msg = "\n".join(f" - {f}" for f in missing_files)
+        _LOG.warning("Failed to ingest the following:\n%s", msg)
+        raise RuntimeError(
+            f"Failed to ingest {n_missed} file{'' if n_missed == 1 else 's'}."
+        )
+
+    return ingested_refs
+
+
+def _ingest_group(
+    butler: Butler,
+    dataset_type: DatasetType,
+    files: list[ResourcePath],
+    *,
+    run: str | None = None,
+    transfer: str = "auto",
+    track_file_attrs: bool = True,
+    on_success: Callable[[list[FileDataset]], Any] = _do_nothing,
+    on_metadata_failure: Callable[[ResourcePath, Exception], Any] = _do_nothing,
+    on_undefined_exposure: Callable[[ResourcePath, str], Any] = _do_nothing,
+    on_ingest_failure: Callable[[list[FileDataset], Exception], Any] = _do_nothing,
+    fail_fast: bool = False,
+) -> tuple[list[DatasetRef], set[str]]:
     # Map filenames to initial data ID (using obs ID rather than exposure ID).
     raw_data_id: dict[str, ObservationInfo] = {}
 
@@ -140,14 +243,26 @@ def ingest_guider(
     # Mapping of file name to error message.
     failed_metadata: dict[str, str] = {}
 
+    # The GUIDE detectors for each instrument.
+    guide_detectors: dict[str, set[int]] = {}
+
     # Since there may be multiple guider files for a single exposure,
     # accumulate the exposure information before converting obs_id to exposure
     # id.
-    file_resources: list[ResourcePath] = []
     for file in files:
-        filepath = ResourcePath(file, forceAbsolute=True)
-        file_resources.append(filepath)
-        metadata_path = filepath.updatedExtension(".json")
+        metadata_path = file.updatedExtension(".json")
+        if metadata_path == file:
+            # Attempting to ingest the sidecar file.
+            try:
+                raise RuntimeError(
+                    f"Can not ingest sidecar file as GUIDER file (attempting {metadata_path})"
+                )
+            except RuntimeError as e:
+                failed_metadata[file] = str(e)
+                on_metadata_failure(file, e)
+                if fail_fast:
+                    raise
+            continue
 
         metadata = None
         if metadata_path.exists():
@@ -158,7 +273,7 @@ def ingest_guider(
             # FITS file itself.
             # Allow direct remote read from S3.
             try:
-                fs, fspath = filepath.to_fsspec()
+                fs, fspath = file.to_fsspec()
                 with fs.open(fspath) as f, astropy.io.fits.open(f) as fits_obj:
                     metadata = fits_obj[0].header
             except Exception as e:
@@ -184,21 +299,41 @@ def ingest_guider(
                 raise RuntimeError(f"Problem parsing metadata for file {file}") from e
             continue
 
-        raw_data_id[filepath] = info
+        # Populate detector lookup table.
+        if info.instrument not in guide_detectors:
+            guide_detectors[info.instrument] = set(
+                rec.id
+                for rec in butler.query_dimension_records(
+                    "detector", instrument=info.instrument
+                )
+                if rec.purpose == "GUIDER"
+            )
+
+        if info.detector_num not in guide_detectors[info.instrument]:
+            # The callbacks are documented to be called within an exception.
+            try:
+                raise ValueError(f"File {file} is not a GUIDER observation.")
+            except ValueError as e:
+                failed_metadata[file] = str(e)
+                on_metadata_failure(file, e)
+                if fail_fast:
+                    raise
+                continue
+
+        raw_data_id[file] = info
         obs_ids[info.instrument].add(info.observation_id)
 
-    if len(obs_ids) > 1:
-        # This constraint is not required but it does simplify the run
-        # parameter unless we allow the run parameter to be defined as
-        # "{instrument}/raw/guider" or something. You likely don't want
-        # data for multiple instruments to go in a single RUN collection.
+    if run is not None and len(obs_ids) > 1:
+        # We do not want to ingest files from different instruments into
+        # the same run so only allow this if we are defining the RUN
+        # internally.
         raise RuntimeError(
-            f"Can only ingest data from a single instrument at a time but got {obs_ids.keys()}"
+            f"Can only ingest data from a single instrument into a single RUN but got {obs_ids.keys()}"
         )
 
     if failed_metadata:
         msg = "\n".join(f" - {f}" for f in failed_metadata)
-        _LOG.warning("Failed to extract useful metadata for:\n%s", msg)
+        _LOG.warning("Failed to extract usable GUIDER metadata for:\n%s", msg)
 
     # Map obs_id to a tuple of instrument and exposure ID in case we are
     # ingesting guiders from multiple instruments.
@@ -231,6 +366,7 @@ def ingest_guider(
         )
 
     # Now there is enough information to create the ingest datasets.
+    output_runs: set[str] = set()
     failed_exposure_metadata: list[str] = []
     datasets: list[FileDataset] = []
     for file, info in raw_data_id.items():
@@ -244,6 +380,16 @@ def ingest_guider(
                 )
             continue
 
+        if run is None:
+            output_run = _DEFAULT_RUN_FORMAT.format(info.instrument)
+        else:
+            output_run = run
+
+        if output_run not in output_runs:
+            # Always try to create on first pass.
+            butler.collections.register(output_run)
+            output_runs.add(output_run)
+
         data_id = DataCoordinate.standardize(
             instrument=info.instrument,
             detector=info.detector_num,
@@ -254,7 +400,7 @@ def ingest_guider(
         ref = DatasetRef(
             dataset_type,
             data_id,
-            run,
+            output_run,
             id_generation_mode=DatasetIdGenEnum.DATAID_TYPE_RUN,
         )
         datasets.append(
@@ -276,13 +422,16 @@ def ingest_guider(
             )
         except Exception as e:
             on_ingest_failure(datasets, e)
-            raise
+            datasets = []  # Effectively nothing was ingested.
+            if fail_fast:
+                raise
+        else:
+            on_success(datasets)
 
-    if len(datasets) != len(file_resources):
-        ingested_files = {d.file for d in datasets}
-        given_files = set(file_resources)
+    missing_files = set()
+    if len(datasets) != len(files):
+        ingested_files = {d.path for d in datasets}
+        given_files = set(files)
         missing_files = given_files - ingested_files
-        msg = "\n".join(f" - {f}" for f in missing_files)
-        raise RuntimeError(f"Failed to ingest the following files:\n{msg}")
 
-    return [d.refs[0] for d in datasets]
+    return [d.refs[0] for d in datasets], missing_files

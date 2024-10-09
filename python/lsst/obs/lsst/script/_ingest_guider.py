@@ -26,7 +26,6 @@ __all__ = ["ingest_guider_simple"]
 import logging
 
 from lsst.daf.butler import Butler
-from lsst.resources import ResourcePath
 
 from .._ingest_guider import ingest_guider
 
@@ -40,7 +39,8 @@ def ingest_guider_simple(
     output_run: str,
     transfer: str = "direct",
     track_file_attrs: bool = True,
-    register_dataset_type: bool = False,
+    fail_fast: bool = False,
+    register_dataset_types: bool = False,
 ) -> None:
     """Ingests guider data into the butler registry.
 
@@ -62,24 +62,22 @@ def ingest_guider_simple(
         Control whether file attributes such as the size or checksum should
         be tracked by the datastore. Whether this parameter is honored
         depends on the specific datastore implementation.
-    register_dataset_type : `bool`, optional
-        Whether to try to register the 'guider_raw' dataset type.
+    fail_fast : `bool`, optional.
+        If `True`, ingest is stopped as soon as any error is encountered.
+    register_dataset_types : `bool`, optional
+        Whether to try to register the guider dataset type.
     """
     butler = Butler(repo, writeable=True)
 
-    # Look for data files.
-    refs = []
-    for group in ResourcePath.findFileResources(locations, regex, grouped=True):
-        files = list(group)
-        _LOG.info(
-            "Found group containing %d file%s in directory %s",
-            len(files),
-            "" if len(files) == 1 else "s",
-            files[0].dirname(),
-        )
-        ingested = ingest_guider(
-            butler, output_run, files, register_dataset_type=True, transfer=transfer
-        )
-        refs.extend(ingested)
+    refs = ingest_guider(
+        butler,
+        locations,
+        file_filter=regex,
+        transfer=transfer,
+        run=output_run,
+        track_file_attrs=track_file_attrs,
+        register_dataset_type=register_dataset_types,
+        fail_fast=fail_fast,
+    )
 
     _LOG.info("Ingested %d guider file%s", len(refs), "" if len(refs) == 1 else "s")
