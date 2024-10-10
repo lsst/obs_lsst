@@ -3,7 +3,7 @@
 
 for source, target in [
     # update left hand column with the filter names once we know them
-    ("u", "u"),
+    ("u", "g"),
     ("g", "g"),
     ("r", "r"),
     ("i", "i"),
