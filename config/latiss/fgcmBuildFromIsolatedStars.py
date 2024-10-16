@@ -8,7 +8,7 @@ config.primaryBands = ["i", "r", "g", "z", "y"]
 config.coarseNside = 64
 
 config.minPerBand = 2
-config.connections.ref_cat = "atlas_refcat2_20220201"
+config.connections.ref_cat = "the_monster_20240904"
 
 config.apertureInnerInstFluxField = "apFlux_35_0_instFlux"
 config.apertureOuterInstFluxField = "apFlux_50_0_instFlux"
