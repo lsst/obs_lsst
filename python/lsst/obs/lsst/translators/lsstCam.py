@@ -113,7 +113,10 @@ class LsstCamTranslator(LsstBaseTranslator):
             header["FILTER2"] = None
             modified = True
 
-        if header.get("DAYOBS") in ("20231107", "20231108") and header["FILTER"] == "ph_05":
+        if (
+            header.get("DAYOBS") in ("20231107", "20231108", "20241015", "20241016")
+            and header["FILTER"] == "ph_05"
+        ):
             header["FILTER"] = "ph_5"
             modified = True
 
