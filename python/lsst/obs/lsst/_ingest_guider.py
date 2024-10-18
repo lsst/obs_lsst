@@ -42,7 +42,7 @@ from lsst.resources import ResourcePath, ResourcePathExpression
 
 _LOG = logging.getLogger(__name__)
 _DATASET_TYPE_NAME = "guider_raw"
-_DEFAULT_GUIDER_REGEX = r".*SG.*\.fits$"
+DEFAULT_GUIDER_REGEX = r".*SG.*_guider\.fits$"
 _DEFAULT_RUN_FORMAT = "{}/raw/guider"
 
 
@@ -59,7 +59,7 @@ def ingest_guider(
     butler: Butler,
     locations: list[ResourcePathExpression],
     *,
-    file_filter: str = _DEFAULT_GUIDER_REGEX,
+    file_filter: str = DEFAULT_GUIDER_REGEX,
     group_files: bool = True,
     run: str | None = None,
     transfer: str = "auto",
