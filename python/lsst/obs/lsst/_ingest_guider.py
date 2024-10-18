@@ -186,6 +186,7 @@ def ingest_guider(
                 on_ingest_failure=on_ingest_failure,
                 on_metadata_failure=on_metadata_failure,
                 on_undefined_exposure=on_undefined_exposure,
+                on_success=on_success,
                 fail_fast=fail_fast,
             )
             ingested_refs.extend(ingested)
@@ -205,6 +206,7 @@ def ingest_guider(
             on_ingest_failure=on_ingest_failure,
             on_metadata_failure=on_metadata_failure,
             on_undefined_exposure=on_undefined_exposure,
+            on_success=on_success,
             fail_fast=fail_fast,
         )
 
