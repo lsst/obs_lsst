@@ -34,10 +34,9 @@ from lsst.daf.butler.cli.opt import (
 from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
-
+from ..._ingest_guider import DEFAULT_GUIDER_REGEX
 
 defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
-default_guider_regex = r".*SG.*\.fits$"
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
@@ -69,9 +68,9 @@ def ingest_photodiode(*args, **kwargs):
 @repo_argument(required=True)
 @locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
                     required=True)
-@regex_option(default=default_guider_regex,
+@regex_option(default=DEFAULT_GUIDER_REGEX,
               help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
-              f"Defaults to {default_guider_regex}")
+              f"Defaults to {DEFAULT_GUIDER_REGEX}")
 @run_option(
     required=False,
     default=None,
