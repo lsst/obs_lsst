@@ -21,5 +21,5 @@
 
 from .commands import (
     ingest_photodiode,
+    ingest_guider,
 )
-

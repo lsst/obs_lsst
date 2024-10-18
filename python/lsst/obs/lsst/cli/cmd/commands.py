@@ -29,11 +29,12 @@ from lsst.daf.butler.cli.opt import (
     regex_option,
     run_option,
     transfer_option,
+    register_dataset_types_option,
 )
 from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
-
+from ..._ingest_guider import DEFAULT_GUIDER_REGEX
 
 defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
 
@@ -55,9 +56,45 @@ defaultRegex = r"Photodiode_Readings.*txt$|photodiode.ecsv$"
     default=True,
     help="Indicate to the datastore whether file attributes such as file size"
     " or checksum should be tracked or not. Whether this parameter is honored"
-    " depends on the specific datastore implentation.",
+    " depends on the specific datastore implementation.",
 )
 @options_file_option()
 def ingest_photodiode(*args, **kwargs):
     """Ingest photodiode data from a directory into the butler registry."""
     script.ingestPhotodiode(*args, **kwargs)
+
+
+@click.command(cls=ButlerCommand, short_help="Ingest LSSTCam guider data.")
+@repo_argument(required=True)
+@locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
+                    required=True)
+@regex_option(default=DEFAULT_GUIDER_REGEX,
+              help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
+              f"Defaults to {DEFAULT_GUIDER_REGEX}")
+@run_option(
+    required=False,
+    default=None,
+    help="Run collection place these guider files. Default is to create collection based on instrument.",
+)
+@transfer_option(default="direct")
+@click.option(
+    "--track-file-attrs/--no-track-file-attrs",
+    default=True,
+    help="Indicate to the datastore whether file attributes such as file size"
+    " or checksum should be tracked or not. Whether this parameter is honored"
+    " depends on the specific datastore implementation.",
+)
+@click.option(
+    "--fail-fast/--no-fail-fast",
+    default=False,
+    is_flag=True,
+    help=(
+        "Stop ingest as soon as any problem is encountered with any file. "
+        "Otherwise problem files will be skipped and logged and a report issued at completion."
+    )
+)
+@register_dataset_types_option()
+@options_file_option()
+def ingest_guider(*args, **kwargs):
+    """Ingest LSSTCam guider data into a butler repository."""
+    script.ingest_guider_simple(*args, **kwargs)
