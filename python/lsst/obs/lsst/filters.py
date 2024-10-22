@@ -443,19 +443,19 @@ for band, sn in [("u", "SN-05"),  # incorrect sub thickness
                  ("y", "SN-04"),
                  ]:
     physical_filter = f"{band}_{sn[3:]}"
-    lsstCamFilter = [f for f in LsstCamFiltersBaseline if f.band == band][0]
-
     addFilter(ComCamFilters_dict, band, physical_filter)
 
 
 ComCamFilters = [
-    FilterDefinition(band="white", physical_filter="empty"),
     FilterDefinition(band="unknown", physical_filter="unknown"),
+    FilterDefinition(band="white", physical_filter="pinhole"),
+    FilterDefinition(band="OG590", physical_filter="OG590_2_5mm"),
 ]
 for band, physical_filters in ComCamFilters_dict.items():
     for physical_filter, filter_defn in physical_filters.items():
         ComCamFilters.append(FilterDefinition(**filter_defn))
 
 COMCAM_FILTER_DEFINITIONS = FilterDefinitionCollection(
+    *NoFilterCollection,
     *ComCamFilters,
 )
