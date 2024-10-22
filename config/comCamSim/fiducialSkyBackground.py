@@ -1,13 +1,12 @@
-# Fiducial values derived from SMTN-002 (v2024-03-06), based on
-# syseng_throughput v1.9. See SMTN-002 (https://smtn-002.lsst.io) and DM-44855
-# for discussion.
+# Fiducial values derived from skyCounts in syseng_throughput v1.9.
+# See DM-47034 for more details.
 
-# Fiducial SkyBackground in ADU per second
+# Fiducial SkyBackground in electrons per second
 config.fiducialSkyBackground = {
-    "u": 0.90,
-    "g": 9.20,
-    "r": 19.62,
-    "i": 31.51,
-    "z": 47.26,
-    "y": 53.91,
+    "u": 1.51,
+    "g": 15.45,
+    "r": 32.95,
+    "i": 52.94,
+    "z": 79.40,
+    "y": 90.57,
 }
