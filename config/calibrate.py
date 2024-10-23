@@ -40,5 +40,5 @@ config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
 
-config.connections.astromRefCat = "gaia_dr3_20230707"
+config.connections.astromRefCat = "the_monster_20240904"
 config.connections.photoRefCat = "the_monster_20240904"
