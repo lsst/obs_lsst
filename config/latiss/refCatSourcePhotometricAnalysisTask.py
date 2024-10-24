@@ -5,6 +5,3 @@ from lsst.pipe.tasks.postprocess import TransformObjectCatalogConfig
 objectConfig = TransformObjectCatalogConfig()
 objectConfig.load(os.path.join(os.path.dirname(__file__), "transformObjectCatalog.py"))
 config.bands = objectConfig.outputBands
-
-config.connections.refCatalog = "atlas_refcat2_20220201"
-config.connections.outputName = "sourceTable_visit_atlas_refcat2_20220201_match_photom"

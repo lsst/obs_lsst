@@ -31,7 +31,5 @@ config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "hsm.py"))
 config.load(os.path.join(os.path.dirname(__file__), "..", "cmodel.py"))
 config.match.refObjLoader.load(os.path.join(os.path.dirname(__file__), "filterMap.py"))
 
-config.connections.refCat = "atlas_refcat2_20220201"
-
 config.doMatchSources = False
 config.doWriteMatchesDenormalized = False

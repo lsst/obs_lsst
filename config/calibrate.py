@@ -27,9 +27,12 @@ import os.path
 
 obsConfigDir = os.path.dirname(__file__)
 
-# TODO: Turn color terms back on when they are available
 config.photoCal.applyColorTerms = False
 config.photoCal.photoCatName = "the_monster_20240904"
+config.photoRefObjLoader.doApplyColorTerms = False
+# Per-instrument configs must load filterMap configs for photoRefObjLoader.
+config.connections.astromRefCat = "the_monster_20240904"
+config.connections.photoRefCat = "the_monster_20240904"
 
 # Activate calibration of measurements: required for aperture corrections
 config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
@@ -39,6 +42,3 @@ config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2
-
-config.connections.astromRefCat = "gaia_dr3_20230707"
-config.connections.photoRefCat = "the_monster_20240904"

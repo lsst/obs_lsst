@@ -44,17 +44,12 @@ config.psf_normalized_calibration_flux.measure_ap_corr.sourceSelector["science"]
 
 config.measure_aperture_correction.sourceSelector["science"].doSignalToNoise = False
 
-# Configure the photometry to use atlas_refcat2.
-config.connections.photometry_ref_cat = "atlas_refcat2_20220201"
+# Configure the photometry to use the Monster correctly.
 config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "r_flux"
 colors = config.photometry.match.referenceSelection.colorLimits
 colors["g-r"] = ColorLimit(primary="g_flux", secondary="r_flux", minimum=0.4, maximum=2.0)
-
-config.photometry.applyColorTerms = True
-config.photometry.photoCatName = "atlas_refcat2_20220201"
-config.photometry.colorterms.load(os.path.join(config_dir, "colorterms.py"))
 
 # Note that the following two config values were validated on data taken in
 # 2022-11 and 2022-12, which is after some major improvements were made to
