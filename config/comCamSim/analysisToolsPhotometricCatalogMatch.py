@@ -1,5 +1,3 @@
-"""comCamSim-specific overrides for PhotometricCatalogMatchTask"""
-
 import os.path
 
 configDir = os.path.dirname(__file__)

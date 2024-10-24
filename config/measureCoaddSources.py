@@ -29,5 +29,5 @@ config.measurement.load(os.path.join(os.path.dirname(__file__), "hsm.py"))
 config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
 
 config.doWriteMatchesDenormalized = True
-
+config.connections.refCat = "the_monster_20240904"
 config.measurement.plugins.names |= ["base_InputCount"]

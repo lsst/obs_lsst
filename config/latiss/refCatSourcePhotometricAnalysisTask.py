@@ -7,4 +7,4 @@ objectConfig.load(os.path.join(os.path.dirname(__file__), "transformObjectCatalo
 config.bands = objectConfig.outputBands
 
 config.connections.refCatalog = "atlas_refcat2_20220201"
-config.connections.outputName = "objectTable_tract_atlas_refcat2_20220201_match_photom"
+config.connections.outputName = "sourceTable_visit_atlas_refcat2_20220201_match_photom"
