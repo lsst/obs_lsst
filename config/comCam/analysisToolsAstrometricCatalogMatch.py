@@ -20,14 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
-config.measurement.load(os.path.join(os.path.dirname(__file__), "apertures.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "kron.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "convolvedFluxes.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "hsm.py"))
-config.load(os.path.join(os.path.dirname(__file__), "cmodel.py"))
-
-config.doWriteMatchesDenormalized = True
-config.connections.refCat = "the_monster_20240904"
-config.measurement.plugins.names |= ["base_InputCount"]
+config.connections.refCatalog = "the_monster_20240904"
