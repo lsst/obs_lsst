@@ -22,7 +22,24 @@
 """
 comCam-specific overrides for IsrTaskLSST
 """
+# from lsst.ip.isr import OverscanDetectorConfig, OverscanAmpConfig
+import copy
+
 config.doSaturation = False
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.doDeferredCharge = False
 config.doFlat = False
+
+overscanCamera = config.overscanCamera
+
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+ampConfig = copy.copy(detectorConfig.defaultAmpConfig)
+ampConfig.serialOverscanConfig.leadingToSkip = 35
+
+detectorConfig.ampRules["C00"] = ampConfig
+detectorConfig.ampRules["C01"] = ampConfig
+detectorConfig.ampRules["C02"] = ampConfig
+detectorConfig.ampRules["C03"] = ampConfig
+detectorConfig.ampRules["C04"] = ampConfig
+
+overscanCamera.detectorRules["R22_S12"] = detectorConfig
