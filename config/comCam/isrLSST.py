@@ -25,8 +25,8 @@ comCam-specific overrides for IsrTaskLSST
 
 import copy
 
-config.doSaturation = False
-config.crosstalk.doQuadraticCrosstalkCorrection = True
+config.doSaturation = True
+config.crosstalk.doQuadraticCrosstalkCorrection = False
 config.doDeferredCharge = False
 config.doFlat = False
 
