@@ -30,7 +30,6 @@ config.crosstalk.doQuadraticCrosstalkCorrection = False
 config.doDeferredCharge = False
 
 config.doAmpOffset = True
-config.ampOffset.doApplyAmpOffset = True
 config.ampOffset.ampEdgeMaxOffset = 100.0
 
 overscanCamera = config.overscanCamera
