@@ -10,3 +10,6 @@ config.astromRefObjLoader.pixelMargin=800
 
 # Loosened for early ComCam with large PSFs.
 config.photoCal.match.sourceSelection.doUnresolved = False
+
+# Exposure summary stats.
+config.computeSummaryStats.load(os.path.join(obsConfigDir, "computeExposureSummaryStats.py"))
