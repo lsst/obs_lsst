@@ -28,5 +28,9 @@ config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSumma
 config.astrometry.matcher.maxOffsetPix=1500
 config.astrometry_ref_loader.pixelMargin=1500
 
+# Overrides to improved astrometry matching.
+config.astrometry.doFiducialZeroPointCull = True
+config.astrometry.load(os.path.join(config_dir, "fiducialZeroPoint.py"))
+
 # Loosened for early ComCam with large PSFs.
 config.photometry.match.sourceSelection.doUnresolved = False

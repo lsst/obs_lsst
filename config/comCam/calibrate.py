@@ -8,6 +8,10 @@ config.connections.astromRefCat = "the_monster_20240904"
 config.astrometry.matcher.maxOffsetPix=1500
 config.astromRefObjLoader.pixelMargin=1500
 
+# Overrides to improved astrometry matching.
+config.astrometry.doFiducialZeroPointCull = True
+config.astrometry.load(os.path.join(obsConfigDir, "fiducialZeroPoint.py"))
+
 # Loosened for early ComCam with large PSFs.
 config.photoCal.match.sourceSelection.doUnresolved = False
 
