@@ -6,6 +6,8 @@ from lsst.meas.algorithms import ColorLimit  # Configure the photometry to use t
 config_dir = os.path.dirname(__file__)
 
 config.connections.photometry_ref_cat = "the_monster_20240904"
+config.connections.astrometry_ref_cat = "the_monster_20240904"
+
 config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "monster_SynthLSST_r_flux"
@@ -16,7 +18,6 @@ colors["g-r"] = ColorLimit(
     minimum=0.4,
     maximum=2.0
 )
-
 
 config.photometry.applyColorTerms = False
 config.photometry.photoCatName = "the_monster_20240904"
