@@ -10,6 +10,8 @@ setupRequired(obs_lsst_data)
 setupRequired(daf_butler)
 setupOptional(meas_extensions_gaap)
 setupOptional(meas_extensions_psfex)
+# Needed for the Stamps class so that guider data can be read.
+setupRequired(meas_algorithms)
 
 envPrepend(PYTHONPATH, ${PRODUCT_DIR}/python)
 envPrepend(PATH, ${PRODUCT_DIR}/bin)

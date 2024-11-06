@@ -5,4 +5,4 @@ from lsst.sconsUtils import scripts
 # will guarantee to be complete before tests run.
 targetList = ("version", "shebang", "policy",) + scripts.DEFAULT_TARGETS
 
-scripts.BasicSConstruct("obs_lsst", disableCc=True, defaultTargets=targetList)
+scripts.BasicSConstruct("obs_lsst", disableCc=True, defaultTargets=targetList, noCfgFile=True)

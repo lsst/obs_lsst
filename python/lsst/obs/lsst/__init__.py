@@ -26,3 +26,4 @@ from ._instrument import *
 from ._fitsHeader import *
 from ._ingestPhotodiode import *
 from ._packer import *
+from ._ingest_guider import ingest_guider
