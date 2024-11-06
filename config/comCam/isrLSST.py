@@ -23,6 +23,7 @@
 comCam-specific overrides for IsrTaskLSST
 """
 config.doSaturation = True
+config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.doDeferredCharge = False
 
 config.doAmpOffset = True
