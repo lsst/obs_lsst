@@ -26,6 +26,7 @@ config.epochMjds = (0.0, 100000.0)
 config.coatingMjds = []
 config.latitude = -30.2333
 config.mirrorArea = 34.524
+config.cameraGain = 1.0
 config.defaultCameraOrientation = 0.0
 config.expGrayPhotometricCutDict = {
     "u": -0.10,
@@ -152,8 +153,8 @@ config.approxThroughputDict = {
     "y": 1.0,
 }
 
-config.deltaAperFitPerCcdNx = 16
-config.deltaAperFitPerCcdNy = 16
+config.deltaAperFitPerCcdNx = 4
+config.deltaAperFitPerCcdNy = 4
 config.doComputeDeltaAperPerVisit = False
 config.doComputeDeltaAperMap = True
 config.doComputeDeltaAperPerCcd = True
