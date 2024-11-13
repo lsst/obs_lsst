@@ -160,3 +160,7 @@ config.doComputeDeltaAperMap = True
 config.doComputeDeltaAperPerCcd = True
 config.deltaAperInnerRadiusArcsec = 2.40
 config.deltaAperOuterRadiusArcsec = 3.40
+
+# Fit the g band chromaticity term to get first-order correction
+# on the per-detector QE curve in the g band.
+config.fitCcdChromaticityDict = {"g": True}
