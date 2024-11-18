@@ -163,4 +163,6 @@ config.deltaAperOuterRadiusArcsec = 3.40
 
 # Fit the g band chromaticity term to get first-order correction
 # on the per-detector QE curve in the g band.
-config.fitCcdChromaticityDict = {"g": True}
+config.fitCcdChromaticityDict = {"g": True,
+                                 "r": True,
+                                 "i": True}
