@@ -25,6 +25,7 @@ LATISS-specific overrides for IsrTaskLSST
 config.overscanCamera.defaultDetectorConfig.defaultAmpConfig.saturation = 120000
 
 config.crosstalk.doQuadraticCrosstalkCorrection = False
+config.crosstalk.doSubtrahendMasking = True
 config.doDeferredCharge = False
 config.doBrighterFatter = False
 
