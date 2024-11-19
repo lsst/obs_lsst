@@ -28,4 +28,4 @@ config.doDeferredCharge = False
 
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = True
-config.ampOffset.ampEdgeMaxOffset = 100.0
+config.ampOffset.ampEdgeMaxOffset = 10.0
