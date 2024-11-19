@@ -104,7 +104,7 @@ config.superStarSubCcdDict = {
 # Allow calibration to work with at least 10 exposures per night.
 config.minExpPerNight = 10
 # Allow calibration to work with very few stars per exposure.
-config.minStarPerExp = 100
+config.minStarPerExp = 50
 config.nStarPerRun = 5000
 config.nExpPerRun = 100
 config.colorSplitBands = ["g", "i"]
