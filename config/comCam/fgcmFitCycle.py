@@ -10,9 +10,8 @@ physical_to_band = {
 }
 
 config.outfileBase = "fgcmLSSTComCam"
-# Our first runs will use just g/r/i.
-config.bands = ["g", "r", "i"]
-config.fitBands = ["g", "r", "i"]
+config.bands = ["u", "g", "r", "i", "z"]
+config.fitBands = ["u", "g", "r", "i", "z"]
 config.physicalFilterMap = physical_to_band
 config.requiredBands = ["g", "r", "i"]
 
