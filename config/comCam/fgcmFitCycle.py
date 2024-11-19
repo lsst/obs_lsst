@@ -56,9 +56,12 @@ config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
 # Fit aperture corrections with only 2 bins to exercise the code.
 config.aperCorrFitNBins = 10
-config.aperCorrInputSlopeDict = {"g": 0.0,
+config.aperCorrInputSlopeDict = {"u": 0.0,
+                                 "g": 0.0,
                                  "r": 0.0,
-                                 "i": 0.0}
+                                 "i": 0.0,
+                                 "z": 0.0,
+                                 "y": 0.0}
 
 config.sedboundaryterms = fgcmcal.SedboundarytermDict()
 config.sedboundaryterms.data["ug"] = fgcmcal.Sedboundaryterm(primary="u",
@@ -74,10 +77,16 @@ config.sedboundaryterms.data["zy"] = fgcmcal.Sedboundaryterm(primary="z",
 
 config.sedterms = fgcmcal.SedtermDict()
 config.sedterms.data = {
+    "u": fgcmcal.Sedterm(primaryTerm="ug", secondaryTerm="gr", constant=0.5,
+                         extrapolated=True, primaryBand="u", secondaryBand="g", tertiaryBand="r"),
     "g": fgcmcal.Sedterm(primaryTerm="gr", secondaryTerm="ri", constant=1.5),
     "r": fgcmcal.Sedterm(primaryTerm="gr", secondaryTerm="ri", constant=0.9),
-    "i": fgcmcal.Sedterm(primaryTerm="ri", secondaryTerm="gr", constant=0.5,
-                         extrapolated=True, primaryBand="i", secondaryBand="r", tertiaryBand="g"),
+    "i": fgcmcal.Sedterm(primaryTerm="ri", secondaryTerm="iz", constant=1.1),
+    "z": fgcmcal.Sedterm(primaryTerm="iz", secondaryTerm="ri", constant=1.0,
+                         extrapolated=True, primaryBand="z", secondaryBand="i", tertiaryBand="r")
+    # "y": fgcmcal.Sedterm(primaryTerm="zy", secondaryTerm="iz", constant=1.0,
+    #                      extrapolated=True, primaryBand="y", secondaryBand="z", tertiaryBand="i")
+
 }
 
 config.starColorCuts = ("g, i, 0.50, 3.5",)
