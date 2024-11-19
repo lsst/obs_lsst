@@ -53,8 +53,7 @@ config.expVarGrayPhotometricCutDict = {
 }
 config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
-# Fit aperture corrections with only 2 bins to exercise the code.
-config.aperCorrFitNBins = 10
+config.aperCorrFitNBins = 5
 config.aperCorrInputSlopeDict = {"u": 0.0,
                                  "g": 0.0,
                                  "r": 0.0,
@@ -83,15 +82,17 @@ config.sedterms.data = {
     "i": fgcmcal.Sedterm(primaryTerm="ri", secondaryTerm="iz", constant=1.1),
     "z": fgcmcal.Sedterm(primaryTerm="iz", secondaryTerm="ri", constant=1.0,
                          extrapolated=True, primaryBand="z", secondaryBand="i", tertiaryBand="r")
+    # The y band is not fully configured. This config can
+    # be uncommented when we are running with y band.
     # "y": fgcmcal.Sedterm(primaryTerm="zy", secondaryTerm="iz", constant=1.0,
-    #                      extrapolated=True, primaryBand="y", secondaryBand="z", tertiaryBand="i")
-
+    #                      extrapolated=True, primaryBand="y",
+    #                      secondaryBand="z", tertiaryBand="i")
 }
 
 config.starColorCuts = ("g, i, 0.50, 3.5",)
 config.refStarColorCuts = ("g, i, 0.5, 3.5",)
-# Use a tiny fraction of reference stars to test true self-calibration.
-config.refStarMaxFracUse = 0.001
+# Use a small fraction of reference stars to test self-calibration.
+config.refStarMaxFracUse = 0.1
 config.useExposureReferenceOffset = False
 config.precomputeSuperStarInitialCycle = False
 config.superStarSubCcdDict = {
@@ -102,7 +103,7 @@ config.superStarSubCcdDict = {
     "z": True,
 }
 # Allow calibration to work with at least 10 exposures per night.
-config.minExpPerNight = 10
+config.minExpPerNight = 2
 # Allow calibration to work with very few stars per exposure.
 config.minStarPerExp = 50
 config.nStarPerRun = 5000
@@ -145,6 +146,8 @@ config.useRepeatabilityForExpGrayCutsDict = {
     "y": False,
 }
 config.sigFgcmMaxEGrayDict = {
+    # We let the u-band be a little bit worse than the
+    # other bands.
     "u": 0.15,
     "g": 0.05,
     "r": 0.05,
