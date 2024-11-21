@@ -35,7 +35,7 @@ config.select.maxPsfApCorrSigmaScaledDelta = 0.15
 
 # PSF-matching configs are in units of pix and specific to skymap pixel scale.
 
-# Currently allowing BestSeeingSelectVisits.maxPsfFwhm = 2.7 into coadds, so
-# increase the default PSF fwhm (pixels) size.
-# TODO DM-47171: optimize this config setting for artifact rejection.
-config.modelPsf.defaultFwhm = 11.0
+# DM-47171: 9.0 (1.8 arcsec) corresponds to the ~98.5% percentile of the
+# PSF FWHM distribution in the 2nd and 3rd weeks of ComCam science observations
+# selectDeepCoaddVisits is currently set the the default 2.0 arcsec
+config.modelPsf.defaultFwhm = 9.0
