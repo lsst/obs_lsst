@@ -1,3 +1,9 @@
+[project]
+name = "lsst-obs-lsst"
+
+[project.entry-points.'butler.cli']
+obs_lsst = "lsst.obs.lsst.cli:get_cli_subcommands"
+
 [tool.ruff]
 line-length = 110
 target-version = "py311"
@@ -32,4 +38,3 @@ max-doc-length = 79
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
-
