@@ -1,4 +1,4 @@
-config.connections.cycleNumber = 6
+config.connections.cycleNumber = 5
 
 physical_to_band = {
     "u_02": "u",
