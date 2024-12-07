@@ -10,14 +10,17 @@ physical_to_band = {
 }
 
 config.outfileBase = "fgcmLSSTComCam"
-config.bands = ["u", "g", "r", "i", "z"]
-config.fitBands = ["u", "g", "r", "i", "z"]
+config.bands = ["u", "g", "r", "i", "z", "y"]
+config.fitBands = ["u", "g", "r", "i", "z", "y"]
 config.physicalFilterMap = physical_to_band
 config.requiredBands = ["g", "r", "i"]
 
+config.doMultipleCycles = True
+config.multipleCyclesFinalCycleNumber = 5
+
 config.cycleNumber = 0
-config.maxIterBeforeFinalCycle = 50
-config.minCcdPerExp = 1
+config.maxIterBeforeFinalCycle = 100
+config.minCcdPerExp = 3
 config.utBoundary = 0.0
 config.washMjds = (0.0,)
 # For now, define 1 observing epoch that encompasses everything.
@@ -27,6 +30,14 @@ config.latitude = -30.2333
 config.mirrorArea = 34.524
 config.cameraGain = 1.0
 config.defaultCameraOrientation = 0.0
+config.expFwhmCutDict = {
+    "u": 1.7,
+    "g": 1.7,
+    "r": 1.7,
+    "i": 1.7,
+    "z": 1.7,
+    "y": 1.7,
+}
 config.expGrayPhotometricCutDict = {
     "u": -0.10,
     "g": -0.05,
@@ -53,7 +64,7 @@ config.expVarGrayPhotometricCutDict = {
 }
 config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
-config.aperCorrFitNBins = 5
+config.aperCorrFitNBins = 10
 config.aperCorrInputSlopeDict = {"u": 0.0,
                                  "g": 0.0,
                                  "r": 0.0,
@@ -81,12 +92,10 @@ config.sedterms.data = {
     "r": fgcmcal.Sedterm(primaryTerm="gr", secondaryTerm="ri", constant=0.9),
     "i": fgcmcal.Sedterm(primaryTerm="ri", secondaryTerm="iz", constant=1.1),
     "z": fgcmcal.Sedterm(primaryTerm="iz", secondaryTerm="ri", constant=1.0,
-                         extrapolated=True, primaryBand="z", secondaryBand="i", tertiaryBand="r")
-    # The y band is not fully configured. This config can
-    # be uncommented when we are running with y band.
-    # "y": fgcmcal.Sedterm(primaryTerm="zy", secondaryTerm="iz", constant=1.0,
-    #                      extrapolated=True, primaryBand="y",
-    #                      secondaryBand="z", tertiaryBand="i")
+                         extrapolated=True, primaryBand="z", secondaryBand="i", tertiaryBand="r"),
+    "y": fgcmcal.Sedterm(primaryTerm="zy", secondaryTerm="iz", constant=1.0,
+                         extrapolated=True, primaryBand="y",
+                         secondaryBand="z", tertiaryBand="i"),
 }
 
 config.starColorCuts = ("g, i, 0.50, 3.5",)
@@ -101,6 +110,7 @@ config.superStarSubCcdDict = {
     "r": True,
     "i": True,
     "z": True,
+    "y": True,
 }
 # Allow calibration to work with at least 10 exposures per night.
 config.minExpPerNight = 2
@@ -118,7 +128,7 @@ config.ccdGraySubCcdDict = {
     "r": True,
     "i": True,
     "z": True,
-    "y": True,
+    "y": False,
 }
 config.ccdGrayFocalPlaneDict = {
     "u": True,
@@ -164,8 +174,8 @@ config.approxThroughputDict = {
     "y": 1.0,
 }
 
-config.deltaAperFitPerCcdNx = 4
-config.deltaAperFitPerCcdNy = 4
+config.deltaAperFitPerCcdNx = 8
+config.deltaAperFitPerCcdNy = 8
 config.doComputeDeltaAperPerVisit = False
 config.doComputeDeltaAperMap = True
 config.doComputeDeltaAperPerCcd = True
