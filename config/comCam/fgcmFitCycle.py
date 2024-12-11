@@ -98,8 +98,8 @@ config.sedterms.data = {
                          secondaryBand="z", tertiaryBand="i"),
 }
 
-config.starColorCuts = ("g, i, 0.50, 3.5",)
-config.refStarColorCuts = ("g, i, 0.5, 3.5",)
+config.starColorCuts = ("g, i, 0.0, 3.5",)
+config.refStarColorCuts = ("g, i, 0.0, 3.5",)
 # Use a small fraction of reference stars to test self-calibration.
 config.refStarMaxFracUse = 0.1
 config.useExposureReferenceOffset = False
