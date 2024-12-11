@@ -13,7 +13,7 @@ config.outfileBase = "fgcmLSSTComCam"
 config.bands = ["u", "g", "r", "i", "z", "y"]
 config.fitBands = ["u", "g", "r", "i", "z", "y"]
 config.physicalFilterMap = physical_to_band
-config.requiredBands = ["g", "r", "i"]
+config.requiredBands = []
 
 config.doMultipleCycles = True
 config.multipleCyclesFinalCycleNumber = 5
