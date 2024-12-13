@@ -22,6 +22,8 @@
 from lsst.daf.butler import Butler
 from lsst.ip.isr import Defects
 import lsst.obs.lsst as ol
+import os
+import lsst.utils
 
 # Read and put new manual defects into the butler.
 # We have to use embargo_old because
@@ -33,13 +35,18 @@ butler.registry.registerRun(collection_output)
 
 cc = ol.LsstComCam
 camera = cc.getCamera()
+
+directory = lsst.utils.getPackageDir("obs_lsst_data")
+
 for det in camera:
     detId = det.getId()
     detName = det.getName()
 
+    manualDefectsPath = os.path.join(directory, "comCam", "manual_defects", detName.lower())
+
     # This is only valid for LSSTComCam which has a single raft
     manual_defects = \
-        Defects.readText('obs_lsst_data/comCam/manual_defects/r22_s'+detName[5:]+'/20241120T000000.ecsv')
+        Defects.readText(manualDefectsPath+'/20241020T000000.ecsv')
 
     butler.put(manual_defects, "manual_defects",
                instrument="LSSTComCam", detector=detId,
