@@ -20,11 +20,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import re
 import os
+import numpy as np
 import dateutil.parser
 from lsst.ip.isr import Defects
 from lsst.geom import Box2I, Point2I, Extent2I
 import lsst.utils
 from lsst.obs.lsst import LsstComCam
+from lsst.daf.butler import Butler
 
 
 camera = LsstComCam().getCamera()
@@ -34,6 +36,8 @@ data_root = lsst.utils.getPackageDir("obs_lsst_data")
 valid_start = "2024-10-20T00:00:00"
 valid_date = dateutil.parser.parse(valid_start)
 datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+
+butler = Butler("embargo", instrument="LSSTComCam", collections=["LSSTComCam/calib/DM-47447"])
 
 for det in camera:
     print("Building manual defects from detector ", det.getName(), det.getId())
@@ -75,6 +79,23 @@ for det in camera:
                 (2031, 0, 10, 2000),
             ),
         )
+
+    # Add bad bias column defects from DM-48174.
+    bias = butler.get("bias", detector=det.getId())
+
+    det_height = det.getBBox().getHeight()
+    for half in ["bottom", "top"]:
+        if half == "bottom":
+            ylow, yhigh = 0, det_height // 2
+        else:
+            ylow, yhigh = det_height // 2, det_height
+
+        col_median = np.median(bias.image.array[ylow: yhigh, :], axis=0)
+
+        bad_cols, = np.where(np.abs(col_median) > 10)
+
+        for bad_col in bad_cols:
+            box_xywh.append((bad_col, ylow, 1, yhigh - ylow))
 
     bboxes = [
         Box2I(corner=Point2I(x, y), dimensions=Extent2I(w, h))
