@@ -54,8 +54,8 @@ for det in camera:
         # Phosphorescence.
         box_xywh.extend(
             (
-                (0, 1300, 350, 2695),
-                (3650, 3600, 417, 395),
+                (0, 1300, 350, 2700),
+                (3650, 3600, 417, 400),
             ),
         )
     elif det.getId() == 4:
