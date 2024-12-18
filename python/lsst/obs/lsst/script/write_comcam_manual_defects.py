@@ -49,8 +49,15 @@ for det in camera:
 
     box_xywh = []
 
-    # Define the manual defects from DM-47365.
-    if det.getId() == 1:
+    # Define the manual defects from DM-47365 and DM-48174.
+    if det.getId() == 0:
+        # Ardenti Negans Imperfecta (incomplete glowing negative column).
+        box_xywh.extend(
+            (
+                (680, 2000, 11, 966),
+            ),
+        )
+    elif det.getId() == 1:
         # Phosphorescence.
         box_xywh.extend(
             (
@@ -58,11 +65,24 @@ for det in camera:
                 (3650, 3600, 417, 400),
             ),
         )
+    elif det.getId() == 3:
+        # Warm corner.
+        box_xywh.extend(
+            (
+                (3600, 0, 472, 900),
+            ),
+        )
     elif det.getId() == 4:
         # Unmasked dark column.
         box_xywh.extend(
             (
-                (3400, 2000, 15, 2000),
+                (3389, 2000, 29, 2000),
+            ),
+        )
+        # Vampire trail.
+        box_xywh.extend(
+            (
+                (2534, 0, 7, 2000),
             ),
         )
     elif det.getId() == 5:
