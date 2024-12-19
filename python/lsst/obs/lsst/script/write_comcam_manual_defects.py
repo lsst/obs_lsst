@@ -31,7 +31,7 @@ camera = LsstComCam().getCamera()
 
 data_root = lsst.utils.getPackageDir("obs_lsst_data")
 
-valid_start = "2024-10-20T00:00:00"
+valid_start = "1970-01-01T00:00:00"
 valid_date = dateutil.parser.parse(valid_start)
 datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
 
