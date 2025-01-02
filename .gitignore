@@ -19,3 +19,4 @@ lsstcam/CALIB/calibRegistry.sqlite3
 lsstcam/CALIB/qe_curve/
 .vscode/
 .coverage*
+python/*.dist-info/
