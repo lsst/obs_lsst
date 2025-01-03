@@ -4,6 +4,9 @@ name = "lsst-obs-lsst"
 [project.entry-points.'butler.cli']
 obs_lsst = "lsst.obs.lsst.cli:get_cli_subcommands"
 
+[project.entry-points.astro_metadata_translators]
+obs_lsst = "lsst.obs.lsst.translators:_force_load"
+
 [tool.ruff]
 line-length = 110
 target-version = "py311"

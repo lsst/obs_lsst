@@ -18,3 +18,10 @@ from .lsst_ucdcam import *
 from .comCam import *
 from .comCamSim import *
 from .lsstCamSim import *
+
+
+def _force_load():
+    # This function exists solely to be loaded by the
+    # astro_metadata_translators entry point. The function
+    # will not be called.
+    pass
