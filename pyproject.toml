@@ -5,7 +5,7 @@ name = "lsst-obs-lsst"
 obs_lsst = "lsst.obs.lsst.cli:get_cli_subcommands"
 
 [project.entry-points.astro_metadata_translators]
-obs_lsst = "lsst.obs.lsst.translators:_force_load"
+obs_lsst = "lsst.obs.lsst.translators:_register_translators"
 
 [tool.ruff]
 line-length = 110

@@ -20,8 +20,24 @@ from .comCamSim import *
 from .lsstCamSim import *
 
 
-def _force_load():
-    # This function exists solely to be loaded by the
-    # astro_metadata_translators entry point. The function
-    # will not be called.
-    pass
+def _register_translators() -> list[str]:
+    """Ensure that the translators are loaded.
+
+    When this function is imported we are guaranteed to also import the
+    translators which will automatically register themselves.
+
+    Returns
+    -------
+    translators : `list` [ `str` ]
+        The names of the translators provided by this package.
+    """
+    return [
+        LsstCamTranslator.name,
+        LatissTranslator.name,
+        LsstComCamTranslator.name,
+        LsstComCamSimTranslator.name,
+        LsstCamSimTranslator.name,
+        LsstCamImSimTranslator.name,
+        LsstUCDCamTranslator.name,
+        LsstCamPhoSimTranslator.name,
+    ]
