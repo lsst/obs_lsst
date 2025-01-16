@@ -22,16 +22,14 @@
 
 """LSSTComCam-specific overrides for MakeWarpTask"""
 
-# These thresholds are being set quite loosely for early LSSTComCam
-# commissioning to make sure we get most of the processed visits
-# included in the coadds.  These have been chosen based on the data
-# in the LSSTComCam/nightlyValidation collection in the embargo_new
-# repo on Oct 30, 2024.
-config.select.maxEllipResidual = 0.19
-config.select.maxScaledSizeScatter = 0.07
-config.select.maxPsfTraceRadiusDelta = 1.2
-config.select.maxPsfApFluxDelta = 0.19
-config.select.maxPsfApCorrSigmaScaledDelta = 0.15
+# These thresholds have been conditioned on the latest DRP run (DM-48371)
+# which used the w_2025_02 pipeline and the LSSTComCam/DP1-RC1/defaults
+# collection.
+config.select.maxEllipResidual = 0.0055
+config.select.maxScaledSizeScatter = 0.017
+config.select.maxPsfTraceRadiusDelta = 4.4
+config.select.maxPsfApFluxDelta = 1.6
+config.select.maxPsfApCorrSigmaScaledDelta = 0.13
 
 # PSF-matching configs are in units of pix and specific to skymap pixel scale.
 
