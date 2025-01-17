@@ -28,6 +28,13 @@ config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSumma
 config.astrometry.matcher.maxOffsetPix=1500
 config.astrometry_ref_loader.pixelMargin=1500
 
+# Loosen minMatchDistanceArcSec, the match distance below which further
+# iteration is pointless (arcsec) since we can only do as well as the
+# camera model in SFM using the affine WCS fit.
+# TODO: DM-47250. Tighten up (or remove) this override when an updated
+# camera model is implemented.
+config.astrometry.minMatchDistanceArcSec = 0.04
+
 # Overrides to improved astrometry matching.
 config.astrometry.doFiducialZeroPointCull = True
 config.astrometry.load(os.path.join(config_dir, "fiducialZeroPoint.py"))
