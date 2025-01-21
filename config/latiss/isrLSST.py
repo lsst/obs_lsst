@@ -29,5 +29,9 @@ config.crosstalk.doSubtrahendMasking = True
 config.crosstalk.minPixelToMask = 1.0
 config.doDeferredCharge = False
 config.doBrighterFatter = False
+# Maintain compatibility with existing calibrations.
+poscan = config.overscanCamera.defaultDetectorConfig.defaultAmpConfig.parallelOverscanConfig
+poscan.doAbsoluteMaxDeviation = True
+poscan.doMedianSmoothingOutlierRejection = False
 
 config.cameraKeywordsToCompare = ["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC", "TEMP_SET"]
