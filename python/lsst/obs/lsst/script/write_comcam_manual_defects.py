@@ -85,6 +85,12 @@ for det in camera:
                 (2534, 0, 7, 2000),
             ),
         )
+        # Expand the vampire.
+        box_xywh.extend(
+            (
+                (2510, 930, 55, 55),
+            ),
+        )
     elif det.getId() == 5:
         # High CTI amp edges.
         box_xywh.extend(
