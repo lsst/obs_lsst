@@ -26,13 +26,6 @@ config.doSaturation = True
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.crosstalk.doSubtrahendMasking = True
 config.crosstalk.minPixelToMask = 1.0
-config.doDeferredCharge = False
-
-# Maintain compatibility with existing calibrations.
-# TODO: Remove these for running new calibs with DM-48520.
-poscan = config.overscanCamera.defaultDetectorConfig.defaultAmpConfig.parallelOverscanConfig
-poscan.doAbsoluteMaxDeviation = True
-poscan.doMedianSmoothingOutlierRejection = False
 
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = True
