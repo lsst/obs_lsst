@@ -25,7 +25,7 @@ also the odd utility function
 import lsst.geom as geom
 import lsst.afw.cameraGeom as cameraGeom
 
-__all__ = ["LsstCameraTransforms", "channelToAmp"]
+__all__ = ["LsstCameraTransforms"]
 
 
 class LsstCameraTransforms():
@@ -127,8 +127,8 @@ class LsstCameraTransforms():
 
         Returns
         -------
-        channel: `int`
-            Channel number of amplifier (1-indexed; identical to HDU).
+        ampName: `str`
+            Amplifier name, eg. 'C10'
         ampX : `int`
             The column coordinate relative to the corner of the single-amp
             image.
@@ -144,7 +144,7 @@ class LsstCameraTransforms():
         amp, ampXY = ccdPixelToAmpPixel(geom.PointD(ccdX, ccdY), self.getDetector(detectorName))
 
         ampX, ampY = ampXY
-        return ampToChannel(amp), ampX, ampY
+        return amp.getName(), ampX, ampY
 
     def ccdPixelToFocalMm(self, ccdX, ccdY, detectorName=None):
         r"""Given position within a detector return the focal plane position.
@@ -275,8 +275,8 @@ class LsstCameraTransforms():
         -------
         detectorName : `str`
             The name of the detector.
-        channel: `int`
-            Channel number of amplifier (1-indexed; identical to HDU).
+        ampName: `str`
+            The name of the amplifier.
         ampX : `int`
             The column coordinate relative to the corner of the single-amp
             image.
@@ -293,41 +293,7 @@ class LsstCameraTransforms():
         amp, ampXY = ccdPixelToAmpPixel(ccdXY, detector)
 
         ampX, ampY = ampXY
-        return detector.getName(), ampToChannel(amp), ampX, ampY
-
-
-def ampToChannel(amp):
-    r"""Given an Amplifier, return the channel.
-
-    Parameters
-    ----------
-    amp : `lsst.afw.table.AmpInfoRecord`
-        The amplifier in question.
-
-    Returns
-    -------
-    channel : `int`
-        The 1-indexed channel ID for the desired amplifier.
-    """
-    return amp.get("hdu")
-
-
-def channelToAmp(detector, channel):
-    r"""Given a Detector and channel, return the Amplifier.
-
-    Parameters
-    ----------
-    detector : `lsst.afw.cameraGeom.Detector`
-        The requested detector.
-    channel : `int`
-        The 1-indexed channel ID for the desired amplifier.
-
-    Returns
-    -------
-    amp : `lsst.afw.table.AmpInfoRecord`
-        The amplifier in question.
-    """
-    return [amp for amp in detector if amp.get("hdu") == channel][0]
+        return detector.getName(), amp.getName(), ampX, ampY
 
 
 def ampPixelToCcdPixel(x, y, detector, channel):
@@ -341,8 +307,8 @@ def ampPixelToCcdPixel(x, y, detector, channel):
         row on amp segment.
     detector : `lsst.afw.cameraGeom.Detector`
         The requested detector.
-    channel : `int`
-        Channel number of amplifier (1-indexed; identical to HDU).
+    channel : `str`
+        The name of the amplifier.
 
     Returns
     -------
@@ -352,7 +318,7 @@ def ampPixelToCcdPixel(x, y, detector, channel):
         The row pixel position relative to the corner of the detector.
     """
 
-    amp = channelToAmp(detector, channel)
+    amp = detector[channel]
     rawBBox, rawDataBBox = amp.getRawBBox(), amp.getRawDataBBox()
     # Allow for flips (due e.g. to physical location of the amplifiers)
     w, h = rawBBox.getDimensions()
