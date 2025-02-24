@@ -20,4 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-config.connections.refCatalog = "the_monster_20240904"
+config.connections.refCatalog = "the_monster_20250219"

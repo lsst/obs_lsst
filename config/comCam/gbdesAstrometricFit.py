@@ -1,1 +1,1 @@
-config.connections.referenceCatalog = "the_monster_20240904"
+config.connections.referenceCatalog = "the_monster_20250219"
