@@ -84,9 +84,9 @@ class LsstCameraTransforms():
 
         Parameters
         ----------
-        ampX : `int`
+        ampX : `float`
             column on amp segment.
-        ampY : `int`
+        ampY : `float`
             row on amp segment.
         channel : `int`
             Channel number of amplifier (1-indexed; identical to HDU).
@@ -100,9 +100,9 @@ class LsstCameraTransforms():
 
         Returns
         -------
-        ccdX : `int`
+        ccdX : `float`
             The column pixel position relative to the corner of the detector.
-        ccdY : `int`
+        ccdY : `float`
             The row pixel position relative to the corner of the detector.
         """
 
@@ -113,9 +113,9 @@ class LsstCameraTransforms():
 
         Parameters
         ----------
-        ccdX : `int`
+        ccdX : `float`
             Column pixel position within detector.
-        ccdY : `int`
+        ccdY : `float`
             Row pixel position within detector.
         detectorName : `str`
             Name of detector (or default from setDetectorName() if None).
@@ -129,10 +129,10 @@ class LsstCameraTransforms():
         -------
         ampName: `str`
             Amplifier name, eg. 'C10'
-        ampX : `int`
+        ampX : `float`
             The column coordinate relative to the corner of the single-amp
             image.
-        ampY : `int`
+        ampY : `float`
             The row coordinate relative to the corner of the single-amp image.
 
         Raises
@@ -151,9 +151,9 @@ class LsstCameraTransforms():
 
         Parameters
         ----------
-        ccdX : `int`
+        ccdX : `float`
             column pixel position within detector.
-        ccdY : `int`
+        ccdY : `float`
             row pixel position within detector.
         detectorName : `str`
             Name of detector (or default from setDetectorName() if None).
@@ -180,9 +180,9 @@ class LsstCameraTransforms():
     def ampPixelToFocalMm(self, ampX, ampY, channel, detectorName=None):
         r"""Given position within an amplifier return the focal plane position.
 
-        ampX : `int`
+        ampX : `float`
            column on amp segment.
-        ampY : `int`
+        ampY : `float`
            row on amp segment.
         channel: `int`
            Channel number of amplifier (1-indexed; identical to HDU).
@@ -238,9 +238,9 @@ class LsstCameraTransforms():
         -------
         detectorName : `str`
             The name of the detector.
-        ccdX : `int`
+        ccdX : `float`
             The column pixel position relative to the corner of the detector.
-        ccdY : `int`
+        ccdY : `float`
             The row pixel position relative to the corner of the detector.
 
         Raises
@@ -277,11 +277,11 @@ class LsstCameraTransforms():
             The name of the detector.
         ampName: `str`
             The name of the amplifier.
-        ampX : `int`
-            The column coordinate relative to the corner of the single-amp
+        ampX : `float`
+            The physical column coordinate relative to the corner of the single-amp
             image.
-        ampY : `int`
-            The row coordinate relative to the corner of the single-amp image.
+        ampY : `float`
+            The physical row coordinate relative to the corner of the single-amp image.
 
         Raises
         ------
@@ -301,10 +301,10 @@ def ampPixelToCcdPixel(x, y, detector, channel):
 
     Parameters
     ----------
-    x : `int`
-        column on amp segment.
-    y : `int`
-        row on amp segment.
+    x : `float`
+        physical column on amp segment.
+    y : `float`
+        physical row on amp segment.
     detector : `lsst.afw.cameraGeom.Detector`
         The requested detector.
     channel : `str`
@@ -312,32 +312,27 @@ def ampPixelToCcdPixel(x, y, detector, channel):
 
     Returns
     -------
-    ccdX : `int`
+    ccdX : `float`
         The column pixel position relative to the corner of the detector.
-    ccdY : `int`
+    ccdY : `float`
         The row pixel position relative to the corner of the detector.
     """
 
     amp = detector[channel]
-    rawBBox, rawDataBBox = amp.getRawBBox(), amp.getRawDataBBox()
+    ampBBox = amp.getBBox()
     # Allow for flips (due e.g. to physical location of the amplifiers)
-    w, h = rawBBox.getDimensions()
+    w, h = ampBBox.getDimensions()  
     if amp.getRawFlipX():
-        rawBBox.flipLR(w)
-        rawDataBBox.flipLR(w)
-
-        x = rawBBox.getWidth() - x - 1
+        ampBBox.flipLR(w)
+        x = w - x - 1  
 
     if amp.getRawFlipY():
-        rawBBox.flipTB(h)
-        rawDataBBox.flipTB(h)
+        ampBBox.flipTB(h)
+        y = h - y - 1  
 
-        y = rawBBox.getHeight() - y - 1
+    xyout = amp.getBBox().getBegin() + geom.ExtentD(x, y)
 
-    dxy = rawBBox.getBegin() - rawDataBBox.getBegin()   # correction for overscan etc.
-
-    return amp.getBBox().getBegin() + dxy + geom.ExtentI(x, y)
-
+    return xyout
 
 def ccdPixelToAmpPixel(xy, detector):
     r"""Given an position within a detector return position within an
@@ -359,20 +354,19 @@ def ccdPixelToAmpPixel(xy, detector):
     -------
     amp : `lsst.afw.table.AmpInfoRecord`
         The amplifier that the pixel lies in.
-    ampXY : `lsst.geom.PointI`
-        The pixel coordinate relative to the corner of the single-amp image.
+    ampXY : `lsst.geom.PointD`
+        The physical pixel coordinate relative to the corner of the single-amp image.
 
     Raises
     ------
     RuntimeError
         If the requested pixel doesn't lie on the detector.
     """
-
+    
     found = False
     for amp in detector:
         if geom.BoxD(amp.getBBox()).contains(xy):
             found = True
-            xy = geom.PointI(xy)     # pixel coordinates as ints
             break
 
     if not found:
@@ -380,16 +374,15 @@ def ccdPixelToAmpPixel(xy, detector):
 
     x, y = xy - amp.getBBox().getBegin()   # offset from origin of amp's data segment
 
-    # Allow for flips (due e.g. to physical location of the amplifiers)
-    w, h = amp.getRawDataBBox().getDimensions()
+    # Allow for flips (due e.g. to physical location and orientation of the amplifiers)
+    w, h = amp.getBBox().getDimensions() 
     if amp.getRawFlipX():
         x = w - x - 1
 
     if amp.getRawFlipY():
         y = h - y - 1
 
-    dxy = amp.getRawBBox().getBegin() - amp.getRawDataBBox().getBegin()   # correction for overscan etc.
-    xy = geom.ExtentI(x, y) - dxy
+    xy = geom.ExtentD (x, y)
 
     return amp, xy
 
