@@ -4,3 +4,6 @@
 config.psf_determiner['piff'].spatialOrder = 4
 # See DM-48887 for more detail.
 config.psf_determiner['piff'].zerothOrderInterpNotEnoughStars = True
+# See DM-49152 for more detail.
+config.psf_determiner['piff'].piffBasisPolynomialSolver = "cpp"
+config.psf_determiner['piff'].piffPixelGridFitCenter = False
