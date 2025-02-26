@@ -20,22 +20,10 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-"""LSSTComCam-specific overrides for MakeWarpTask"""
-
-# These thresholds have been conditioned on the latest DRP run (DM-48371)
-# which used the w_2025_02 pipeline and the LSSTComCam/DP1-RC1/defaults
-# collection.
-# Keep these in sync with the makeDirectWarp.py config.
-config.select.maxEllipResidual = 0.0055
-config.select.maxScaledSizeScatter = 0.017
-config.select.maxPsfTraceRadiusDelta = 4.4
-config.select.maxPsfApFluxDelta = 1.6
-config.select.maxPsfApCorrSigmaScaledDelta = 0.13
-
-# PSF-matching configs are in units of pix and specific to skymap pixel scale.
+"""LSSTComCam-specific overrides for MakePsfMatchedWarpTask"""
 
 # DM-47171: 9.0 (1.8 arcsec) corresponds to the ~98.5% percentile of the
 # PSF FWHM distribution in the 2nd and 3rd weeks of ComCam science observations
 # selectDeepCoaddVisits is currently set the the default 2.0 arcsec
-# Keep these in sync with the makePsfMatchedWarp.py config.
+# Keep this in sync with the makeWarp.py config.
 config.modelPsf.defaultFwhm = 9.0
