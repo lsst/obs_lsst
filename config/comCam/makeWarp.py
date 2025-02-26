@@ -36,6 +36,6 @@ config.select.maxPsfApCorrSigmaScaledDelta = 0.13
 
 # DM-47171: 9.0 (1.8 arcsec) corresponds to the ~98.5% percentile of the
 # PSF FWHM distribution in the 2nd and 3rd weeks of ComCam science observations
-# selectDeepCoaddVisits is currently set the the default 2.0 arcsec
+# selectDeepCoaddVisits is currently set the the default 1.7 arcsec for ComCam.
 # Keep these in sync with the makePsfMatchedWarp.py config.
 config.modelPsf.defaultFwhm = 9.0
