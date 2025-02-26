@@ -20,13 +20,14 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-"""LSSTComCamSim-specific overrides for MakeWarpTask"""
+"""LSSTComCamSim-specific overrides for MakeDirectWarpTask"""
 
 # These thresholds can be tightened for the simulated data compared to the
 # task defaults (which were conditioned on HSC data).  These have been
 # chosen based on the OR3 dataset reduced with w_2024_19 pipeline on
 # DM-37952 (see ticket for figures).
-# Keep these in sync with the makeDirectWarp.py config.
+# Keep these in sync with the makeWarp.py config.
+config.doSelectPreWarp = True
 config.select.maxEllipResidual = 0.004
 config.select.maxScaledSizeScatter = 0.014
 config.select.maxPsfTraceRadiusDelta = 0.091
