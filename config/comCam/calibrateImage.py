@@ -8,6 +8,12 @@ config_dir = os.path.dirname(__file__)
 config.connections.photometry_ref_cat = "the_monster_20250219"
 config.connections.astrometry_ref_cat = "the_monster_20250219"
 
+# Turn on illumination corrections.
+config.do_illumination_correction = True
+config.psf_subtract_background.doApplyFlatBackgroundRatio = True
+config.psf_detection.doApplyFlatBackgroundRatio = True
+config.star_detection.doApplyFlatBackgroundRatio = True
+
 config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "monster_ComCam_r_flux"

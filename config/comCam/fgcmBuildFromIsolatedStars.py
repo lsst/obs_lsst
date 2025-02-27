@@ -26,3 +26,5 @@ config.fgcmLoadReferenceCatalog.referenceSelector.doSignalToNoise = True
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.fluxField = "monster_ComCam_i_flux"
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.errField = "monster_ComCam_i_fluxErr"
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.minimum = 50.0
+
+config.doApplyWcsJacobian = False
