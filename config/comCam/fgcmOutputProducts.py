@@ -10,3 +10,5 @@ physical_to_band = {
 }
 
 config.physicalFilterMap = physical_to_band
+
+config.doComposeWcsJacobian = False
