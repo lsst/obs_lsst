@@ -55,7 +55,10 @@ for det in camera:
         box_xywh.extend(
             (
                 # Scratch on detector.
-                (2345, 0, 125, 4000),
+                (2300, 0, 200, 4000),
+                # Edge bleed regions.
+                (2036, 0, 509, 100),
+                (2036, 3900, 509, 100),
             ),
         )
     elif det.getId() == 9:
