@@ -22,6 +22,9 @@
 """
 comCam-specific overrides for IsrTaskLSST
 """
+import copy
+
+
 config.doSaturation = True
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.crosstalk.doSubtrahendMasking = True
@@ -30,3 +33,13 @@ config.crosstalk.minPixelToMask = 1.0
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = True
 config.ampOffset.ampEdgeMaxOffset = 10.0
+
+overscanCamera = config.overscanCamera
+
+# Detector R22_S22 (8)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinHeight = 50
+detectorConfig.itlDipMinWidth = 5
+detectorConfig.itlDipWidthScale = 1.5
+detectorConfig.itlDipBackgroundFraction = 0.0026
+overscanCamera.detectorRules["R22_S22"] = detectorConfig
