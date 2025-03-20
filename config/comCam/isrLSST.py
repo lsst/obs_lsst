@@ -22,6 +22,9 @@
 """
 comCam-specific overrides for IsrTaskLSST
 """
+import copy
+
+
 config.doSaturation = True
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.crosstalk.doSubtrahendMasking = True
@@ -30,3 +33,51 @@ config.crosstalk.minPixelToMask = 1.0
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = True
 config.ampOffset.ampEdgeMaxOffset = 10.0
+
+overscanCamera = config.overscanCamera
+
+# Detector R22_S00 (0)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 14
+detectorConfig.itlDipBackgroundFraction = 0.0014
+overscanCamera.detectorRules["R22_S00"] = detectorConfig
+
+# Detector R22_S01 (1)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 18
+detectorConfig.itlDipBackgroundFraction = 0.0015
+overscanCamera.detectorRules["R22_S01"] = detectorConfig
+
+# Detector R22_S02 (2)
+# No dip seen.
+
+# Detector R22_S10 (3)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 13
+detectorConfig.itlDipBackgroundFraction = 0.00065
+overscanCamera.detectorRules["R22_S10"] = detectorConfig
+
+# Detector R22_S11 (4)
+# No dip seen.
+
+# Detector R22_S12 (5)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 18
+detectorConfig.itlDipBackgroundFraction = 0.0006
+overscanCamera.detectorRules["R22_S12"] = detectorConfig
+
+# Detector R22_S20 (6)
+# No dip seen.
+
+# Detector R22_S21 (7)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 14
+detectorConfig.itlDipMinHeight = 30
+detectorConfig.itlDipBackgroundFraction = 0.0006
+overscanCamera.detectorRules["R22_S21"] = detectorConfig
+
+# Detector R22_S22 (8)
+detectorConfig = copy.copy(overscanCamera.defaultDetectorConfig)
+detectorConfig.itlDipMinWidth = 4
+detectorConfig.itlDipBackgroundFraction = 0.0026
+overscanCamera.detectorRules["R22_S22"] = detectorConfig
