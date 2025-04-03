@@ -27,7 +27,7 @@
 # collection.
 # Keep these in sync with the makeWarp.py config.
 config.select.maxEllipResidual = 0.0055
-config.select.maxScaledSizeScatter = 0.017
+config.select.maxScaledSizeScatter = 0.022
 config.select.maxPsfTraceRadiusDelta = 4.4
 config.select.maxPsfApFluxDelta = 1.6
 config.select.maxPsfApCorrSigmaScaledDelta = 0.13
