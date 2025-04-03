@@ -339,6 +339,7 @@ def ampPixelToCcdPixel(x, y, detector, ampName):
 
     return xyout
 
+
 def ccdPixelToAmpPixel(xy, detector):
     r"""Given an position within a detector return position within an
     amplifier.
@@ -388,7 +389,7 @@ def ccdPixelToAmpPixel(xy, detector):
     if amp.getRawFlipY():
         y = h - y - 1
 
-    xy = geom.ExtentD (x, y)
+    xy = geom.ExtentD(x, y)
 
     return amp, xy
 
