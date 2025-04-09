@@ -82,6 +82,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
         controller: str = "O",
         is_one_to_one_reinterpretation: bool = False,
         visit_id: int | None = None,
+        use_controllers: bool = False,
     ) -> None:
         """Run tests on an instrument that uses the new Rubin dimension packer.
 
@@ -111,6 +112,11 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             Integer visit ID.  Must be provided only if
             ``is_one_to_one_reinterpretatation=True``; otherwise this is the
             same as ``exposure_id``.
+        use_controllers : `bool`, optional
+            Whether to configure the packer to encode and hence round-trip
+            controller values.  This tests more of the functionality but is not
+            the default behavior, since we instead want to assume OCS and
+            save bits for data releases.
         """
         if visit_id is None:
             assert (
@@ -119,9 +125,11 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             visit_id = exposure_id
         instrument_data_id = self.registry.expandDataId(instrument=instrument.getName())
         config = _TestConfig()
+        if use_controllers:
+            config.packer["rubin"].use_controllers()
         packer = config.packer.apply(instrument_data_id, is_exposure=is_exposure)
         self.assertIsInstance(packer, RubinDimensionPacker)
-        self.assertEqual(packer.maxBits, 41)
+        self.assertEqual(packer.maxBits, 41 if use_controllers else 38)
         full_data_id = DataCoordinate.standardize(
             instrument_data_id, exposure=exposure_id, visit=visit_id, detector=detector
         )
@@ -131,11 +139,13 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             detector,
             controller,
             is_one_to_one_reinterpretation=is_one_to_one_reinterpretation,
+            config=packer.config,
         )
         packed2 = RubinDimensionPacker.pack_id_pair(
             exposure_id,
             detector,
             is_one_to_one_reinterpretation=is_one_to_one_reinterpretation,
+            config=packer.config,
         )
         packed3 = packer.pack(full_data_id)
         self.assertEqual(packed1, packed2)
@@ -146,7 +156,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             u_detector,
             u_controller,
             u_is_one_to_one_reinterpretation,
-        ) = RubinDimensionPacker.unpack_decomposition(packed1)
+        ) = RubinDimensionPacker.unpack_decomposition(packed1, config=packer.config)
         self.assertEqual(u_day_obs, day_obs)
         self.assertEqual(u_seq_num, seq_num)
         self.assertEqual(u_detector, detector)
@@ -156,7 +166,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             u_exposure_id,
             u_detector,
             u_is_one_to_one_reinterpretation,
-        ) = RubinDimensionPacker.unpack_id_pair(packed1)
+        ) = RubinDimensionPacker.unpack_id_pair(packed1, config=packer.config)
         self.assertEqual(u_exposure_id, exposure_id)
         self.assertEqual(u_detector, detector)
         self.assertEqual(u_is_one_to_one_reinterpretation, is_one_to_one_reinterpretation)
@@ -232,6 +242,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             seq_num=75,
             detector=150,
             controller="C",
+            use_controllers=True,
         )
 
     def test_comCam(self):
@@ -262,7 +273,8 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             day_obs=20240321,
             seq_num=720,
             detector=4,
-            controller="S"
+            controller="S",
+            use_controllers=True,
         )
 
     def test_lsstCamSim(self):
@@ -279,6 +291,7 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
             seq_num=720,
             detector=94,
             controller="S",
+            use_controllers=True,
         )
 
     def test_imsim(self):
