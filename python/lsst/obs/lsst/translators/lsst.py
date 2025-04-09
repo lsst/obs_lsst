@@ -246,7 +246,9 @@ class LsstBaseTranslator(FitsTranslator):
         """
         from .._packer import RubinDimensionPacker
 
-        return RubinDimensionPacker.pack_id_pair(exposure_id, detector_num)
+        config = RubinDimensionPacker.ConfigClass()
+        config.use_controllers()
+        return RubinDimensionPacker.pack_id_pair(exposure_id, detector_num, config=config)
 
     @classmethod
     def max_detector_exposure_id(cls):
