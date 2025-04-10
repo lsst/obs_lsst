@@ -80,18 +80,17 @@ class RubinDimensionPackerConfig(Config):
     controllers = DictField(
         "Mapping from controller code to integer.",
         keytype=str,
-        itemtype=int
-        # Default is set from the CONTROLLERS constant in translators/lsst.py
-        # below.
+        itemtype=int,
+        # Default is to assume all data we're using a dimension packer on is
+        # OCS, since the main use of the packer for source/object IDs.
+        default={"O": 0},
     )
 
     n_controllers = Field(
         "Reserved number of controller codes.  May be larger than `len(controllers)`.",
         dtype=int,
         check=_is_positive,
-        default=8,
-        # Default by rounding 5 (current set of codes) up to the nearest power
-        # of 2.
+        default=1,
     )
 
     n_visit_definitions = Field(
@@ -141,9 +140,17 @@ class RubinDimensionPackerConfig(Config):
         # point just after the 2050 bound in the translators.
     )
 
-    def setDefaults(self):
-        super().setDefaults()
+    def use_controllers(self) -> None:
+        """Configure this packer to include all known controllers, instead
+        of eliminating that field to save bit space.
+
+        This still does not make the packing of controller, day_obs, and
+        seq_num here the same as what is done in the translator class
+        calculations of exposure_id, because that translator calculation is
+        day_obs dependent.
+        """
         self.controllers = {c: i for i, c in enumerate(CONTROLLERS)}
+        self.n_controllers = 8
 
     def validate(self):
         super().validate()
