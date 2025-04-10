@@ -38,6 +38,9 @@ from lsst.pipe.base import Task
 from lsst.resources import ResourcePath
 
 
+DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electrometer.*fits$"
+
+
 class PhotodiodeIngestConfig(Config):
     """Configuration class for PhotodiodeIngestTask."""
 
@@ -88,7 +91,8 @@ class PhotodiodeIngestTask(Task):
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
-    def run(self, locations, run=None, file_filter=r"Photodiode_Readings.*txt$|_photodiode.ecsv$",
+    def run(self, locations, run=None,
+            file_filter=DEFAULT_PHOTODIODE_REGEX,
             track_file_attrs=None):
         """Ingest photodiode data into a Butler data repository.
 
@@ -145,34 +149,62 @@ class PhotodiodeIngestTask(Task):
             # Convert the file into the right class.
             calibType = "Unknown"
             try:
-                # Can this be read directly in standard form?
+                # Try reading as a fits file.  This is the 2025
+                # standard, but make sure to include the format
+                # version so we can parse that below.
                 with inputFile.as_local() as localFile:
-                    calib = PhotodiodeCalib.readText(localFile.ospath)
-                calibType = "full"
+                    calib = PhotodiodeCalib.readFits(localFile.ospath)
+                fitsVersion = int(calib.getMetadata().get("FORMAT_V", 1))
+                calibType = f"fits-v{fitsVersion:d}"
             except Exception:
-                # Try reading as a two-column file.
-                with inputFile.as_local() as localFile:
-                    calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
-                calibType = "two-column"
+                try:
+                    # Try reading as a text file
+                    with inputFile.as_local() as localFile:
+                        calib = PhotodiodeCalib.readText(localFile.ospath)
+                    # This is "full" in that it has everything needed to
+                    # be read from text.
+                    calibType = "full"
+                except Exception:
+                    # Try reading as a two-column file.  This was the
+                    # older version.
+                    with inputFile.as_local() as localFile:
+                        calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
+                    calibType = "two-column"
 
-            # Get exposure records
-            if calibType == "full":
+            # Get exposure records so we can associate the photodiode
+            # to the exposure.
+            if calibType == "fits-v1":
+                instrumentName = calib.metadata.get("INSTRUME")
+                if instrumentName is None:
+                    # The field is populated by the calib class, so we
+                    # can't use defaults.
+                    instrumentName = self.instrument.getName()
+
+                # This format uses the GROUPID to match what is set in
+                # the exposure.
+                groupId = calib.metadata.get("GROUPID")
+                whereClause = "exposure.group=groupId"
+                binding = {"groupId": groupId}
+                logId = groupId
+            elif calibType == "full":
                 instrumentName = calib.getMetadata().get('INSTRUME')
                 if instrumentName is None:
                     # The field is populated by the calib class, so we
                     # can't use defaults.
                     instrumentName = self.instrument.getName()
 
+                # This format uses the obsId to match what is set in
+                # the exposure.
                 obsId = calib.getMetadata()['obsId']
                 whereClause = "exposure.obs_id=obsId"
                 binding = {"obsId": obsId}
                 logId = obsId
-
             elif calibType == "two-column":
                 dayObs = calib.getMetadata()['day_obs']
                 seqNum = calib.getMetadata()['seq_num']
 
-                # Find the associated exposure information.
+                # This format uses dayObs and seqNum to match what is
+                # set in the exposure.
                 whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
                 instrumentName = self.instrument.getName()
                 binding = {"dayObs": dayObs, "seqNum": seqNum}
