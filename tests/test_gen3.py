@@ -174,6 +174,22 @@ class TestInstruments(unittest.TestCase):
         self.checkInstrumentWithRegistry(Latiss,
                                          "latiss/raw/2018-09-20/3018092000065-det000.fits")
 
+    def test_exposure_max(self):
+        # Ensure that the exposure max value does not change.
+        for cls, exp_max in (
+            (LsstCam, 7050123199999),
+            (LsstComCam, 7050123199999),
+            (LsstCamImSim, 9999999),
+            (LsstCamPhoSim, 9999999),
+            (LsstTS8, 205012312359999),
+            (LsstTS3, 205012312359999),
+            (LsstUCDCam, 7050123199999),
+            (Latiss, 7050123199999),
+            (LsstComCamSim, 7050123199999),
+            (LsstCamSim, 7050123199999),
+        ):
+            self.assertEqual(cls.translatorClass.max_exposure_id(), exp_max)
+
 
 if __name__ == "__main__":
     unittest.main()
