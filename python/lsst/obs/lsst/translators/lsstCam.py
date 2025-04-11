@@ -185,9 +185,14 @@ class LsstCamTranslator(LsstBaseTranslator):
         This flag is true even if the telescope is on the test stand or a
         simulated file has come from the BTS.
         """
+        # phosim is always on mountain.
+        if self._get_controller_code() == "H":
+            return True
+
         date = self.to_datetime_begin()
         if date > TSTART:
             return True
+
         return False
 
     @classmethod

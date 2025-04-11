@@ -276,6 +276,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                       dict(telescope="Simonyi Survey Telescope",
                            instrument="LSSTCamSim",
                            boresight_rotation_coord="sky",
+                           boresight_rotation_angle=81.12326734428959 * u.deg,
                            can_see_sky=True,
                            dark_time=30.0*u.s,
                            detector_exposure_id=730756993118,
