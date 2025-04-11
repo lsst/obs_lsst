@@ -85,3 +85,18 @@ class LsstCamSimTranslator(LsstCamTranslator):
     def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
         # Always use the 12 hour offset.
         return cls._ROLLOVER_TIME
+
+    def _is_on_mountain(self):
+        """Indicate whether these data are coming from the instrument
+        installed on the mountain.
+
+        Returns
+        -------
+        is : `bool`
+            `True` if instrument is on the mountain.
+
+        Notes
+        -----
+        Simulated LSSTCam is always on the mountain.
+        """
+        return True

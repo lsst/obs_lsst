@@ -29,6 +29,9 @@ log = logging.getLogger(__name__)
 # Normalized name of the LSST Camera
 LSST_CAM = "LSSTCam"
 
+# Date instrument is taking data at telescope.
+TSTART = astropy.time.Time("2025-03-01T00:00", format="isot", scale="utc")
+
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -179,11 +182,15 @@ class LsstCamTranslator(LsstBaseTranslator):
         Notes
         -----
         LSSTCam was installed on the Simonyi Telescope in March 2025.
+        This flag is true even if the telescope is on the test stand or a
+        simulated file has come from the BTS.
         """
-        if "TSTAND" not in self._header:
+        # phosim is always on mountain.
+        if self._get_controller_code() == "H":
             return True
 
-        if self._header["TSTAND"].startswith("TMAMC"):
+        date = self.to_datetime_begin()
+        if date > TSTART:
             return True
 
         return False
