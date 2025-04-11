@@ -177,3 +177,8 @@ class LsstTS3Translator(LsstBaseTranslator):
         serial = self.to_detector_serial()
         detector_info = self.compute_detector_info_from_serial(serial)
         return detector_info[0]
+
+    @classmethod
+    def max_exposure_id(cls):
+        # Only one controller by definition and only the date matters.
+        return cls.compute_exposure_id("2050-12-31T23:59.999")

@@ -274,12 +274,15 @@ class LsstBaseTranslator(FitsTranslator):
         -------
         max_exposure_id : `int`
             The maximum value.
+
+        Notes
+        -----
+        The value is hard-coded to reflect historical values that were used
+        for various controllers before the sequence counter was unified.
         """
-        max_date = "2050-12-31T23:59.999"
-        max_seqnum = 99_999
-        # This controller triggers the largest numbers
-        max_controller = CONTROLLERS[-1]
-        return cls.compute_exposure_id(max_date, max_seqnum, max_controller)
+        # Assumes maximum observing date of 2050-12-31, 99,999 exposures per
+        # day and 6 controllers.
+        return 7050123199999
 
     @classmethod
     def detector_mapping(cls):
