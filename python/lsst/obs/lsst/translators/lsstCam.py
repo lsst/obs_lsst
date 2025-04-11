@@ -167,6 +167,27 @@ class LsstCamTranslator(LsstBaseTranslator):
 
         return joined
 
+    def _is_on_mountain(self):
+        """Indicate whether these data are coming from the instrument
+        installed on the mountain.
+
+        Returns
+        -------
+        is : `bool`
+            `True` if instrument is on the mountain.
+
+        Notes
+        -----
+        LSSTCam was installed on the Simonyi Telescope in March 2025.
+        """
+        if "TSTAND" not in self._header:
+            return True
+
+        if self._header["TSTAND"].startswith("TMAMC"):
+            return True
+
+        return False
+
     @classmethod
     def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
         """Return the offset to use when calculating the observing day.
