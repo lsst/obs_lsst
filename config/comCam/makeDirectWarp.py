@@ -31,5 +31,8 @@ config.select.maxScaledSizeScatter = 0.022
 config.select.maxPsfTraceRadiusDelta = 4.4
 config.select.maxPsfApFluxDelta = 1.6
 config.select.maxPsfApCorrSigmaScaledDelta = 0.13
+# The following should be kept consistent with the final PSF model spatial
+# order.
+config.select.minNPsfStarPerBand = {"u": 6, "g": 15, "r": 15, "i": 15, "z": 15, "y": 15, "fallback": 6}
 
 config.doApplyFlatBackgroundRatio = True
