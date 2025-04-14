@@ -26,7 +26,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument("-o", "--do_output", action="store_true", help="Do output?")
 parser.add_argument("-b", "--repo", help="Butler repo", default="/repo/main")
-parser.add_argument("-d", "--rundate", help="Run date", default="20250401b")
+parser.add_argument("-d", "--rundate", help="Run date", default="20250414a")
 
 args = parser.parse_args()
 
@@ -58,7 +58,7 @@ vignetting_coeffs = np.asarray(
 if do_output:
     butler = Butler(repo, instrument="LSSTCam", writeable=True)
 
-    output_collection = f"LSSTCam/calib/DM-49679/pseudoFlats/pseudoFlatGen.{rundate}/run"
+    output_collection = f"LSSTCam/calib/DM-50162/pseudoFlats/pseudoFlatGen.{rundate}/run"
     registered = butler.collections.register(output_collection)
 
     if not registered:
@@ -193,9 +193,10 @@ for filter_name, band in filter_dict.items():
         pseudo_flat.image.array[:, :] *= np.polyval(vignetting_coeffs, fprad).reshape(nx, ny).T
         pseudo_flat.image.array[:, :] = np.clip(pseudo_flat.image.array[:, :], 0.0, None)
 
-        # Set BAD where the flat is 0.0
-        bad = (pseudo_flat.image.array[:, :] == 0.0)
+        # Set BAD where the flat is < 0.15 (15%) and force to 0.
+        bad = (pseudo_flat.image.array[:, :] < 0.15)
         pseudo_flat.mask.array[:, :][bad] |= pseudo_flat.mask.getPlaneBitMask("BAD")
+        pseudo_flat.image.array[:, :][bad] = 0.0
 
         pseudo_flats_binned.append(visualize_bin_exp_task.run(inputExp=pseudo_flat, camera=camera).outputExp)
 
