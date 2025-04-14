@@ -783,7 +783,7 @@ class LsstBaseTranslator(FitsTranslator):
         # Always attempt to find the alt/az values regardless of observation
         # type.
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
-                                         self.to_datetime_begin(), is_zd=False)
+                                         self.to_datetime_begin(), is_zd=False, max_alt=95.55, min_alt=-5.55)
 
     @cache_translation
     def to_exposure_group(self):
