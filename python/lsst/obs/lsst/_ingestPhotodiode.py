@@ -181,8 +181,24 @@ class PhotodiodeIngestTask(Task):
                     instrumentName = self.instrument.getName()
 
                 # This format uses the GROUPID to match what is set in
-                # the exposure.
+                # the exposure.  Validate this to be of the form:
+                # {initial_group}#{unique identifier}, neither of
+                # which should be blank.
                 groupId = calib.metadata.get("GROUPID")
+                validGroup = True
+                if "#" not in groupId:
+                    validGroup = False
+                else:
+                    splitGroup = groupId.split("#")
+                    if len(splitGroup) != 2:
+                        validGroup = False
+                    if splitGroup[0] == "" or splitGroup[1] == "":
+                        validGroup = False
+                if not validGroup:
+                    self.log.warning("Skipping input file %s with malformed group %s.",
+                                     inputFile, groupId)
+                    continue
+
                 whereClause = "exposure.group=groupId"
                 binding = {"groupId": groupId}
                 logId = groupId
