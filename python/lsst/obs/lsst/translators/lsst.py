@@ -743,6 +743,11 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_tracking_radec(self):
+        # Not an observation that is tracking in RA/Dec so it is not
+        # appropriate to report a value for this.
+        if self.are_keys_ok(["TRACKSYS"]) and self._header["TRACKSYS"] != "RADEC":
+            return None
+
         # RA/DEC are *derived* headers and for the case where the DATE-BEG
         # is 1970 they are garbage and should not be used.
         try:
