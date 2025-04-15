@@ -31,7 +31,9 @@ config.select.maxScaledSizeScatter = 0.022
 config.select.maxPsfTraceRadiusDelta = 4.4
 config.select.maxPsfApFluxDelta = 1.6
 config.select.maxPsfApCorrSigmaScaledDelta = 0.13
-
+# The following should be kept consistent with the final PSF model spatial
+# order.
+config.select.minNPsfStarPerBand = {"u": 6, "g": 15, "r": 15, "i": 15, "z": 15, "y": 15, "fallback": 6}
 # PSF-matching configs are in units of pix and specific to skymap pixel scale.
 
 # DM-47171: 9.0 (1.8 arcsec) corresponds to the ~98.5% percentile of the

@@ -40,6 +40,10 @@ config.select.maxPsfTraceRadiusDelta = 2.9
 config.select.maxPsfApFluxDelta = 0.075
 config.select.maxPsfApCorrSigmaScaledDelta = 0.118
 
+# The following should be kept consistent with the final PSF model spatial
+# order.
+config.select.minNPsfStarPerBand = {"u": 3, "g": 3, "r": 3, "i": 3, "z": 3, "y": 3, "fallback": 3}
+
 # PSF-matching configs are in units of pix and specific to skymap pixel scale
 
 # Max PSF FWHM allowed into coadds BestSeeingSelectVisits.maxPsfFwhm = 1.9
