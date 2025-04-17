@@ -182,6 +182,11 @@ class LsstBaseTranslator(FitsTranslator):
     Used when the header is missing. See LSE-400 or SITCOMTN-032 for details.
     """
 
+    _non_sky_observation_types: tuple[str, ...] = ("bias", "dark", "flat")
+    """Observation types that correspond to an observation where the detector
+    can not see sky photons.
+    """
+
     @classmethod
     def __init_subclass__(cls, **kwargs):
         """Ensure that subclasses clear their own detector mapping entries
@@ -521,7 +526,7 @@ class LsstBaseTranslator(FitsTranslator):
                 return False
 
         # These are obviously not on sky
-        if self.to_observation_type() in ("bias", "dark", "flat"):
+        if self.to_observation_type() in self._non_sky_observation_types:
             return False
 
         return self._is_on_mountain()
@@ -743,6 +748,13 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_tracking_radec(self):
+        # Do not even attempt to attach an RA/Dec for observations that we
+        # know are not going to be tracking. The Rubin OCS can sometimes
+        # report the telescope is tracking when it's not when doing
+        # calibrations like these.
+        if self.to_observation_type() in self._non_sky_observation_types:
+            return None
+
         # Not an observation that is tracking in RA/Dec so it is not
         # appropriate to report a value for this.
         if self.are_keys_ok(["TRACKSYS"]) and self._header["TRACKSYS"] != "RADEC":
