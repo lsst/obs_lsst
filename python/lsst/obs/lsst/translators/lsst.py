@@ -751,8 +751,10 @@ class LsstBaseTranslator(FitsTranslator):
         # Do not even attempt to attach an RA/Dec for observations that we
         # know are not going to be tracking. The Rubin OCS can sometimes
         # report the telescope is tracking when it's not when doing
-        # calibrations like these.
-        if self.to_observation_type() in self._non_sky_observation_types:
+        # calibrations like these. Darks are sometimes taken whilst tracking
+        # to test stability so those are special-cased.
+        non_sky_obstypes = {t for t in self._non_sky_observation_types if t != "dark"}
+        if self.to_observation_type() in non_sky_obstypes:
             return None
 
         # Not an observation that is tracking in RA/Dec so it is not
