@@ -346,6 +346,18 @@ class LatissTranslator(LsstBaseTranslator):
                 log.debug("%s: Forcing blank RADESYS to '%s'", log_label, header["RADESYS"])
                 modified = True
 
+        if "TRACKSYS" in header:
+            if header["TRACKSYS"] == "":
+                # Force it to a consistent undefined value. Could try to
+                # see if RADESYS is defined.
+                header["TRACKSYS"] = None
+                log.debug("%s: Forcing blank TRACKSYS to undef", log_label)
+                modified = True
+            elif header["TRACKSYS"] == "SIDEREAL":
+                header["TRACKSYS"] = "RADEC"
+                log.debug("%s: Conforming SIDEREAL TRACKSYS to '%s'", log_label, header["TRACKSYS"])
+                modified = True
+
         if date < RASTART_IS_HOURS:
             # Avoid two checks for case where RASTART is fine
             if date < RASTART_IS_BAD:

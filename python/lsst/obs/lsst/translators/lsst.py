@@ -182,6 +182,11 @@ class LsstBaseTranslator(FitsTranslator):
     Used when the header is missing. See LSE-400 or SITCOMTN-032 for details.
     """
 
+    _non_sky_observation_types: tuple[str, ...] = ("bias", "dark", "flat")
+    """Observation types that correspond to an observation where the detector
+    can not see sky photons.
+    """
+
     @classmethod
     def __init_subclass__(cls, **kwargs):
         """Ensure that subclasses clear their own detector mapping entries
@@ -521,7 +526,7 @@ class LsstBaseTranslator(FitsTranslator):
                 return False
 
         # These are obviously not on sky
-        if self.to_observation_type() in ("bias", "dark", "flat"):
+        if self.to_observation_type() in self._non_sky_observation_types:
             return False
 
         return self._is_on_mountain()
@@ -743,6 +748,20 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_tracking_radec(self):
+        # Do not even attempt to attach an RA/Dec for observations that we
+        # know are not going to be tracking. The Rubin OCS can sometimes
+        # report the telescope is tracking when it's not when doing
+        # calibrations like these. Darks are sometimes taken whilst tracking
+        # to test stability so those are special-cased.
+        non_sky_obstypes = {t for t in self._non_sky_observation_types if t != "dark"}
+        if self.to_observation_type() in non_sky_obstypes:
+            return None
+
+        # Not an observation that is tracking in RA/Dec so it is not
+        # appropriate to report a value for this.
+        if self.are_keys_ok(["TRACKSYS"]) and self._header["TRACKSYS"] != "RADEC":
+            return None
+
         # RA/DEC are *derived* headers and for the case where the DATE-BEG
         # is 1970 they are garbage and should not be used.
         try:
@@ -778,7 +797,7 @@ class LsstBaseTranslator(FitsTranslator):
         # Always attempt to find the alt/az values regardless of observation
         # type.
         return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
-                                         self.to_datetime_begin(), is_zd=False)
+                                         self.to_datetime_begin(), is_zd=False, max_alt=95.55, min_alt=-5.55)
 
     @cache_translation
     def to_exposure_group(self):
