@@ -428,6 +428,8 @@ class LsstBaseTranslator(FitsTranslator):
         exposure_id : `int`
             Exposure ID in form YYYYMMDDnnnnn form.
         """
+        if isinstance(seqnum, str):
+            seqnum = int(seqnum)
         # We really want an integer but the checks require a str.
         if isinstance(dayobs, int):
             dayobs = str(dayobs)
