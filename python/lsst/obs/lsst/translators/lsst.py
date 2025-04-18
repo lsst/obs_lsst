@@ -452,7 +452,7 @@ class LsstBaseTranslator(FitsTranslator):
             # with the OCS, so there is no need to adjust the dayobs
             # to make unique exposure IDs.
             controller = None
-        elif dayobs > 20250417 and controller in "PSQ":
+        elif dayobs > 20250417 and controller in {"P", "S", "Q"}:
             # At some point in the past the PSQ and OC controller sequence
             # counters were unified. To avoid confusion with previous files
             # that may already be ingested where we do not want to change

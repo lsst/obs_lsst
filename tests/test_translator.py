@@ -1686,6 +1686,7 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
             (20250417, 42, "Q"): 6025041700042,
             (20250417, 42, "S"): 7025041700042,
             # Post phase-out of offsets
+            (20250418, 43): 2025041800043,
             ("2023-10-05", 1, "C"): 2023100500001,
             ("2025-04-18", 101, "P"): 2025041800101,
             (20250418, 42, "Q"): 2025041800042,
