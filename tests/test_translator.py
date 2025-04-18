@@ -27,7 +27,7 @@ import astropy.units as u
 import astropy.units.cds as cds
 from astropy.io.fits.verify import VerifyWarning
 
-import lsst.obs.lsst.translators  # noqa: F401 -- register the translators
+import lsst.obs.lsst.translators  # register the translators
 from astro_metadata_translator.tests import MetadataAssertHelper
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
@@ -1673,6 +1673,32 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
         for filename, expected in test_data:
             with self.subTest(f"Testing {filename}"):
                 self.assertObservationInfoFromYaml(filename, dir=self.datadir, **expected)
+
+    def test_compute_exposure_id(self):
+        test_data = {
+            (20240318, 43): 2024031800043,
+            (20240318, 43, None): 2024031800043,
+            ("2024-03-18", "42", "O"): 2024031800042,
+            (20240318, "1", "H"): 4024031800001,
+            # Pre phase-out of offsets
+            (20231004, "1", "C"): 3023100400001,
+            ("2025-04-17", 101, "P"): 5025041700101,
+            (20250417, 42, "Q"): 6025041700042,
+            (20250417, 42, "S"): 7025041700042,
+            # Post phase-out of offsets
+            (20250418, 43): 2025041800043,
+            ("2023-10-05", 1, "C"): 2023100500001,
+            ("2025-04-18", 101, "P"): 2025041800101,
+            (20250418, 42, "Q"): 2025041800042,
+            (20250418, 42, "S"): 2025041800042,
+        }
+
+        for inputs, expected in test_data.items():
+            with self.subTest(inputs=inputs):
+                self.assertEqual(
+                    lsst.obs.lsst.translators.lsst.LsstBaseTranslator.compute_exposure_id(*inputs),
+                    expected
+                )
 
     def test_checker(self):
         filename = "latiss-future.yaml"

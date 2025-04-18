@@ -416,18 +416,20 @@ class LsstBaseTranslator(FitsTranslator):
             Sequence number.
         controller : `str`, optional
             Controller to use. If this is "O", no change is made to the
-            exposure ID. If it is "C" a 1000 is added to the year component
-            of the exposure ID. If it is "H" a 2000 is added to the year
-            component. This sequence continues with "P" and "Q" controllers.
-            `None` indicates that the controller is not relevant to the
-            exposure ID calculation (generally this is the case for test
-            stand data).
+            exposure ID. Before Oct 5 2023, if it is "C" a 1000 is added to the
+            year component of the exposure ID. If it is "H" a 2000 is added to
+            the year component. Before Apr 18 2025, this sequence continues
+            with "P", "Q", and "S" controllers. `None` indicates that the
+            controller is not relevant to the exposure ID calculation
+            (generally this is the case for test stand data).
 
         Returns
         -------
         exposure_id : `int`
             Exposure ID in form YYYYMMDDnnnnn form.
         """
+        if isinstance(seqnum, str):
+            seqnum = int(seqnum)
         # We really want an integer but the checks require a str.
         if isinstance(dayobs, int):
             dayobs = str(dayobs)
@@ -450,7 +452,7 @@ class LsstBaseTranslator(FitsTranslator):
             # with the OCS, so there is no need to adjust the dayobs
             # to make unique exposure IDs.
             controller = None
-        elif dayobs > 20250417 and controller in "PSQ":
+        elif dayobs > 20250417 and controller in {"P", "S", "Q"}:
             # At some point in the past the PSQ and OC controller sequence
             # counters were unified. To avoid confusion with previous files
             # that may already be ingested where we do not want to change
