@@ -416,12 +416,12 @@ class LsstBaseTranslator(FitsTranslator):
             Sequence number.
         controller : `str`, optional
             Controller to use. If this is "O", no change is made to the
-            exposure ID. If it is "C" a 1000 is added to the year component
-            of the exposure ID. If it is "H" a 2000 is added to the year
-            component. This sequence continues with "P" and "Q" controllers.
-            `None` indicates that the controller is not relevant to the
-            exposure ID calculation (generally this is the case for test
-            stand data).
+            exposure ID. Before Oct 5 2023, if it is "C" a 1000 is added to the
+            year component of the exposure ID. If it is "H" a 2000 is added to
+            the year component. Before Apr 18 2025, this sequence continues
+            with "P", "Q", and "S" controllers. `None` indicates that the
+            controller is not relevant to the exposure ID calculation
+            (generally this is the case for test stand data).
 
         Returns
         -------
