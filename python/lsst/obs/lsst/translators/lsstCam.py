@@ -15,7 +15,6 @@ __all__ = ("LsstCamTranslator", )
 import logging
 
 import pytz
-from astropy.coordinates import Angle
 import astropy.time
 import astropy.units as u
 
@@ -82,6 +81,8 @@ class LsstCamTranslator(LsstBaseTranslator):
         "detector_serial": "LSST_NUM",
         "object": ("OBJECT", dict(default="UNKNOWN")),
         "science_program": (["PROGRAM", "RUNNUM"], dict(default="unknown")),
+        "boresight_rotation_angle": (["ROTPA", "ROTANGLE"], dict(checker=is_non_science_or_lab,
+                                                                 default=0.0, unit=u.deg)),
     }
 
     # Use Imsim raft definitions until a true lsstCam definition exists
@@ -90,9 +91,6 @@ class LsstCamTranslator(LsstBaseTranslator):
     # Date (YYYYMM) the camera changes from using lab day_offset (Pacific time)
     # to summit day_offset (12 hours).
     _CAMERA_SHIP_DATE = 202405
-
-    # See to_boresight_rotation_angle() for details.
-    _ROTPA_OFFSET = -90.0
 
     @classmethod
     def fix_header(cls, header, instrument, obsid, filename=None):
@@ -223,20 +221,3 @@ class LsstCamTranslator(LsstBaseTranslator):
         # We need the offset to go the other way.
         offset = pacific_time.utcoffset() * -1
         return astropy.time.TimeDelta(offset)
-
-    @cache_translation
-    def to_boresight_rotation_angle(self) -> Angle:
-        # Docstring will be inherited. Property defined in
-        # astro_metadata_translator properties.py
-        # Rotation formula determined from ComCam on sky +
-        # LSSTCam mounting and photographs. LSSTCam has
-        # a rotation of -90 deg while ComCam is 0 deg.
-        # See DM-49838.
-        q = self.quantity_from_card(
-            ["ROTPA", "ROTANGLE"],
-            u.deg,
-            default=0.0,
-            checker=is_non_science_or_lab,
-        )
-        angle = (Angle(q) + Angle(self._ROTPA_OFFSET * u.deg)).wrap_at("360d")
-        return angle
