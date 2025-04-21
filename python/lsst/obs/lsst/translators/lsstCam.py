@@ -116,12 +116,24 @@ class LsstCamTranslator(LsstBaseTranslator):
             header["FILTER2"] = None
             modified = True
 
+        day_obs = header.get("DAYOBS")
+        i_day_obs = int(day_obs) if day_obs else None
         if (
-            header.get("DAYOBS") in ("20231107", "20231108", "20241015", "20241016")
+            day_obs in ("20231107", "20231108", "20241015", "20241016")
             and header["FILTER"] == "ph_05"
         ):
             header["FILTER"] = "ph_5"
             modified = True
+
+        # For first ~ week of observing the ROTPA in the header was the ComCam
+        # value and needed to be adjusted by 90 degrees to match LSSTCam.
+        # Fixed for day_obs 20250422.
+        rotpa_fixed_on_day = 20250422
+        if i_day_obs and i_day_obs > 20250301 and i_day_obs < rotpa_fixed_on_day:
+            if rotpa := header.get("ROTPA"):
+                header["ROTPA"] = rotpa - 90.0
+                modified = True
+                log.debug("%s: Correcting ROTPA by -90.0", log_label)
 
         return modified
 
