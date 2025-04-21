@@ -54,8 +54,6 @@ class LsstComCamTranslator(LsstCamTranslator):
     # to summit day_offset (12 hours).
     _CAMERA_SHIP_DATE = 202003
 
-    _ROTPA_OFFSET = 0.0
-
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
