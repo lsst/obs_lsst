@@ -34,8 +34,6 @@ class LsstCamSimTranslator(LsstCamTranslator):
 
     cameraPolicyFile = "policy/lsstCamSim.yaml"
 
-    _ROTPA_OFFSET = 0.0
-
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
