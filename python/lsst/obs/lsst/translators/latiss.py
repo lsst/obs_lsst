@@ -439,7 +439,8 @@ class LatissTranslator(LsstBaseTranslator):
         # Docstring will be inherited. Property defined in properties.py
         # Some data is missing a value for EXPTIME.
         # Have to be careful we do not have circular logic when trying to
-        # guess
+        # guess. SHUTTIME for LATISS is always the same as EXPTIME so requested
+        # and actual are identical.
         if self.is_key_ok("EXPTIME"):
             return self.quantity_from_card("EXPTIME", u.s)
 

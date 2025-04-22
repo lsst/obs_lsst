@@ -78,7 +78,7 @@ class LsstCamTranslator(LsstBaseTranslator):
         "detector_group": "RAFTBAY",
         "detector_name": "CCDSLOT",
         "observation_id": "OBSID",
-        "exposure_time": ("EXPTIME", dict(unit=u.s)),
+        "exposure_time_requested": ("EXPTIME", dict(unit=u.s)),
         "detector_serial": "LSST_NUM",
         "object": ("OBJECT", dict(default="UNKNOWN")),
         "science_program": (["PROGRAM", "RUNNUM"], dict(default="unknown")),
@@ -246,3 +246,12 @@ class LsstCamTranslator(LsstBaseTranslator):
         # We need the offset to go the other way.
         offset = pacific_time.utcoffset() * -1
         return astropy.time.TimeDelta(offset)
+
+    @cache_translation
+    def to_exposure_time(self):
+        # Use shutter time if greater than 0 (for a dark the shutter never
+        # opens).
+        if self.is_key_ok("SHUTTIME"):
+            if (shuttime := self._header["SHUTTIME"]) > 0.0:
+                return shuttime * u.s
+        return self.to_exposure_time_requested()
