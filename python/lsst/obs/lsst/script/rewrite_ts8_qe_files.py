@@ -25,15 +25,15 @@ from astropy.io import fits
 from astropy.table import QTable
 import argparse
 import sys
-import re
 import os
-import dateutil.parser
 import pickle
 import numpy
 
 from lsst.meas.algorithms.simple_curve import AmpCurve
 
 from lsst.obs.lsst import LsstTS8
+
+from ..utils import valid_start_to_file_root
 
 amp_name_map = {'AMP01': 'C10', 'AMP02': 'C11', 'AMP03': 'C12', 'AMP04': 'C13', 'AMP05': 'C14',
                 'AMP06': 'C15', 'AMP07': 'C16', 'AMP08': 'C17', 'AMP09': 'C07', 'AMP10': 'C06',
@@ -103,8 +103,7 @@ def rewrite_ts8_files(picklefile, out_root='.', valid_start='1970-01-01T00:00:00
     cam = ts8.getCamera()
     file_root = os.path.dirname(picklefile)
 
-    valid_date = dateutil.parser.parse(valid_start)
-    datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
+    datestr = valid_start_to_file_root(valid_start)
 
     if not file_root:  # no path given
         file_root = os.path.curdir()

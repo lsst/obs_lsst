@@ -19,16 +19,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
-import re
 import numpy as np
 
 import astropy.units as u
 from astropy.table import QTable
-import dateutil.parser
 import galsim
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
+
+from ..utils import valid_start_to_file_root
 
 # Obtain the throughputs of the individual optical components from
 # the throughputs package.
@@ -81,8 +81,7 @@ optics_table.meta.update(
 optics_table.meta["CALIB_ID"] = f"calibDate={valid_start} filter=None"
 
 # Write output transmission_optics file.
-valid_date = dateutil.parser.parse(valid_start)
-datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+datestr = valid_start_to_file_root(valid_start)
 
 data_dir = lsst.utils.getPackageDir("obs_lsst_data")
 outfile = os.path.join(data_dir, "comCamSim", "transmission_optics", datestr + ".ecsv")

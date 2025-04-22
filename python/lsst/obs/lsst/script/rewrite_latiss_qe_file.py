@@ -21,13 +21,13 @@
 import astropy.units as u
 from astropy.io import fits
 from astropy.table import QTable
-import re
 import os
-import dateutil.parser
 import numpy
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import AmpCurve
+
+from ..utils import valid_start_to_file_root
 
 amp_name_map = {'AMP01': 'C10', 'AMP02': 'C11', 'AMP03': 'C12', 'AMP04': 'C13', 'AMP05': 'C14',
                 'AMP06': 'C15', 'AMP07': 'C16', 'AMP08': 'C17', 'AMP09': 'C07', 'AMP10': 'C06',
@@ -93,8 +93,7 @@ filename = os.path.join(data_dir, "latiss", "transmission_sensor", raft_detector
 curve_table = convert_qe_curve(filename)
 curve = AmpCurve.fromTable(curve_table)
 
-valid_date = dateutil.parser.parse(valid_start)
-datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
+datestr = valid_start_to_file_root(valid_start)
 
 outfile = os.path.join(data_dir, "latiss", "transmission_sensor", raft_detector, datestr + ".ecsv")
 

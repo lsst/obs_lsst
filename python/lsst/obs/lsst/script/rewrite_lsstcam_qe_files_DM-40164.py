@@ -26,9 +26,7 @@
 
 import astropy.units as u
 from astropy.table import Table, QTable
-import re
 import os
-import dateutil.parser
 import numpy as np
 from scipy.interpolate import interp1d
 from scipy.optimize import leastsq
@@ -37,6 +35,8 @@ import copy
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import AmpCurve
 import lsst.afw.math
+
+from ..utils import valid_start_to_file_root
 
 
 class SplineFitter:
@@ -156,8 +156,7 @@ parquet_file_update = os.path.join(
 )
 
 valid_start = "1970-01-01T00:00:00"
-valid_date = dateutil.parser.parse(valid_start)
-datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
+datestr = valid_start_to_file_root(valid_start)
 
 data = Table.read(parquet_file)
 

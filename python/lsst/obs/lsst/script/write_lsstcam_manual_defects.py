@@ -18,22 +18,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import re
 import os
-import dateutil.parser
+
 from lsst.ip.isr import Defects
 from lsst.geom import Box2I, Point2I, Extent2I
 import lsst.utils
 from lsst.obs.lsst import LsstCam
 
+from ..utils import valid_start_to_file_root
 
 camera = LsstCam().getCamera()
 
 data_root = lsst.utils.getPackageDir("obs_lsst_data")
 
 valid_start = "1970-01-01T00:00:00"
-valid_date = dateutil.parser.parse(valid_start)
-datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+datestr = valid_start_to_file_root(valid_start)
 
 total_masked_pixels = 0
 

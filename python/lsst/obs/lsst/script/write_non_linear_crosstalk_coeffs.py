@@ -18,15 +18,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import re
 import os
-import dateutil.parser
+
 import numpy as np
 from lsst.daf.butler import Butler
 from lsst.ip.isr import CrosstalkCalib
 import lsst.utils
 import warnings
 from scipy.stats import median_abs_deviation
+
+from ..utils import valid_start_to_file_root
 
 repo = "/sdf/group/rubin/repo/main"
 butler = Butler(repo)
@@ -296,8 +297,7 @@ for detector in camera:
 
     # Save the ecsv files
     valid_start = "1970-01-01T00:00:00"
-    valid_date = dateutil.parser.parse(valid_start)
-    datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+    datestr = valid_start_to_file_root(valid_start)
     directory = lsst.utils.getPackageDir("obs_lsst_data")
     out_path = os.path.join(directory, "lsstCam", "crosstalk", det_name.lower())
     os.makedirs(out_path, exist_ok=True)

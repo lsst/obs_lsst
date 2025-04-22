@@ -25,7 +25,10 @@
 Miscellaneous utilities related to lsst cameras
 """
 
-__all__ = ("readRawFile",)
+__all__ = ("readRawFile", "valid_start_to_file_root")
+
+import re
+from astropy.time import Time
 
 from .assembly import attachRawWcsFromBoresight, readRawAmps, fixAmpsAndAssemble
 from ._fitsHeader import readRawFitsHeader
@@ -57,3 +60,24 @@ def readRawFile(fileName, detector, dataId=None):
     exp.setMetadata(md)
     attachRawWcsFromBoresight(exp, dataId)
     return exp
+
+
+def valid_start_to_file_root(valid_start: str) -> str:
+    """Parse a calibration valid start time and convert to form suitable for
+    use in a filename.
+
+    Parameters
+    ----------
+    valid_start : `str`
+        Validity start time in ISOT format.
+
+    Returns
+    -------
+    date_str : `str`
+        Form suitable for use in a file name: YYYYMMDDTHHMMSS.
+    """
+    # Parse the ISO string to ensure conformity if there is an edit to
+    # valid_start.
+    format = "isot" if "T" in valid_start else "iso"
+    valid_date = Time(valid_start, format=format, scale="utc", precision=0)
+    return re.sub(r"\W", "", valid_date.isot)

@@ -25,15 +25,14 @@
 
 import astropy.units as u
 from astropy.table import Table, QTable
-import re
 import os
-import dateutil.parser
 import numpy as np
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import AmpCurve
 import lsst.afw.math
 
+from ..utils import valid_start_to_file_root
 
 data_path = lsst.utils.getPackageDir("obs_lsst_data")
 transmission_path = os.path.join(data_path, "lsstCam", "transmission_sensor")
@@ -50,8 +49,7 @@ parquet_file_corr_factors = os.path.join(
 )
 
 valid_start = "1970-01-01T00:00:00"
-valid_date = dateutil.parser.parse(valid_start)
-datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
+datestr = valid_start_to_file_root(valid_start)
 
 data_update = Table.read(parquet_file_update)
 
