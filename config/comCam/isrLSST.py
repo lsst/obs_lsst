@@ -23,6 +23,7 @@
 comCam-specific overrides for IsrTaskLSST
 """
 import copy
+import numpy as np
 
 
 config.doSaturation = True
@@ -33,6 +34,9 @@ config.crosstalk.minPixelToMask = 1.0
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = True
 config.ampOffset.ampEdgeMaxOffset = 10.0
+
+config.serialOverscanMedianShiftSigmaThreshold = np.inf
+config.bssVoltageMinimum = 0.0
 
 overscanCamera = config.overscanCamera
 
