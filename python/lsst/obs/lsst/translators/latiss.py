@@ -529,3 +529,13 @@ class LatissTranslator(LsstBaseTranslator):
         physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 
         return physical_filter
+
+    @cache_translation
+    def to_altaz_end(self):
+        # For over a year we wrote AAZEND/AELEND by mistake with blank
+        # values because of a typo in the header configuration. In this
+        # scenario we return None since it is not possible to calculate
+        # anything regardless of observing mode.
+        if "AELEND" in self._header and "ELEND" not in self._header:
+            return None
+        return super().to_altaz_end()
