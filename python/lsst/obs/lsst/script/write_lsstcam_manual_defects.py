@@ -25,14 +25,14 @@ from lsst.geom import Box2I, Point2I, Extent2I
 import lsst.utils
 from lsst.obs.lsst import LsstCam
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 camera = LsstCam().getCamera()
 
 data_root = lsst.utils.getPackageDir("obs_lsst_data")
 
 valid_start = "1970-01-01T00:00:00"
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 total_masked_pixels = 0
 

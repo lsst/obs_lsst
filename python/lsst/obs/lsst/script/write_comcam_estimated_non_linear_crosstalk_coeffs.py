@@ -27,7 +27,7 @@ from lsst.ip.isr import CrosstalkCalib
 import lsst.utils
 from lsst.obs.lsst import LsstComCam, LsstCam
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 comcam_camera = LsstComCam().getCamera()
 lsst_camera = LsstCam().getCamera()
@@ -35,7 +35,7 @@ lsst_camera = LsstCam().getCamera()
 data_root = lsst.utils.getPackageDir("obs_lsst_data")
 
 valid_start = "1970-01-01T00:00:00"
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 # Get the crosstalk filenames of every ITL detector.
 crosstalk_files = []

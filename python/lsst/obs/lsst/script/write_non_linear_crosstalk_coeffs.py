@@ -27,7 +27,7 @@ import lsst.utils
 import warnings
 from scipy.stats import median_abs_deviation
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 repo = "/sdf/group/rubin/repo/main"
 butler = Butler(repo)
@@ -297,7 +297,7 @@ for detector in camera:
 
     # Save the ecsv files
     valid_start = "1970-01-01T00:00:00"
-    datestr = valid_start_to_file_root(valid_start)
+    datestr = iso_date_to_curated_calib_file_root(valid_start)
     directory = lsst.utils.getPackageDir("obs_lsst_data")
     out_path = os.path.join(directory, "lsstCam", "crosstalk", det_name.lower())
     os.makedirs(out_path, exist_ok=True)

@@ -28,7 +28,7 @@ import galsim
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 # Obtain the throughputs of the individual optical components from
 # the throughputs package.
@@ -81,7 +81,7 @@ optics_table.meta.update(
 optics_table.meta["CALIB_ID"] = f"calibDate={valid_start} filter=None"
 
 # Write output transmission_optics file.
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 data_dir = lsst.utils.getPackageDir("obs_lsst_data")
 outfile = os.path.join(data_dir, "comCamSim", "transmission_optics", datestr + ".ecsv")

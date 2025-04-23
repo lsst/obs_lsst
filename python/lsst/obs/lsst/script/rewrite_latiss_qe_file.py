@@ -27,7 +27,7 @@ import numpy
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import AmpCurve
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 amp_name_map = {'AMP01': 'C10', 'AMP02': 'C11', 'AMP03': 'C12', 'AMP04': 'C13', 'AMP05': 'C14',
                 'AMP06': 'C15', 'AMP07': 'C16', 'AMP08': 'C17', 'AMP09': 'C07', 'AMP10': 'C06',
@@ -93,7 +93,7 @@ filename = os.path.join(data_dir, "latiss", "transmission_sensor", raft_detector
 curve_table = convert_qe_curve(filename)
 curve = AmpCurve.fromTable(curve_table)
 
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 outfile = os.path.join(data_dir, "latiss", "transmission_sensor", raft_detector, datestr + ".ecsv")
 

@@ -27,7 +27,7 @@ from astropy.table import Table, QTable
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 data_dir = lsst.utils.getPackageDir("obs_lsst_data")
 subaru_file = "subaru_m1_r_20200219.txt"
@@ -58,7 +58,7 @@ optics_table["efficiency"] += 3.5*u.percent
 
 curve = DetectorCurve.fromTable(optics_table)
 
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 outfile = os.path.join(data_dir, "latiss", "transmission_optics", datestr + ".ecsv")
 

@@ -28,7 +28,7 @@ from astropy.table import QTable
 import lsst.utils
 from lsst.obs.lsst import LsstComCam, LsstCam
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 comcam_instr = LsstComCam()
 comcam_camera = comcam_instr.getCamera()
@@ -37,7 +37,7 @@ lsst_camera = LsstCam().getCamera()
 data_root = lsst.utils.getPackageDir("obs_lsst_data")
 
 valid_start = "1970-01-01T00:00:00"
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 # The LSSTComCam focal plane is a raft of ITL sensors, while the LSSTCam
 # focal plane is a mix of ITL and E2V sensors. While there are chromatic

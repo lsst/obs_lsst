@@ -23,7 +23,7 @@ import os
 from lsst.daf.butler import Butler
 import lsst.utils
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 crosstalk_run = "u/czw/DM-37819/crosstalkGen.20230601a/20230601T201929Z"
 
@@ -37,7 +37,7 @@ name = det.getName()
 
 # Make this valid for all time.
 valid_start = "1970-01-01T00:00:00"
-datestr = valid_start_to_file_root(valid_start)
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 directory = lsst.utils.getPackageDir("obs_lsst_data")
 out_path = os.path.join(directory, "latiss", "crosstalk", name.lower())
 os.makedirs(out_path, exist_ok=True)

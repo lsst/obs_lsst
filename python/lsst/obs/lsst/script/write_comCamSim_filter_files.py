@@ -28,7 +28,7 @@ import galsim
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 
-from ..utils import valid_start_to_file_root
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 # Write transmission_filter files for the g, r, i band used
 # by LSSTComCamSim.  These are the baseline/filter_[gri].dat
@@ -77,7 +77,7 @@ for physical_filter, filter_file in zip(physical_filters, filter_files):
     optics_table.meta["CALIB_ID"] = f"calibDate={valid_start} filter={physical_filter}"
 
     # Write output transmission_filter file.
-    datestr = valid_start_to_file_root(valid_start)
+    datestr = iso_date_to_curated_calib_file_root(valid_start)
 
     data_dir = lsst.utils.getPackageDir("obs_lsst_data")
     outfile = os.path.join(
