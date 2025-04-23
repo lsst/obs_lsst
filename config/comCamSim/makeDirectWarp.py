@@ -26,7 +26,6 @@
 # task defaults (which were conditioned on HSC data).  These have been
 # chosen based on the OR3 dataset reduced with w_2024_19 pipeline on
 # DM-37952 (see ticket for figures).
-# Keep these in sync with the makeWarp.py config.
 config.doSelectPreWarp = True
 config.select.maxEllipResidual = 0.004
 config.select.maxScaledSizeScatter = 0.014
