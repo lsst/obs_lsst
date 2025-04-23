@@ -17,6 +17,7 @@ import logging
 import pytz
 import astropy.time
 import astropy.units as u
+from astropy.coordinates import Angle
 
 from astro_metadata_translator import cache_translation
 from astro_metadata_translator.translators.helpers import is_non_science
@@ -134,6 +135,18 @@ class LsstCamTranslator(LsstBaseTranslator):
                 header["ROTPA"] = rotpa - 90.0
                 modified = True
                 log.debug("%s: Correcting ROTPA by -90.0", log_label)
+
+        # For half a night the ROTPA was out by 180 degrees.
+        if i_day_obs == 20250422:
+            seq_num = header["SEQNUM"]
+            if seq_num < 251 and (rotpa := header.get("ROTPA")):
+                rotpa_corrected = rotpa - 180.0
+                angle = Angle(rotpa_corrected * u.deg)
+                header["ROTPA"] = float(angle.wrap_at("180d").value)
+                modified = True
+                log.debug(
+                    "%s: Correcting ROTPA of %f by 180 degrees to %f", log_label, rotpa, header["ROTPA"]
+                )
 
         return modified
 
