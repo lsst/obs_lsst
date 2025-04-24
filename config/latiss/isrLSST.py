@@ -22,6 +22,9 @@
 """
 LATISS-specific overrides for IsrTaskLSST
 """
+import numpy as np
+
+
 config.overscanCamera.defaultDetectorConfig.defaultAmpConfig.saturation = 120000
 
 config.crosstalk.doQuadraticCrosstalkCorrection = False
@@ -35,3 +38,6 @@ poscan.doAbsoluteMaxDeviation = True
 poscan.doMedianSmoothingOutlierRejection = False
 
 config.cameraKeywordsToCompare = ["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC", "TEMP_SET"]
+
+config.serialOverscanMedianShiftSigmaThreshold = np.inf
+config.bssVoltageMinimum = 0.0
