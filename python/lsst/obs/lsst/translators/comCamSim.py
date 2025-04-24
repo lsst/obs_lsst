@@ -166,6 +166,16 @@ class LsstComCamSimTranslator(LsstCamTranslator):
 
         return None
 
+    @cache_translation
+    def to_altaz_end(self):
+        # Tries to calculate the value. Simulated files for ops-rehearsal 3
+        # did not have the AZ/EL headers defined.
+        if self.are_keys_ok(["ELEND", "AZEND"]):
+            return super().to_altaz_end()
+        # Do not attempt to calculate anything in this situation since it is
+        # never going to be correct.
+        return None
+
     @classmethod
     def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:
         # Always use the 12 hour offset.

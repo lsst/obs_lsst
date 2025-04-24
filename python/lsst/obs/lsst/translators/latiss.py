@@ -439,7 +439,8 @@ class LatissTranslator(LsstBaseTranslator):
         # Docstring will be inherited. Property defined in properties.py
         # Some data is missing a value for EXPTIME.
         # Have to be careful we do not have circular logic when trying to
-        # guess
+        # guess. SHUTTIME for LATISS is always the same as EXPTIME so requested
+        # and actual are identical.
         if self.is_key_ok("EXPTIME"):
             return self.quantity_from_card("EXPTIME", u.s)
 
@@ -529,3 +530,13 @@ class LatissTranslator(LsstBaseTranslator):
         physical_filter = f"{physical_filter}{FILTER_DELIMITER}{grating}"
 
         return physical_filter
+
+    @cache_translation
+    def to_altaz_end(self):
+        # For over a year we wrote AAZEND/AELEND by mistake with blank
+        # values because of a typo in the header configuration. In this
+        # scenario we return None since it is not possible to calculate
+        # anything regardless of observing mode.
+        if "AELEND" in self._header and "ELEND" not in self._header:
+            return None
+        return super().to_altaz_end()

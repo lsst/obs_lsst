@@ -15,6 +15,8 @@ __all__ = ("LsstCamSimTranslator",)
 import logging
 import astropy
 
+from astro_metadata_translator import cache_translation
+
 from .lsstCam import LsstCamTranslator
 from .lsst import SIMONYI_TELESCOPE
 
@@ -98,3 +100,13 @@ class LsstCamSimTranslator(LsstCamTranslator):
         Simulated LSSTCam is always on the mountain.
         """
         return True
+
+    @cache_translation
+    def to_altaz_end(self):
+        # Tries to calculate the value. Simulated files for ops-rehearsal 3
+        # did not have the AZ/EL headers defined.
+        if self.are_keys_ok(["ELEND", "AZEND"]):
+            return super().to_altaz_end()
+        # Do not attempt to calculate anything in this situation since it is
+        # never going to be correct.
+        return None

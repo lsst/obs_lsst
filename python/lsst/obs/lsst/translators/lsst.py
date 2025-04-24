@@ -788,18 +788,27 @@ class LsstBaseTranslator(FitsTranslator):
 
     @cache_translation
     def to_altaz_begin(self):
+        return self._to_altaz("AZSTART", "ELSTART")
+
+    @cache_translation
+    def to_altaz_end(self):
+        return self._to_altaz("AZEND", "ELEND")
+
+    def _to_altaz(self, az_key, el_key):
         if not self._is_on_mountain():
             return None
 
         # H controller data are sometimes science observations without
-        # having AZSTART header. The code lets those return nothing.
-        if self._get_controller_code() == "H" and not self.are_keys_ok(["ELSTART", "AZSTART"]):
+        # having AZx header. The code lets those return nothing.
+        if self._get_controller_code() == "H" and not self.are_keys_ok([el_key, az_key]):
             return None
 
         # Always attempt to find the alt/az values regardless of observation
         # type.
-        return altaz_from_degree_headers(self, (("ELSTART", "AZSTART"),),
-                                         self.to_datetime_begin(), is_zd=False, max_alt=95.55, min_alt=-5.55)
+        altaz = altaz_from_degree_headers(self, ((el_key, az_key),),
+                                          self.to_datetime_begin(), is_zd=False, max_alt=95.55, min_alt=-5.55)
+        self._used_these_cards(el_key, az_key)
+        return altaz
 
     @cache_translation
     def to_exposure_group(self):

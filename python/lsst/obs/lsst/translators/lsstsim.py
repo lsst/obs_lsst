@@ -98,3 +98,9 @@ class LsstSimTranslator(LsstBaseTranslator):
                     altaz = radec.transform_to(AltAz())
                 return altaz
         return None
+
+    @cache_translation
+    def to_altaz_end(self):
+        # imsim and phosim do not have this information and we make no attempt
+        # to calculate it from the tracking radec and exposure end time.
+        return None
