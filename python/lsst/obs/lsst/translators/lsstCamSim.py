@@ -36,6 +36,9 @@ class LsstCamSimTranslator(LsstCamTranslator):
 
     cameraPolicyFile = "policy/lsstCamSim.yaml"
 
+    # Allowed to use obstype for can_see_sky fallback.
+    _can_check_obstype_for_can_see_sky = True
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the

@@ -187,6 +187,11 @@ class LsstBaseTranslator(FitsTranslator):
     can not see sky photons.
     """
 
+    _can_check_obstype_for_can_see_sky: bool = True
+    """If can_see_sky can not be determined, allow usage of observation type
+    if `True`.
+    """
+
     @classmethod
     def __init_subclass__(cls, **kwargs):
         """Ensure that subclasses clear their own detector mapping entries
@@ -1078,11 +1083,18 @@ class LsstBaseTranslator(FitsTranslator):
         if self.is_key_ok(key):
             self._used_these_cards(key)
             vignetted = self._header[key]
-            if vignetted == "FULLY":
-                return False
-            return True
+            match vignetted:
+                case "FULLY":
+                    return False
+                case "UNKNOWN":
+                    return None
+                case _:
+                    return True
 
         # Fallback to using the observation type if the key is missing.
-        # May not want to allow this for non-simulated cameras after
-        # comcam goes on sky.
-        return super().to_can_see_sky()
+        # PhoSim always falls back.
+        if self._can_check_obstype_for_can_see_sky or self._get_controller_code() == "H":
+            return super().to_can_see_sky()
+
+        # Unknown state.
+        return None
