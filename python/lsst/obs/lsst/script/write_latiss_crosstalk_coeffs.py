@@ -18,12 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import re
 import os
-import dateutil.parser
+
 from lsst.daf.butler import Butler
 import lsst.utils
 
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 crosstalk_run = "u/czw/DM-37819/crosstalkGen.20230601a/20230601T201929Z"
 
@@ -37,8 +37,7 @@ name = det.getName()
 
 # Make this valid for all time.
 valid_start = "1970-01-01T00:00:00"
-valid_date = dateutil.parser.parse(valid_start)
-datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 directory = lsst.utils.getPackageDir("obs_lsst_data")
 out_path = os.path.join(directory, "latiss", "crosstalk", name.lower())
 os.makedirs(out_path, exist_ok=True)

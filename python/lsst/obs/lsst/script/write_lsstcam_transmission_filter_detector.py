@@ -20,23 +20,22 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import os
-import re
+
 import numpy as np
 import fitsio
 
 import astropy.units as u
 from astropy.table import QTable
-import dateutil.parser
 import galsim
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 from lsst.obs.lsst import LsstCam
 
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 valid_start = "1970-01-01T00:00:00"
-valid_date = dateutil.parser.parse(valid_start)
-datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 lsstcam_instr = LsstCam()
 camera = lsstcam_instr.getCamera()

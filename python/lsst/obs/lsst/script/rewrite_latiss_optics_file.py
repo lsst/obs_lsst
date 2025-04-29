@@ -19,8 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
-import re
-import dateutil.parser
 
 import numpy as np
 import astropy.units as u
@@ -29,6 +27,7 @@ from astropy.table import Table, QTable
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 data_dir = lsst.utils.getPackageDir("obs_lsst_data")
 subaru_file = "subaru_m1_r_20200219.txt"
@@ -59,8 +58,7 @@ optics_table["efficiency"] += 3.5*u.percent
 
 curve = DetectorCurve.fromTable(optics_table)
 
-valid_date = dateutil.parser.parse(valid_start)
-datestr = ''.join(re.split(r'[:-]', valid_date.isoformat()))
+datestr = iso_date_to_curated_calib_file_root(valid_start)
 
 outfile = os.path.join(data_dir, "latiss", "transmission_optics", datestr + ".ecsv")
 

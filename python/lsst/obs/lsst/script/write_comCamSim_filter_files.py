@@ -19,16 +19,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
-import re
 import numpy as np
 
 import astropy.units as u
 from astropy.table import QTable
-import dateutil.parser
 import galsim
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
+
+from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 # Write transmission_filter files for the g, r, i band used
 # by LSSTComCamSim.  These are the baseline/filter_[gri].dat
@@ -77,8 +77,7 @@ for physical_filter, filter_file in zip(physical_filters, filter_files):
     optics_table.meta["CALIB_ID"] = f"calibDate={valid_start} filter={physical_filter}"
 
     # Write output transmission_filter file.
-    valid_date = dateutil.parser.parse(valid_start)
-    datestr = "".join(re.split(r"[:-]", valid_date.isoformat()))
+    datestr = iso_date_to_curated_calib_file_root(valid_start)
 
     data_dir = lsst.utils.getPackageDir("obs_lsst_data")
     outfile = os.path.join(
