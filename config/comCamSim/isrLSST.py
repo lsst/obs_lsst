@@ -26,3 +26,4 @@ config.doCrosstalk = False
 config.doLinearize = False
 config.doDeferredCharge = False
 config.doDefect = False
+config.bssVoltageMinimum = 0  # Simulated voltages are very low
