@@ -29,9 +29,6 @@ log = logging.getLogger(__name__)
 # Normalized name of the LSST Camera
 LSST_CAM = "LSSTCam"
 
-# Date instrument is taking data at telescope.
-TSTART = astropy.time.Time("2025-03-01T00:00", format="isot", scale="utc")
-
 
 def is_non_science_or_lab(self):
     """Pseudo method to determine whether this is a lab or non-science
@@ -92,6 +89,12 @@ class LsstCamTranslator(LsstBaseTranslator):
     # Date (YYYYMM) the camera changes from using lab day_offset (Pacific time)
     # to summit day_offset (12 hours).
     _CAMERA_SHIP_DATE = 202405
+
+    # Date we know camera is in Chile and potentially taking on-sky data.
+    _CAMERA_ON_TELESCOPE_DATE = astropy.time.Time("2025-03-01T00:00", format="isot", scale="utc")
+
+    # Not allowed to use obstype for can_see_sky fallback.
+    _can_check_obstype_for_can_see_sky = False
 
     @classmethod
     def fix_header(cls, header, instrument, obsid, filename=None):
@@ -213,7 +216,7 @@ class LsstCamTranslator(LsstBaseTranslator):
             return True
 
         date = self.to_datetime_begin()
-        if date > TSTART:
+        if date > self._CAMERA_ON_TELESCOPE_DATE:
             return True
 
         return False
@@ -255,3 +258,10 @@ class LsstCamTranslator(LsstBaseTranslator):
             if (shuttime := self._header["SHUTTIME"]) > 0.0:
                 return shuttime * u.s
         return self.to_exposure_time_requested()
+
+    @cache_translation
+    def to_can_see_sky(self) -> bool | None:
+        if not self._is_on_mountain():
+            # Lab data cannot see sky.
+            return False
+        return super().to_can_see_sky()

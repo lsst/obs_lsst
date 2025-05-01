@@ -54,6 +54,10 @@ class LsstComCamTranslator(LsstCamTranslator):
     # to summit day_offset (12 hours).
     _CAMERA_SHIP_DATE = 202003
 
+    # Date we know camera is in Chile and potentially taking on-sky data.
+    # https://www.lsst.org/news/rubin-commissioning-camera-installed-telescope-mount
+    _CAMERA_ON_TELESCOPE_DATE = Time("2024-08-24T00:00", format="isot", scale="utc")
+
     @classmethod
     def can_translate(cls, header, filename=None):
         """Indicate whether this translation class can translate the
@@ -149,19 +153,3 @@ class LsstComCamTranslator(LsstCamTranslator):
             modified = True
 
         return modified
-
-    def _is_on_mountain(self):
-        """Indicate whether these data are coming from the instrument
-        installed on the mountain.
-        Returns
-        -------
-        is : `bool`
-            `True` if instrument is on the mountain.
-
-        Notes
-        -----
-        TODO: DM-33387 This is currently a terrible hack and MUST be removed
-        once CAP-807 and CAP-808 are done.
-        Until then, ALL non-calib ComCam data will look like it is on sky.
-        """
-        return True
