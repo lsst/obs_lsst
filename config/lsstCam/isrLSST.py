@@ -41,56 +41,86 @@ config.ampOffset.ampEdgeMaxOffset = 10.0
 # ITL dip handling.  The defaultDetectorConfig has a
 # itlDipBackgroundFraction of 0.0, which disables the correction.
 # This means we only need to update the rules for detectors that show
-# evidence of the features.  To simplify this for the initial
-# configuration, define three configurations that have "small",
-# "medium", and "big" corrections, and assign those to the detectors
-# as needed.
-smallCorrectionConfig = copy.copy(config.overscanCamera.defaultDetectorConfig)
-smallCorrectionConfig.itlDipMinWidth = 18
-smallCorrectionConfig.itlDipBackgroundFraction = 0.0005
+# evidence of the features.  To simplify this, use the five best
+# configs (DM-50343 for details), and apply to the detectors as
+# applicable.
 
-mediumCorrectionConfig = copy.copy(config.overscanCamera.defaultDetectorConfig)
-mediumCorrectionConfig.itlDipMinWidth = 13
-mediumCorrectionConfig.itlDipBackgroundFraction = 0.0015
+correctionConfigA = copy.copy(config.overscanCamera.defaultDetectorConfig)
+correctionConfigA.itlDipMinWidth = 10
+correctionConfigA.itlDipBackgroundFraction = 0.0015
 
-largeCorrectionConfig = copy.copy(config.overscanCamera.defaultDetectorConfig)
-largeCorrectionConfig.itlDipMinWidth = 8
-largeCorrectionConfig.itlDipBackgroundFraction = 0.0025
+correctionConfigB = copy.copy(config.overscanCamera.defaultDetectorConfig)
+correctionConfigB.itlDipMinWidth = 8
+correctionConfigB.itlDipBackgroundFraction = 0.0030
 
-# Small corrections:
+correctionConfigC = copy.copy(config.overscanCamera.defaultDetectorConfig)
+correctionConfigC.itlDipMinWidth = 13
+correctionConfigC.itlDipBackgroundFraction = 0.0015
+
+correctionConfigD = copy.copy(config.overscanCamera.defaultDetectorConfig)
+correctionConfigD.itlDipMinWidth = 15
+correctionConfigD.itlDipBackgroundFraction = 0.0010
+
+correctionConfigE = copy.copy(config.overscanCamera.defaultDetectorConfig)
+correctionConfigE.itlDipMinWidth = 6
+correctionConfigE.itlDipBackgroundFraction = 0.0025
+
+# A correction
 # det 3
-config.overscanCamera.detectorRules["R01_S10"] = copy.copy(smallCorrectionConfig)
-# det 8
-config.overscanCamera.detectorRules["R01_S22"] = copy.copy(smallCorrectionConfig)
-# det 11
-config.overscanCamera.detectorRules["R02_S02"] = copy.copy(smallCorrectionConfig)
-# det 13
-config.overscanCamera.detectorRules["R02_S11"] = copy.copy(smallCorrectionConfig)
-# det 16
-config.overscanCamera.detectorRules["R02_S21"] = copy.copy(smallCorrectionConfig)
-# det 20
-config.overscanCamera.detectorRules["R03_S20"] = copy.copy(smallCorrectionConfig)
-# det 165
-config.overscanCamera.detectorRules["R41_S10"] = copy.copy(smallCorrectionConfig)
-
-# Medium corrections:
+config.overscanCamera.detectorRules["R01_S10"] = copy.copy(correctionConfigA)
 # det 4
-config.overscanCamera.detectorRules["R01_S11"] = copy.copy(mediumCorrectionConfig)
-# det 5
-config.overscanCamera.detectorRules["R01_S12"] = copy.copy(mediumCorrectionConfig)
-# det 7
-config.overscanCamera.detectorRules["R01_S21"] = copy.copy(mediumCorrectionConfig)
-# det 14
-config.overscanCamera.detectorRules["R02_S12"] = copy.copy(mediumCorrectionConfig)
-# det 24
-config.overscanCamera.detectorRules["R03_S20"] = copy.copy(mediumCorrectionConfig)
+config.overscanCamera.detectorRules["R01_S11"] = copy.copy(correctionConfigA)
+# det 6
+config.overscanCamera.detectorRules["R01_S20"] = copy.copy(correctionConfigA)
 # det 30
-config.overscanCamera.detectorRules["R10_S10"] = copy.copy(mediumCorrectionConfig)
+config.overscanCamera.detectorRules["R10_S10"] = copy.copy(correctionConfigA)
 # det 162
-config.overscanCamera.detectorRules["R41_S00"] = copy.copy(mediumCorrectionConfig)
+config.overscanCamera.detectorRules["R41_S00"] = copy.copy(correctionConfigA)
 
-# Large corrections:
+# B correction
+# det 5
+config.overscanCamera.detectorRules["R01_S12"] = copy.copy(correctionConfigB)
+
+# C correction
+# det 7
+config.overscanCamera.detectorRules["R01_S21"] = copy.copy(correctionConfigC)
+# det 24
+config.overscanCamera.detectorRules["R03_S20"] = copy.copy(correctionConfigC)
+# det 35
+config.overscanCamera.detectorRules["R10_S22"] = copy.copy(correctionConfigC)
+
+# D correction
+# det 8
+config.overscanCamera.detectorRules["R01_S22"] = copy.copy(correctionConfigD)
+# det 11
+config.overscanCamera.detectorRules["R02_S02"] = copy.copy(correctionConfigD)
+# det 13
+config.overscanCamera.detectorRules["R02_S11"] = copy.copy(correctionConfigD)
+# det 16
+config.overscanCamera.detectorRules["R02_S21"] = copy.copy(correctionConfigD)
+# det 18
+config.overscanCamera.detectorRules["R03_S00"] = copy.copy(correctionConfigD)
+# det 20
+config.overscanCamera.detectorRules["R03_S02"] = copy.copy(correctionConfigD)
+# det 28
+config.overscanCamera.detectorRules["R10_S01"] = copy.copy(correctionConfigD)
+# det 163
+config.overscanCamera.detectorRules["R41_S01"] = copy.copy(correctionConfigD)
+# det 181
+config.overscanCamera.detectorRules["R43_S01"] = copy.copy(correctionConfigD)
+
+# E correction
 # det 12
-config.overscanCamera.detectorRules["R02_S10"] = copy.copy(largeCorrectionConfig)
+config.overscanCamera.detectorRules["R02_S10"] = copy.copy(correctionConfigE)
+# det 14
+config.overscanCamera.detectorRules["R02_S12"] = copy.copy(correctionConfigE)
+# det 29
+config.overscanCamera.detectorRules["R10_S02"] = copy.copy(correctionConfigE)
+# det 169
+config.overscanCamera.detectorRules["R41_S21"] = copy.copy(correctionConfigE)
+# det 173
+config.overscanCamera.detectorRules["R42_S02"] = copy.copy(correctionConfigE)
 # det 184
-config.overscanCamera.detectorRules["R43_S11"] = copy.copy(largeCorrectionConfig)
+config.overscanCamera.detectorRules["R43_S11"] = copy.copy(correctionConfigE)
+# det 186
+config.overscanCamera.detectorRules["R43_S20"] = copy.copy(correctionConfigE)
