@@ -22,7 +22,6 @@
 """
 LSSTCam-specific overrides for IsrTaskLSST
 """
-
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.crosstalk.doSubtrahendMasking = True
 config.crosstalk.minPixelToMask = 1.0
@@ -30,3 +29,8 @@ config.crosstalk.minPixelToMask = 1.0
 config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = False
 config.ampOffset.ampEdgeMaxOffset = 10.0
+
+config.badAmps = [
+    "R42_S21_C07",  # Inconsistent linearizer and gain.
+    "R03_S01_C10",  # Extremely high CTI
+]
