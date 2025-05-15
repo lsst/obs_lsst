@@ -38,7 +38,7 @@ from lsst.pipe.base import Task
 from lsst.resources import ResourcePath
 
 
-DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electrometer.*fits$"
+DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electrometer.*fits$|EM.*fits$"
 
 
 class PhotodiodeIngestConfig(Config):
@@ -156,6 +156,7 @@ class PhotodiodeIngestTask(Task):
                     calib = PhotodiodeCalib.readFits(localFile.ospath)
                 fitsVersion = int(calib.getMetadata().get("FORMAT_V", 1))
                 calibType = f"fits-v{fitsVersion:d}"
+                # import pdb; pdb.set_trace()
             except Exception:
                 try:
                     # Try reading as a text file
@@ -175,7 +176,7 @@ class PhotodiodeIngestTask(Task):
             # to the exposure.
             if calibType == "fits-v1":
                 instrumentName = calib.metadata.get("INSTRUME")
-                if instrumentName is None:
+                if instrumentName is None or instrumentName != self.instrument.getName():
                     # The field is populated by the calib class, so we
                     # can't use defaults.
                     instrumentName = self.instrument.getName()
