@@ -186,7 +186,9 @@ class PhotodiodeIngestTask(Task):
                 # which should be blank.
                 groupId = calib.metadata.get("GROUPID")
                 validGroup = True
-                if "#" not in groupId:
+                if groupId is None:
+                    validGroup = False
+                elif "#" not in groupId:
                     validGroup = False
                 else:
                     splitGroup = groupId.split("#")
