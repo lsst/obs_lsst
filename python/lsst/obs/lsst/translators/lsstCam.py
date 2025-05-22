@@ -151,6 +151,14 @@ class LsstCamTranslator(LsstBaseTranslator):
                     "%s: Correcting ROTPA of %f by 180 degrees to %f", log_label, rotpa, header["ROTPA"]
                 )
 
+        # For the night of 20250518 the dome was closed but many
+        # calibs had the wrong header because of dome/TMA faults.
+        if i_day_obs == 20250518:
+            if header["VIGN_MIN"] != "FULLY":
+                header["VIGN_MIN"] = "FULLY"
+                modified = True
+                log.debug("%s: Correcting VIGN_MIN to FULLY", log_label)
+
         return modified
 
     @classmethod
