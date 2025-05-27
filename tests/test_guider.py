@@ -95,7 +95,11 @@ class GuiderIngestTestCase(unittest.TestCase):
         )
 
         self.assertEqual(len(ingested), 1)
-        self.butler.get(refs[0])
+
+        # Check that the guider metadata is set.
+        guider = self.butler.get(refs[0])
+        self.assertIsNone(guider.metadata)
+
 
 
 if __name__ == '__main__':
