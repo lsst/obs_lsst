@@ -95,7 +95,16 @@ class GuiderIngestTestCase(unittest.TestCase):
         )
 
         self.assertEqual(len(ingested), 1)
-        self.butler.get(refs[0])
+
+        # Check that the guider metadata is set.
+        guider = self.butler.get(refs[0])
+        self.assertIsNotNone(guider.metadata)
+        for stamp in guider:
+            self.assertIn("STMPTIME", stamp.metadata)
+
+        self.assertEqual(guider[0].metadata["STMPTIME"], "2024-09-18T13:51:28.526")
+        self.assertEqual(guider[-1].metadata["STMPTIME"], "2024-09-18T13:51:43.319")
+
 
 
 if __name__ == '__main__':
