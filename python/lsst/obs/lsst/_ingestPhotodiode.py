@@ -273,13 +273,25 @@ class IsrCalibIngestTask(Task):
             # it.  Write it to a temp file that we can use to ingest.
             # If we can have the files written appropriately, this
             # will be a direct ingest of those files.
-            with ResourcePath.temporary_uri(suffix=".fits") as tempFile:
-                calib.writeFits(tempFile.ospath)
+            if self.config.transfer == "copy":
+                with ResourcePath.temporary_uri(suffix=".fits") as tempFile:
+                    calib.writeFits(tempFile.ospath)
+
+                    ref = DatasetRef(self.datasetType, dataId, run=run, id_generation_mode=mode)
+                    dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
+
+                    # No try, as if this fails, we should stop.
+                    self.butler.ingest(dataset, transfer=self.config.transfer,
+                                       record_validation_info=track_file_attrs)
+                    self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
+                                  logId)
+                    refs.append(dataset)
+            elif self.config.transfer == "direct":
+                if self.config.forceCopyOnly:
+                    raise RuntimeError("I probably can never happen.")
 
                 ref = DatasetRef(self.datasetType, dataId, run=run, id_generation_mode=mode)
-                dataset = FileDataset(path=tempFile, refs=ref, formatter=FitsGenericFormatter)
-
-                # No try, as if this fails, we should stop.
+                dataset = FileDataset(path=inputFile, refs=ref, formatter=FitsGenericFormatter)  # ??
                 self.butler.ingest(dataset, transfer=self.config.transfer,
                                    record_validation_info=track_file_attrs)
                 self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
