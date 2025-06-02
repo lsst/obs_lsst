@@ -33,7 +33,7 @@ from lsst.daf.butler import (
 from lsst.ip.isr import PhotodiodeCalib
 from lsst.obs.base import makeTransferChoiceField
 from lsst.obs.base.formatters.fitsGeneric import FitsGenericFormatter
-from lsst.pex.config import Config
+from lsst.pex.config import Config, Field
 from lsst.pipe.base import Task
 from lsst.resources import ResourcePath
 
@@ -41,26 +41,32 @@ from lsst.resources import ResourcePath
 DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electrometer.*fits$|EM.*fits$"
 
 
-class PhotodiodeIngestConfig(Config):
-    """Configuration class for PhotodiodeIngestTask."""
-
+class IsrCalibIngestConfig(Config):
+    """Configuration class for base IsrCalib ingestion task."""
     transfer = makeTransferChoiceField(default="copy")
+
+    forceCopyOnly = Field(
+        dtype=bool,
+        doc="Should this ingest force transfer to be copy, to ensure the calib is rewritten?",
+        default=True,
+    )
 
     def validate(self):
         super().validate()
-        if self.transfer != "copy":
-            raise ValueError(f"Transfer Must be 'copy' for photodiode data. {self.transfer}")
+        if self.forceCopyOnly and self.transfer != "copy":
+            raise ValueError(f"Transfer must be 'copy' for this data: {self.transfer}")
 
 
-class PhotodiodeIngestTask(Task):
-    """Task to ingest photodiode data into a butler repository.
+class IsrCalibIngestTask(Task):
+    """Base task to ingest data convertable to an IsrCalib into a butler
+    repository
 
     Parameters
     ----------
-    config : `PhotodiodeIngestConfig`
+    config : `IsrCalibIngestConfig`
         Configuration for the task.
     instrument : `~lsst.obs.base.Instrument`
-        The instrument these photodiode datasets are from.
+        The instrument these datasets are from.
     butler : `~lsst.daf.butler.Butler`
         Writable butler instance, with ``butler.run`` set to the
         appropriate `~lsst.daf.butler.CollectionType.RUN` collection
@@ -69,17 +75,8 @@ class PhotodiodeIngestTask(Task):
         Additional keyword arguments.
     """
 
-    ConfigClass = PhotodiodeIngestConfig
-    _DefaultName = "photodiodeIngest"
-
-    def getDatasetType(self):
-        """Return the DatasetType of the photodiode datasets."""
-        return DatasetType(
-            "photodiode",
-            ("instrument", "exposure"),
-            "IsrCalib",
-            universe=self.universe,
-        )
+    ConfigClass = IsrCalibIngestConfig
+    _DefaultName = "genericIsrIngest"
 
     def __init__(self, butler, instrument, config=None, **kwargs):
         config.validate()
@@ -91,10 +88,84 @@ class PhotodiodeIngestTask(Task):
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
 
+
+    def getDatasetType(self):
+        """Return the DatasetType to be ingested.
+
+        Returns
+        -------
+        datasetType : `lsst.daf.butler.DatasetType`
+            The datasetType for the ingested data.
+        """
+        raise NotImplementedError(
+            "Subclasses must define their datasetType."
+        )
+
+    def getDestinationCollection(self):
+        """Return the collection that these datasets will be ingested to.
+
+        Returns
+        -------
+        collectionName : `str`
+            The collection the data will be ingested to.
+        """
+        raise NotImplementedError(
+            "Subclasses must define their target collection."
+        )
+
+    def readCalibFromFile(self, inputFile):
+        """Read the inputFile, and determine its calibration type and read it.
+
+        Parameters
+        ----------
+        inputFile : `lsst.resources.ResourcePath`
+            File to be read to check ingestibility.
+
+        Returns
+        -------
+        calib : `lsst.ip.isr.IsrCalib`
+            The appropriately subclassed implementation for this calibration type.
+        calibType : `str`
+            The calibration type/version name.
+        """
+        raise NotImplementedError(
+            "Subclasses must define how to read their datasets."
+        )
+
+    def getAssociationInfo(self, inputFile, calib, calibType):
+        """Determine the information needed to create a dataId for this dataset.
+
+        Parameters
+        ----------
+        inputFile : `lsst.resources.ResourcePath`
+            Original file containing the dataset.  Used for log messages.
+        calib : `lsst.ip.isr.IsrCalib`
+            The calibration dataset to study.
+        calibType : `str`
+            The calibration type/version name.
+
+        Returns
+        -------
+        instrumentName : `str`
+            Instrument this dataset belongs to.
+        whereClause : `str`
+            Butler query "where" that will find the exposure with
+            matching dataId.
+        binding : `dict` [`str`: `str`]
+            Binding values for ``whereClause``.
+        logId : `str`
+            A string (or dataset convertable to string) to be used in
+            downstream logs.
+        """
+        raise NotImplementedError(
+            "Subclasses must define how to associate their datasets."
+        )
+
     def run(self, locations, run=None,
             file_filter=DEFAULT_PHOTODIODE_REGEX,
             track_file_attrs=None):
-        """Ingest photodiode data into a Butler data repository.
+
+        """Ingest calibration data into a Butler data repository.
 
         Parameters
         ----------
@@ -133,7 +204,7 @@ class PhotodiodeIngestTask(Task):
 
         # Find and register run that we will ingest to.
         if run is None:
-            run = self.instrument.makeCollectionName("calib", "photodiode")
+            run = self.getDestinationCollection()
         registry.registerCollection(run, type=CollectionType.RUN)
 
         # Use datasetIds that match the raw exposure data.
@@ -147,92 +218,17 @@ class PhotodiodeIngestTask(Task):
         numFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
-            calibType = "Unknown"
-            try:
-                # Try reading as a fits file.  This is the 2025
-                # standard, but make sure to include the format
-                # version so we can parse that below.
-                with inputFile.as_local() as localFile:
-                    calib = PhotodiodeCalib.readFits(localFile.ospath)
-                fitsVersion = int(calib.getMetadata().get("FORMAT_V", 1))
-                calibType = f"fits-v{fitsVersion:d}"
-                # import pdb; pdb.set_trace()
-            except Exception:
-                try:
-                    # Try reading as a text file
-                    with inputFile.as_local() as localFile:
-                        calib = PhotodiodeCalib.readText(localFile.ospath)
-                    # This is "full" in that it has everything needed to
-                    # be read from text.
-                    calibType = "full"
-                except Exception:
-                    # Try reading as a two-column file.  This was the
-                    # older version.
-                    with inputFile.as_local() as localFile:
-                        calib = PhotodiodeCalib.readTwoColumnPhotodiodeData(localFile.ospath)
-                    calibType = "two-column"
+            calib, calibType = self.readCalibFromFile(inputFile)
 
-            # Get exposure records so we can associate the photodiode
-            # to the exposure.
-            if calibType == "fits-v1":
-                instrumentName = calib.metadata.get("INSTRUME")
-                if instrumentName is None or instrumentName != self.instrument.getName():
-                    # The field is populated by the calib class, so we
-                    # can't use defaults.
-                    instrumentName = self.instrument.getName()
+            # Get the information we'll need to look up which exposure
+            # it matches
+            instrumentName, whereClause, binding, logId = self.getAssociationInfo(inputFile, calib, calibType)
 
-                # This format uses the GROUPID to match what is set in
-                # the exposure.  Validate this to be of the form:
-                # {initial_group}#{unique identifier}, neither of
-                # which should be blank.
-                groupId = calib.metadata.get("GROUPID")
-                validGroup = True
-                if groupId is None:
-                    validGroup = False
-                elif "#" not in groupId:
-                    validGroup = False
-                else:
-                    splitGroup = groupId.split("#")
-                    if len(splitGroup) != 2:
-                        validGroup = False
-                    if splitGroup[0] == "" or splitGroup[1] == "":
-                        validGroup = False
-                if not validGroup:
-                    self.log.warning("Skipping input file %s with malformed group %s.",
-                                     inputFile, groupId)
-                    continue
-
-                whereClause = "exposure.group=groupId"
-                binding = {"groupId": groupId}
-                logId = groupId
-            elif calibType == "full":
-                instrumentName = calib.getMetadata().get('INSTRUME')
-                if instrumentName is None:
-                    # The field is populated by the calib class, so we
-                    # can't use defaults.
-                    instrumentName = self.instrument.getName()
-
-                # This format uses the obsId to match what is set in
-                # the exposure.
-                obsId = calib.getMetadata()['obsId']
-                whereClause = "exposure.obs_id=obsId"
-                binding = {"obsId": obsId}
-                logId = obsId
-            elif calibType == "two-column":
-                dayObs = calib.getMetadata()['day_obs']
-                seqNum = calib.getMetadata()['seq_num']
-
-                # This format uses dayObs and seqNum to match what is
-                # set in the exposure.
-                whereClause = "exposure.day_obs=dayObs and exposure.seq_num=seqNum"
-                instrumentName = self.instrument.getName()
-                binding = {"dayObs": dayObs, "seqNum": seqNum}
-                logId = (dayObs, seqNum)
-
-            else:
+            if whereClause is None:
                 self.log.warning("Skipping input file %s of unknown type.",
                                  inputFile)
                 continue
+
             exposureRecords = [rec for rec in registry.queryDimensionRecords("exposure",
                                                                              instrument=instrumentName,
                                                                              where=whereClause,
