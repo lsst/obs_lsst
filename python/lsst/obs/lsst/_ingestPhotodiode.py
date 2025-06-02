@@ -124,7 +124,8 @@ class IsrCalibIngestTask(Task):
         Returns
         -------
         calib : `lsst.ip.isr.IsrCalib`
-            The appropriately subclassed implementation for this calibration type.
+            The appropriately subclassed implementation for this
+            calibration type.
         calibType : `str`
             The calibration type/version name.
         """
@@ -133,7 +134,8 @@ class IsrCalibIngestTask(Task):
         )
 
     def getAssociationInfo(self, inputFile, calib, calibType):
-        """Determine the information needed to create a dataId for this dataset.
+        """Determine the information needed to create a dataId for this
+        dataset.
 
         Parameters
         ----------
