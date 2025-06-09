@@ -60,14 +60,16 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
     butler = Butler(repo, writeable=True)
     instr = Instrument.from_string(instrument, butler.registry)
 
-    config = PhotodiodeIngestConfig()
-    config.transfer = transfer
+    # We'll reuse `config`, so get the overrides stored first.
     configOverrides = ConfigOverrides()
     if config_file is not None:
         configOverrides.addFileOverride(config_file)
     if config is not None:
         for name, value in config.items():
             configOverrides.addValueOverride(name, value)
+
+    config = PhotodiodeIngestConfig()
+    config.transfer = transfer
     configOverrides.applyTo(config)
 
     task = PhotodiodeIngestTask(butler=butler, instrument=instr, config=config)
