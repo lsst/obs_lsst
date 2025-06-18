@@ -29,7 +29,7 @@ import lsst.utils.tests
 
 import lsst.afw.image
 from lsst.obs.base import createInitialSkyWcsFromBoresight
-from lsst.obs.lsst import Latiss
+from lsst.obs.lsst import Latiss, LsstCam
 
 
 class WcsRotationTestCase(lsst.utils.tests.TestCase):
@@ -37,9 +37,10 @@ class WcsRotationTestCase(lsst.utils.tests.TestCase):
 
     def setUp(self):
 
-        camera = Latiss.getCamera()
-        self.assertTrue(len(camera) == 1)
-        self.detector = camera[0]
+        latiss = Latiss.getCamera()
+        self.assertTrue(len(latiss) == 1)
+        self.latiss_detector = latiss[0]
+        self.lsst_detector = LsstCam.getCamera()[0]
 
     def test_getAngleBetweenWcs(self):
         ras = [0, 0.1, 1, np.pi/2, np.pi]
@@ -47,16 +48,16 @@ class WcsRotationTestCase(lsst.utils.tests.TestCase):
         rotAngles1 = [0, 0.01, 45, 90, 180, 270, -10]
         epsilon = 0.5
         rotAngles2 = [r + epsilon for r in rotAngles1]
-        flips = [True, False]
+        detectors = [self.latiss_detector, self.lsst_detector]
 
         nomPosition = lsst.geom.SpherePoint(1.2, 1.1, lsst.geom.radians)
-        for ra, dec, rot1, rot2, flip in itertools.product(ras, decs, rotAngles1, rotAngles2, flips):
+        for ra, dec, rot1, rot2, detector in itertools.product(ras, decs, rotAngles1, rotAngles2, detectors):
             nomRotation = lsst.geom.Angle(rot2, lsst.geom.degrees)
-            nominalWcs = createInitialSkyWcsFromBoresight(nomPosition, nomRotation, self.detector, flipX=flip)
+            nominalWcs = createInitialSkyWcsFromBoresight(nomPosition, nomRotation, detector)
 
             testPoint = lsst.geom.SpherePoint(ra, dec, lsst.geom.radians)
             testRot = lsst.geom.Angle(rot1, lsst.geom.degrees)
-            testWcs = createInitialSkyWcsFromBoresight(testPoint, testRot, self.detector, flipX=flip)
+            testWcs = createInitialSkyWcsFromBoresight(testPoint, testRot, detector)
 
             result = nominalWcs.getRelativeRotationToWcs(testWcs).asDegrees()
             test = (rot2 - rot1) % 360
