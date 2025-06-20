@@ -28,6 +28,8 @@
 #
 plateScale : 9.5695  # as measured from median of 450 fitted images
 
+focalPlaneParity: true
+
 transforms :
   nativeSys : FocalPlane
 
