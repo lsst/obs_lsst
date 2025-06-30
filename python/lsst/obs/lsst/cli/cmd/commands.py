@@ -62,6 +62,30 @@ def ingest_photodiode(*args, **kwargs):
     """Ingest photodiode data from a directory into the butler registry."""
     script.ingestPhotodiode(*args, **kwargs)
 
+@click.command(cls=ButlerCommand, short_help="Ingest shutter motion profile data.")
+@repo_argument(required=True)
+@instrument_argument(required=True, help="INSTRUMENT is the name of the instrument to use.")
+@locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
+                    required=True)
+@regex_option(default=DEFAULT_PHOTODIODE_REGEX,
+              help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
+              f"Defaults to {DEFAULT_PHOTODIODE_REGEX}")
+@config_option(metavar="TEXT=TEXT", multiple=True)
+@config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
+@run_option(required=False)
+@transfer_option(default="copy")
+@click.option(
+    "--track-file-attrs/--no-track-file-attrs",
+    default=True,
+    help="Indicate to the datastore whether file attributes such as file size"
+    " or checksum should be tracked or not. Whether this parameter is honored"
+    " depends on the specific datastore implementation.",
+)
+@options_file_option()
+def ingest_shuttermotion(*args, **kwargs):
+    """Ingest photodiode data from a directory into the butler registry."""
+    script.ingestShutterMotion(*args, **kwargs)
+
 
 @click.command(cls=ButlerCommand, short_help="Ingest LSSTCam guider data.")
 @repo_argument(required=True)
