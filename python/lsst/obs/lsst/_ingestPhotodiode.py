@@ -206,8 +206,8 @@ class IsrCalibIngestTask(Task):
         files = ResourcePath.findFileResources(locations, file_filter)
 
         registry = self.butler.registry
-        for datasetType in self.datasetType:
-            registry.registerDatasetType(datasetType)
+        datasetType = self.datasetType
+        registry.registerDatasetType(datasetType)
 
         # Find and register run that we will ingest to.
         if run is None:
@@ -223,6 +223,7 @@ class IsrCalibIngestTask(Task):
         refs = []
         numExisting = 0
         numFailed = 0
+        numSoftFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
             calib, calibType = self.readCalibFromFile(inputFile)
@@ -246,7 +247,7 @@ class IsrCalibIngestTask(Task):
                 exposureId = exposureRecords[0].id
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
             elif nRecords == 0:
-                numFailed += 1
+                numSoftFailed += 1
                 self.log.warning("Skipping instrument %s and identifiers %s: no exposures found.",
                                  instrumentName, logId)
                 continue
@@ -307,6 +308,8 @@ class IsrCalibIngestTask(Task):
 
         if numExisting != 0:
             self.log.warning("Skipped %d entries that already existed in run %s", numExisting, run)
+        if numSoftFailed != 0:
+            self.log.warning("Skipped %d entries that had no associated exposure", numSoftFailed)
         if numFailed != 0:
             raise RuntimeError(f"Failed to ingest {numFailed} entries due to missing exposure information.")
 
@@ -501,7 +504,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
             # standard, but make sure to include the format
             # version so we can parse that below.
             with inputFile.as_local() as localFile:
-                calib = ShutterMotionCalib.readText(localFile.ospath)
+                calib = ShutterMotionProfile.readText(localFile.ospath)
             fitsVersion = int(calib.getMetadata().get("FORMAT_V", 1))
             calibType = f"text-v{fitsVersion:d}"
             return calib, calibType
@@ -527,13 +530,12 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
             # {initial_group}#{unique identifier}, neither of
             # which should be blank.
             obsId = calib.metadata.get("obsId")
-
             if obsId is None:
                 self.log.warning("Skipping input file %s with malformed obsId %s.",
                                  inputFile, obsId)
                 return None, None, None, obsId
 
-            whereClause = "exposure.obsId=obsId"
+            whereClause = "exposure.obs_id=obsId"
             binding = {"obsId": obsId}
             logId = obsId
         else:
