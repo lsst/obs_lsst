@@ -67,9 +67,9 @@ def ingest_photodiode(*args, **kwargs):
 @instrument_argument(required=True, help="INSTRUMENT is the name of the instrument to use.")
 @locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
                     required=True)
-@regex_option(default=DEFAULT_PHOTODIODE_REGEX,
+@regex_option(default=None,
               help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
-              f"Defaults to {DEFAULT_PHOTODIODE_REGEX}")
+              "Defaults to None, to use expected regexes.")
 @config_option(metavar="TEXT=TEXT", multiple=True)
 @config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
 @run_option(required=False)
