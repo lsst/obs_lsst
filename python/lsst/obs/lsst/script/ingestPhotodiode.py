@@ -22,8 +22,9 @@ from lsst.daf.butler import Butler
 from lsst.pipe.base.configOverrides import ConfigOverrides
 from lsst.pipe.base import Instrument
 from .. import PhotodiodeIngestTask, PhotodiodeIngestConfig
-from .. import (ShutterMotionOpenIngestConfig, ShutterMotionCloseIngestConfig,
-                ShutterMotionOpenIngestTask, ShutterMotionCloseIngestTask)
+from .._ingestPhotodiode import (ShutterMotionOpenIngestConfig, ShutterMotionCloseIngestConfig,
+                                 ShutterMotionOpenIngestTask, ShutterMotionCloseIngestTask,
+                                 DEFAULT_SHUTTER_OPEN_REGEX, DEFAULT_SHUTTER_CLOSE_REGEX)
 
 
 def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None, config_file=None,
@@ -114,6 +115,13 @@ def ingestShutterMotion(repo, instrument, locations, regex, output_run, config=N
     """
     butler = Butler(repo, writeable=True)
     instr = Instrument.from_string(instrument, butler.registry)
+    if regex is None:
+        # This is the case we want.
+        openRegex = DEFAULT_SHUTTER_OPEN_REGEX
+        closeRegex = DEFAULT_SHUTTER_CLOSE_REGEX
+    else:
+        openRegex = regex
+        closeRegex = regex
 
     # Store the overrides first:
     configOverrides = ConfigOverrides()
@@ -123,17 +131,17 @@ def ingestShutterMotion(repo, instrument, locations, regex, output_run, config=N
         for name, value in config.items():
             configOverrides.addValueOverride(name, value)
 
-    configOpen = ShutterMotionIngestOpenConfig()
+    configOpen = ShutterMotionOpenIngestConfig()
     configOpen.transfer = transfer
     configOverrides.applyTo(configOpen)
 
     task = ShutterMotionOpenIngestTask(butler=butler, instrument=instr, config=configOpen)
-    task.run(locations, run=output_run, file_filter=regex,
+    task.run(locations, run=output_run, file_filter=openRegex,
              track_file_attrs=track_file_attrs)
 
-    configClose = ShutterMotionIngestCloseConfig()
+    configClose = ShutterMotionCloseIngestConfig()
     configClose.transfer = transfer
     configOverrides.applyTo(configClose)
     task = ShutterMotionCloseIngestTask(butler=butler, instrument=instr, config=configClose)
-    task.run(locations, run=output_run, file_filter=regex,
+    task.run(locations, run=output_run, file_filter=closeRegex,
              track_file_attrs=track_file_attrs)
