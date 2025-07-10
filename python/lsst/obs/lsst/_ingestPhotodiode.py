@@ -54,6 +54,11 @@ class IsrCalibIngestConfig(Config):
         doc="Should this ingest force transfer to be copy, to ensure the calib is rewritten?",
         default=True,
     )
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
+        default=True,
+    )
 
     def validate(self):
         super().validate()
@@ -308,8 +313,14 @@ class IsrCalibIngestTask(Task):
 
         if numExisting != 0:
             self.log.warning("Skipped %d entries that already existed in run %s", numExisting, run)
+
         if numSoftFailed != 0:
-            self.log.warning("Skipped %d entries that had no associated exposure", numSoftFailed)
+            print(self.config.doRaiseOnMissingExposure)
+            if self.config.doRaiseOnMissingExposure:
+                raise RuntimeError(f"Failed to ingest {numSoftFailed} entries due to "
+                                   "missing exposure information.")
+            else:
+                self.log.warning("Skipped %d entries that had no associated exposure", numSoftFailed)
         if numFailed != 0:
             raise RuntimeError(f"Failed to ingest {numFailed} entries due to missing exposure information.")
 
@@ -317,7 +328,11 @@ class IsrCalibIngestTask(Task):
 # Photodiode implementation begin.
 class PhotodiodeIngestConfig(IsrCalibIngestConfig):
     """Configuration class for PhotodiodeIngestTask."""
-    pass
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
+        default=True
+    )
 
 
 class PhotodiodeIngestTask(IsrCalibIngestTask):
@@ -459,7 +474,11 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
 # Shutter Motion Open / Base Class begin:
 class ShutterMotionOpenIngestConfig(IsrCalibIngestConfig):
     """Configuration class for ShutterMotionIngestTask."""
-    pass
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
+        default=False
+    )
 
 
 class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
