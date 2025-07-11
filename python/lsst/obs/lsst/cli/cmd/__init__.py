@@ -19,9 +19,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-__all__ = ["ingest_photodiode", "ingest_guider"]
+__all__ = ["ingest_photodiode", "ingest_shuttermotion", "ingest_guider"]
 
 from .commands import (
     ingest_photodiode,
+    ingest_shuttermotion,
     ingest_guider,
 )

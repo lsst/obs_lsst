@@ -18,7 +18,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-__all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask')
+__all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask',
+           'ShutterMotionOpenIngestConfig', 'ShutterMotionOpenIngestTask',
+           'ShutterMotionCloseIngestConfig', 'ShutterMotionCloseIngestTask')
 
 
 from lsst.daf.butler import (
@@ -30,7 +32,7 @@ from lsst.daf.butler import (
     FileDataset,
     Progress,
 )
-from lsst.ip.isr import PhotodiodeCalib
+from lsst.ip.isr import PhotodiodeCalib, ShutterMotionProfile
 from lsst.obs.base import makeTransferChoiceField
 from lsst.obs.base.formatters.fitsGeneric import FitsGenericFormatter
 from lsst.pex.config import Config, Field
@@ -39,8 +41,10 @@ from lsst.resources import ResourcePath
 
 
 DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electrometer.*fits$|EM.*fits$"
+DEFAULT_SHUTTER_OPEN_REGEX = r".*shutterMotionProfileOpen.json$"
+DEFAULT_SHUTTER_CLOSE_REGEX = r".*shutterMotionProfileClose.json$"
 
-
+# Base class begin.
 class IsrCalibIngestConfig(Config):
     """Configuration class for base IsrCalib ingestion task."""
     transfer = makeTransferChoiceField(default="copy")
@@ -48,6 +52,11 @@ class IsrCalibIngestConfig(Config):
     forceCopyOnly = Field(
         dtype=bool,
         doc="Should this ingest force transfer to be copy, to ensure the calib is rewritten?",
+        default=True,
+    )
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
         default=True,
     )
 
@@ -202,7 +211,8 @@ class IsrCalibIngestTask(Task):
         files = ResourcePath.findFileResources(locations, file_filter)
 
         registry = self.butler.registry
-        registry.registerDatasetType(self.datasetType)
+        datasetType = self.datasetType
+        registry.registerDatasetType(datasetType)
 
         # Find and register run that we will ingest to.
         if run is None:
@@ -218,6 +228,7 @@ class IsrCalibIngestTask(Task):
         refs = []
         numExisting = 0
         numFailed = 0
+        numSoftFailed = 0
         for inputFile in files:
             # Convert the file into the right class.
             calib, calibType = self.readCalibFromFile(inputFile)
@@ -241,7 +252,7 @@ class IsrCalibIngestTask(Task):
                 exposureId = exposureRecords[0].id
                 calib.updateMetadata(camera=self.camera, exposure=exposureId)
             elif nRecords == 0:
-                numFailed += 1
+                numSoftFailed += 1
                 self.log.warning("Skipping instrument %s and identifiers %s: no exposures found.",
                                  instrumentName, logId)
                 continue
@@ -302,13 +313,26 @@ class IsrCalibIngestTask(Task):
 
         if numExisting != 0:
             self.log.warning("Skipped %d entries that already existed in run %s", numExisting, run)
+
+        if numSoftFailed != 0:
+            print(self.config.doRaiseOnMissingExposure)
+            if self.config.doRaiseOnMissingExposure:
+                raise RuntimeError(f"Failed to ingest {numSoftFailed} entries due to "
+                                   "missing exposure information.")
+            else:
+                self.log.warning("Skipped %d entries that had no associated exposure", numSoftFailed)
         if numFailed != 0:
             raise RuntimeError(f"Failed to ingest {numFailed} entries due to missing exposure information.")
 
 
+# Photodiode implementation begin.
 class PhotodiodeIngestConfig(IsrCalibIngestConfig):
     """Configuration class for PhotodiodeIngestTask."""
-    pass
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
+        default=True
+    )
 
 
 class PhotodiodeIngestTask(IsrCalibIngestTask):
@@ -445,3 +469,136 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
             logId = None
 
         return instrumentName, whereClause, binding, logId
+
+
+# Shutter Motion Open / Base Class begin:
+class ShutterMotionOpenIngestConfig(IsrCalibIngestConfig):
+    """Configuration class for ShutterMotionIngestTask."""
+    doRaiseOnMissingExposure = Field(
+        dtype=bool,
+        doc="Should ingest raise if a calibration exists, but the matching exposure doesn't?",
+        default=False
+    )
+
+
+class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
+    """Task to ingest shutter motion profiles into a butler repository.
+
+    This task specifically works on the "open" profile.
+
+    Parameters
+    ----------
+    config : `ShutterMotionIngestConfig`
+        Configuration for the task.
+    instrument : `~lsst.obs.base.Instrument`
+        The instrument these photodiode datasets are from.
+    butler : `~lsst.daf.butler.Butler`
+        Writable butler instance, with ``butler.run`` set to the
+        appropriate `~lsst.daf.butler.CollectionType.RUN` collection
+        for these datasets.
+    **kwargs
+        Additional keyword arguments.
+    """
+
+    ConfigClass = ShutterMotionOpenIngestConfig
+    _DefaultName = "shutterMotionOpenIngest"
+
+    def getDatasetType(self):
+        """Inherited from base class"""
+        return DatasetType(
+            "shutterMotionProfileOpen",
+            ("instrument", "exposure"),
+            "IsrCalib",
+            universe=self.universe,
+        )
+
+    def getDestinationCollection(self):
+        """Inherited from base class"""
+        return self.instrument.makeCollectionName("calib", "shutterMotion")
+
+    def readCalibFromFile(self, inputFile):
+        """Inherited from base class"""
+        try:
+            # Try reading as a json file.  This is the 2025
+            # standard, but make sure to include the format
+            # version so we can parse that below.
+            with inputFile.as_local() as localFile:
+                calib = ShutterMotionProfile.readText(localFile.ospath)
+            fitsVersion = int(calib.getMetadata().get("FORMAT_V", 1))
+            calibType = f"text-v{fitsVersion:d}"
+            return calib, calibType
+        except Exception:
+            return None, "Unknown"
+
+        # Code should never get here
+        return None, "Unknown"
+
+    def getAssociationInfo(self, inputFile, calib, calibType):
+        """Inherited from base class"""
+        # Get exposure records so we can associate the photodiode
+        # to the exposure.
+        if calibType == "text-v1":
+            instrumentName = calib.metadata.get("INSTRUME")
+            if instrumentName is None or instrumentName != self.instrument.getName():
+                # The field is populated by the calib class, so we
+                # can't use defaults.
+                instrumentName = self.instrument.getName()
+
+            # This format uses the GROUPID to match what is set in
+            # the exposure.  Validate this to be of the form:
+            # {initial_group}#{unique identifier}, neither of
+            # which should be blank.
+            obsId = calib.metadata.get("obsId")
+            if obsId is None:
+                self.log.warning("Skipping input file %s with malformed obsId %s.",
+                                 inputFile, obsId)
+                return None, None, None, obsId
+
+            whereClause = "exposure.obs_id=obsId"
+            binding = {"obsId": obsId}
+            logId = obsId
+        else:
+            # We've failed somewhere to reach this point
+            instrumentName = None
+            whereClause = None
+            binding = None
+            logId = None
+
+        return instrumentName, whereClause, binding, logId
+
+    # Shutter Motion Open / Base Class begin:
+class ShutterMotionCloseIngestConfig(ShutterMotionOpenIngestConfig):
+    """Configuration class for ShutterMotionIngestTask."""
+    pass
+
+
+class ShutterMotionCloseIngestTask(ShutterMotionOpenIngestTask):
+    """Task to ingest shutter motion profiles into a butler repository.
+
+    This task specifically works on the "Close" profile.
+
+    Parameters
+    ----------
+    config : `ShutterMotionIngestConfig`
+        Configuration for the task.
+    instrument : `~lsst.obs.base.Instrument`
+        The instrument these profiles are from.
+    butler : `~lsst.daf.butler.Butler`
+        Writable butler instance, with ``butler.run`` set to the
+        appropriate `~lsst.daf.butler.CollectionType.RUN` collection
+        for these datasets.
+    **kwargs
+        Additional keyword arguments.
+    """
+
+    ConfigClass = ShutterMotionCloseIngestConfig
+    _DefaultName = "shutterMotionCloseIngest"
+
+    def getDatasetType(self):
+        """Inherited from base class"""
+        return DatasetType(
+            "shutterMotionProfileClose",
+            ("instrument", "exposure"),
+            "IsrCalib",
+            universe=self.universe,
+        )
