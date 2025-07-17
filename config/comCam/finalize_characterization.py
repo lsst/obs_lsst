@@ -17,7 +17,7 @@ config.psf_determiner['piff'].piffBasisPolynomialSolver = "cpp"
 config.psf_determiner['piff'].piffPixelGridFitCenter = False
 # See DM-45569, but this is not enable but it was the config
 # used in the plots.
-config.psf_determiner['piff'].useColor = False
+config.psf_determiner['piff'].useColor = True
 config.psf_determiner['piff'].colorOrder = 1
 config.psf_determiner['piff'].color = {
     "u": "g-i",
