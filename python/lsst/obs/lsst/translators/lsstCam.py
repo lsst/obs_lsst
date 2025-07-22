@@ -159,6 +159,23 @@ class LsstCamTranslator(LsstBaseTranslator):
                 modified = True
                 log.debug("%s: Correcting VIGN_MIN to FULLY", log_label)
 
+        # DM-51847: For several nights in July, the dome was closed but many
+        # flats had the wrong header because of a dome CSC regression
+        fix_ranges = {
+            20250703: (743, 745),
+            20250704: (832, 834),
+            20250705: (1, 736),
+            20250714: (258, 781),
+            20250715: (205, 1218)
+        }
+        if i_day_obs in fix_ranges:
+            i_seq_num = header["SEQNUM"]
+            if (fix_ranges[i_day_obs][0] <= i_seq_num <= fix_ranges[i_day_obs][1]
+                and header["VIGN_MIN"] != "FULLY"):
+                header["VIGN_MIN"] = "FULLY"
+                modified = True
+                log.debug("%s: Correcting VIGN_MIN to FULLY", log_label)
+
         return modified
 
     @classmethod
