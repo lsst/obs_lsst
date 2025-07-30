@@ -826,6 +826,13 @@ class LsstBaseTranslator(FitsTranslator):
         if self.is_key_ok("GROUPID"):
             exposure_group = self._header["GROUPID"]
             self._used_these_cards("GROUPID")
+            # Sometimes people forget to quote date strings in YAML
+            # correction files. This is a problem because we are assuming
+            # strings for matching across multiple exposures and if the
+            # value in the YAML file is not milliseconds then there is
+            # a potential disaster.
+            if isinstance(exposure_group, datetime.datetime):
+                exposure_group = exposure_group.isoformat(timespec="milliseconds")
             return exposure_group
         return super().to_exposure_group()
 
