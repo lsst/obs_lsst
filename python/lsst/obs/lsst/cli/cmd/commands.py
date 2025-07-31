@@ -68,7 +68,7 @@ def ingest_photodiode(*args, **kwargs):
 @locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
                     required=True)
 @regex_option(default=None,
-              help="Regex string used to find photodiode data in directories listed in LOCATIONS. "
+              help="Regex string used to find shutter motion data in directories listed in LOCATIONS. "
               "Defaults to None, to use expected regexes.")
 @config_option(metavar="TEXT=TEXT", multiple=True)
 @config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
@@ -83,7 +83,7 @@ def ingest_photodiode(*args, **kwargs):
 )
 @options_file_option()
 def ingest_shuttermotion(*args, **kwargs):
-    """Ingest photodiode data from a directory into the butler registry."""
+    """Ingest shutter motion data from a directory into the butler registry."""
     script.ingestShutterMotion(*args, **kwargs)
 
 

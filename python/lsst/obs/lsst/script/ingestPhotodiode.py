@@ -82,7 +82,7 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
 
 def ingestShutterMotion(repo, instrument, locations, regex, output_run, config=None, config_file=None,
                         transfer="copy", track_file_attrs=True):
-    """Ingests photodiode data into the butler registry.
+    """Ingests shutter motion profiles into the butler registry.
 
     Parameters
     ----------
