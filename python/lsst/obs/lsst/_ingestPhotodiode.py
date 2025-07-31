@@ -296,7 +296,7 @@ class IsrCalibIngestTask(Task):
                     # No try, as if this fails, we should stop.
                     self.butler.ingest(dataset, transfer=self.config.transfer,
                                        record_validation_info=track_file_attrs)
-                    self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
+                    self.log.info("Dataset %s:%d (%s) ingested successfully", instrumentName, exposureId,
                                   logId)
                     refs.append(dataset)
             elif self.config.transfer == "direct":
@@ -307,7 +307,7 @@ class IsrCalibIngestTask(Task):
                 dataset = FileDataset(path=inputFile, refs=ref, formatter=FitsGenericFormatter)  # ??
                 self.butler.ingest(dataset, transfer=self.config.transfer,
                                    record_validation_info=track_file_attrs)
-                self.log.info("Photodiode %s:%d (%s) ingested successfully", instrumentName, exposureId,
+                self.log.info("Dataset %s:%d (%s) ingested successfully", instrumentName, exposureId,
                               logId)
                 refs.append(dataset)
 
@@ -491,7 +491,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
     config : `ShutterMotionIngestConfig`
         Configuration for the task.
     instrument : `~lsst.obs.base.Instrument`
-        The instrument these photodiode datasets are from.
+        The instrument these datasets are from.
     butler : `~lsst.daf.butler.Butler`
         Writable butler instance, with ``butler.run`` set to the
         appropriate `~lsst.daf.butler.CollectionType.RUN` collection
@@ -535,7 +535,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
 
     def getAssociationInfo(self, inputFile, calib, calibType):
         """Inherited from base class"""
-        # Get exposure records so we can associate the photodiode
+        # Get exposure records so we can associate the dataset
         # to the exposure.
         if calibType == "text-v1":
             instrumentName = calib.metadata.get("INSTRUME")
