@@ -18,9 +18,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-__all__ = ('PhotodiodeIngestConfig', 'PhotodiodeIngestTask',
-           'ShutterMotionOpenIngestConfig', 'ShutterMotionOpenIngestTask',
-           'ShutterMotionCloseIngestConfig', 'ShutterMotionCloseIngestTask')
+__all__ = ("PhotodiodeIngestConfig", "PhotodiodeIngestTask",
+           "ShutterMotionOpenIngestConfig", "ShutterMotionOpenIngestTask",
+           "ShutterMotionCloseIngestConfig", "ShutterMotionCloseIngestTask")
 
 
 from lsst.daf.butler import (
@@ -356,7 +356,6 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
     _DefaultName = "photodiodeIngest"
 
     def getDatasetType(self):
-        """Inherited from base class"""
         return DatasetType(
             "photodiode",
             ("instrument", "exposure"),
@@ -365,12 +364,9 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
         )
 
     def getDestinationCollection(self):
-        """Inherited from base class"""
         return self.instrument.makeCollectionName("calib", "photodiode")
 
     def readCalibFromFile(self, inputFile):
-        """Inherited from base class"""
-        # import pdb; pdb.set_trace()
         try:
             # Try reading as a fits file.  This is the 2025
             # standard, but make sure to include the format
@@ -403,7 +399,6 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
         return None, "Unknown"
 
     def getAssociationInfo(self, inputFile, calib, calibType):
-        """Inherited from base class"""
         # GET INFO BLOCK
         # Get exposure records so we can associate the photodiode
         # to the exposure.
@@ -439,7 +434,7 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
             binding = {"groupId": groupId}
             logId = groupId
         elif calibType == "full":
-            instrumentName = calib.getMetadata().get('INSTRUME')
+            instrumentName = calib.getMetadata().get("INSTRUME")
             if instrumentName is None:
                 # The field is populated by the calib class, so we
                 # can't use defaults.
@@ -447,13 +442,13 @@ class PhotodiodeIngestTask(IsrCalibIngestTask):
 
             # This format uses the obsId to match what is set in
             # the exposure.
-            obsId = calib.getMetadata()['obsId']
+            obsId = calib.getMetadata()["obsId"]
             whereClause = "exposure.obs_id=obsId"
             binding = {"obsId": obsId}
             logId = obsId
         elif calibType == "two-column":
-            dayObs = calib.getMetadata()['day_obs']
-            seqNum = calib.getMetadata()['seq_num']
+            dayObs = calib.getMetadata()["day_obs"]
+            seqNum = calib.getMetadata()["seq_num"]
 
             # This format uses dayObs and seqNum to match what is
             # set in the exposure.
@@ -504,7 +499,6 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
     _DefaultName = "shutterMotionOpenIngest"
 
     def getDatasetType(self):
-        """Inherited from base class"""
         return DatasetType(
             "shutterMotionProfileOpen",
             ("instrument", "exposure"),
@@ -513,11 +507,9 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
         )
 
     def getDestinationCollection(self):
-        """Inherited from base class"""
         return self.instrument.makeCollectionName("calib", "shutterMotion")
 
     def readCalibFromFile(self, inputFile):
-        """Inherited from base class"""
         try:
             # Try reading as a json file.  This is the 2025
             # standard, but make sure to include the format
@@ -534,7 +526,6 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
         return None, "Unknown"
 
     def getAssociationInfo(self, inputFile, calib, calibType):
-        """Inherited from base class"""
         # Get exposure records so we can associate the dataset
         # to the exposure.
         if calibType == "text-v1":
@@ -566,7 +557,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
 
         return instrumentName, whereClause, binding, logId
 
-    # Shutter Motion Open / Base Class begin:
+# Shutter Motion Open / Base Class begin:
 class ShutterMotionCloseIngestConfig(ShutterMotionOpenIngestConfig):
     """Configuration class for ShutterMotionIngestTask."""
     pass
@@ -595,7 +586,6 @@ class ShutterMotionCloseIngestTask(ShutterMotionOpenIngestTask):
     _DefaultName = "shutterMotionCloseIngest"
 
     def getDatasetType(self):
-        """Inherited from base class"""
         return DatasetType(
             "shutterMotionProfileClose",
             ("instrument", "exposure"),
