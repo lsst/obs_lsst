@@ -528,7 +528,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
     def getAssociationInfo(self, inputFile, calib, calibType):
         # Get exposure records so we can associate the dataset
         # to the exposure.
-        if calibType == "text-v1":
+        if calibType == "text-v1" or calibType == "text-v2":
             instrumentName = calib.metadata.get("INSTRUME")
             if instrumentName is None or instrumentName != self.instrument.getName():
                 # The field is populated by the calib class, so we
