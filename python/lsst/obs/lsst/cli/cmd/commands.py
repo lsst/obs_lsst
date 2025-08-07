@@ -35,7 +35,7 @@ from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
 from ..._ingest_guider import DEFAULT_GUIDER_REGEX
-from ..._ingestPhotodiode import DEFAULT_PHOTODIODE_REGEX
+from ..._ingestAuxCalibs import DEFAULT_PHOTODIODE_REGEX
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
@@ -61,6 +61,30 @@ from ..._ingestPhotodiode import DEFAULT_PHOTODIODE_REGEX
 def ingest_photodiode(*args, **kwargs):
     """Ingest photodiode data from a directory into the butler registry."""
     script.ingestPhotodiode(*args, **kwargs)
+
+@click.command(cls=ButlerCommand, short_help="Ingest shutter motion profile data.")
+@repo_argument(required=True)
+@instrument_argument(required=True, help="INSTRUMENT is the name of the instrument to use.")
+@locations_argument(help="LOCATIONS specifies files to ingest and/or locations to search for files.",
+                    required=True)
+@regex_option(default=None,
+              help="Regex string used to find shutter motion data in directories listed in LOCATIONS. "
+              "Defaults to None, to use expected regexes.")
+@config_option(metavar="TEXT=TEXT", multiple=True)
+@config_file_option(type=click.Path(exists=True, writable=False, file_okay=True, dir_okay=False))
+@run_option(required=False)
+@transfer_option(default="copy")
+@click.option(
+    "--track-file-attrs/--no-track-file-attrs",
+    default=True,
+    help="Indicate to the datastore whether file attributes such as file size"
+    " or checksum should be tracked or not. Whether this parameter is honored"
+    " depends on the specific datastore implementation.",
+)
+@options_file_option()
+def ingest_shuttermotion(*args, **kwargs):
+    """Ingest shutter motion data from a directory into the butler registry."""
+    script.ingestShutterMotion(*args, **kwargs)
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest LSSTCam guider data.")

@@ -33,7 +33,7 @@ from lsst.daf.butler import Butler, DataCoordinate
 from lsst.daf.butler.cli.butler import cli as butlerCli
 from lsst.daf.butler.cli.utils import LogCliRunner
 from lsst.obs.base.ingest_tests import IngestTestBase
-from lsst.ip.isr import PhotodiodeCalib
+from lsst.ip.isr import PhotodiodeCalib, ShutterMotionProfile
 import lsst.afw.cameraGeom.testUtils  # for injected test asserts
 import lsst.obs.lsst
 
@@ -267,6 +267,92 @@ class LSSTCamPhotodiodeIngestTestCase(lsst.utils.tests.TestCase):
         butler = Butler(self.root, run="LSSTCam/calib/photodiode")
         getResult = butler.get('photodiode', dataId=self.dataIds[0])
         self.assertIsInstance(getResult, PhotodiodeCalib)
+
+
+class LSSTCamShutterMotionIngestTestCase(lsst.utils.tests.TestCase):
+    instrumentClassName = "lsst.obs.lsst.LsstCam"
+    rawIngestTask = "lsst.obs.base.RawIngestTask"
+    ingestDir = TESTDIR
+    file = os.path.join(DATAROOT, "lsstCam", "raw", "2021-12-12",
+                        "30211212000310", "30211212000310-R22-S22-det098.fits")
+    dataIds = [dict(instrument="LSSTCam", exposure=3021121200310, detector=98)]
+    filterLabel = lsst.afw.image.FilterLabel(physical="SDSSi", band="i")
+    smpPath = os.path.join(DATAROOT, "lsstCam", "raw")
+
+    def setUp(self):
+        """Setup for lightweight shutter motion ingest task.
+
+        This will create the repo and register the instrument.
+        """
+        self.root = tempfile.mkdtemp(dir=self.ingestDir)
+
+        # Create Repo
+        runner = LogCliRunner()
+        result = runner.invoke(butlerCli, ["create", self.root])
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+        # Register Instrument
+        runner = LogCliRunner()
+        result = runner.invoke(butlerCli, ["register-instrument", self.root, self.instrumentClassName])
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+    def testShutterMotionFailure(self):
+        """Test ingest to a repo missing exposure information will raise.
+        """
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-shuttermotion",
+                self.root,
+                self.instrumentClassName,
+                self.smpPath,
+                "-c",
+                "doRaiseOnMissingExposure=True",
+            ],
+        )
+        self.assertEqual(result.exit_code, 1, f"output: {result.output} exception: {result.exception}")
+
+    def testShutterMotion(self):
+        """Test ingest to a repo with the exposure information will not raise.
+        """
+        # Ingest raw to provide exposure information.
+        outputRun = "raw_ingest_" + self.id()
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-raws",
+                self.root,
+                self.file,
+                "--output-run",
+                outputRun,
+                "--ingest-task",
+                self.rawIngestTask,
+            ],
+        )
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+        # Ingest photodiode matching this exposure.
+        runner = LogCliRunner()
+        result = runner.invoke(
+            butlerCli,
+            [
+                "ingest-shuttermotion",
+                self.root,
+                self.instrumentClassName,
+                self.smpPath,
+                "-c",
+                "doRaiseOnMissingExposure=True",
+            ],
+        )
+        self.assertEqual(result.exit_code, 0, f"output: {result.output} exception: {result.exception}")
+
+        # Confirm that we can retrieve the ingested photodiode, and
+        # that it has the correct type.
+        butler = Butler(self.root, run="LSSTCam/calib/shutterMotion")
+        getResult = butler.get('shutterMotionProfileOpen', dataId=self.dataIds[0])
+        self.assertIsInstance(getResult, ShutterMotionProfile)
 
 
 def setup_module(module):

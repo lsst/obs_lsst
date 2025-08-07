@@ -19,5 +19,5 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from .ingestPhotodiode import ingestPhotodiode
+from .ingestAuxCalibs import ingestPhotodiode, ingestShutterMotion
 from ._ingest_guider import ingest_guider_simple
