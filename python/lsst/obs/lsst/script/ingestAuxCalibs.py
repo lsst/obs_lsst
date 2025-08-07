@@ -22,9 +22,9 @@ from lsst.daf.butler import Butler
 from lsst.pipe.base.configOverrides import ConfigOverrides
 from lsst.pipe.base import Instrument
 from .. import PhotodiodeIngestTask, PhotodiodeIngestConfig
-from .._ingestPhotodiode import (ShutterMotionOpenIngestConfig, ShutterMotionCloseIngestConfig,
-                                 ShutterMotionOpenIngestTask, ShutterMotionCloseIngestTask,
-                                 DEFAULT_SHUTTER_OPEN_REGEX, DEFAULT_SHUTTER_CLOSE_REGEX)
+from .._ingestAuxCalibs import (ShutterMotionOpenIngestConfig, ShutterMotionCloseIngestConfig,
+                                ShutterMotionOpenIngestTask, ShutterMotionCloseIngestTask,
+                                DEFAULT_SHUTTER_OPEN_REGEX, DEFAULT_SHUTTER_CLOSE_REGEX)
 
 
 def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None, config_file=None,

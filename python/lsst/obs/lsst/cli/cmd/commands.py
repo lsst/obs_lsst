@@ -35,7 +35,7 @@ from lsst.pipe.base.cli.opt import instrument_argument
 from lsst.daf.butler.cli.utils import ButlerCommand
 from ... import script
 from ..._ingest_guider import DEFAULT_GUIDER_REGEX
-from ..._ingestPhotodiode import DEFAULT_PHOTODIODE_REGEX
+from ..._ingestAuxCalibs import DEFAULT_PHOTODIODE_REGEX
 
 
 @click.command(cls=ButlerCommand, short_help="Ingest photodiode data.")
