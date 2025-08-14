@@ -23,16 +23,19 @@ config.photometry.photoCatName = "the_monster_20250219"
 
 config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSummaryStats.py"))
 
+# Decrease maximum number of reference sources
+config.astrometry.matcher.maxRefObjects = 4096
+
 # Loosen maxOffset to account for early pointing model inaccuracy.
-config.astrometry.matcher.maxOffsetPix=1500
-config.astrometry_ref_loader.pixelMargin=1500
+config.astrometry.matcher.maxOffsetPix = 500
+config.astrometry_ref_loader.pixelMargin = 500
 
 # Loosen minMatchDistanceArcSec, the match distance below which further
 # iteration is pointless (arcsec) since we can only do as well as the
 # camera model in SFM using the affine WCS fit.
 # TODO: DM-47250. Tighten up (or remove) this override when an updated
 # camera model is implemented.
-config.astrometry.minMatchDistanceArcSec = 0.04
+config.astrometry.minMatchDistanceArcSec = 0.06
 
 # Overrides to improved astrometry matching.
 config.astrometry.doFiducialZeroPointCull = True
