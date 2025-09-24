@@ -24,8 +24,8 @@ config.maxIterBeforeFinalCycle = 100
 config.minCcdPerExp = 10
 config.utBoundary = 0.0
 config.washMjds = (0.0,)
-# For now, define 1 observing epoch that encompasses everything.
-config.epochMjds = (0.0, 100000.0)
+# We have an observing epoch split at 2025-07-03 (new sequencer).
+config.epochMjds = (0.0, 60859.0, 100000.0)
 config.coatingMjds = []
 config.latitude = -30.2333
 config.mirrorArea = 34.524
@@ -65,6 +65,7 @@ config.expVarGrayPhotometricCutDict = {
 }
 config.autoPhotometricCutNSig = 3.0
 config.autoHighCutNSig = 3.0
+config.aperCorrPerCcd = True
 config.aperCorrFitNBins = 10
 config.aperCorrInputSlopeDict = {"u": 0.0,
                                  "g": 0.0,
@@ -100,11 +101,12 @@ config.sedterms.data = {
 }
 
 config.starColorCuts = ("g, i, 0.0, 3.5",)
-config.refStarColorCuts = ("g, i, 0.0, 3.5",)
+config.refStarColorCuts = ("g, i, 0.4, 1.0",)
 # Use a small fraction of reference stars to test self-calibration.
 config.refStarMaxFracUse = 0.1
 config.useExposureReferenceOffset = False
-config.precomputeSuperStarInitialCycle = False
+# TODO DM-50133: This should not be necessary after illumination corrections.
+config.precomputeSuperStarInitialCycle = True
 config.superStarSubCcdDict = {
     "u": True,
     "g": True,
@@ -113,11 +115,10 @@ config.superStarSubCcdDict = {
     "z": True,
     "y": True,
 }
-# Allow calibration to work with at least 10 exposures per night.
-config.minExpPerNight = 10
-# Allow calibration to work with very few stars per exposure.
-config.minStarPerExp = 50
-config.nStarPerRun = 5000
+config.ccdGrayFocalPlaneMaxStars = 10000
+# Allow calibration to work with at least 3 exposures per night.
+config.minExpPerNight = 3
+config.minStarPerExp = 500
 config.nExpPerRun = 100
 config.colorSplitBands = ["g", "i"]
 config.freezeStdAtmosphere = True
@@ -156,6 +157,7 @@ config.useRepeatabilityForExpGrayCutsDict = {
     "z": False,
     "y": False,
 }
+config.sigFgcmMaxErr = 0.005
 config.sigFgcmMaxEGrayDict = {
     # We let the u-band be a little bit worse than the
     # other bands.
@@ -179,6 +181,7 @@ config.deltaAperFitPerCcdNx = 8
 config.deltaAperFitPerCcdNy = 8
 config.doComputeDeltaAperPerVisit = False
 config.doComputeDeltaAperMap = True
+config.deltaAperFitSpatialNside = 32
 config.doComputeDeltaAperPerCcd = True
 config.deltaAperInnerRadiusArcsec = 2.40
 config.deltaAperOuterRadiusArcsec = 3.40
