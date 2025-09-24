@@ -24,8 +24,8 @@ config.maxIterBeforeFinalCycle = 100
 config.minCcdPerExp = 10
 config.utBoundary = 0.0
 config.washMjds = (0.0,)
-# For now, define 1 observing epoch that encompasses everything.
-config.epochMjds = (0.0, 100000.0)
+# We have an observing epoch split at 2025-07-03 (new sequencer).
+config.epochMjds = (0.0, 60859.0, 100000.0)
 config.coatingMjds = []
 config.latitude = -30.2333
 config.mirrorArea = 34.524
