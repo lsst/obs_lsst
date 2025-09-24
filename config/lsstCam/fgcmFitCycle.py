@@ -157,6 +157,7 @@ config.useRepeatabilityForExpGrayCutsDict = {
     "z": False,
     "y": False,
 }
+config.sigFgcmMaxErr = 0.005
 config.sigFgcmMaxEGrayDict = {
     # We let the u-band be a little bit worse than the
     # other bands.
