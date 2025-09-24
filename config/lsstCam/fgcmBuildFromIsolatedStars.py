@@ -26,5 +26,5 @@ config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.fluxField = "mon
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.errField = "monster_ComCam_i_fluxErr"
 config.fgcmLoadReferenceCatalog.referenceSelector.signalToNoise.minimum = 50.0
 
-# Temporary until we turn on illumination corrections.
+# TODO DM-50133: Set to False with illumination corrections.
 config.doApplyWcsJacobian = True

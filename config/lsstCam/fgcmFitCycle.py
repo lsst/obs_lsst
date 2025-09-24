@@ -104,7 +104,8 @@ config.refStarColorCuts = ("g, i, 0.0, 3.5",)
 # Use a small fraction of reference stars to test self-calibration.
 config.refStarMaxFracUse = 0.1
 config.useExposureReferenceOffset = False
-config.precomputeSuperStarInitialCycle = False
+# TODO DM-50133: This should not be necessary after illumination corrections.
+config.precomputeSuperStarInitialCycle = True
 config.superStarSubCcdDict = {
     "u": True,
     "g": True,
