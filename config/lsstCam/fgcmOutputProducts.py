@@ -1,7 +1,7 @@
 config.connections.cycleNumber = 5
 
 physical_to_band = {
-    "u_26": "u",
+    "u_24": "u",
     "g_6": "g",
     "r_57": "r",
     "i_39": "i",
