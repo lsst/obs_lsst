@@ -179,6 +179,17 @@ class LsstCamTranslator(LsstBaseTranslator):
                     modified = True
                     log.debug("%s: Correcting VIGN_MIN to FULLY", log_label)
 
+        # DM-52711: The filter was incorrect for the start of the night.
+        if i_day_obs == 20250609:
+            i_seq_num = header["SEQNUM"]
+            if i_seq_num >= 76 and i_seq_num <= 578:
+                header["FILTER"] = "z_20"
+                header["FILTBAND"] = "z"
+                header["FILTPOS"] = 201.0
+                header["FILTSLOT"] = 4
+                modified = True
+                log.debug("%s: Correcting filter to z", log_label)
+
         return modified
 
     @classmethod
