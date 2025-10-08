@@ -105,7 +105,9 @@ config.refStarColorCuts = ("g, i, 0.4, 1.0",)
 # Use a large fraction of reference stars until we get image quality
 # under control
 config.refStarMaxFracUse = 0.5
-config.useExposureReferenceOffset = False
+# Use a reference-star check for each exposure to help in fully
+# non-photometric regions.
+config.useExposureReferenceOffset = True
 # TODO DM-50133: This should not be necessary after illumination corrections.
 config.precomputeSuperStarInitialCycle = True
 config.superStarSubCcdDict = {
