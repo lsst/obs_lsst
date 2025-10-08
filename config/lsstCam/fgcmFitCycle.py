@@ -32,12 +32,12 @@ config.mirrorArea = 34.524
 config.cameraGain = 1.0
 config.defaultCameraOrientation = 0.0
 config.expFwhmCutDict = {
-    "u": 1.7,
-    "g": 1.7,
-    "r": 1.7,
-    "i": 1.7,
-    "z": 1.7,
-    "y": 1.7,
+    "u": 2.0,
+    "g": 2.0,
+    "r": 2.0,
+    "i": 2.0,
+    "z": 2.0,
+    "y": 2.0,
 }
 config.expGrayPhotometricCutDict = {
     "u": -0.10,
@@ -102,9 +102,12 @@ config.sedterms.data = {
 
 config.starColorCuts = ("g, i, 0.0, 3.5",)
 config.refStarColorCuts = ("g, i, 0.4, 1.0",)
-# Use a small fraction of reference stars to test self-calibration.
-config.refStarMaxFracUse = 0.1
-config.useExposureReferenceOffset = False
+# Use a large fraction of reference stars until we get image quality
+# under control
+config.refStarMaxFracUse = 0.5
+# Use a reference-star check for each exposure to help in fully
+# non-photometric regions.
+config.useExposureReferenceOffset = True
 # TODO DM-50133: This should not be necessary after illumination corrections.
 config.precomputeSuperStarInitialCycle = True
 config.superStarSubCcdDict = {
