@@ -102,8 +102,9 @@ config.sedterms.data = {
 
 config.starColorCuts = ("g, i, 0.0, 3.5",)
 config.refStarColorCuts = ("g, i, 0.4, 1.0",)
-# Use a small fraction of reference stars to test self-calibration.
-config.refStarMaxFracUse = 0.1
+# Use a large fraction of reference stars until we get image quality
+# under control
+config.refStarMaxFracUse = 0.5
 config.useExposureReferenceOffset = False
 # TODO DM-50133: This should not be necessary after illumination corrections.
 config.precomputeSuperStarInitialCycle = True
