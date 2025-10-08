@@ -32,12 +32,12 @@ config.mirrorArea = 34.524
 config.cameraGain = 1.0
 config.defaultCameraOrientation = 0.0
 config.expFwhmCutDict = {
-    "u": 1.7,
-    "g": 1.7,
-    "r": 1.7,
-    "i": 1.7,
-    "z": 1.7,
-    "y": 1.7,
+    "u": 2.0,
+    "g": 2.0,
+    "r": 2.0,
+    "i": 2.0,
+    "z": 2.0,
+    "y": 2.0,
 }
 config.expGrayPhotometricCutDict = {
     "u": -0.10,
