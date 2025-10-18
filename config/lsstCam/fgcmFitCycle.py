@@ -105,9 +105,7 @@ config.refStarColorCuts = ("g, i, 0.4, 1.0",)
 # Use a large fraction of reference stars until we get image quality
 # under control
 config.refStarMaxFracUse = 0.5
-# Use a reference-star check for each exposure to help in fully
-# non-photometric regions.
-config.useExposureReferenceOffset = True
+config.useExposureReferenceOffset = False
 # TODO DM-50133: This should not be necessary after illumination corrections.
 config.precomputeSuperStarInitialCycle = True
 config.superStarSubCcdDict = {
@@ -125,23 +123,22 @@ config.minStarPerExp = 500
 config.nExpPerRun = 100
 config.colorSplitBands = ["g", "i"]
 config.freezeStdAtmosphere = True
-# For tests, do low-order per-ccd polynomial.
 config.superStarSubCcdChebyshevOrder = 2
 config.ccdGraySubCcdDict = {
-    "u": False,
-    "g": True,
-    "r": True,
-    "i": True,
-    "z": True,
-    "y": False,
-}
-config.ccdGrayFocalPlaneDict = {
     "u": True,
     "g": True,
     "r": True,
     "i": True,
     "z": True,
     "y": True,
+}
+config.ccdGrayFocalPlaneDict = {
+    "u": False,
+    "g": False,
+    "r": False,
+    "i": False,
+    "z": False,
+    "y": False,
 }
 config.ccdGrayFocalPlaneFitMinCcd = 3
 config.ccdGrayFocalPlaneChebyshevOrder = 2
