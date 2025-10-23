@@ -47,3 +47,6 @@ config.astrometry.load(os.path.join(config_dir, "fiducialZeroPoint.py"))
 
 # Loosened for early ComCam with large PSFs.
 config.photometry.match.sourceSelection.doUnresolved = False
+
+# Turn on masking of diffraction spikes from bright stars.
+config.doMaskDiffractionSpikes = True
