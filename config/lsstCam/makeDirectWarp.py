@@ -10,3 +10,5 @@ config.select.maxPsfApFluxDelta = 1.6
 config.select.maxEllipResidual = 0.19
 config.select.maxScaledSizeScatter = 0.07
 config.select.maxPsfApCorrSigmaScaledDelta = 0.15
+
+config.select.excludeDetectors = [0, 20, 27, 65, 123, 161, 168, 188]
