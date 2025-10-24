@@ -14,6 +14,7 @@ config.psf_subtract_background.doApplyFlatBackgroundRatio = True
 config.psf_detection.doApplyFlatBackgroundRatio = True
 config.star_detection.doApplyFlatBackgroundRatio = True
 
+config.astrometry.load(os.path.join(config_dir, "filterMap.py"))
 config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "monster_ComCam_r_flux"
@@ -29,6 +30,9 @@ config.photometry.applyColorTerms = False
 config.photometry.photoCatName = "the_monster_20250219"
 
 config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSummaryStats.py"))
+
+# Decrease maximum number of reference sources
+# config.astrometry.matcher.maxRefObjects = 4096
 
 # Loosen maxOffset to account for early pointing model inaccuracy.
 config.astrometry.matcher.maxOffsetPix=1500
