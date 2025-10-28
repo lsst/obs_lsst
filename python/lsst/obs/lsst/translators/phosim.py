@@ -26,6 +26,8 @@ from astro_metadata_translator.translators.helpers import (
     altaz_from_degree_headers,
 )
 
+from lsst.resources import ResourcePath
+
 from .lsstsim import LsstSimTranslator
 
 log = logging.getLogger(__name__)
@@ -140,7 +142,7 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
 
         Parameters
         ----------
-        filename : `str`
+        filename : `str` or `lsst.resources.ResourcePathExpression`
             Path to a file in a format understood by this translator.
         primary : `dict`-like, optional
             The primary header obtained by the caller. This is sometimes
@@ -162,6 +164,8 @@ class LsstCamPhoSimTranslator(LsstSimTranslator):
         translator class to then call to obtain the real headers to be used for
         translation.
         """
-        with fits.open(filename) as fits_file:
+        uri = ResourcePath(filename, forceDirectory=False)
+        fs, fspath = uri.to_fsspec()
+        with fs.open(fspath) as f, fits.open(f) as fits_file:
             yield merge_headers([fits_file[0].header, fits_file[1].header],
                                 mode="overwrite")
