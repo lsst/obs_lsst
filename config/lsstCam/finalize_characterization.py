@@ -1,11 +1,11 @@
-# PFL recommends starting with spatial order 2
+# https://rubinobs.atlassian.net/browse/DM-53160 for DP2.
 config.psf_determiner['piff'].spatialOrderPerBand = {
     "u": 2,
-    "g": 2,
-    "r": 2,
-    "i": 2,
-    "z": 2,
-    "y": 2,
+    "g": 4,
+    "r": 4,
+    "i": 4,
+    "z": 4,
+    "y": 4,
 }
 # See DM-48887 & DM-49688 for more detail.
 config.psf_determiner['piff'].zerothOrderInterpNotEnoughStars = False
