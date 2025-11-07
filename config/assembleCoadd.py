@@ -31,5 +31,3 @@ config.select.retarget(PsfWcsSelectImagesTask)
 
 # FUTURE: Set to True when we get transmission curves
 config.doAttachTransmissionCurve = False
-
-config.doFilterMorphological=True
