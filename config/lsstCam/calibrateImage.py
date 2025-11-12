@@ -28,15 +28,8 @@ config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSumma
 config.astrometry.matcher.maxRefObjects = 4096
 
 # Loosen maxOffset to account for early pointing model inaccuracy.
-# NOTE: these only work for data post April 25, 2025, when the
-#       LSSTCam pointing model was dramatically improved.  Data
-#       taken before the update still require these to be ~1500 to
-#       obtain good astrometric fits, and the following ticket is
-#       to implement an acutal "fix" via the metadata-translator.
-# TODO: DM-53164: Refit the pointing for LSSTCam observations prior
-#       to April 25 and file metadata-patch tickets.
-config.astrometry.matcher.maxOffsetPix = 500
-config.astrometry_ref_loader.pixelMargin = 500
+config.astrometry.matcher.maxOffsetPix = 1500
+config.astrometry_ref_loader.pixelMargin = 1500
 
 # Loosen minMatchDistanceArcSec, the match distance below which further
 # iteration is pointless (arcsec) since we can only do as well as the
