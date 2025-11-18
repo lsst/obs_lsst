@@ -11,3 +11,6 @@ config.bad_mask_planes += ["SPIKE"]
 # This must be equal to or lesser than the numberOfNoiseRealizations
 # value in makeDirectWarp.
 config.num_noise_realizations = 1
+
+# Set the dimensions of the PSF image.
+config.psf_dimensions = 35
