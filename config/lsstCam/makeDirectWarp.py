@@ -1,5 +1,10 @@
 """LSSTCam-specific overrides for MakeDirectWarpTask"""
 
+# Set the number of Monte-Carlo noise realizations to
+# generate and warp. This must be equal to or greater
+# than num_noise_realizations value in assembleCellCoadd.
+config.numberOfNoiseRealizations = 1
+
 # These thresholds have been conditioned on the latest DRP run (DM-48371)
 # which used the w_2025_02 pipeline and the LSSTComCam/DP1-RC1/defaults
 # collection.
