@@ -14,3 +14,6 @@ config.num_noise_realizations = 1
 
 # Set the dimensions of the PSF image.
 config.psf_dimensions = 35
+
+# Generate edgeless cell coadds (at least for DP2).
+config.min_overlap_fraction = 1.0
