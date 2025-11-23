@@ -248,6 +248,8 @@ class LsstTS8Translator(LsstBaseTranslator):
         try:
             filter_pos = self._header["FILTPOS"]
             self._used_these_cards("FILTPOS")
+            if filter_pos is None:
+                raise KeyError
         except KeyError:
             # TS8 data from 2023-05-09 and later should be following
             # DM-38882 conventions.
