@@ -27,21 +27,6 @@ from lsst.daf.butler import Butler, DatasetType
 import lsst.geom
 
 
-ebutler = Butler(
-    "embargo",
-    instrument="LSSTComCam",
-    collections=[
-        "LSSTComCam/runs/DRP/DP1-RC1/w_2025_02/DM-48371",
-        "u/erykoff/LSSTComCam/DM-47303/lookuptable",
-    ],
-)
-
-dbutler = Butler(
-    "dp1",
-    instrument="LSSTComCam",
-    writeable=True,
-)
-
 filter_to_band = {
     "u_02": "u",
     "g_01": "g",
@@ -51,48 +36,62 @@ filter_to_band = {
     "y_04": "y",
 }
 
-# Register the new dataset type.
-
-dataset_type = DatasetType(
-    "standard_passband",
-    dimensions=["instrument", "band"],
-    storageClass="ArrowAstropy",
-    universe=dbutler.dimensions,
-)
-
-_ = dbutler.registry.registerDatasetType(dataset_type)
-
-# Register the run this will go into.
-
-output_collection = "LSSTComCam/calib/fgcmcal/DM-48089/standard_passbands"
-
-_ = dbutler.collections.register(output_collection)
-
-wavelengths = np.arange(300.0, 1100.5, 0.5)
-
-for physical_filter, band in filter_to_band.items():
-    fsp = ebutler.get("fgcm_standard_passband", physical_filter=physical_filter)
-
-    passband = fsp.sampleAt(lsst.geom.Point2D(0, 0), wavelengths*10.0)
-
-    passband_table = Table(
-        {
-            "wavelength": wavelengths*units.nm,
-            "throughput": (passband*100.)*units.percent,
-        },
-    )
-
-    print(f"Putting passband for {band} band.")
-    dbutler.put(
-        passband_table,
-        "standard_passband",
+with (
+    Butler.from_config(
+        "embargo",
         instrument="LSSTComCam",
-        band=band,
-        run=output_collection,
+        collections=[
+            "LSSTComCam/runs/DRP/DP1-RC1/w_2025_02/DM-48371",
+            "u/erykoff/LSSTComCam/DM-47303/lookuptable",
+        ],
+    ) as ebutler,
+    Butler.from_config(
+        "dp1",
+        instrument="LSSTComCam",
+        writeable=True,
+    ) as dbutler,
+):
+    # Register the new dataset type.
+    dataset_type = DatasetType(
+        "standard_passband",
+        dimensions=["instrument", "band"],
+        storageClass="ArrowAstropy",
+        universe=dbutler.dimensions,
     )
 
-# And chain in the collection.
-dbutler.collections.extend_chain(
-    "LSSTComCam/calib/fgcmcal",
-    output_collection,
-)
+    _ = dbutler.registry.registerDatasetType(dataset_type)
+
+    # Register the run this will go into.
+
+    output_collection = "LSSTComCam/calib/fgcmcal/DM-48089/standard_passbands"
+
+    _ = dbutler.collections.register(output_collection)
+
+    wavelengths = np.arange(300.0, 1100.5, 0.5)
+
+    for physical_filter, band in filter_to_band.items():
+        fsp = ebutler.get("fgcm_standard_passband", physical_filter=physical_filter)
+
+        passband = fsp.sampleAt(lsst.geom.Point2D(0, 0), wavelengths * 10.0)
+
+        passband_table = Table(
+            {
+                "wavelength": wavelengths * units.nm,
+                "throughput": (passband * 100.0) * units.percent,
+            },
+        )
+
+        print(f"Putting passband for {band} band.")
+        dbutler.put(
+            passband_table,
+            "standard_passband",
+            instrument="LSSTComCam",
+            band=band,
+            run=output_collection,
+        )
+
+    # And chain in the collection.
+    dbutler.collections.extend_chain(
+        "LSSTComCam/calib/fgcmcal",
+        output_collection,
+    )

@@ -45,6 +45,7 @@ class GuiderIngestTestCase(unittest.TestCase):
         config = Config()
         config["datastore", "cls"] = "lsst.daf.butler.datastores.fileDatastore.FileDatastore"
         self.butler = makeTestRepo(self.root, config=config)
+        self.enterContext(self.butler)
         self.instrument = LsstCam()
         self.instrument.register(self.butler.registry)
 

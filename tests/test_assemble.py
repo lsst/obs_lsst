@@ -123,12 +123,12 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         as the expected one.
         """
         for root, did, expected in zip(self.roots, self.ids, self.expecteds):
-            butler = Butler(root)
-            raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
-            for amp1, amp2 in zip(expected['detector'], raw.getDetector()):
-                with self.subTest(amp=amp1.getName()):
-                    self.assertEqual(amp1.getName(), amp2.getName())
-                    self.assertAmpRawBBoxesEqual(amp1, amp2)
+            with Butler.from_config(root) as butler:
+                raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
+                for amp1, amp2 in zip(expected['detector'], raw.getDetector()):
+                    with self.subTest(amp=amp1.getName()):
+                        self.assertEqual(amp1.getName(), amp2.getName())
+                        self.assertAmpRawBBoxesEqual(amp1, amp2)
 
     def testAssemble(self):
         """Test the assembly of E2V and ITL sensors
@@ -136,11 +136,11 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
         task = AssembleCcdTask()
         # exclude LATISS for this test since we don't have an expected output
         for root, did, expected in zip(self.roots, self.ids, self.expecteds):
-            butler = Butler(root)
-            raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
-            assembled = task.assembleCcd(raw)
-            count = numpy.sum(expected['expected'].read().array - assembled.getImage().array)
-            self.assertEqual(count, 0)
+            with Butler.from_config(root) as butler:
+                raw = butler.get("raw", dataId=did, collections="LSSTCam/raw/all")
+                assembled = task.assembleCcd(raw)
+                count = numpy.sum(expected['expected'].read().array - assembled.getImage().array)
+                self.assertEqual(count, 0)
 
 
 class ReadRawFileTestCase(lsst.utils.tests.TestCase):

@@ -27,10 +27,10 @@ from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 crosstalk_run = "u/czw/DM-37819/crosstalkGen.20230601a/20230601T201929Z"
 
-butler = Butler("/repo/embargo")
+with Butler.from_config("/repo/embargo") as butler:
 
-camera = butler.get("camera", instrument="LATISS", collections=["LATISS/calib"])
-crosstalk = butler.get("crosstalk", instrument="LATISS", detector=0, collections=[crosstalk_run])
+    camera = butler.get("camera", instrument="LATISS", collections=["LATISS/calib"])
+    crosstalk = butler.get("crosstalk", instrument="LATISS", detector=0, collections=[crosstalk_run])
 
 det = camera[0]
 name = det.getName()
