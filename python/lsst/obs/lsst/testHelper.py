@@ -81,8 +81,10 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
         collections = [instrument.makeUnboundedCalibrationRunName(),
                        instrument.makeDefaultRawIngestRunName(),
                        instrument.makeCalibrationCollectionName()]
-        cls._butler = lsst.daf.butler.Butler(cls.data_dir, collections=collections,
-                                             instrument=instrument.getName())
+        cls._butler = lsst.daf.butler.Butler.from_config(
+            cls.data_dir, collections=collections, instrument=instrument.getName()
+        )
+        cls.enterClassContext(cls._butler)
 
 
 class ObsLsstObsBaseOverrides(lsst.obs.base.tests.ObsTests):
