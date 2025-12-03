@@ -11,3 +11,4 @@ config.load(os.path.join(os.path.dirname(__file__), "assembleCoadd.py"))
 # in rapid sucessions across only few nights.
 config.maxFractionEpochsHigh = 0.2
 config.prefilterArtifactsMaskPlanes.append("SPIKE")
+config.prefilterArtifactsMaskPlanes.append("PARTLY_VIGNETTED")
