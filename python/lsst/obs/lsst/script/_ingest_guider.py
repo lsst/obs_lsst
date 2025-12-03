@@ -67,17 +67,17 @@ def ingest_guider_simple(
     register_dataset_types : `bool`, optional
         Whether to try to register the guider dataset type.
     """
-    butler = Butler(repo, writeable=True)
+    with Butler.from_config(repo, writeable=True) as butler:
 
-    refs = ingest_guider(
-        butler,
-        locations,
-        file_filter=regex,
-        transfer=transfer,
-        run=output_run,
-        track_file_attrs=track_file_attrs,
-        register_dataset_type=register_dataset_types,
-        fail_fast=fail_fast,
-    )
+        refs = ingest_guider(
+            butler,
+            locations,
+            file_filter=regex,
+            transfer=transfer,
+            run=output_run,
+            track_file_attrs=track_file_attrs,
+            register_dataset_type=register_dataset_types,
+            fail_fast=fail_fast,
+        )
 
     _LOG.info("Ingested %d guider file%s", len(refs), "" if len(refs) == 1 else "s")

@@ -70,6 +70,9 @@ class RubinDimensionPackerTestCase(unittest.TestCase):
         for cls in self.rubin_packer_instruments + self.old_packer_instruments:
             cls().register(self.registry)
 
+    def tearDown(self) -> None:
+        self.registry.close()
+
     def check_rubin_dimension_packer(
         self,
         instrument: Instrument,

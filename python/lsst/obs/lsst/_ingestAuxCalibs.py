@@ -44,6 +44,7 @@ DEFAULT_PHOTODIODE_REGEX = r"Photodiode_Readings.*txt$|_photodiode.ecsv$|Electro
 DEFAULT_SHUTTER_OPEN_REGEX = r".*shutterMotionProfileOpen.json$"
 DEFAULT_SHUTTER_CLOSE_REGEX = r".*shutterMotionProfileClose.json$"
 
+
 # Base class begin.
 class IsrCalibIngestConfig(Config):
     """Configuration class for base IsrCalib ingestion task."""
@@ -96,7 +97,6 @@ class IsrCalibIngestTask(Task):
         self.progress = Progress(self.log.name)
         self.instrument = instrument
         self.camera = self.instrument.getCamera()
-
 
     def getDatasetType(self):
         """Return the DatasetType to be ingested.
@@ -556,6 +556,7 @@ class ShutterMotionOpenIngestTask(IsrCalibIngestTask):
             logId = None
 
         return instrumentName, whereClause, binding, logId
+
 
 # Shutter Motion Open / Base Class begin:
 class ShutterMotionCloseIngestConfig(ShutterMotionOpenIngestConfig):

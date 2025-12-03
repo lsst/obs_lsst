@@ -60,24 +60,24 @@ def ingestPhotodiode(repo, instrument, locations, regex, output_run, config=None
     Exception
         Raised if operations on configuration object fail.
     """
-    butler = Butler(repo, writeable=True)
-    instr = Instrument.from_string(instrument, butler.registry)
+    with Butler.from_config(repo, writeable=True) as butler:
+        instr = Instrument.from_string(instrument, butler.registry)
 
-    # We'll reuse `config`, so get the overrides stored first.
-    configOverrides = ConfigOverrides()
-    if config_file is not None:
-        configOverrides.addFileOverride(config_file)
-    if config is not None:
-        for name, value in config.items():
-            configOverrides.addValueOverride(name, value)
+        # We'll reuse `config`, so get the overrides stored first.
+        configOverrides = ConfigOverrides()
+        if config_file is not None:
+            configOverrides.addFileOverride(config_file)
+        if config is not None:
+            for name, value in config.items():
+                configOverrides.addValueOverride(name, value)
 
-    config = PhotodiodeIngestConfig()
-    config.transfer = transfer
-    configOverrides.applyTo(config)
+        config = PhotodiodeIngestConfig()
+        config.transfer = transfer
+        configOverrides.applyTo(config)
 
-    task = PhotodiodeIngestTask(butler=butler, instrument=instr, config=config)
-    task.run(locations, run=output_run, file_filter=regex,
-             track_file_attrs=track_file_attrs)
+        task = PhotodiodeIngestTask(butler=butler, instrument=instr, config=config)
+        task.run(locations, run=output_run, file_filter=regex,
+                track_file_attrs=track_file_attrs)
 
 
 def ingestShutterMotion(repo, instrument, locations, regex, output_run, config=None, config_file=None,
@@ -113,35 +113,35 @@ def ingestShutterMotion(repo, instrument, locations, regex, output_run, config=N
     Exception
         Raised if operations on configuration object fail.
     """
-    butler = Butler(repo, writeable=True)
-    instr = Instrument.from_string(instrument, butler.registry)
-    if regex is None:
-        # This is the case we want.
-        openRegex = DEFAULT_SHUTTER_OPEN_REGEX
-        closeRegex = DEFAULT_SHUTTER_CLOSE_REGEX
-    else:
-        openRegex = regex
-        closeRegex = regex
+    with Butler.from_config(repo, writeable=True) as butler:
+        instr = Instrument.from_string(instrument, butler.registry)
+        if regex is None:
+            # This is the case we want.
+            openRegex = DEFAULT_SHUTTER_OPEN_REGEX
+            closeRegex = DEFAULT_SHUTTER_CLOSE_REGEX
+        else:
+            openRegex = regex
+            closeRegex = regex
 
-    # Store the overrides first:
-    configOverrides = ConfigOverrides()
-    if config_file is not None:
-        configOverrides.addFileOverride(config_file)
-    if config is not None:
-        for name, value in config.items():
-            configOverrides.addValueOverride(name, value)
+        # Store the overrides first:
+        configOverrides = ConfigOverrides()
+        if config_file is not None:
+            configOverrides.addFileOverride(config_file)
+        if config is not None:
+            for name, value in config.items():
+                configOverrides.addValueOverride(name, value)
 
-    configOpen = ShutterMotionOpenIngestConfig()
-    configOpen.transfer = transfer
-    configOverrides.applyTo(configOpen)
+        configOpen = ShutterMotionOpenIngestConfig()
+        configOpen.transfer = transfer
+        configOverrides.applyTo(configOpen)
 
-    task = ShutterMotionOpenIngestTask(butler=butler, instrument=instr, config=configOpen)
-    task.run(locations, run=output_run, file_filter=openRegex,
-             track_file_attrs=track_file_attrs)
+        task = ShutterMotionOpenIngestTask(butler=butler, instrument=instr, config=configOpen)
+        task.run(locations, run=output_run, file_filter=openRegex,
+                track_file_attrs=track_file_attrs)
 
-    configClose = ShutterMotionCloseIngestConfig()
-    configClose.transfer = transfer
-    configOverrides.applyTo(configClose)
-    task = ShutterMotionCloseIngestTask(butler=butler, instrument=instr, config=configClose)
-    task.run(locations, run=output_run, file_filter=closeRegex,
-             track_file_attrs=track_file_attrs)
+        configClose = ShutterMotionCloseIngestConfig()
+        configClose.transfer = transfer
+        configOverrides.applyTo(configClose)
+        task = ShutterMotionCloseIngestTask(butler=butler, instrument=instr, config=configClose)
+        task.run(locations, run=output_run, file_filter=closeRegex,
+                track_file_attrs=track_file_attrs)
