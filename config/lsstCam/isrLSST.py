@@ -38,6 +38,10 @@ config.doAmpOffset = True
 config.ampOffset.doApplyAmpOffset = False
 config.ampOffset.ampEdgeMaxOffset = 10.0
 
+# Set default brighter fatter correction to use the electrostatic
+# brighter fatter correction.
+config.brighterFatterCorrectionMethod = "ASTIER23"
+
 # ITL dip handling.  The defaultDetectorConfig has a
 # itlDipBackgroundFraction of 0.0, which disables the correction.
 # This means we only need to update the rules for detectors that show
