@@ -80,6 +80,7 @@ config.astrometry.referenceSelector.magLimit.fluxField = "phot_g_mean_flux"
 config.astrometry.matcher.maxRotationDeg = 2.0
 
 # Set the default aperture as appropriate for the LATISS plate scale.
+config.background_stats_flux_column = "base_CircularApertureFlux_35_0_flux"
 config.star_measurement.plugins["base_CircularApertureFlux"].radii = [35.0]
 config.star_measurement.plugins["base_CompensatedTophatFlux"].apertures = [35]
 config.star_measurement.slots.apFlux = "base_CircularApertureFlux_35_0"
