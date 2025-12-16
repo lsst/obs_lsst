@@ -35,7 +35,7 @@ config.crosstalk.doSubtrahendMasking = True
 config.crosstalk.minPixelToMask = 1.0
 
 config.doAmpOffset = True
-config.ampOffset.doApplyAmpOffset = False
+config.ampOffset.doApplyAmpOffset = True
 config.ampOffset.ampEdgeMaxOffset = 10.0
 
 # Set default brighter fatter correction to use the electrostatic
