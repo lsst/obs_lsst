@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import os.path
 import sys
 import unittest
 
@@ -29,9 +30,12 @@ import lsst.afw.image
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 from lsst.obs.lsst import LsstTS8
 
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
+
 
 class TestTs8(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ts8"
+    DATAROOT = os.path.join(TESTDIR, "data", "input")
 
     @classmethod
     def getInstrument(cls):

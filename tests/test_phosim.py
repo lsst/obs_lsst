@@ -43,6 +43,7 @@ def _clean_metadata_provenance(hdr):
 
 class TestPhosim(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "phosim"
+    DATAROOT = os.path.join(TESTDIR, "data", "input")
 
     @classmethod
     def getInstrument(cls):

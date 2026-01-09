@@ -36,8 +36,8 @@ from lsst.obs.lsst.utils import readRawFile
 
 PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
-LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, 'data', 'input', 'latiss')
-BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input')
+LATISS_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'latiss')
+BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'bot')
 E2V_DATA_ID = {'raft': 'R22', 'name_in_raft': 'S11', 'exposure': 3019103101985, 'instrument': 'LSSTCam'}
 ITL_DATA_ID = {'raft': 'R02', 'name_in_raft': 'S02', 'exposure': 3019110102212, 'instrument': 'LSSTCam'}
 TESTDATA_ROOT = os.path.join(TESTDIR, "data")

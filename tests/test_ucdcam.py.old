@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+import os.path
 import sys
 import unittest
 
@@ -29,9 +30,12 @@ import lsst.afw.image
 from lsst.obs.lsst.testHelper import ObsLsstButlerTests, ObsLsstObsBaseOverrides
 from lsst.obs.lsst import LsstUCDCam
 
+TESTDIR = os.path.abspath(os.path.dirname(__file__))
+
 
 class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
     instrumentDir = "ucd"
+    DATAROOT = os.path.join(TESTDIR, "data", "input")
 
     @classmethod
     def getInstrument(cls):
@@ -64,7 +68,7 @@ class TestUcdCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         raw_subsets = (({}, 2),
                        ({'physical_filter': 'r'}, 2),
                        ({'physical_filter': 'foo'}, 0),
-                       ({'exposure': 3023073000237}, 1), 
+                       ({'exposure': 3023073000237}, 1),
                        )
         linearizer_type = unittest.SkipTest
         self.setUp_butler_get(ccdExposureId_bits=ccdExposureId_bits,
