@@ -25,11 +25,10 @@ __all__ = ("LsstCam", "LsstCamImSim", "LsstCamPhoSim", "LsstTS8",
 
 import datetime
 import hashlib
-import os.path
+import importlib.resources
 
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.utils.introspection import get_full_type_name
-from lsst.utils import getPackageDir
 from lsst.obs.base import Instrument, VisitSystem
 from .filters import (LSSTCAM_FILTER_DEFINITIONS, LATISS_FILTER_DEFINITIONS,
                       LSSTCAM_IMSIM_FILTER_DEFINITIONS, TS3_FILTER_DEFINITIONS,
@@ -43,8 +42,6 @@ from .translators import LatissTranslator, LsstCamTranslator, \
     LsstComCamSimTranslator, LsstCamSimTranslator
 
 from .translators.lsst import GROUP_RE, TZERO_DATETIME
-
-PACKAGE_DIR = getPackageDir("obs_lsst")
 
 
 class LsstCam(Instrument):
@@ -92,8 +89,8 @@ class LsstCam(Instrument):
 
     @property
     def configPaths(self):
-        return [os.path.join(PACKAGE_DIR, "config"),
-                os.path.join(PACKAGE_DIR, "config", self.policyName)]
+        return ["resource://lsst.obs.lsst/resources/config",
+                f"resource://lsst.obs.lsst/resources/config/{self.policyName}"]
 
     @classmethod
     def getName(cls):
@@ -104,8 +101,10 @@ class LsstCam(Instrument):
     def getCamera(cls):
         # Constructing a YAML camera takes a long time but we rely on
         # yamlCamera to cache for us.
-        cameraYamlFile = os.path.join(PACKAGE_DIR, "policy", f"{cls.policyName}.yaml")
-        camera = yamlCamera.makeCamera(cameraYamlFile)
+        with importlib.resources.path(
+            "lsst.obs.lsst", f"resources/policy/{cls.policyName}.yaml"
+        ) as cameraYamlFile:
+            camera = yamlCamera.makeCamera(cameraYamlFile)
         if camera.getName() != cls.getName():
             raise RuntimeError(f"Expected to read camera geometry for {cls.instrument}"
                                f" but instead got geometry for {camera.getName()}")
