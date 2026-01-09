@@ -20,15 +20,8 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
-configDir = os.path.dirname(__file__)
-
-config.load(os.path.join(configDir, "lsstCamCommon.py"))
-config.isr.load(os.path.join(configDir, "isr.py"))
-
-fpBgFile = os.path.join(configDir, "focalPlaneBackground.py")
-
-config.largeScaleBackground.load(fpBgFile)
+config.load("lsstCamCommon.py")
+config.isr.load("isr.py")
+config.largeScaleBackground.load("focalPlaneBackground.py")
 
 config.isr.doBrighterFatter = False

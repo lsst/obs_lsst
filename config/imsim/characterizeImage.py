@@ -23,15 +23,11 @@
 imsim-specific overrides for CharacterizeImageTask
 """
 
-import os.path
-
-obsConfigDir = os.path.join(os.path.dirname(__file__))
-
-config.load(os.path.join(obsConfigDir, "..", "cmodel.py"))
-config.measurement.load(os.path.join(obsConfigDir, "..", "kron.py"))
-config.measurement.load(os.path.join(obsConfigDir, "..", "convolvedFluxes.py"))
-config.measurement.load(os.path.join(obsConfigDir, "..", "gaap.py"))
-config.measurement.load(os.path.join(obsConfigDir, "..", "hsm.py"))
+config.load("../cmodel.py")
+config.measurement.load("../kron.py")
+config.measurement.load("../convolvedFluxes.py")
+config.measurement.load("../gaap.py")
+config.measurement.load("../hsm.py")
 
 if "ext_shapeHSM_HsmShapeRegauss" in config.measurement.plugins:
     # no deblending has been done

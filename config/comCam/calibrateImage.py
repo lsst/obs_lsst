@@ -1,10 +1,6 @@
-import os
-
 from lsst.meas.algorithms import ColorLimit  # Configure the photometry to use the_monster.
 
 # Configure the photometry to use atlas_refcat2.
-config_dir = os.path.dirname(__file__)
-
 config.connections.photometry_ref_cat = "the_monster_20250219"
 config.connections.astrometry_ref_cat = "the_monster_20250219"
 
@@ -15,8 +11,8 @@ config.psf_detection.doApplyFlatBackgroundRatio = True
 config.star_background.doApplyFlatBackgroundRatio = True
 config.star_detection.doApplyFlatBackgroundRatio = True
 
-config.astrometry.load(os.path.join(config_dir, "filterMap.py"))
-config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
+config.astrometry.load("filterMap.py")
+config.photometry_ref_loader.load("filterMap.py")
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "monster_ComCam_r_flux"
 colors = config.photometry.match.referenceSelection.colorLimits
@@ -30,7 +26,7 @@ colors["g-r"] = ColorLimit(
 config.photometry.applyColorTerms = False
 config.photometry.photoCatName = "the_monster_20250219"
 
-config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSummaryStats.py"))
+config.compute_summary_stats.load("computeExposureSummaryStats.py")
 
 # Loosen maxOffset to account for early pointing model inaccuracy.
 config.astrometry.matcher.maxOffsetPix=1500
@@ -45,7 +41,7 @@ config.astrometry.minMatchDistanceArcSec = 0.04
 
 # Overrides to improved astrometry matching.
 config.astrometry.doFiducialZeroPointCull = True
-config.astrometry.load(os.path.join(config_dir, "fiducialZeroPoint.py"))
+config.astrometry.load("fiducialZeroPoint.py")
 
 # Loosened for early ComCam with large PSFs.
 config.photometry.match.sourceSelection.doUnresolved = False

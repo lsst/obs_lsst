@@ -1,14 +1,10 @@
-import os.path
-
 from lsst.meas.algorithms import ColorLimit  # Configure the photometry to use the_monster.
-
-config_dir = os.path.dirname(__file__)
 
 config.connections.photometry_ref_cat = "the_monster_20250219"
 config.connections.astrometry_ref_cat = "the_monster_20250219"
 
-config.astrometry.load(os.path.join(config_dir, "filterMap.py"))
-config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
+config.astrometry.load("filterMap.py")
+config.photometry_ref_loader.load("filterMap.py")
 
 config.photometry.match.referenceSelection.magLimit.fluxField = "monster_ComCam_r_flux"
 colors = config.photometry.match.referenceSelection.colorLimits
@@ -22,7 +18,7 @@ colors["g-r"] = ColorLimit(
 config.photometry.applyColorTerms = False
 config.photometry.photoCatName = "the_monster_20250219"
 
-config.compute_summary_stats.load(os.path.join(config_dir, "computeExposureSummaryStats.py"))
+config.compute_summary_stats.load("computeExposureSummaryStats.py")
 
 # Decrease maximum number of reference sources
 config.astrometry.matcher.maxRefObjects = 4096
@@ -41,7 +37,7 @@ config.astrometry.minMatchDistanceArcSec = 0.07
 
 # Overrides to improved astrometry matching.
 config.astrometry.doFiducialZeroPointCull = True
-config.astrometry.load(os.path.join(config_dir, "fiducialZeroPoint.py"))
+config.astrometry.load("fiducialZeroPoint.py")
 
 # Loosened for early LSSTCam with large PSFs.
 config.photometry.match.sourceSelection.doUnresolved = False

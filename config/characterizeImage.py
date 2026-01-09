@@ -23,15 +23,12 @@
 """
 LSST Cam-specific overrides for CharacterizeImageTask
 """
-import os.path
-
-obsConfigDir = os.path.join(os.path.dirname(__file__))
 
 # PSF determination
 config.measurePsf.reserve.fraction = 0.2
 
 # Activate calibration of measurements: required for aperture corrections
-config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
+config.measurement.load("apertures.py")
 
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 config.measurement.plugins["base_Jacobian"].pixelScale = 0.2

@@ -20,6 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
-config.load(os.path.join(os.path.dirname(__file__), "ts8.py"))
+config.load("ts8.py")

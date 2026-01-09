@@ -1,5 +1,3 @@
-import os
-
 physical_to_band = {
     "g_01": "g",
     "r_03": "r",
@@ -14,7 +12,6 @@ config.coarseNside = 64
 config.minPerBand = 2
 config.connections.ref_cat = "uw_stars_20240524"
 
-configDir = os.path.join(os.path.dirname(__file__))
 config.physicalFilterMap = physical_to_band
 config.fgcmLoadReferenceCatalog.filterMap = {
     "g": "lsst_g",

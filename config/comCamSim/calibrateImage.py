@@ -1,13 +1,10 @@
 # ComCamSim-specialized configuration for CalibrateImageTask.
-import os.path
-
-configDir = os.path.dirname(__file__)
 
 config.connections.astrometry_ref_cat = "uw_stars_20240524"
 config.connections.photometry_ref_cat = "uw_stars_20240524"
 
-config.astrometry_ref_loader.load(os.path.join(configDir, "filterMap.py"))
-config.photometry_ref_loader.load(os.path.join(configDir, "filterMap.py"))
+config.astrometry_ref_loader.load("filterMap.py")
+config.photometry_ref_loader.load("filterMap.py")
 config.astrometry_ref_loader.anyFilterMapsToThis = None
 config.photometry_ref_loader.anyFilterMapsToThis = None
 
@@ -30,4 +27,4 @@ config.photometry.match.referenceSelection.magLimit.minimum = 14.0
 config.photometry.match.referenceSelection.magLimit.maximum = 22.0
 
 # Exposure summary stats
-config.compute_summary_stats.load(os.path.join(configDir, "computeExposureSummaryStats.py"))
+config.compute_summary_stats.load("computeExposureSummaryStats.py")

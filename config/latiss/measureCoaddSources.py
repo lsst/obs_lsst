@@ -22,10 +22,8 @@
 
 """LATISS-specific overrides for MeasureMergedCoaddSourcesTask"""
 
-import os.path
-
-config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "apertures.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "kron.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "convolvedFluxes.py"))
-config.measurement.load(os.path.join(os.path.dirname(__file__), "..", "hsm.py"))
-config.load(os.path.join(os.path.dirname(__file__), "..", "cmodel.py"))
+config.measurement.load("../apertures.py")
+config.measurement.load("../kron.py")
+config.measurement.load("../convolvedFluxes.py")
+config.measurement.load("../hsm.py")
+config.load("../cmodel.py")

@@ -20,11 +20,9 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
 # existing synthetic refcat does not have coordinate errors
 config.astrometryReferenceErr = 1
 
-filterMapFile = os.path.join(os.path.dirname(__file__), "filterMap.py")
+filterMapFile = "filterMap.py"
 config.astrometryRefObjLoader.load(filterMapFile)
 config.photometryRefObjLoader.load(filterMapFile)
