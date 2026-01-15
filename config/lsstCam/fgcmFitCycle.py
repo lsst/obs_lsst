@@ -25,7 +25,8 @@ config.minCcdPerExp = 10
 config.utBoundary = 0.0
 config.washMjds = (0.0,)
 # We have an observing epoch split at 2025-07-03 (new sequencer).
-config.epochMjds = (0.0, 60859.0, 100000.0)
+# Another epoch split at 2025-10-01 (during Sept/Oct shutdown).
+config.epochMjds = (0.0, 60859.0, 60949.0, 100000.0)
 config.coatingMjds = []
 config.latitude = -30.2333
 config.mirrorArea = 34.524
