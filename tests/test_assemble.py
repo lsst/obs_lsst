@@ -25,16 +25,15 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.utils import getPackageDir
 from lsst.daf.butler import Butler
 from lsst.afw.cameraGeom import Detector
 from lsst.afw.image import ImageFitsReader
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.ip.isr import AssembleCcdTask
+from lsst.resources import ResourcePath
 
 from lsst.obs.lsst.utils import readRawFile
 
-PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
 LATISS_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'latiss')
 BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'bot')
@@ -146,8 +145,10 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 class ReadRawFileTestCase(lsst.utils.tests.TestCase):
     def testReadRawLatissFile(self):
         fileName = os.path.join(LATISS_DATA_ROOT, "raw/2018-09-20/3018092000065-det000.fits")
-        policy = os.path.join(PACKAGE_DIR, "policy", "latiss.yaml")
-        camera = yamlCamera.makeCamera(policy)
+        with ResourcePath(
+            "resource://lsst.obs.lsst/resources/policy/latiss.yaml", forceDirectory=False
+        ).as_local() as policy_file:
+            camera = yamlCamera.makeCamera(policy_file.ospath)
         exposure = readRawFile(fileName, camera[0], dataId={"file": fileName})
         self.assertIsInstance(exposure, lsst.afw.image.Exposure)
         md = exposure.getMetadata()

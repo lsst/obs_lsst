@@ -30,9 +30,9 @@ import glob
 import lsst.utils
 from lsst.obs.lsst.script.rewrite_ts8_qe_files import rewrite_ts8_files
 from lsst.ip.isr import IntermediateSensorTransmissionCurve
+from lsst.resources import ResourcePath
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-DATADIR = lsst.utils.getPackageDir('obs_lsst_data')
 
 
 class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
@@ -48,8 +48,13 @@ class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
             self.assertEqual(len(files), 9)
             for f in files:
                 curve1 = IntermediateSensorTransmissionCurve.readText(f)
-                expect_file = os.path.join(DATADIR, 'ts8', 'transmission_sensor', os.path.relpath(f, root))
-                curve2 = IntermediateSensorTransmissionCurve.readText(expect_file)
+
+                rel_path = os.path.relpath(f, root)
+                with ResourcePath(
+                    f"resource://lsst.obs_lsst_data/resources/ts8/transmission_sensor/{rel_path}",
+                    forceDirectory=False,
+                ).as_local() as expect_file:
+                    curve2 = IntermediateSensorTransmissionCurve.readText(expect_file.ospath)
 
                 # These fields are created every time, and therefore
                 # differ between the test data and the references.
