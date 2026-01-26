@@ -7,7 +7,6 @@ from astropy.table import Table
 import argparse
 
 from lsst.daf.butler import Butler
-from lsst.pipe.base import Instrument
 from lsst.utils import getPackageDir
 import lsst.afw.cameraGeom
 from lsst.afw.image import ExposureF, FilterLabel
@@ -17,6 +16,7 @@ from lsst.pipe.tasks.visualizeVisit import (
     VisualizeMosaicExpConfig,
     VisualizeMosaicExpTask,
 )
+from .._instrument import LsstCam
 
 
 def write_pseudoflats(butler: Butler | None, output_collection: str | None):
@@ -41,7 +41,7 @@ def write_pseudoflats(butler: Butler | None, output_collection: str | None):
         ],
     )
 
-    lsstcam_instr = Instrument.from_string("lsst.obs.lsst.LsstCam")
+    lsstcam_instr = LsstCam()
     camera = lsstcam_instr.getCamera()
 
     filter_dict = {
