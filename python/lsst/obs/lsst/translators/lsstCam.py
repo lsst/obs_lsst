@@ -190,6 +190,17 @@ class LsstCamTranslator(LsstBaseTranslator):
                 modified = True
                 log.debug("%s: Correcting filter to z", log_label)
 
+        # DM-53949: Incorrect block number.
+        if i_day_obs in [
+            20250415, 20250416, 20250423, 20250417, 20250418, 20250421,
+            20250424, 20250425, 20250504, 20250503, 20250512, 20250522,
+            20250524, 20250826, 20250827, 20250828
+        ]:
+            if header["PROGRAM"] == "BLOCK-417":
+                header["PROGRAM"] = "BLOCK-T417"
+                modified = True
+                log.debug("%s: Correcting BLOCK-417 to BLOCK-T417", log_label)
+
         return modified
 
     @classmethod
