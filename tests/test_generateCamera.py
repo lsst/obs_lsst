@@ -26,16 +26,13 @@ import os
 import shutil
 from tempfile import mkdtemp
 
-import lsst.utils
-import lsst.utils.tests
-
 from lsst.obs.lsst.script.generateCamera import generateCamera, parseYamlOnPath
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 POLICYDIR = os.path.normpath(os.path.join(TESTDIR, os.path.pardir, 'policy'))
 
 
-class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
+class PhosimToRaftsTestCase(unittest.TestCase):
     """Test the generateCamera.py utility script."""
 
     def setUp(self):
@@ -111,5 +108,4 @@ class PhosimToRaftsTestCase(lsst.utils.tests.ExecutablesTestCase):
 
 
 if __name__ == "__main__":
-    lsst.utils.tests.init()
     unittest.main()

@@ -27,7 +27,6 @@ import shutil
 import tempfile
 import glob
 
-import lsst.utils
 from lsst.obs.lsst.script.rewrite_ts8_qe_files import rewrite_ts8_files
 from lsst.ip.isr import IntermediateSensorTransmissionCurve
 from lsst.resources import ResourcePath
@@ -35,7 +34,7 @@ from lsst.resources import ResourcePath
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
 
-class RewriteQeTestCase(lsst.utils.tests.ExecutablesTestCase):
+class RewriteQeTestCase(unittest.TestCase):
     """Test the rewrite_ts8_qe_files.py utility script."""
 
     def testRewriteQe(self):
