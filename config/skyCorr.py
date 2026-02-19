@@ -20,7 +20,4 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-
-import os.path
-
-config.bgModel1.load(os.path.join(os.path.dirname(__file__), "focalPlaneBackground.py"))
+config.bgModel1.load("focalPlaneBackground.py")

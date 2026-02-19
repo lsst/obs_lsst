@@ -30,7 +30,7 @@ from lsst.obs.lsst import LsstCam, ingest_guider
 from lsst.obs.base import RawIngestTask
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input", "guider")
+DATAROOT = os.path.join(TESTDIR, "data", "input", "guider")
 
 
 class GuiderIngestTestCase(unittest.TestCase):

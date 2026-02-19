@@ -14,7 +14,6 @@ __all__ = ("TZERO", "SIMONYI_LOCATION", "read_detector_ids",
            "compute_detector_exposure_id_generic", "LsstBaseTranslator",
            "SIMONYI_TELESCOPE")
 
-import os.path
 import yaml
 import logging
 import re
@@ -26,7 +25,7 @@ import astropy.units as u
 from astropy.time import Time, TimeDelta
 from astropy.coordinates import EarthLocation
 
-from lsst.utils import getPackageDir
+from lsst.resources import ResourcePath, ResourcePathExpression
 
 from astro_metadata_translator import cache_translation, FitsTranslator
 from astro_metadata_translator.translators.helpers import tracking_from_degree_headers, \
@@ -69,20 +68,18 @@ _CONTROLLER_INCREMENT = 1000_00_00
 # Number of decimal digits used by exposure_ids.
 EXPOSURE_ID_MAXDIGITS = _SEQNUM_MAXDIGITS + _DAYOBS_MAXDIGITS
 
-obs_lsst_packageDir = getPackageDir("obs_lsst")
-
 log = logging.getLogger(__name__)
 
 
-def read_detector_ids(policyFile):
+def read_detector_ids(policyFile: ResourcePathExpression):
     """Read a camera policy file and retrieve the mapping from CCD name
     to ID.
 
     Parameters
     ----------
-    policyFile : `str`
-        Name of YAML policy file to read, relative to the obs_lsst
-        package.
+    policyFile : `lsst.resources.ResourcePathExpression`
+        Name of YAML policy file to read, relative to the resources root
+        directory. This usually means that the "policy" directory is included.
 
     Returns
     -------
@@ -99,14 +96,13 @@ def read_detector_ids(policyFile):
     `lsst.afw.cameraGeom`.  This is because the translators are intended to
     have minimal dependencies on LSST infrastructure.
     """
-
-    file = os.path.join(obs_lsst_packageDir, policyFile)
+    root = ResourcePath("resource://lsst.obs.lsst/resources/", forceDirectory=True)
+    resource = ResourcePath(policyFile, root=root)
     try:
-        with open(file) as fh:
-            # Use the fast parser since these files are large
-            camera = yaml.load(fh, Loader=yaml.CSafeLoader)
+        # Use the fast parser since these files are large
+        camera = yaml.load(resource.read(), Loader=yaml.CSafeLoader)
     except OSError as e:
-        raise ValueError(f"Could not load camera policy file {file}") from e
+        raise ValueError(f"Could not load camera policy file {resource}") from e
 
     mapping = {}
     for ccd, value in camera["CCDs"].items():
@@ -152,6 +148,8 @@ class LsstBaseTranslator(FitsTranslator):
 
     _const_map = {}
     _trivial_map = {}
+    default_resource_package = "lsst.obs.lsst"
+    default_resource_root = "resources/corrections/"
 
     # Do not specify a name for this translator
     cameraPolicyFile = None
@@ -202,18 +200,6 @@ class LsstBaseTranslator(FitsTranslator):
         cls.detectorSerials = None
 
         super().__init_subclass__(**kwargs)
-
-    def search_paths(self):
-        """Search paths to use for LSST data when looking for header correction
-        files.
-
-        Returns
-        -------
-        path : `list`
-            List with a single element containing the full path to the
-            ``corrections`` directory within the ``obs_lsst`` package.
-        """
-        return [os.path.join(obs_lsst_packageDir, "corrections")]
 
     @classmethod
     def observing_date_to_offset(cls, observing_date: astropy.time.Time) -> astropy.time.TimeDelta | None:

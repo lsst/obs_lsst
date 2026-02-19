@@ -30,10 +30,6 @@ from abc import abstractmethod
 import lsst.utils.tests
 import lsst.obs.base.tests
 import lsst.daf.butler
-from lsst.utils import getPackageDir
-
-# Define the data location relative to this package
-DATAROOT = os.path.join(getPackageDir("obs_lsst"), "data", "input")
 
 
 class ObsLsstButlerTests(lsst.utils.tests.TestCase):
@@ -53,6 +49,8 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
 
     _butler = None
 
+    DATAROOT = "UNDEFINED"  # Define in subclass
+
     @classmethod
     @abstractmethod
     def getInstrument(cls):
@@ -71,7 +69,7 @@ class ObsLsstButlerTests(lsst.utils.tests.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.data_dir = os.path.normpath(os.path.join(DATAROOT, cls.instrumentDir))
+        cls.data_dir = os.path.normpath(os.path.join(cls.DATAROOT, cls.instrumentDir))
         # Protection against the base class values being used
         if not os.path.exists(cls.data_dir):
             raise unittest.SkipTest(f"Data directory {cls.data_dir} does not exist.")

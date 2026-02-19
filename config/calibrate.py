@@ -23,18 +23,15 @@
 """
 LSST Cam-specific overrides for CalibrateTask
 """
-import os.path
-
-obsConfigDir = os.path.dirname(__file__)
 
 # TODO: Turn color terms back on when they are available
 config.photoCal.applyColorTerms = False
 config.photoCal.photoCatName = "the_monster_20250219"
 
 # Activate calibration of measurements: required for aperture corrections
-config.measurement.load(os.path.join(obsConfigDir, "apertures.py"))
-config.measurement.load(os.path.join(obsConfigDir, "kron.py"))
-config.measurement.load(os.path.join(obsConfigDir, "hsm.py"))
+config.measurement.load("apertures.py")
+config.measurement.load("kron.py")
+config.measurement.load("hsm.py")
 
 config.measurement.plugins.names |= ["base_Jacobian", "base_FPPosition"]
 

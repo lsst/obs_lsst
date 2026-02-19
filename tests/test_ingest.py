@@ -38,7 +38,7 @@ import lsst.afw.cameraGeom.testUtils  # for injected test asserts
 import lsst.obs.lsst
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
+DATAROOT = os.path.join(TESTDIR, "data", "input")
 
 
 class LatissIngestTestCase(IngestTestBase, lsst.utils.tests.TestCase):

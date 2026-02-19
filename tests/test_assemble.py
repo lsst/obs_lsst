@@ -25,19 +25,18 @@ import sys
 import unittest
 
 import lsst.utils.tests
-from lsst.utils import getPackageDir
 from lsst.daf.butler import Butler
 from lsst.afw.cameraGeom import Detector
 from lsst.afw.image import ImageFitsReader
 import lsst.obs.base.yamlCamera as yamlCamera
 from lsst.ip.isr import AssembleCcdTask
+from lsst.resources import ResourcePath
 
 from lsst.obs.lsst.utils import readRawFile
 
-PACKAGE_DIR = getPackageDir("obs_lsst")
 TESTDIR = os.path.dirname(__file__)
-LATISS_DATA_ROOT = os.path.join(PACKAGE_DIR, 'data', 'input', 'latiss')
-BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input')
+LATISS_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'latiss')
+BOT_DATA_ROOT = os.path.join(TESTDIR, 'data', 'input', 'bot')
 E2V_DATA_ID = {'raft': 'R22', 'name_in_raft': 'S11', 'exposure': 3019103101985, 'instrument': 'LSSTCam'}
 ITL_DATA_ID = {'raft': 'R02', 'name_in_raft': 'S02', 'exposure': 3019110102212, 'instrument': 'LSSTCam'}
 TESTDATA_ROOT = os.path.join(TESTDIR, "data")
@@ -146,8 +145,10 @@ class RawAssemblyTestCase(lsst.utils.tests.TestCase):
 class ReadRawFileTestCase(lsst.utils.tests.TestCase):
     def testReadRawLatissFile(self):
         fileName = os.path.join(LATISS_DATA_ROOT, "raw/2018-09-20/3018092000065-det000.fits")
-        policy = os.path.join(PACKAGE_DIR, "policy", "latiss.yaml")
-        camera = yamlCamera.makeCamera(policy)
+        with ResourcePath(
+            "resource://lsst.obs.lsst/resources/policy/latiss.yaml", forceDirectory=False
+        ).as_local() as policy_file:
+            camera = yamlCamera.makeCamera(policy_file.ospath)
         exposure = readRawFile(fileName, camera[0], dataId={"file": fileName})
         self.assertIsInstance(exposure, lsst.afw.image.Exposure)
         md = exposure.getMetadata()

@@ -40,7 +40,7 @@ from lsst.daf.butler import (
 )
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
-DATAROOT = os.path.join(TESTDIR, os.path.pardir, "data", "input")
+DATAROOT = os.path.join(TESTDIR, "data", "input")
 
 # This test is unfortunately slow; leave a profiling option in in case we want
 # to improve it later.  Initial version is about 60% YamlCamera construction

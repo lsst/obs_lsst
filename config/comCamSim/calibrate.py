@@ -20,16 +20,12 @@
 # the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
-import os.path
-
-configDir = os.path.dirname(__file__)
-
 config.connections.astromRefCat = "uw_stars_20240524"
 config.connections.photoRefCat = "uw_stars_20240524"
 config.photoCal.photoCatName = "uw_stars_20240524"
 
-config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
+config.astromRefObjLoader.load("filterMap.py")
+config.photoRefObjLoader.load("filterMap.py")
 config.astromRefObjLoader.anyFilterMapsToThis = None
 config.photoRefObjLoader.anyFilterMapsToThis = None
 
@@ -52,4 +48,4 @@ config.photoCal.match.referenceSelection.magLimit.minimum = 14.0
 config.photoCal.match.referenceSelection.magLimit.maximum = 22.0
 
 # Exposure summary stats
-config.computeSummaryStats.load(os.path.join(configDir, "computeExposureSummaryStats.py"))
+config.computeSummaryStats.load("computeExposureSummaryStats.py")

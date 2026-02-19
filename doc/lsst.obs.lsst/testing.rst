@@ -39,13 +39,13 @@ New data can be added as follow:
    template strings to work to be able to locate the file.
 
 -  This file or files
-   should be added to the test butler repository in ``data/input``. Create
-   directory ``data/input/fooCam``, if required, and then run ``butler create`` for that directory to initialize a butler repository.
+   should be added to the test butler repository in ``tests/data/input``. Create
+   directory ``tests/data/input/fooCam``, if required, and then run ``butler create`` for that directory to initialize a butler repository.
    Then ingest your test raw file(s) with:
 
    .. code-block:: bash
 
-      butler ingest-raws data/input/fooCam --transfer copy fooCamtest.fits
+      butler ingest-raws tests/data/input/fooCam --transfer copy fooCamtest.fits
 
    specifying the path to the test files. This will store them in the butler
    repository.

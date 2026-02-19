@@ -1,3 +1,5 @@
 extend = "../pyproject.toml"
+# Use this line when config moves inside python tree.
+# extend = "../../../../../../pyproject.toml"
 # Ignore undefined "config", as config files are loaded with `eval`.
 builtins = ["config"]

@@ -22,15 +22,12 @@
 """
 imsim-specific overrides for CalibrateTask
 """
-import os.path
-
-configDir = os.path.dirname(__file__)
 
 # imSim-specifc reference catalog configuration.
 config.connections.astromRefCat = "cal_ref_cat"
 config.connections.photoRefCat = "cal_ref_cat"
-config.astromRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
-config.photoRefObjLoader.load(os.path.join(configDir, "filterMap.py"))
+config.astromRefObjLoader.load("filterMap.py")
+config.photoRefObjLoader.load("filterMap.py")
 config.astromRefObjLoader.anyFilterMapsToThis = None
 
 # Reduce Chebyshev polynomial order for background fitting (DM-30820)

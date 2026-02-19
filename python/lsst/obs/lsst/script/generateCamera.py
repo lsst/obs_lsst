@@ -74,6 +74,7 @@ def build_argparser():
     parser.add_argument('outputFile', type=str, help="Name of generated file")
     parser.add_argument('--path', type=str, help="List of directories to search for components",
                         default=False)
+    parser.add_argument('--copy-to', type=str, help="Additional directory to write output to.", default="")
     parser.add_argument('--verbose', action="store_true", help="How chatty should I be?", default=False)
 
     return parser
@@ -318,6 +319,8 @@ def main():
 
     try:
         generateCamera(args.outputFile, args.path)
+        if args.copy_to:
+            shutil.copyfile(args.outputFile, os.path.join(args.copy_to, os.path.basename(args.outputFile)))
     except Exception as e:
         print(f"{e}", file=sys.stderr)
         return 1

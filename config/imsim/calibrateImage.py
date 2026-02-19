@@ -1,9 +1,6 @@
 """
 ImSim-specific overrides for CalibrateImageTask
 """
-import os
-
-config_dir = os.path.join(os.path.dirname(__file__))
 
 # imsim background model is a single value per detector.
 config.psf_subtract_background.approxOrderX = 1
@@ -20,9 +17,9 @@ config.star_detection.tempWideBackground.approxOrderX = 1
 config.connections.astrometry_ref_cat = "cal_ref_cat_2_2"
 config.connections.photometry_ref_cat = "cal_ref_cat_2_2"
 # Use the ImSim filterMap ("lsst_X_smeared" reference fluxes).
-config.astrometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
+config.astrometry_ref_loader.load("filterMap.py")
 config.astrometry_ref_loader.anyFilterMapsToThis = None
-config.photometry_ref_loader.load(os.path.join(config_dir, "filterMap.py"))
+config.photometry_ref_loader.load("filterMap.py")
 
 # Make sure galaxies from truth catalog are not used for calibration.
 config.astrometry.referenceSelector.doUnresolved = True
