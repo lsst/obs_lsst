@@ -4,8 +4,8 @@
 
 # Fiducial ZeroPoint in electrons for 1s exposure
 config.fiducialZeroPoint = {
-  "u": 26.52 + 0.03,
-  "g": 28.51 + 0.06,
+  "u": 26.52 + 0.04,
+  "g": 28.51 + 0.08,
   "r": 28.36 + 0.14,
   "i": 28.17 + 0.12,
   "z": 27.78 + 0.12,
