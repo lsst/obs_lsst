@@ -758,7 +758,7 @@ class LsstBaseTranslator(FitsTranslator):
         # RA/DEC are *derived* headers and for the case where the DATE-BEG
         # is 1970 they are garbage and should not be used.
         try:
-            if self._header["DATE-OBS"] == self._header["DATE"]:
+            if self._header.get("DATE-OBS") == self._header["DATE"]:
                 # A fixed up date -- use AZEL as source of truth
                 altaz = self.to_altaz_begin()
                 radec = astropy.coordinates.SkyCoord(altaz.transform_to(astropy.coordinates.ICRS()),
