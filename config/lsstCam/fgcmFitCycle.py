@@ -65,7 +65,7 @@ config.expVarGrayPhotometricCutDict = {
     "y": 0.05,
 }
 config.autoPhotometricCutNSig = 3.0
-config.autoHighCutNSig = 3.0
+config.autoHighCutNSig = 6.0
 config.aperCorrUsePsfFwhm = True
 config.aperCorrPerCcd = False
 config.aperCorrFitNBins = 10
