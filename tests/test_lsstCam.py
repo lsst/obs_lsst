@@ -109,6 +109,33 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         md = self.butler.get('raw.metadata', dataId)
         self.assertEqual(md["TELESCOP"], "LSST")
 
+    def testFiducialMagLim(self):
+        """Verify that the fiducial m5 magnitude limit values match those given
+        in SMTN-002 (v.2025-07-16). The fiducial values must remain fixed so
+        that the effective time can be meaningfully interpreted.
+        """
+        from lsst.pipe.tasks.computeExposureSummaryStats import ComputeExposureSummaryStatsTask
+        from lsst.pipe.tasks.computeExposureSummaryStats import ComputeExposureSummaryStatsConfig
+
+        instrument = self.getInstrument()
+        config = ComputeExposureSummaryStatsConfig()
+        instrument.applyConfigOverrides(ComputeExposureSummaryStatsTask._DefaultName, config)
+
+        # From SMTN-002. Changes would break the utility of effective_time.
+        fiducialMagLim = {
+            "u": 23.70,
+            "g": 24.97,
+            "r": 24.52,
+            "i": 24.13,
+            "z": 23.56,
+            "y": 22.55,
+        }
+        for band, magLim in fiducialMagLim.items():
+            msg = "The fiducialMagLim cannot be changed from SMTN-002 values without breaking "
+            msg += "the calculation of effective time."
+            self.assertFloatsAlmostEqual(magLim, config.fiducialMagLim[band], atol=1e-3, rtol=1e-5,
+                                         err_msg=msg)
+            print(magLim, config.fiducialMagLim[band])
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
