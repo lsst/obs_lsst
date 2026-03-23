@@ -201,6 +201,15 @@ class LsstCamTranslator(LsstBaseTranslator):
                 modified = True
                 log.debug("%s: Correcting BLOCK-417 to BLOCK-T417", log_label)
 
+        if i_day_obs == 20260315:
+            i_seq_num = header["SEQNUM"]
+            if i_seq_num >=49 and i_seq_num <= 109:
+                header["FILTER"] = "i_39"
+                header["FILTBAND"] = "i"
+                header["FILTPOS"] = 304.0
+                header["FILTSLOT"] = 1
+                modified = True
+
         return modified
 
     @classmethod
