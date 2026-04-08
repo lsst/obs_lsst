@@ -30,6 +30,8 @@ config.badAmps = [
     "R03_S11_C00",  # Dead amp
 ]
 
+config.cameraKeywordsToCompare = ["SEQNAME", "SEQFILE", "SEQCKSUM", "ODP", "AP0_RC"]
+
 config.crosstalk.doQuadraticCrosstalkCorrection = True
 config.crosstalk.doSubtrahendMasking = True
 config.crosstalk.minPixelToMask = 1.0
