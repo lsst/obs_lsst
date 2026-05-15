@@ -338,9 +338,7 @@ _latiss_filters = (
 # Form a new set of filter definitions from all the explicit gratings, and add
 # sdss65mm_filter set.
 _latiss_gratings = ("ronchi90lpmm",
-                    "ronchi90lpmm_prism",
                     "ronchi170lpmm",
-                    "ronchi170lpmm_prism",
                     "empty",
                     "unknown",
                     "holo4_003",
