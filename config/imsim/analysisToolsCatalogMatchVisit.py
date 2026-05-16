@@ -23,4 +23,4 @@
 """LSST-specific overrides for CatalogMatchVisitTask"""
 
 config.anyFilterMapsToThis = "lsst_g_smeared"
-config.connections.refCat = "cal_ref_cat_2_2"
+config.connections.refCatalog = "cal_ref_cat_2_2"
