@@ -12,3 +12,6 @@ config.psf_determiner['piff'].zerothOrderInterpNotEnoughStars = False
 # See DM-49152 for more detail.
 config.psf_determiner['piff'].piffBasisPolynomialSolver = "cpp"
 config.psf_determiner['piff'].piffPixelGridFitCenter = False
+config.do_add_sky_moments = False
+config.do_add_fgcm_photometry = False
+config.fgcmPhotometryBands = ['u', 'g', 'r', 'i', 'z', 'y']
