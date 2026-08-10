@@ -7,3 +7,4 @@ config.fitProperMotion = False
 config.referenceFilter = "lsst_r"
 config.devicePolyOrder = 5
 config.exposurePolyOrder = 7
+config.useColor = False
