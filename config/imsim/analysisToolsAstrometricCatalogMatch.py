@@ -21,5 +21,5 @@
 # see <http://www.lsstcorp.org/LegalNotices/>.
 
 config.referenceCatalogLoader.refObjLoader.anyFilterMapsToThis = "lsst_g_smeared"
-config.connections.refCat = "cal_ref_cat_2_2"
+config.connections.refCatalog = "cal_ref_cat_2_2"
 config.referenceCatalogLoader.refObjLoader.requireProperMotion = False
