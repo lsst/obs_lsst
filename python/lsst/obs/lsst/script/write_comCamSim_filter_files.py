@@ -27,21 +27,23 @@ import galsim
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
+from lsst.resources import ResourcePath
 
 from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 # Write transmission_filter files for the g, r, i band used
 # by LSSTComCamSim.  These are the baseline/filter_[gri].dat
 # files in the throughputs package.
-throughputs_dir = lsst.utils.getPackageDir("throughputs")
+throughputs_dir = ResourcePath("eups://throughputs/baseline/", forceDirectory=True)
 filter_files = [
-    os.path.join(throughputs_dir, "baseline", _)
+    throughputs_dir.join(_)
     for _ in ("filter_g.dat", "filter_r.dat", "filter_i.dat")
 ]
 physical_filters = ("g_01", "r_03", "i_06")
 
 for physical_filter, filter_file in zip(physical_filters, filter_files):
-    throughput = np.genfromtxt(filter_file).transpose()
+    with filter_file.as_local() as local_file:
+        throughput = np.genfromtxt(local_file.ospath).transpose()
     # Use a GalSim.Bandpass object to truncate the curves at low
     # relative throughput and thin the number of wavelength points.
     bp = galsim.Bandpass(
