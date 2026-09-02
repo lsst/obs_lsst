@@ -157,8 +157,8 @@ class LsstComCamTranslator(LsstCamTranslator):
             modified = True
 
         # DM-45661: Correct a mislabeling of the g-band filter for data
-        # from 20240729.
-        if i_day_obs == 20240729:
+        # from 20240729 through the first flat taken on 20240806.
+        if 20240729 <= i_day_obs <= 20240806:
             if header["FILTER"] == "g_07":
                 header["FILTER"] = "g_01"
                 modified = True
