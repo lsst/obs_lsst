@@ -115,6 +115,10 @@ class LsstComCamTranslator(LsstCamTranslator):
         # Calculate the standard label to use for log messages
         log_label = cls._construct_log_prefix(obsid, filename)
 
+        # Standardize the DAYOBS for use in time-based corrections
+        day_obs = header.get("DAYOBS")
+        i_day_obs = int(day_obs) if day_obs else None
+
         physical_filter = header.get("FILTER")
         if physical_filter in (None, "r", ""):
             # Create a translator since we need the date
@@ -151,5 +155,14 @@ class LsstComCamTranslator(LsstCamTranslator):
             header["ROTPA"] = 0.0
             log.warning("Missing ROTPA in header - replacing with 0.0")
             modified = True
+
+        # DM-45661: Correct a mislabeling of the g-band filter for data
+        # from 20240729.
+        if i_day_obs == 20240729:
+            if header["FILTER"] == "g_07":
+                header["FILTER"] = "g_01"
+                modified = True
+                log.debug("%s: Corrected FILTER g_07 to %s", log_label, header["FILTER"])
+
 
         return modified
