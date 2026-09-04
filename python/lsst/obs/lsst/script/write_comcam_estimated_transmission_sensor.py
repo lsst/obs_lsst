@@ -25,8 +25,8 @@ from lsst.afw.cameraGeom import DetectorType
 from lsst.meas.algorithms.simple_curve import AmpCurve
 from astropy.table import QTable
 
-import lsst.utils
 from lsst.obs.lsst import LsstComCam, LsstCam
+from lsst.resources import ResourcePath
 
 from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
@@ -34,7 +34,7 @@ comcam_instr = LsstComCam()
 comcam_camera = comcam_instr.getCamera()
 lsst_camera = LsstCam().getCamera()
 
-data_root = lsst.utils.getPackageDir("obs_lsst_data")
+data_root = ResourcePath("eups://obs_lsst_data/", forceDirectory=True)
 
 valid_start = "1970-01-01T00:00:00"
 datestr = iso_date_to_curated_calib_file_root(valid_start)
@@ -56,11 +56,12 @@ for det in lsst_camera:
     name = det.getName()
 
     transmission_sensor_files.append(
-        os.path.join(data_root, "lsstCam", "transmission_sensor", name.lower(), f"{datestr}.ecsv"),
+        data_root.join(f"lsstCam/transmission_sensor/{name.lower()}/{datestr}.ecsv"),
     )
 
 # Read in the first one to get the size/shape of things.
-transmission_sensor0 = AmpCurve.readText(transmission_sensor_files[0])
+with transmission_sensor_files[0].as_local() as local_file:
+    transmission_sensor0 = AmpCurve.readText(local_file.ospath)
 
 amp_names = sorted([amp.getName() for amp in comcam_camera[0]])
 
@@ -69,7 +70,8 @@ efficiencies = np.zeros((len(wavelengths), len(amp_names) * len(transmission_sen
 
 counter = 0
 for transmission_sensor_file in transmission_sensor_files:
-    transmission_sensor = AmpCurve.readText(transmission_sensor_file)
+    with transmission_sensor_file.as_local() as local_file:
+        transmission_sensor = AmpCurve.readText(local_file.ospath)
     for amp_name in amp_names:
         wave, eff = transmission_sensor.data[amp_name]
         if len(wave) != len(wavelengths):

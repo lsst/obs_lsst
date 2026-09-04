@@ -29,10 +29,10 @@ from astropy.table import QTable
 
 import galsim
 
-import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 from lsst.obs.lsst import LsstComCam
 from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
+from lsst.resources import ResourcePath
 
 
 valid_start = "1970-01-01T00:00:00"
@@ -43,9 +43,9 @@ comcam_instr = LsstComCam()
 # Write initial transmission_filter files for the u, g, r, i, z, y bands
 # used by LSSTComCam.  These are the baseline/filter_[ugrizy].dat
 # files in the throughputs package.
-throughputs_dir = lsst.utils.getPackageDir("throughputs")
+throughputs_dir = ResourcePath("eups://throughputs/baseline/", forceDirectory=True)
 filter_files = [
-    os.path.join(throughputs_dir, "baseline", _)
+    throughputs_dir.join(_)
     for _ in (
         "filter_u.dat",
         "filter_g.dat",
@@ -58,7 +58,8 @@ filter_files = [
 physical_filters = ("u_02", "g_01", "r_03", "i_06", "z_03", "y_04")
 
 for physical_filter, filter_file in zip(physical_filters, filter_files):
-    throughput = np.genfromtxt(filter_file).transpose()
+    with filter_file.as_local() as local_file:
+        throughput = np.genfromtxt(local_file.ospath).transpose()
     # Use a GalSim.Bandpass object to truncate the curves at low
     # relative throughput and thin the number of wavelength points.
     bp = galsim.Bandpass(

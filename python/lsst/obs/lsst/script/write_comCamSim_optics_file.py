@@ -27,23 +27,26 @@ import galsim
 
 import lsst.utils
 from lsst.meas.algorithms.simple_curve import DetectorCurve
+from lsst.resources import ResourcePath
 
 from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
 # Obtain the throughputs of the individual optical components from
 # the throughputs package.
-throughputs_dir = lsst.utils.getPackageDir("throughputs")
+throughputs_dir = ResourcePath("eups://throughputs/baseline/", forceDirectory=True)
 
 component_files = [
-    os.path.join(throughputs_dir, "baseline", _)
+    throughputs_dir.join(_)
     for _ in ("m1.dat", "m2.dat", "m3.dat", "lens1.dat", "lens2.dat", "lens3.dat")
 ]
 
 # Combine, i.e., multiply, the component contributions to get the
 # total optical throughput.
-total = np.genfromtxt(component_files[0], names=["wl", "throughput"])
+with component_files[0].as_local() as local_file:
+    total = np.genfromtxt(local_file.ospath, names=["wl", "throughput"])
 for component_file in component_files[1:]:
-    component = np.genfromtxt(component_file, names=["wl", "throughput"])
+    with component_file.as_local() as local_file:
+        component = np.genfromtxt(local_file.ospath, names=["wl", "throughput"])
     total["throughput"] *= component["throughput"]
 
 # Use a GalSim.Bandpass object to truncate the curves at low

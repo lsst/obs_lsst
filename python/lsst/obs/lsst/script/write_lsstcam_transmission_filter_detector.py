@@ -28,9 +28,10 @@ import astropy.units as u
 from astropy.table import QTable
 import galsim
 
-import lsst.utils
+import lsst.afw.cameraGeom
 from lsst.meas.algorithms.simple_curve import DetectorCurve
 from lsst.obs.lsst import LsstCam
+from lsst.resources import ResourcePath
 
 from lsst.obs.base.utils import iso_date_to_curated_calib_file_root
 
@@ -40,8 +41,8 @@ datestr = iso_date_to_curated_calib_file_root(valid_start)
 lsstcam_instr = LsstCam()
 camera = lsstcam_instr.getCamera()
 
-data_path = lsst.utils.getPackageDir("obs_lsst_data")
-filter_path = os.path.join(data_path, "lsstCam", "transmission_filter_detector")
+data_path = ResourcePath("eups://obs_lsst_data/", forceDirectory=True)
+filter_path = data_path.join("lsstCam/transmission_filter_detector/", forceDirectory=True)
 
 # Band to filter name, from lsst.obs.lsst.filters
 filter_dict = {
@@ -57,27 +58,28 @@ for band, physical_filter in filter_dict.items():
     print("Working on ", band)
 
     # Read in all the filter curves for the science detectors.
-    filter_file = os.path.join(filter_path, f"integrated_transmission_materion_{band}band.fits")
+    filter_file = filter_path.join(f"integrated_transmission_materion_{band}band.fits")
 
     wavelengths = None
     filter_tput_dict = {}
     filter_tput_tot = None
     filter_tput_n = 0
 
-    for detector in camera:
-        if detector.getType() != lsst.afw.cameraGeom.DetectorType.SCIENCE:
-            continue
-        data = fitsio.read(
-            filter_file,
-            ext=f"filter {band} sensor {detector.getName()}",
-        )
-        if wavelengths is None:
-            wavelengths = data[0]["wavelength"]
-            filter_tput_tot = np.zeros_like(wavelengths)
+    with filter_file.as_local() as local_filter_file:
+        for detector in camera:
+            if detector.getType() != lsst.afw.cameraGeom.DetectorType.SCIENCE:
+                continue
+            data = fitsio.read(
+                local_filter_file.ospath,
+                ext=f"filter {band} sensor {detector.getName()}",
+            )
+            if wavelengths is None:
+                wavelengths = data[0]["wavelength"]
+                filter_tput_tot = np.zeros_like(wavelengths)
 
-        filter_tput_dict[detector.getName()] = data[0]["integ_transmission"]
-        filter_tput_tot += filter_tput_dict[detector.getName()]
-        filter_tput_n += 1
+            filter_tput_dict[detector.getName()] = data[0]["integ_transmission"]
+            filter_tput_tot += filter_tput_dict[detector.getName()]
+            filter_tput_n += 1
 
     filter_tput_mean = filter_tput_tot / filter_tput_n
 

@@ -7,7 +7,7 @@ from astropy.table import Table
 import argparse
 
 from lsst.daf.butler import Butler
-from lsst.utils import getPackageDir
+from lsst.resources import ResourcePath
 import lsst.afw.cameraGeom
 from lsst.afw.image import ExposureF, FilterLabel
 from lsst.pipe.tasks.visualizeVisit import (
@@ -58,11 +58,12 @@ def write_pseudoflats(butler: Butler | None, output_collection: str | None):
     wavelengths = np.arange(300.0, 1101.0)
 
     # Read in the throughputs for everything but filter + detector.
-    tput_path = os.path.join(getPackageDir("throughputs"), "baseline")
+    tput_path = ResourcePath("eups://throughputs/baseline/", forceDirectory=True)
 
     hw_no_det_filter = np.ones(len(wavelengths))
     for element in ["lens1", "lens2", "lens3", "m1", "m2", "m3", "atmos_std"]:
-        edat = Table.read(os.path.join(tput_path, f"{element}.dat"), format="ascii")
+        with tput_path.join(f"{element}.dat").as_local() as local_file:
+            edat = Table.read(local_file.ospath, format="ascii")
         interp = interp1d(edat["col1"], edat["col2"], bounds_error=False, fill_value=0.0)
         hw_no_det_filter *= interp(wavelengths)
 
