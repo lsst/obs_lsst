@@ -15,3 +15,13 @@ config.psf_determiner['piff'].piffPixelGridFitCenter = False
 config.do_add_sky_moments = False
 config.do_add_fgcm_photometry = False
 config.fgcmPhotometryBands = ['u', 'g', 'r', 'i', 'z', 'y']
+config.psf_determiner['piff'].useColor = True
+config.psf_determiner['piff'].colorOrder = 1
+config.psf_determiner['piff'].color = {
+    "u": "g-i",
+    "g": "g-i",
+    "r": "g-i",
+    "i": "g-i",
+    "z": "g-i",
+    "y": "g-i",
+}
