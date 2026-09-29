@@ -2053,8 +2053,30 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 self.assertEqual(header["FILTER"], expected_filter)
                 self.assertEqual(header["FILTBAND"], expected_band)
 
+        # Filter wheel position is also corrected on some nights.
+        # (day_obs, seq_num, expected FILTER, FILTBAND, FILTPOS, FILTSLOT)
+        test_data = (
+            ("20250609", 76, "z_20", "z", 201.0, 4),
+            ("20260315", 109, "i_39", "i", 304.0, 1),
+        )
+        for day_obs, seq_num, expected_filter, expected_band, expected_pos, expected_slot in test_data:
+            obsid = f"MC_O_{day_obs}_{seq_num:06d}"
+            with self.subTest(obsid=obsid):
+                header = template.copy()
+                header.update(
+                    OBSID=obsid, DAYOBS=day_obs, SEQNUM=seq_num, FILTER="u_24", FILTBAND="u",
+                    FILTPOS=0.0, FILTSLOT=0,
+                )
+                self.assertTrue(fix_header(header))
+                self.assertEqual(header["FILTER"], expected_filter)
+                self.assertEqual(header["FILTBAND"], expected_band)
+                self.assertEqual(header["FILTPOS"], expected_pos)
+                self.assertEqual(header["FILTSLOT"], expected_slot)
+
         # Exposures outside the corrected ranges must not be changed.
-        for day_obs, seq_num in (("20250606", 46), ("20251022", 17), ("20251120", 8)):
+        for day_obs, seq_num in (
+            ("20250606", 46), ("20250609", 579), ("20251022", 17), ("20251120", 8), ("20260315", 48)
+        ):
             obsid = f"MC_O_{day_obs}_{seq_num:06d}"
             with self.subTest(obsid=obsid):
                 header = template.copy()
