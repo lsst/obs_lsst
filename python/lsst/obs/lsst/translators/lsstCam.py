@@ -179,17 +179,6 @@ class LsstCamTranslator(LsstBaseTranslator):
                     modified = True
                     log.debug("%s: Correcting VIGN_MIN to FULLY", log_label)
 
-        # DM-52711: The filter was incorrect for the start of the night.
-        if i_day_obs == 20250609:
-            i_seq_num = header["SEQNUM"]
-            if i_seq_num >= 76 and i_seq_num <= 578:
-                header["FILTER"] = "z_20"
-                header["FILTBAND"] = "z"
-                header["FILTPOS"] = 201.0
-                header["FILTSLOT"] = 4
-                modified = True
-                log.debug("%s: Correcting filter to z", log_label)
-
         # DM-53949: Incorrect block number.
         if i_day_obs in [
             20250415, 20250416, 20250423, 20250417, 20250418, 20250421,
@@ -201,14 +190,44 @@ class LsstCamTranslator(LsstBaseTranslator):
                 modified = True
                 log.debug("%s: Correcting BLOCK-417 to BLOCK-T417", log_label)
 
-        if i_day_obs == 20260315:
+        # Filter recorded incorrectly for ranges of sequence numbers. Each
+        # entry is (first seqnum, last seqnum, header values to set).
+        # DM-52711: 20250609.
+        # DM-56418: Correct values come from the filter exchange system
+        # database.
+        i_band = {"FILTER": "i_39", "FILTBAND": "i"}
+        g_band = {"FILTER": "g_6", "FILTBAND": "g"}
+        r_band = {"FILTER": "r_57", "FILTBAND": "r"}
+        z_band = {"FILTER": "z_20", "FILTBAND": "z"}
+        filter_fixes = {
+            20250606: [(47, 63, i_band)],
+            20250609: [(76, 578, z_band | {"FILTPOS": 201.0, "FILTSLOT": 4})],
+            20250903: [(1, 3, g_band)],
+            20251022: [
+                (9, 10, i_band),
+                (16, 16, z_band),
+                (18, 20, g_band),
+                (33, 35, i_band),
+                (38, 39, r_band),
+                (42, 44, i_band),
+            ],
+            20251120: [(4, 7, r_band), (10, 11, r_band)],
+            20251217: [(1, 13, r_band)],
+            20260315: [(49, 109, i_band | {"FILTPOS": 304.0, "FILTSLOT": 1})],
+        }
+        if i_day_obs in filter_fixes:
             i_seq_num = header["SEQNUM"]
-            if i_seq_num >=49 and i_seq_num <= 109:
-                header["FILTER"] = "i_39"
-                header["FILTBAND"] = "i"
-                header["FILTPOS"] = 304.0
-                header["FILTSLOT"] = 1
-                modified = True
+            for seq_start, seq_end, corrections in filter_fixes[i_day_obs]:
+                if seq_start <= i_seq_num <= seq_end:
+                    log.debug(
+                        "%s: Correcting filter from %s to %s",
+                        log_label,
+                        header.get("FILTER"),
+                        corrections["FILTER"],
+                    )
+                    header.update(corrections)
+                    modified = True
+                    break
 
         return modified
 

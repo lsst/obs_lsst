@@ -28,7 +28,8 @@ import astropy.units.cds as cds
 from astropy.io.fits.verify import VerifyWarning
 
 import lsst.obs.lsst.translators  # register the translators
-from astro_metadata_translator.tests import MetadataAssertHelper
+from astro_metadata_translator import ObservationInfo, fix_header
+from astro_metadata_translator.tests import MetadataAssertHelper, read_test_file
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -2002,15 +2003,11 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
 
     def test_checker(self):
         filename = "latiss-future.yaml"
-        from astro_metadata_translator.tests import read_test_file
-        from astro_metadata_translator import ObservationInfo
         header = read_test_file(filename, self.datadir)
         obsInfo = ObservationInfo(header, pedantic=True, filename=filename)
         self.assertTrue(obsInfo)
 
     def test_fix_header(self):
-        from astro_metadata_translator import fix_header
-        from astro_metadata_translator.tests import read_test_file
         # Test that header fix up is working
         # Not all headers are used in metadata translation
         test_data = (
@@ -2026,6 +2023,67 @@ class LsstMetadataTranslatorTestCase(unittest.TestCase, MetadataAssertHelper):
                 self.assertTrue(modified)
                 for k, v in expected.items():
                     self.assertEqual(header[k], v, f"Testing {k} in {filename}")
+
+    def test_lsstcam_filter_fix(self):
+        # Use an LSSTCam header as a template and change the observation.
+        template = read_test_file("lsstCam-MC_O_20250609_000578_R01_S01.yaml", dir=self.datadir)
+        # (day_obs, seq_num, original filter, expected FILTER, FILTBAND)
+        test_data = (
+            ("20250606", 47, "none", "i_39", "i"),
+            ("20250606", 63, "none", "i_39", "i"),
+            ("20250606", 153, None, "g_6", "g"),  # Corrections file.
+            ("20250606", 352, None, "NONE", "none"),  # Corrections file.
+            ("20250903", 2, "z_20", "g_6", "g"),
+            ("20251022", 16, "none", "z_20", "z"),
+            ("20251022", 19, "none", "g_6", "g"),
+            ("20251022", 39, "none", "r_57", "r"),
+            ("20251022", 44, "none", "i_39", "i"),
+            ("20251120", 4, "none", "r_57", "r"),
+            ("20251120", 11, "none", "r_57", "r"),
+            ("20251217", 13, "i_39", "r_57", "r"),
+        )
+        for day_obs, seq_num, original, expected_filter, expected_band in test_data:
+            obsid = f"MC_O_{day_obs}_{seq_num:06d}"
+            with self.subTest(obsid=obsid):
+                header = template.copy()
+                header.update(
+                    OBSID=obsid, DAYOBS=day_obs, SEQNUM=seq_num, FILTER=original, FILTBAND=None
+                )
+                self.assertTrue(fix_header(header))
+                self.assertEqual(header["FILTER"], expected_filter)
+                self.assertEqual(header["FILTBAND"], expected_band)
+
+        # Filter wheel position is also corrected on some nights.
+        # (day_obs, seq_num, expected FILTER, FILTBAND, FILTPOS, FILTSLOT)
+        test_data = (
+            ("20250609", 76, "z_20", "z", 201.0, 4),
+            ("20260315", 109, "i_39", "i", 304.0, 1),
+        )
+        for day_obs, seq_num, expected_filter, expected_band, expected_pos, expected_slot in test_data:
+            obsid = f"MC_O_{day_obs}_{seq_num:06d}"
+            with self.subTest(obsid=obsid):
+                header = template.copy()
+                header.update(
+                    OBSID=obsid, DAYOBS=day_obs, SEQNUM=seq_num, FILTER="u_24", FILTBAND="u",
+                    FILTPOS=0.0, FILTSLOT=0,
+                )
+                self.assertTrue(fix_header(header))
+                self.assertEqual(header["FILTER"], expected_filter)
+                self.assertEqual(header["FILTBAND"], expected_band)
+                self.assertEqual(header["FILTPOS"], expected_pos)
+                self.assertEqual(header["FILTSLOT"], expected_slot)
+
+        # Exposures outside the corrected ranges must not be changed.
+        for day_obs, seq_num in (
+            ("20250606", 46), ("20250609", 579), ("20251022", 17), ("20251120", 8), ("20260315", 48)
+        ):
+            obsid = f"MC_O_{day_obs}_{seq_num:06d}"
+            with self.subTest(obsid=obsid):
+                header = template.copy()
+                header.update(OBSID=obsid, DAYOBS=day_obs, SEQNUM=seq_num, FILTER="u_24", FILTBAND="u")
+                fix_header(header)
+                self.assertEqual(header["FILTER"], "u_24")
+                self.assertEqual(header["FILTBAND"], "u")
 
 
 if __name__ == "__main__":
