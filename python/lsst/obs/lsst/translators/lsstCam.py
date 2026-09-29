@@ -210,6 +210,35 @@ class LsstCamTranslator(LsstBaseTranslator):
                 header["FILTSLOT"] = 1
                 modified = True
 
+        # DM-56418: Filter recorded incorrectly. Correct values come from the
+        # filter exchange system database. Values are
+        # (first seqnum, last seqnum, FILTER, FILTBAND).
+        filter_fixes = {
+            20250606: [(47, 63, "i_39", "i")],
+            20250903: [(1, 3, "g_6", "g")],
+            20251022: [
+                (9, 10, "i_39", "i"),
+                (16, 16, "z_20", "z"),
+                (18, 20, "g_6", "g"),
+                (33, 35, "i_39", "i"),
+                (38, 39, "r_57", "r"),
+                (42, 44, "i_39", "i"),
+            ],
+            20251120: [(4, 7, "r_57", "r"), (10, 11, "r_57", "r")],
+            20251217: [(1, 13, "r_57", "r")],
+        }
+        if i_day_obs in filter_fixes:
+            i_seq_num = header["SEQNUM"]
+            for seq_start, seq_end, filter_name, filter_band in filter_fixes[i_day_obs]:
+                if seq_start <= i_seq_num <= seq_end:
+                    log.debug(
+                        "%s: Correcting filter from %s to %s", log_label, header.get("FILTER"), filter_name
+                    )
+                    header["FILTER"] = filter_name
+                    header["FILTBAND"] = filter_band
+                    modified = True
+                    break
+
         return modified
 
     @classmethod
