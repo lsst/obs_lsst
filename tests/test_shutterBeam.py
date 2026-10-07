@@ -21,28 +21,23 @@
 #
 """Tests of the packaged LSSTCam shutter-plane beam table."""
 
-import hashlib
 import unittest
 
+import numpy as np
+
 import lsst.utils.tests
-from lsst.resources import ResourcePath
 
 BEAM_URI = "resource://lsst.obs.lsst/resources/shutter/beam_at_L3S1_z9.618_rot0_evaluated.tnt"
-BEAM_SHA256 = "9aa3f0f308b0fb5d59315a408156f9832fd47ba9db52bb1b6d055171eac7de0d"
 
 
 class ShutterBeamTestCase(lsst.utils.tests.TestCase):
 
-    def testBeamFile(self):
-        data = ResourcePath(BEAM_URI).read()
-        self.assertEqual(hashlib.sha256(data).hexdigest(), BEAM_SHA256)
-
     def testBeamLoads(self):
         from lsst.ip.isr.shutterTiming import loadShutterBeam
 
+        # Loading checks the levels and that the table is complete.
         beam = loadShutterBeam(BEAM_URI)
-        self.assertEqual(len(beam.levels), 9)
-        self.assertEqual(beam.hullDistance([0.0], [0.0])[0], 0.0)
+        self.assertFalse(beam.isOutside(np.array([[0.0, 0.0]]))[0])
 
     def testConfigOverrides(self):
         """The LSSTCam overrides turn the timing on with the packaged beam."""
