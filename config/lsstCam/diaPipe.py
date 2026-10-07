@@ -21,7 +21,8 @@
 
 # Shutter-corrected per-source mid-exposure times (lsst.ip.isr.shutterTiming),
 # from the shutter Hall-fit cards in the exposure metadata and the
-# shutter-plane beam table shipped with obs_lsst.
+# shutter-plane beam table shipped with obs_lsst. Also loaded by
+# transformDiaSourceCatalog.py.
 config.doShutterTiming = True
 config.shutterTiming.beamFile = (
     "resource://lsst.obs.lsst/resources/shutter/beam_at_L3S1_z9.618_rot0_evaluated.tnt"
