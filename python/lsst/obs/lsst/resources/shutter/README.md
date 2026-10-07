@@ -6,8 +6,9 @@ it gives the blade coordinate (CCS-x mm) below which a fraction q of the pixel's
 flux lies, for q = 0.01 ... 0.99.
 
 - Author: A. Rasmussen (LSST Camera), the method of LCA-20578.
-- Source: `/sdf/group/rubin/u/arasmus/shutter-data-20250619/shutterplane_beam_DB/` at USDF;
-  also public in lsst-dm/ap_pipe-notebooks (`tickets/DM-50985`, `data/`).
+- Source: the LSST Camera team's shutter-plane beam release of 2025-06-19;
+  a byte-identical copy is public in lsst-dm/ap_pipe-notebooks (branch
+  `tickets/DM-50985`, commit 3e6fc39, `data/beam_at_L3S1_-z9.618_rot0_evaluated.tnt`).
 - sha256: `9aa3f0f308b0fb5d59315a408156f9832fd47ba9db52bb1b6d055171eac7de0d` (checked by
   `tests/test_shutterBeam.py`).
 - Used by `lsst.ip.isr.shutterTiming` (per-pixel mid-exposure times), via
