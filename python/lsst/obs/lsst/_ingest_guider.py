@@ -26,6 +26,7 @@ __all__ = ["ingest_guider"]
 import contextlib
 import json
 import logging
+import zipfile
 from collections import defaultdict
 from collections.abc import Callable
 from typing import Any
@@ -268,6 +269,31 @@ def _ingest_group(
         if metadata_path.exists():
             with contextlib.suppress(Exception):
                 metadata = json.loads(metadata_path.read().decode())
+
+        # Allow reading metadata from zips.
+        if metadata is None and file.fragment and file.fragment.startswith("zip-path="):
+            _, _, path_in_zip = file.fragment.partition("=")
+            try:
+                with file.open("rb") as fd, zipfile.ZipFile(fd) as zf:  # type: ignore
+                    ext_index = path_in_zip.rfind(".")
+                    metadata_path = path_in_zip[0:ext_index] + ".json"
+                    with contextlib.suppress(Exception):
+                        with zf.open(metadata_path) as zip_fd:
+                            metadata = json.load(zip_fd)
+                    if metadata is None:
+                        # Read from FITS using astropy
+                        with zf.open(path_in_zip) as zip_fd:
+                            with astropy.io.fits.open(zip_fd) as fits_obj:
+                                metadata = fits_obj[0].header
+            except Exception as e:
+                failed_metadata[file] = str(e)
+                on_metadata_failure(file, e)
+                if fail_fast:
+                    raise RuntimeError(
+                        f"Problem extracting metadata for file {file}"
+                    ) from e
+                continue
+
         if metadata is None:
             # Could not find sidecar file or it was corrupt. Read from the
             # FITS file itself.
