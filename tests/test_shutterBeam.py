@@ -37,6 +37,28 @@ class ShutterBeamTestCase(lsst.utils.tests.TestCase):
         data = ResourcePath(BEAM_URI).read()
         self.assertEqual(hashlib.sha256(data).hexdigest(), BEAM_SHA256)
 
+    def testBeamLoads(self):
+        from lsst.ip.isr.shutterTiming import loadShutterBeam
+
+        beam = loadShutterBeam(BEAM_URI)
+        self.assertEqual(len(beam.levels), 9)
+        self.assertEqual(beam.hullDistance([0.0], [0.0])[0], 0.0)
+
+    def testConfigOverrides(self):
+        """The LSSTCam overrides turn the timing on with the packaged beam."""
+        try:
+            from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
+        except ImportError:
+            raise unittest.SkipTest("ap_association is not set up")
+        from lsst.obs.lsst import LsstCam
+
+        for configClass, name in ((TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
+                                  (DiaPipelineConfig, "diaPipe")):
+            config = configClass()
+            LsstCam().applyConfigOverrides(name, config)
+            self.assertTrue(config.doShutterTiming)
+            self.assertEqual(config.shutterTiming.beamFile, BEAM_URI)
+
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
