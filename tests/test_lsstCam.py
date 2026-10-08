@@ -154,8 +154,8 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             print(expTime, config.fiducialExpTime[band])
 
     def testShutterTiming(self):
-        """The difference-imaging tasks use shutter-corrected times with the
-        packaged beam table.
+        """Check that the difference-imaging tasks use shutter-corrected
+        times with the packaged beam table.
         """
         try:
             from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
