@@ -153,6 +153,26 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
                                          atol=1e-3, rtol=1e-5, msg=msg)
             print(expTime, config.fiducialExpTime[band])
 
+    def testShutterTiming(self):
+        """The difference-imaging tasks use shutter-corrected times with the
+        packaged beam table.
+        """
+        try:
+            from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
+        except ImportError:
+            raise unittest.SkipTest("ap_association is not set up")
+
+        instrument = self.getInstrument()
+        for configClass, name in ((TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
+                                  (DiaPipelineConfig, "diaPipe")):
+            config = configClass()
+            instrument.applyConfigOverrides(name, config)
+            self.assertTrue(config.doShutterTiming)
+            self.assertEqual(config.shutterTiming.beamFile,
+                             "resource://lsst.obs.lsst/resources/shutter/"
+                             "beam_at_L3S1_z9.618_rot0_evaluated.tnt")
+
+
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
     pass
 
