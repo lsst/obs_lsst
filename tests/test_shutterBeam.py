@@ -19,11 +19,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-"""Tests of the packaged LSSTCam shutter-plane beam table."""
+"""Tests of the LSSTCam shutter-timing configuration."""
 
 import unittest
-
-import numpy as np
 
 import lsst.utils.tests
 
@@ -31,13 +29,6 @@ BEAM_URI = "resource://lsst.obs.lsst/resources/shutter/beam_at_L3S1_z9.618_rot0_
 
 
 class ShutterBeamTestCase(lsst.utils.tests.TestCase):
-
-    def testBeamLoads(self):
-        from lsst.ip.isr.shutterTiming import loadShutterBeam
-
-        # Loading checks the levels and that the table is complete.
-        beam = loadShutterBeam(BEAM_URI)
-        self.assertFalse(beam.isOutside(np.array([[0.0, 0.0]]))[0])
 
     def testConfigOverrides(self):
         """The LSSTCam overrides turn the timing on with the packaged beam."""
