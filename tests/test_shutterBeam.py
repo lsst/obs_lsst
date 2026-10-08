@@ -29,6 +29,7 @@ BEAM_URI = "resource://lsst.obs.lsst/resources/shutter/beam_at_L3S1_z9.618_rot0_
 
 
 class ShutterBeamTestCase(lsst.utils.tests.TestCase):
+    """The LSSTCam shutter-timing configuration."""
 
     def testConfigOverrides(self):
         """The LSSTCam overrides turn the timing on with the packaged beam."""
