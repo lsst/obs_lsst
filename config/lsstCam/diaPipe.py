@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Shutter-corrected per-source mid-exposure times (lsst.ip.isr.shutterTiming),
-# from the shutter Hall-fit cards in the exposure metadata; the
-# ShutterTimingConfig defaults are for LSSTCam. Also loaded by
-# transformDiaSourceCatalog.py.
+# as recorded by ISR (or, for images ISR processed without them, from the
+# shutter cards in the exposure metadata; the ShutterTimingConfig defaults are
+# for LSSTCam). Also loaded by transformDiaSourceCatalog.py.
 config.doShutterTiming = True

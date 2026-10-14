@@ -91,16 +91,6 @@ class LsstCamRawFormatter(FitsRawFormatterBase):
 
         final_md = merge_headers([base_md] + ehdrs, mode="overwrite")
         fix_header(final_md, translator_class=self.translatorClass)
-
-        # Workaround until VisitInfo records the requested exposure time:
-        # EXPTIME is removed from the metadata of exposures (it is replaced
-        # by visitInfo.exposureTime, which for LSSTCam is the measured
-        # SHUTTIME), so keep a copy that lsst.ip.isr.shutterTiming can use
-        # to check the shutter timestamps.  Remove once VisitInfo has it.
-        if "EXPTIME" in final_md:
-            final_md.set("EXPTIME REQUESTED", final_md.getScalar("EXPTIME"),
-                         "Requested exposure time (s); copy of EXPTIME")
-
         return final_md
 
     def stripMetadata(self):

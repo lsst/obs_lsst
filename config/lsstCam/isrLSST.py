@@ -130,3 +130,8 @@ config.overscanCamera.detectorRules["R42_S02"] = correctionConfigE
 config.overscanCamera.detectorRules["R43_S11"] = correctionConfigE
 # det 186
 config.overscanCamera.detectorRules["R43_S20"] = correctionConfigE
+
+# Record the shutter-corrected mid-exposure times in the metadata
+# (lsst.ip.isr.shutterTiming); the ShutterTimingConfig defaults are for
+# LSSTCam.
+config.doShutterTiming = True
