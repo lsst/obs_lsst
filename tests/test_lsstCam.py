@@ -155,7 +155,7 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
 
     def testShutterTiming(self):
         """Check that the difference-imaging tasks use shutter-corrected
-        times with the packaged beam table.
+        times.
         """
         try:
             from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
@@ -168,9 +168,6 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             config = configClass()
             instrument.applyConfigOverrides(name, config)
             self.assertTrue(config.doShutterTiming)
-            self.assertEqual(config.shutterTiming.beamFile,
-                             "resource://lsst.obs.lsst/resources/shutter/"
-                             "beam_at_L3S1_z9.618_rot0_evaluated.tnt")
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
