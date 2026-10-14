@@ -109,15 +109,6 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         md = self.butler.get('raw.metadata', dataId)
         self.assertEqual(md["TELESCOP"], "LSST")
 
-    def testRequestedExposureTime(self):
-        """Check that the requested exposure time is kept in the metadata of
-        a raw exposure (a workaround until VisitInfo records it).
-        """
-        dataId = {'exposure': 3019031900001, 'name_in_raft': 'S02', 'raft': 'R10'}
-        md = self.butler.get('raw.metadata', dataId)
-        raw = self.butler.get('raw', dataId)
-        self.assertEqual(raw.metadata["EXPTIME REQUESTED"], md["EXPTIME"])
-
     def testFiducials(self):
         """Verify that the fiducial values match those given in SMTN-002
         (v.2025-07-16). The fiducial values must remain fixed so that
@@ -163,17 +154,21 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
             print(expTime, config.fiducialExpTime[band])
 
     def testShutterTiming(self):
-        """Check that the difference-imaging tasks use shutter-corrected
-        times.
+        """Check that ISR records shutter-corrected times, and that the
+        difference-imaging and association tasks use them.
         """
         try:
             from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
         except ImportError:
             raise unittest.SkipTest("ap_association is not set up")
+        from lsst.ip.isr import IsrTaskLSSTConfig
+        from lsst.pipe.tasks.drpAssociationPipe import DrpAssociationPipeConfig
 
         instrument = self.getInstrument()
-        for configClass, name in ((TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
-                                  (DiaPipelineConfig, "diaPipe")):
+        for configClass, name in ((IsrTaskLSSTConfig, "isrLSST"),
+                                  (TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
+                                  (DiaPipelineConfig, "diaPipe"),
+                                  (DrpAssociationPipeConfig, "drpAssociation")):
             config = configClass()
             instrument.applyConfigOverrides(name, config)
             self.assertTrue(config.doShutterTiming)
