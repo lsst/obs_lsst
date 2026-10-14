@@ -157,21 +157,21 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         """Check that ISR records shutter-corrected times, and that the
         difference-imaging and association tasks use them.
         """
-        try:
-            from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
-        except ImportError:
-            raise unittest.SkipTest("ap_association is not set up")
         from lsst.ip.isr import IsrTaskLSSTConfig
         from lsst.pipe.tasks.drpAssociationPipe import DrpAssociationPipeConfig
+        tasks = [(IsrTaskLSSTConfig, "isrLSST"), (DrpAssociationPipeConfig, "drpAssociation")]
+        try:
+            from lsst.ap.association import DiaPipelineConfig, TransformDiaSourceCatalogConfig
+            tasks += [(TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
+                      (DiaPipelineConfig, "diaPipe")]
+        except ImportError:
+            pass  # ap_association is optional.
 
         instrument = self.getInstrument()
-        for configClass, name in ((IsrTaskLSSTConfig, "isrLSST"),
-                                  (TransformDiaSourceCatalogConfig, "transformDiaSourceCatalog"),
-                                  (DiaPipelineConfig, "diaPipe"),
-                                  (DrpAssociationPipeConfig, "drpAssociation")):
+        for configClass, name in tasks:
             config = configClass()
             instrument.applyConfigOverrides(name, config)
-            self.assertTrue(config.doShutterTiming)
+            self.assertTrue(config.doShutterTiming, name)
 
 
 class MemoryTester(lsst.utils.tests.MemoryTestCase):
