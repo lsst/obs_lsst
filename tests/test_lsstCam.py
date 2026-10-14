@@ -109,6 +109,15 @@ class TestLsstCam(ObsLsstObsBaseOverrides, ObsLsstButlerTests):
         md = self.butler.get('raw.metadata', dataId)
         self.assertEqual(md["TELESCOP"], "LSST")
 
+    def testRequestedExposureTime(self):
+        """Check that the requested exposure time is kept in the metadata of
+        a raw exposure (a workaround until VisitInfo records it).
+        """
+        dataId = {'exposure': 3019031900001, 'name_in_raft': 'S02', 'raft': 'R10'}
+        md = self.butler.get('raw.metadata', dataId)
+        raw = self.butler.get('raw', dataId)
+        self.assertEqual(raw.metadata["EXPTIME REQUESTED"], md["EXPTIME"])
+
     def testFiducials(self):
         """Verify that the fiducial values match those given in SMTN-002
         (v.2025-07-16). The fiducial values must remain fixed so that
