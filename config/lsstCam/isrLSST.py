@@ -28,6 +28,7 @@ config.badAmps = [
     "R42_S21_C07",  # Inconsistent linearizer and gain.
     "R03_S01_C10",  # Extremely high CTI
     "R03_S11_C00",  # Dead amp
+    "R01_S01_C00",  # Intermittant dead amp.
 ]
 
 config.cameraKeywordsToCompare = ["SEQCKSUM", "AP0_RC"]
